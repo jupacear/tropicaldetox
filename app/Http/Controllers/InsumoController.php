@@ -107,12 +107,21 @@ class InsumoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  Insumo $insumo
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Insumo $insumo)
+    public function update(Request $request, $id)
     {
-        request()->validate(Insumo::$rules);
+        // Validar los datos de entrada
+        $request->validate(Insumo::$rules);
+
+        // Obtener el insumo por su ID
+        $insumo = Insumo::find($id);
+
+        // Verificar si se encontró el insumo
+        if (!$insumo) {
+            return redirect()->back()->with('error', 'El insumo no existe');
+        }
 
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
@@ -137,12 +146,21 @@ class InsumoController extends Controller
             $insumo->imagen = 'img/' . $imageName;
         }
 
-        // Actualizar el registro en la base de datos con los datos actualizados
-        $insumo->update($request->except('imagen'));
+        // Actualizar los demás campos del insumo
+        $insumo->nombre = $request->input('nombre');
+        $insumo->activo = $request->input('activo');
+        $insumo->cantidad_disponible = $request->input('cantidad_disponible');
+        $insumo->unidad_medida = $request->input('unidad_medida');
+        $insumo->precio_unitario = $request->input('precio_unitario');
+
+        // Guardar los cambios en la base de datos
+        $insumo->save();
 
         return redirect()->route('insumo.index')
             ->with('success', 'Insumo actualizado correctamente');
     }
+
+
 
 
     /**

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('template_title')
+@section('title')
     Insumo
 @endsection
-{{-- xx --}}
+
 @section('content')
     <section class="section">
         <div class="section-header">
@@ -21,20 +21,19 @@
                         <div class="card-body">
                             <a class="btn btn-warning" href="{{ route('insumo.create') }}">Nuevo</a>
                             <div class="table-responsive">
-                                <table class="table table-striped table-hover">
-                                    <thead class="thead">
+                                <table id="example" class="table table-striped table-bordered" style="width:100%">
+
+                                    <thead style="background-color:#6777ef" class="thead">
                                         <tr>
-                                            <th>No</th>
+                                            <th style="color:#fff;">No</th>
+                                            <th style="color:#fff;">Imagen</th>
+                                            <th style="color:#fff;">Nombre</th>
+                                            <th style="color:#fff;">Estado</th>
+                                            <th style="color:#fff;">Cantidad Disponible</th>
+                                            <th style="color:#fff;">Unidad Medida</th>
+                                            <th style="color:#fff;">Precio Unitario</th>
+                                            <th style="color:#fff;">Opciones</th>
 
-                                            <th>Imagen</th>
-                                            <th>Nombre</th>
-                                            <th>Estado</th>
-                                            <th>Cantidad Disponible</th>
-                                            <th>Unidad Medida</th>
-                                            <th>Precio Unitario</th>
-                                            <th>Opciones</th>
-
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -43,8 +42,8 @@
                                                 <td>{{ ++$i }}</td>
                                                 <td>
                                                     @if ($insumo->imagen)
-                                                        <img src="{{ asset($insumo->imagen) }}"
-                                                            alt="Imagen del insumo" width="100">
+                                                        <img src="{{ asset($insumo->imagen) }}" alt="Imagen del insumo"
+                                                            width="25">
                                                     @else
                                                         Sin imagen
                                                     @endif
@@ -67,7 +66,7 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm"><i
-                                                                class="fa fa-fw fa-trash"></i>Eliminar</button>
+                                                                class="fa fa-fw fa-trash"></i>Desactivar</button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -86,4 +85,14 @@
             </div>
         </div>
     </section>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#example').DataTable({
+                responsive: true
+            });
+
+            new $.fn.dataTable.FixedHeader(table);
+        });
+    </script>
 @endsection

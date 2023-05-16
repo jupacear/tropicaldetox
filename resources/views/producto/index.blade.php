@@ -26,6 +26,7 @@
                                             <th style="color:#fff;">Nombre</th>
                                             <th style="color:#fff;">Precio</th>
                                             <th style="color:#fff;">Descripcion</th>
+                                            <th style="color:#fff;">Estado</th>
                                             <th style="color:#fff;">Nombre de categoria</th>
                                             <th style="color:#fff;">Opciones</th>
 
@@ -36,10 +37,19 @@
                                             <tr>
                                                 <td>{{ ++$i }}</td>
 
-                                                <td>{{ $producto->imagen }}</td>
+                                                <td>
+                                                    @if ($producto->imagen)
+                                                        <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto"
+                                                            width="25">
+                                                    @else
+                                                        Sin imagen
+                                                    @endif
+                                                </td>
+
                                                 <td>{{ $producto->nombre }}</td>
                                                 <td>{{ $producto->precio }}</td>
                                                 <td>{{ $producto->descripcion }}</td>
+                                                <td>{{ $producto->activo }}</td>
                                                 <td>{{ $producto->categorium->nombre }}</td>
 
                                                 <td>
@@ -79,7 +89,7 @@
             var table = $('#example').DataTable({
                 responsive: true
             });
-    
+
             new $.fn.dataTable.FixedHeader(table);
         });
     </script>

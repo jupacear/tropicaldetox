@@ -109,13 +109,24 @@ class ProductoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  Producto $producto
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, $id)
     {
+        // 1. Buscar el producto existente en la base de datos
+        $producto = Producto::find($id);
+
+        // 2. Verificar si el producto se encontró
+        if (!$producto) {
+            return redirect()->route('productos.index')->with('error', 'El producto no existe');
+            // O puedes mostrar una vista de error personalizada: return view('error')->with('message', 'El producto no existe');
+        }
+
+        // 3. Validar los datos de entrada
         $request->validate(Producto::$rules);
-        // Verificar si se ha enviado un archivo de imagen
+
+        // 4. Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
             // Obtener el archivo de imagen
             $image = $request->file('imagen');
@@ -138,18 +149,18 @@ class ProductoController extends Controller
             $producto->imagen = 'img/' . $imageName;
         }
 
-        // Actualizar los atributos del producto
+        // 5. Actualizar los atributos del producto
         $producto->nombre = $request->input('nombre');
         $producto->precio = $request->input('precio');
         $producto->descripcion = $request->input('descripcion');
         $producto->activo = $request->input('activo');
         $producto->categorias_id = $request->input('categorias_id');
 
-        // Guardar los cambios en la base de datos
+        // 6. Guardar los cambios en la base de datos
         $producto->save();
 
-        return redirect()->route('productos.index')
-            ->with('success', 'Producto actualizado correctamente');
+        // 7. Redireccionar a la página de índice de productos con un mensaje de éxito
+        return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
     }
 
     /**

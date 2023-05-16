@@ -111,31 +111,31 @@ class CategoriumController extends Controller
     {
         // Buscar la categoría por ID
         $categoria = Categorium::find($id);
-    
+
         // Verificar si se encontró la categoría
         if (!$categoria) {
             return redirect()->back()->with('error', 'La categoría no existe');
         }
-    
+
         // Validar los datos del formulario 
         $request->validate([
-            'imagen' => 'image|mimes:jpg|max:2048',
+            'imagen' => 'required|image|mimes:jpg,png|max:2048',
             'nombre' => 'required',
             'descripcion' => 'required',
             'activo' => 'required',
         ]);
-    
+
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
             // Obtener el archivo de imagen
             $image = $request->file('imagen');
-    
+
             // Generar un nombre único para la imagen usando la marca de tiempo actual
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-    
+
             // Mover la nueva imagen a la carpeta "img" dentro del directorio público
             $image->move(public_path('img'), $imageName);
-    
+
             // Eliminar la imagen anterior si existe
             if ($categoria->imagen) {
                 $oldImagePath = public_path('img') . '/' . $categoria->imagen;
@@ -143,23 +143,23 @@ class CategoriumController extends Controller
                     unlink($oldImagePath);
                 }
             }
-    
+
             // Actualizar la ruta de la imagen en el modelo
             $categoria->imagen = 'img/' . $imageName;
         }
-    
+
         // Actualizar los atributos de la categoría
         $categoria->nombre = $request->input('nombre');
         $categoria->descripcion = $request->input('descripcion');
         $categoria->activo = $request->input('activo');
-    
+
         // Guardar los cambios en la base de datos
         $categoria->save();
-    
+
         // Mostrar mensaje de éxito al redireccionar
         return redirect()->route('categoria.index')->with('success', 'Categoría actualizada exitosamente');
     }
-    
+
 
 
     /**
