@@ -1,9 +1,6 @@
 /node_modules
 /public/hot
 /public/storage
-/public/img/CategoriasIMG/
-/public/img/InsumoIMG/
-/public/img/ProductosIMG/
 # /storage/*.key
 /vendor
 # .env
@@ -16,3 +13,6 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+/public/img/CategoriasIMG/
+/public/img/ProductosIMG/
+/public/img/InsumoIMG/
