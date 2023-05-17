@@ -17,24 +17,24 @@ class ProductoSeeder extends Seeder
     {
         $productos = [
             [
-                'imagen' => 'img/logo',
-                'nombre' => 'Producto 1',
+                'imagen' => 'img/logo.png',
+                'nombre' => 'Piloncillo y Vainilla',
                 'precio' => 10.99,
                 'descripcion' => 'Verdes',
                 'activo' => true,
                 'categorias_id' => 1,
             ],
             [
-                'imagen' => 'img/logo',
-                'nombre' => 'Producto 2',
+                'imagen' => 'img/logo.png',
+                'nombre' => 'jugo de Manzana',
                 'precio' => 20.99,
                 'descripcion' => 'Frutas',
                 'activo' => true,
                 'categorias_id' => 2,
             ],
             [
-                'imagen' => 'img/logo',
-                'nombre' => 'Producto 3',
+                'imagen' => 'img/logo.png',
+                'nombre' => 'Guayaba con mango',
                 'precio' => 30.99,
                 'descripcion' => 'Personalizado',
                 'activo' => true,

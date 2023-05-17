@@ -10,8 +10,7 @@ use App\Http\Controllers\ventasController;
 use App\Http\Controllers\CategoriumController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\InsumoController;
-
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,11 +47,11 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth']] , function(){
+Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
-    
+
     //clientes
     Route::get('/A_clientes', [UsuarioController::class, 'indexc'])->name('A_clientes.index');
     Route::get('/A_clientes/create', [UsuarioController::class, 'createc'])->name('A_clientes.create');
@@ -71,9 +70,5 @@ Route::group(['middleware' => ['auth']] , function(){
 
     Route::resource('Categorias', CategoriumController::class)->names('categoria');
     Route::resource('Productos', ProductoController::class)->names('productos');
-
     Route::resource('Insumos', InsumoController::class)->names('insumo');
-
-    
-
 });

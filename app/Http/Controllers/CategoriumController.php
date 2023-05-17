@@ -47,6 +47,9 @@ class CategoriumController extends Controller
         // Validar los campos según las reglas definidas en el modelo Categorium
         $request->validate(Categorium::$rules);
 
+        // Obtener el valor del campo 'activo' del formulario
+        $activo = $request->has('activo') ? true : false;
+
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
             // Obtener el archivo de imagen
@@ -55,25 +58,28 @@ class CategoriumController extends Controller
             // Generar un nombre único para la imagen usando la marca de tiempo actual
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
-            // Mover la imagen a la carpeta "img" dentro del directorio público
-            $image->move(public_path('img'), $imageName);
+            // Mover la imagen a la carpeta "CategoriasIMG" dentro del directorio público
+            $image->move(public_path('img/CategoriasIMG'), $imageName);
 
-            // Crear el nuevo registro en la base de datos con la ruta de la imagen
+            // Crear el nuevo registro en la base de datos con la ruta de la imagen y el estado 'activo' o 'inactivo'
             Categorium::create([
-                'imagen' => 'img/' . $imageName,
+                'imagen' => 'img/CategoriasIMG/' . $imageName,
                 'nombre' => $request->nombre,
                 'descripcion' => $request->descripcion,
-                'activo' => $request->has('activo') ? true : false,
+                'activo' => $activo,
             ]);
         } else {
-            // Si no se ha enviado una imagen, crear el registro sin el campo de imagen
-            Categorium::create($request->all());
+            // Si no se ha enviado una imagen, crear el registro sin el campo de imagen y establecer el estado 'activo' o 'inactivo'
+            Categorium::create([
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion,
+                'activo' => $activo,
+            ]);
         }
 
         return redirect()->route('categoria.index')
-            ->with('success', 'Categoria creada exitosamente');
+            ->with('success', 'Categoría creada exitosamente');
     }
-
     /**
      * Display the specified resource.
      *
@@ -117,12 +123,12 @@ class CategoriumController extends Controller
             return redirect()->back()->with('error', 'La categoría no existe');
         }
 
-        // Validar los datos del formulario 
+        // Validar los datos del formulario
         $request->validate([
-            'imagen' => 'required|image|mimes:jpg,png|max:2048',
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'activo' => 'required',
+            'imagen' => 'image|mimes:jpg,png|max:2048',
+            'nombre' => 'required|max:50',
+            'descripcion' => 'required|min:10|max:50',
+            'activo' => '', // No es necesario validar el campo 'activo'
         ]);
 
         // Verificar si se ha enviado un archivo de imagen
@@ -133,25 +139,27 @@ class CategoriumController extends Controller
             // Generar un nombre único para la imagen usando la marca de tiempo actual
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
-            // Mover la nueva imagen a la carpeta "img" dentro del directorio público
-            $image->move(public_path('img'), $imageName);
+            // Mover la nueva imagen a la carpeta "CategoriasIMG" dentro del directorio público
+            $image->move(public_path('img/CategoriasIMG'), $imageName);
 
             // Eliminar la imagen anterior si existe
             if ($categoria->imagen) {
-                $oldImagePath = public_path('img') . '/' . $categoria->imagen;
+                $oldImagePath = public_path($categoria->imagen);
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
             }
 
             // Actualizar la ruta de la imagen en el modelo
-            $categoria->imagen = 'img/' . $imageName;
+            $categoria->imagen = 'img/CategoriasIMG/' . $imageName;
         }
 
         // Actualizar los atributos de la categoría
         $categoria->nombre = $request->input('nombre');
         $categoria->descripcion = $request->input('descripcion');
-        $categoria->activo = $request->input('activo');
+
+        // Actualizar el estado 'activo' según el valor recibido del formulario
+        $categoria->activo = $request->has('activo');
 
         // Guardar los cambios en la base de datos
         $categoria->save();
@@ -159,6 +167,7 @@ class CategoriumController extends Controller
         // Mostrar mensaje de éxito al redireccionar
         return redirect()->route('categoria.index')->with('success', 'Categoría actualizada exitosamente');
     }
+
 
 
 
@@ -178,15 +187,26 @@ class CategoriumController extends Controller
             return redirect()->back()->with('error', 'La categoría no existe');
         }
 
-        // Desactivar la categoría
-        $categoria->activo = false;
+        // Obtener el nuevo estado de la categoría
+        $nuevoEstado = !$categoria->activo;
+
+
+        // Actualizar el estado de la categoría
+        $categoria->activo = $nuevoEstado;
+        // return
         $categoria->save();
 
-        // Desactivar los productos relacionados
-        $categoria->productos()->update(['activo' => false]);
+        // Obtener los productos relacionados
+        $productos = $categoria->productos;
+
+        // Actualizar el estado de los productos relacionados
+        foreach ($productos as $producto) {
+            $producto->activo = $nuevoEstado;
+            $producto->save();
+        }
 
         // Redireccionar a la lista de categorías con mensaje de éxito
         return redirect()->route('categoria.index')
-            ->with('success', 'Categoria desactivada exitosamente');
+            ->with('success', 'Categoría actualizada exitosamente');
     }
 }

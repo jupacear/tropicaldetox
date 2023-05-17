@@ -26,8 +26,8 @@
             {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
         </div>
         <div class="form-group">
-            {{ Form::label('activo', 'Activo') }}
-            {{ Form::checkbox('activo', 1, $producto->activo, ['class' => 'form-check-input' . ($errors->has('activo') ? ' is-invalid' : '')]) }}
+            {{ Form::label('activo') }}
+            {{ Form::checkbox('activo', 1, $producto->activo ?? true, ['class' => 'form-control' . ($errors->has('activo') ? ' is-invalid' : '')]) }}
             {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
 

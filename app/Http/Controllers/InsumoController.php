@@ -35,7 +35,6 @@ class InsumoController extends Controller
         $insumo = new Insumo();
         return view('insumo.create', compact('insumo'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -46,6 +45,9 @@ class InsumoController extends Controller
     {
         $request->validate(Insumo::$rules);
 
+        // Obtener el valor del checkbox de estado "activo"
+        $activo = $request->has('activo') ? true : false;
+
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
             // Obtener el archivo de imagen
@@ -54,27 +56,36 @@ class InsumoController extends Controller
             // Generar un nombre único para la imagen usando la marca de tiempo actual
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
-            // Mover la imagen a la carpeta "img" dentro del directorio público
-            $image->move(public_path('img'), $imageName);
+            // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
+            $image->move(public_path('img/InsumoIMG'), $imageName);
 
-            // Crear el nuevo registro en la base de datos con la ruta de la imagen 
+            // Crear el nuevo registro en la base de datos con la ruta de la imagen y el valor del campo "activo"
             Insumo::create([
-                'imagen' => 'img/' . $imageName,
+                'imagen' => 'img/InsumoIMG/' . $imageName,
                 'nombre' => $request->input('nombre'),
                 'descripcion' => $request->input('descripcion'),
-                'activo' => $request->input('activo'),
+                'activo' => $activo,
                 'cantidad_disponible' => $request->input('cantidad_disponible'),
                 'unidad_medida' => $request->input('unidad_medida'),
                 'precio_unitario' => $request->input('precio_unitario'),
             ]);
         } else {
-            // Si no se ha enviado una imagen, crear el registro sin el campo de imagen
-            Insumo::create($request->all());
+            // Si no se ha enviado una imagen, crear el registro sin el campo de imagen y con el valor del campo "activo"
+            Insumo::create([
+                'nombre' => $request->input('nombre'),
+                'descripcion' => $request->input('descripcion'),
+                'activo' => $activo,
+                'cantidad_disponible' => $request->input('cantidad_disponible'),
+                'unidad_medida' => $request->input('unidad_medida'),
+                'precio_unitario' => $request->input('precio_unitario'),
+            ]);
         }
 
         return redirect()->route('insumo.index')
             ->with('success', 'Insumo creado exitosamente.');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -123,6 +134,9 @@ class InsumoController extends Controller
             return redirect()->back()->with('error', 'El insumo no existe');
         }
 
+        // Obtener el valor del checkbox de estado "activo"
+        $activo = $request->has('activo') ? true : false;
+
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
             // Obtener el archivo de imagen
@@ -131,24 +145,24 @@ class InsumoController extends Controller
             // Generar un nombre único para la imagen usando la marca de tiempo actual
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
-            // Mover la imagen a la carpeta "img" dentro del directorio público
-            $image->move(public_path('img'), $imageName);
+            // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
+            $image->move(public_path('img/InsumoIMG'), $imageName);
 
             // Eliminar la imagen anterior si existe
             if ($insumo->imagen) {
-                $oldImagePath = public_path('img') . '/' . $insumo->imagen;
+                $oldImagePath = public_path('img/InsumoIMG') . '/' . $insumo->imagen;
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
             }
 
             // Actualizar el campo 'imagen' del modelo con la nueva ruta de la imagen
-            $insumo->imagen = 'img/' . $imageName;
+            $insumo->imagen = 'img/InsumoIMG/' . $imageName;
         }
 
         // Actualizar los demás campos del insumo
         $insumo->nombre = $request->input('nombre');
-        $insumo->activo = $request->input('activo');
+        $insumo->activo = $activo;
         $insumo->cantidad_disponible = $request->input('cantidad_disponible');
         $insumo->unidad_medida = $request->input('unidad_medida');
         $insumo->precio_unitario = $request->input('precio_unitario');
@@ -159,10 +173,6 @@ class InsumoController extends Controller
         return redirect()->route('insumo.index')
             ->with('success', 'Insumo actualizado correctamente');
     }
-
-
-
-
     /**
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
@@ -178,12 +188,21 @@ class InsumoController extends Controller
             return redirect()->back()->with('error', 'El insumo no existe');
         }
 
-        // Desactivar el insumo
-        $insumo->activo = false;
+        // Verificar el estado actual del insumo
+        if ($insumo->activo) {
+            // Si está activo, desactivarlo
+            $insumo->activo = false;
+            $message = 'Insumo desactivado exitosamente';
+        } else {
+            // Si está inactivo, activarlo
+            $insumo->activo = true;
+            $message = 'Insumo activado exitosamente';
+        }
+
+        // Guardar los cambios en la base de datos
         $insumo->save();
 
         // Redireccionar a la lista de insumos con mensaje de éxito
-        return redirect()->route('insumo.index')
-            ->with('success', 'Insumo desactivado exitosamente');
+        return redirect()->route('insumo.index')->with('success', $message);
     }
 }

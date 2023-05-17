@@ -46,9 +46,17 @@ class ProductoController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
-        $request->validate(Producto::$rules);
+        $request->validate([
+            'imagen' => 'required|image|mimes:jpg,png|max:2048',
+            'nombre' => 'required',
+            'precio' => 'required',
+            'descripcion' => 'required',
+            'activo' => '', //No validar para que pueda ser enviado correctamente
+            'categorias_id' => 'required'
+        ]);
 
         $producto = new Producto();
 
@@ -56,7 +64,7 @@ class ProductoController extends Controller
         $producto->precio = $request->input('precio');
         $producto->categorias_id = $request->input('categorias_id');
         $producto->descripcion = $request->input('descripcion');
-        $producto->activo = $request->input('activo');
+        $producto->activo = $request->has('activo'); // Guarda el estado como true o false según si se seleccionó o no el checkbox
 
         // Verificar si se ha enviado una imagen
         if ($request->hasFile('imagen')) {
@@ -64,10 +72,10 @@ class ProductoController extends Controller
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
             // Mover la imagen a la carpeta "img" dentro del directorio público
-            $image->move(public_path('img'), $imageName);
+            $image->move(public_path('img/ProductosIMG'), $imageName);
 
             // Asignar la ruta de la imagen al modelo
-            $producto->imagen = 'img/' . $imageName;
+            $producto->imagen = 'img/ProductosIMG/' . $imageName;
         }
 
         // Guardar el registro en la base de datos
@@ -76,8 +84,6 @@ class ProductoController extends Controller
         return redirect()->route('productos.index')
             ->with('success', 'Producto creado exitosamente');
     }
-
-
     /**
      * Display the specified resource.
      *
@@ -114,19 +120,25 @@ class ProductoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // 1. Buscar el producto existente en la base de datos
+        // Buscar el producto existente en la base de datos
         $producto = Producto::find($id);
 
-        // 2. Verificar si el producto se encontró
+        // Verificar si el producto se encontró
         if (!$producto) {
-            return redirect()->route('productos.index')->with('error', 'El producto no existe');
-            // O puedes mostrar una vista de error personalizada: return view('error')->with('message', 'El producto no existe');
+            return view('error')->with('message', 'El producto no existe');
+            // return redirect()->route('productos.index')->with('error', 'El producto no existe');
         }
+        //  Validar los datos de entrada
+        $request->validate([
+            'imagen' => 'image|mimes:jpg,png|max:2048',
+            'nombre' => 'required',
+            'precio' => 'required',
+            'descripcion' => 'required',
+            'activo' => 'required',
+            'categorias_id' => 'required'
+        ]);
 
-        // 3. Validar los datos de entrada
-        $request->validate(Producto::$rules);
-
-        // 4. Verificar si se ha enviado un archivo de imagen
+        // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
             // Obtener el archivo de imagen
             $image = $request->file('imagen');
@@ -135,33 +147,34 @@ class ProductoController extends Controller
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
             // Mover la nueva imagen a la carpeta "img" dentro del directorio público
-            $image->move(public_path('img'), $imageName);
+            $image->move(public_path('img/ProductosIMG'), $imageName);
 
             // Eliminar la imagen anterior si existe
             if ($producto->imagen) {
-                $oldImagePath = public_path('img') . '/' . $producto->imagen;
+                $oldImagePath = public_path('img/ProductosIMG') . '/' . $producto->imagen;
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
             }
 
             // Actualizar la ruta de la imagen en el modelo
-            $producto->imagen = 'img/' . $imageName;
+            $producto->imagen = 'img/ProductosIMG/' . $imageName;
         }
 
-        // 5. Actualizar los atributos del producto
+        // Actualizar los atributos del producto
         $producto->nombre = $request->input('nombre');
         $producto->precio = $request->input('precio');
         $producto->descripcion = $request->input('descripcion');
-        $producto->activo = $request->input('activo');
+        $producto->activo = $request->has('activo'); // Guarda el estado como true o false según si se seleccionó o no el checkbox
         $producto->categorias_id = $request->input('categorias_id');
 
-        // 6. Guardar los cambios en la base de datos
+        // Guardar los cambios en la base de datos
         $producto->save();
 
-        // 7. Redireccionar a la página de índice de productos con un mensaje de éxito
+        // Redireccionar a la página de índice de productos con un mensaje de éxito
         return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
     }
+
 
     /**
      * @param int $id

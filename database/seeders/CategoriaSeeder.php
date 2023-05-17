@@ -17,17 +17,17 @@ class CategoriaSeeder extends Seeder
     {
         DB::table('categoria')->insert([
             [
-                'imagen' => 'Frutas',
+                'imagen' => 'img/logo.png',
                 'nombre' => 'Frutas',
                 'descripcion' => 'Deliciosas y nutritivas opciones naturales llenas de sabores y colores variados',
             ],
             [
-                'imagen' => 'Verdes',
+                'imagen' => 'img/logo.png',
                 'nombre' => 'Verdes',
                 'descripcion' => 'Refrescantes bebidas naturales cargadas de nutrientes y beneficios saludables',
             ],
             [
-                'imagen' => 'Personalizados',
+                'imagen' => 'img/logo.png',
                 'nombre' => 'Personalizados',
                 'descripcion' => 'Deliciosas bebidas adaptadas a tus gustos y necesidades individuales.',
             ]

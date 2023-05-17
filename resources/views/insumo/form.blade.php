@@ -12,12 +12,6 @@
             {!! $errors->first('nombre', '<div class="invalid-feedback">:message</div>') !!}
         </div>
         <div class="form-group">
-            {{ Form::label('activo') }}
-            {{ Form::checkbox('activo', 1, $insumo->activo ?? true, ['class' => 'form-control' . ($errors->has('activo') ? ' is-invalid' : '')]) }}
-            {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
-        </div>
-
-        <div class="form-group">
             {{ Form::label('cantidad_disponible') }}
             {{ Form::text('cantidad_disponible', $insumo->cantidad_disponible, ['class' => 'form-control' . ($errors->has('cantidad_disponible') ? ' is-invalid' : ''), 'placeholder' => 'Cantidad Disponible']) }}
             {!! $errors->first('cantidad_disponible', '<div class="invalid-feedback">:message</div>') !!}
@@ -31,6 +25,11 @@
             {{ Form::label('precio_unitario') }}
             {{ Form::text('precio_unitario', $insumo->precio_unitario, ['class' => 'form-control' . ($errors->has('precio_unitario') ? ' is-invalid' : ''), 'placeholder' => 'Precio Unitario']) }}
             {!! $errors->first('precio_unitario', '<div class="invalid-feedback">:message</div>') !!}
+        </div>
+        <div class="form-group">
+            {{ Form::label('activo') }}
+            {{ Form::checkbox('activo', 1, $insumo->activo ?? true, ['class' => 'form-control' . ($errors->has('activo') ? ' is-invalid' : '')]) }}
+            {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
 
     </div>

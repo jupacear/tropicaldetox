@@ -65,8 +65,15 @@
                                                                 class="fa fa-fw fa-edit"></i>Editar</a>
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm"><i
-                                                                class="fa fa-fw fa-trash"></i>Desactivar</button>
+                                                        @if ($insumo->activo)
+                                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                                <i class="fa fa-fw fa-trash"></i> Desactivar
+                                                            </button>
+                                                        @else
+                                                            <button type="submit" class="btn btn-success btn-sm">
+                                                                <i class="fa fa-fw fa-check"></i> Activar
+                                                            </button>
+                                                        @endif
                                                     </form>
                                                 </td>
                                             </tr>
