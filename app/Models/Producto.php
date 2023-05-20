@@ -26,12 +26,19 @@ class Producto extends Model
   static $rules = [
     'imagen' => 'required|image|mimes:jpg,png|max:2048',
     'nombre' => 'required',
-    'precio' => 'required',
+    'precio' => 'required|numeric',
     'descripcion' => 'required',
     'activo' => 'required',
     'categorias_id' => 'required'
   ];
-
+  static $rulesUpdate = [
+    'imagen' => 'image|mimes:jpg,png|max:2048',
+    'nombre' => '',
+    'precio' => 'numeric',
+    'descripcion' => '',
+    'activo' => '',
+    'categorias_id' => 'required'
+  ];
   protected $perPage = 20;
 
   /**

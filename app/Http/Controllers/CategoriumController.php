@@ -123,13 +123,7 @@ class CategoriumController extends Controller
             return redirect()->back()->with('error', 'La categoría no existe');
         }
 
-        // Validar los datos del formulario
-        $request->validate([
-            'imagen' => 'image|mimes:jpg,png|max:2048',
-            'nombre' => 'required|max:50',
-            'descripcion' => 'required|min:10|max:50',
-            'activo' => '', // No es necesario validar el campo 'activo'
-        ]);
+        $request->validate(Categorium::$rulesUpdate);
 
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {

@@ -124,7 +124,7 @@ class InsumoController extends Controller
     public function update(Request $request, $id)
     {
         // Validar los datos de entrada
-        $request->validate(Insumo::$rules);
+        $request->validate(Insumo::$rulesUpdate);
 
         // Obtener el insumo por su ID
         $insumo = Insumo::find($id);

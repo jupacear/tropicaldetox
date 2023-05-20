@@ -129,14 +129,7 @@ class ProductoController extends Controller
             // return redirect()->route('productos.index')->with('error', 'El producto no existe');
         }
         //  Validar los datos de entrada
-        $request->validate([
-            'imagen' => 'image|mimes:jpg,png|max:2048',
-            'nombre' => 'required',
-            'precio' => 'required',
-            'descripcion' => 'required',
-            'activo' => 'required',
-            'categorias_id' => 'required'
-        ]);
+        $request->validate(Producto::$rulesUpdate);
 
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
