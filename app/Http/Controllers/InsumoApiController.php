@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Insumo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 class InsumoApiController extends Controller
 {
@@ -15,10 +17,15 @@ class InsumoApiController extends Controller
      */
     public function index()
     {
-        $insumos = Insumo::all();
+        try {
+            $insumos = Insumo::all();
 
-        return response()->json($insumos);
+            return response()->json($insumos);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -28,40 +35,46 @@ class InsumoApiController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(Insumo::$rules);
+        $request->validate([
+            'imagen' => 'required|image|mimes:jpg,png|max:2048',
+            'nombre' => 'required',
+            'cantidad_disponible' => 'required|numeric',
+            'unidad_medida' => 'required',
+            'precio_unitario' => 'required|numeric',
+            'activo' => 'boolean',
+        ]);
 
-        if ($request->hasFile('imagen')) {
-            // Obtener el archivo de imagen
-            $image = $request->file('imagen');
+        // Obtener la imagen del cuerpo de la solicitud
+        $image = $request->file('imagen');
 
-            // Generar un nombre único para la imagen usando la marca de tiempo actual
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-
-            // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
-            $image->move(public_path('img/InsumoIMG'), $imageName);
+        // Verificar si se proporcionó una imagen
+        if (!$image) {
+            return response()->json(['error' => 'Debe proporcionar una imagen'], 400);
         }
 
-        // Crea una instancia del modelo Insumo con los demás datos del formulario
+        // Generar un nombre único para la imagen usando la marca de tiempo actual
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+        // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
+        $image->move(public_path('img/InsumoIMG'), $imageName);
+
+        // Crear una instancia del modelo Insumo con los demás datos del formulario
         $insumo = new Insumo([
             'nombre' => $request->input('nombre'),
             'cantidad_disponible' => $request->input('cantidad_disponible'),
             'unidad_medida' => $request->input('unidad_medida'),
             'precio_unitario' => $request->input('precio_unitario'),
-            'activo' => $request->input('activo',)
+            'activo' => $request->input('activo'),
+            'imagen' => 'img/InsumoIMG/' . $imageName,
         ]);
 
-        // Guardar la ruta de la imagen en la base de datos si se ha cargado
-        if (isset($imageName)) {
-            $insumo->imagen = 'img/InsumoIMG/' . $imageName;
-        }
-
-        // Guarda el nuevo insumo en la base de datos
+        // Guardar el nuevo insumo en la base de datos
         $insumo->save();
 
-        // Devolver un mensaje de éxito personalizado
-        $message = 'Insumo creado exitosamente: ' . $insumo->toJson();
-        return response()->json(['message' => $message], 201);
+        // Devolver una respuesta de éxito
+        return response()->json(['message' => 'Insumo creado exitosamente'], 201);
     }
+
 
 
     /**
@@ -106,7 +119,7 @@ class InsumoApiController extends Controller
             $image->move(public_path('img/InsumoIMG'), $imageName);
 
             // Actualizar la propiedad "imagen" del modelo Insumo
-            $insumo->imagen = 'img/InsumoIMG/' . $imageName;
+            $insumo->imagen = 'img/InsumoIMG' . $imageName;
         } else {
             // Actualizar los demás campos del modelo con los datos del formulario
             $insumo->nombre = $request->input('nombre');
@@ -131,30 +144,42 @@ class InsumoApiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
-        $insumo = Insumo::findOrFail($id);
+        $url = 'http://127.0.0.1:8000/api/insumos/' . $id; // URL de la API
 
+        $response = Http::tiemeout(60)->delete($url); // Realizar la solicitud DELETE a la API
 
-        // Verificar si se encontró el insumo
-        if (!$insumo) {
-            return redirect()->back()->with('error', 'El insumo no existe');
-        }
+        if ($response->successful()) {
+            $responseData = $response->json(); // Obtener los datos JSON de la respuesta
 
-        // Verificar el estado actual del insumo
-        if ($insumo->activo) {
-            // Si está activo, desactivarlo
-            $insumo->activo = false;
-            $message = 'Insumo desactivado exitosamente: ' . $insumo->toJson();
+            // Verificar si la clave 'activo' existe en la respuesta
+            if (isset($responseData['activo'])) {
+                // Obtener el estado actual del insumo en la respuesta
+                $isActive = $responseData['activo'];
+
+                if ($isActive) {
+                    $message = 'Insumo desactivado exitosamente';
+                } else {
+                    $message = 'Insumo activado exitosamente';
+                }
+
+                // Redireccionar a la lista de insumos con mensaje de éxito
+                return redirect()->route('insumo.index')->with('success', $message);
+            } else {
+                // Manejar el caso en que la clave 'activo' no exista en la respuesta
+                $errorMessage = 'La respuesta de la API no contiene la clave "activo"';
+
+                // Redireccionar con mensaje de error
+                return redirect()->back()->withError($errorMessage);
+            }
         } else {
-            // Si está inactivo, activarlo
-            $insumo->activo = true;
-            $message = 'Insumo activado exitosamente: ' . $insumo->toJson();
+            // Manejar el caso en que la solicitud no sea exitosa
+            $errorMessage = $response->body();
+
+            // Redireccionar con mensaje de error
+            return redirect()->back()->withError($errorMessage);
         }
-
-        // Guardar los cambios en la base de datos
-        $insumo->save();
-
-        return response()->json(['message' => 'Insumo actualizado exitosamente'], 204);
     }
 }

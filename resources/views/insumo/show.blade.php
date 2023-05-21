@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Mostrar
+    Detalle
 @endsection
 
 @section('content')
@@ -19,29 +19,33 @@
 
                             <div class="form-group">
                                 <strong>Imagen:</strong>
-                                <img src="{{ asset($insumo->imagen) }}" class="img-thumbnail" alt="Imagen del insumo"
+                                <img src="{{ asset($insumo['imagen']) }}" class="img-thumbnail" alt="Imagen del insumo"
                                     width="115px">
                             </div>
                             <br>
                             <div class="form-group">
                                 <strong>Nombre:</strong>
-                                {{ $insumo->nombre }}
+                                {{ $insumo['nombre'] }}
                             </div>
                             <div class="form-group">
                                 <strong>Estado:</strong>
-                                {{ $insumo->activo }}
+                                @if ($insumo['activo'] == 1)
+                                    Activo
+                                @else
+                                    Desactivado
+                                @endif
                             </div>
                             <div class="form-group">
                                 <strong>Cantidad Disponible:</strong>
-                                {{ $insumo->cantidad_disponible }}
+                                {{ $insumo['cantidad_disponible'] }}
                             </div>
                             <div class="form-group">
                                 <strong>Unidad Medida:</strong>
-                                {{ $insumo->unidad_medida }}
+                                {{ $insumo['unidad_medida'] }}
                             </div>
                             <div class="form-group">
                                 <strong>Precio Unitario:</strong>
-                                {{ $insumo->precio_unitario }}
+                                {{ $insumo['precio_unitario'] }}
                             </div>
                             <div class="float-center">
                                 <a class="btn btn-primary" href="{{ route('insumo.index') }}"> Volver</a>

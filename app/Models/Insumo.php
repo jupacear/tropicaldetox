@@ -37,7 +37,8 @@ class Insumo extends Model
     'unidad_medida' => '',
     'precio_unitario' => 'numeric',
   ];
-  protected $perPage = 20;
+  protected $table = 'insumos';
+  // protected $perPage = 20;
 
   /**
    * Attributes that should be mass-assignable.
