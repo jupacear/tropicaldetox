@@ -47,7 +47,7 @@ class InsumoApiController extends Controller
             'cantidad_disponible' => $request->input('cantidad_disponible'),
             'unidad_medida' => $request->input('unidad_medida'),
             'precio_unitario' => $request->input('precio_unitario'),
-            'activo' => $request->input('activo', false), // Ajusta el valor del checkbox si corresponde
+            'activo' => $request->input('activo',)
         ]);
 
         // Guardar la ruta de la imagen en la base de datos si se ha cargado
@@ -58,7 +58,9 @@ class InsumoApiController extends Controller
         // Guarda el nuevo insumo en la base de datos
         $insumo->save();
 
-        return response()->json($insumo, 201);
+        // Devolver un mensaje de éxito personalizado
+        $message = 'Insumo creado exitosamente: ' . $insumo->toJson();
+        return response()->json(['message' => $message], 201);
     }
 
 
@@ -111,13 +113,15 @@ class InsumoApiController extends Controller
             $insumo->cantidad_disponible = $request->input('cantidad_disponible');
             $insumo->unidad_medida = $request->input('unidad_medida');
             $insumo->precio_unitario = $request->input('precio_unitario');
-            $insumo->activo = $request->input('activo', false);
+            $insumo->activo = $request->input('activo');
         }
 
         // Guardar los cambios en la base de datos
         $insumo->save();
 
-        return response()->json($insumo, 200);
+        // Devolver un mensaje de éxito personalizado
+        $message = 'Insumo actualizado exitosamente: ' . $insumo->toJson();
+        return response()->json(['message' => $message], 200);
     }
 
 
@@ -130,10 +134,27 @@ class InsumoApiController extends Controller
     public function destroy($id)
     {
         $insumo = Insumo::findOrFail($id);
-    
-        $insumo->delete();
-    
-        return response()->json(['message' => 'Insumo eliminado exitosamente'], 204);
+
+
+        // Verificar si se encontró el insumo
+        if (!$insumo) {
+            return redirect()->back()->with('error', 'El insumo no existe');
+        }
+
+        // Verificar el estado actual del insumo
+        if ($insumo->activo) {
+            // Si está activo, desactivarlo
+            $insumo->activo = false;
+            $message = 'Insumo desactivado exitosamente: ' . $insumo->toJson();
+        } else {
+            // Si está inactivo, activarlo
+            $insumo->activo = true;
+            $message = 'Insumo activado exitosamente: ' . $insumo->toJson();
+        }
+
+        // Guardar los cambios en la base de datos
+        $insumo->save();
+
+        return response()->json(['message' => 'Insumo actualizado exitosamente'], 204);
     }
-    
 }
