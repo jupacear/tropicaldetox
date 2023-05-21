@@ -24,6 +24,11 @@ class pedidoController extends Controller
         $pedidos = Pedido::with('users')->get();
 
         // Retornamos la vista "index" y le pasamos la variable "pedidos"
+        $producto = Producto::all();
+
+
+        // return view('pedidos.index', ["pedidos"=>$pedidos,"producto"=>$producto]);
+
         return view('pedidos.index', compact('pedidos'));
 
     }
@@ -39,6 +44,7 @@ class pedidoController extends Controller
     public function create()
     {
         // Retornamos la vista "create" y le pasamos las variables "productos" y "users"
+
         return view('pedidos.create', ['productos' => Producto::all(), 'users' => User::all()]);
 
     }
@@ -49,6 +55,9 @@ class pedidoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
+
 
 
 
@@ -66,6 +75,9 @@ class pedidoController extends Controller
             'Productos' => 'required|array',
             'Productos.*' => 'integer',
         ]);
+        // return response()->json($request);
+
+
 
         $pedido = new Pedido();
 
@@ -73,27 +85,44 @@ class pedidoController extends Controller
         $pedido->Telefono = $request->input('Telefono');
         $pedido->Estado = $request->input('Estado');
         $pedido->Fecha = $request->input('Fecha');
-        $pedido->Total = 22; // Aquí podrías calcular el total basado en los productos seleccionados si es necesario
         $pedido->id_users = $request->input('Usuario');
+        $pedido->Total = 0;
         $pedido->save();
 
         $productos = $request->input('Productos');
         $cantidades = $request->input('Cantidad');
+
+        $total = 0;
+
+        
         foreach ($productos as $index => $producto_id) {
             $producto = Producto::find($producto_id);
             $detalles_pedidos = new detalle_pedidos();
             $detalles_pedidos->id_pedidos = $pedido->id;
             $detalles_pedidos->cantidad = $cantidades[$index];
             $detalles_pedidos->precio_unitario = $producto->precio;
-            $detalles_pedidos->Prductos = $producto_id;
-            // $detalles_pedidos->Prductos = $producto->nombre;
+            $detalles_pedidos->id_productos = $producto_id;
+            $detalles_pedidos->Nombre = $producto->nombre;
+
+            $subtotal = $detalles_pedidos->cantidad * $detalles_pedidos->precio_unitario;
+            $total += $subtotal;
 
             $detalles_pedidos->save();
         }
 
+        $pedido->Total = $total;
+        $pedido->save();
+
         $pedidos = Pedido::all();
+
         return view('pedidos.index', compact('pedidos'));
     }
+
+
+    
+    
+
+
 
 
 
@@ -154,7 +183,8 @@ class pedidoController extends Controller
             'Estado' => 'required|max:200',
             'Fecha' => 'required|date',
             'Usuario' => 'required',
-            'Productos' => 'required',
+            'Productos' => 'required|array',
+            'Productos.*' => 'integer',
         ]);
 
         $pedido = Pedido::find($id);
@@ -162,8 +192,8 @@ class pedidoController extends Controller
         $pedido->Telefono = $request->input('Telefono');
         $pedido->Estado = $request->input('Estado');
         $pedido->Fecha = $request->input('Fecha');
-        $pedido->Total = 22;
         $pedido->id_users = $request->input('Usuario');
+        $pedido->Total = 0;
         $pedido->save();
 
         // Eliminar los detalles de pedido existentes asociados con el pedido
@@ -173,20 +203,29 @@ class pedidoController extends Controller
         $productos = $request->input('Productos');
         $cantidades = $request->input('Cantidad');
 
+        $total = 0;
+
         foreach ($productos as $index => $producto_id) {
             $producto = Producto::find($producto_id);
+            $detalles_pedidos = new detalle_pedidos();
+            $detalles_pedidos->id_pedidos = $pedido->id;
+            $detalles_pedidos->cantidad = $cantidades[$index];
+            $detalles_pedidos->precio_unitario = $producto->precio;
+            $detalles_pedidos->id_productos = $producto_id;
+            $detalles_pedidos->Nombre = $producto->nombre;
 
-            $detalle_pedido = new detalle_pedidos();
-            $detalle_pedido->id_pedidos = $pedido->id;
-            $detalle_pedido->cantidad = $cantidades[$index];
-            $detalle_pedido->precio_unitario = $producto->precio;
-            $detalle_pedido->Prductos = $producto_id;
+            $subtotal = $detalles_pedidos->cantidad * $detalles_pedidos->precio_unitario;
+            $total += $subtotal;
 
-            $detalle_pedido->save();
+            $detalles_pedidos->save();
         }
+
+        $pedido->Total = $total;
+        $pedido->save();
 
         $pedidos = Pedido::all();
         return view('pedidos.index', compact('pedidos'));
+
     }
 
 
@@ -222,4 +261,11 @@ class pedidoController extends Controller
 
         return redirect()->route('pedidos.index')->with('success', 'Pedido eliminado correctamente');
     }
+
+
+
+
+
+
+  
 }

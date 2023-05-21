@@ -65,7 +65,10 @@ Route::group(['middleware' => ['auth']] , function(){
     // modulos de Johan 
 
     Route::resource('pedidos',  pedidoController::class);
+    Route::get('/ventas/graficatop10', [ventasController::class, 'graficatop10'])->name('ventas.graficatop10');
+    Route::get('/ventas/informe', [ventasController::class, 'informe'])->name('ventas.informe');
     Route::resource('ventas', ventasController::class);
+
 
     // diego
 

@@ -88,49 +88,36 @@
                                         <label class="form-check-label" for="producto-{{ $producto->id }}">
                                             {{ $producto->nombre }}
                                         </label>
-                                        @foreach ($detalles_pedidos as $detalles_pedido)
+                                        <label class="form-check-label" >
+                                            :{{ $producto->precio }}
+                                        </label>
                                             <input style="width:  3em;" type="number" name="Cantidad[]"
-                                                value="{{ $detalles_pedido->cantidad }}">
+                                                value="1">
                                             <!-- Aquí se agrega el campo de cantidad actual del producto -->
-                                        @endforeach
 
                                     </div>
                                 @endforeach --}}
 
+                             
 
-                                @foreach ($productos as $producto)
-                                <?php
-                                    $detalle_pedido = $detalles_pedidos->firstWhere('Prductos', $producto->id);
-                                ?>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="Productos[]"
-                                        value="{{ $producto->id }}" id="producto-{{ $producto->id }}"
-                                        @if ($detalle_pedido) checked @endif>
-                                    <label class="form-check-label" for="producto-{{ $producto->id }}">
-                                        {{ $producto->nombre }}
-                                    </label>
-                                    @if ($detalle_pedido)
-                                        <input style="width:  3em;" type="number" name="Cantidad[]"
-                                            value="{{ $detalle_pedido->cantidad }}">
-                                        <!-- Aquí se agrega el campo de cantidad actual del producto -->
-                                    @endif
-                                </div>
-                            @endforeach
-
-
-
-
+                              
+                            
+                            @foreach ($productos as $producto)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="Productos[]"
+                                    value="{{ $producto->id }}" id="producto-{{ $producto->id }}"
+                                    @if ($detalles_pedidos->contains('id_productos', $producto->id)) checked @endif>
                         
-
-
-
-
-
-
-
-
-
-
+                                <label class="form-check-label" for="producto-{{ $producto->id }}">
+                                    {{ $producto->nombre }}
+                                </label>
+                                <label class="form-check-label">
+                                    :{{ $producto->precio }}
+                                </label>
+                                <input style="width: 3em;" type="number" name="Cantidad[]" value="1">
+                                <!-- Aquí se agrega el campo de cantidad actual del producto -->
+                            </div>
+                        @endforeach
 
                                 <button type="submit" class="btn btn-primary">Guarda</button>
                                 <a class="btn btn-dark" href="{{ route('pedidos.index') }} ">Regresar</a>

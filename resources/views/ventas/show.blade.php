@@ -7,14 +7,14 @@
 @extends('layouts.app')
 
 @section('content')
-@section('title', 'Pedidos')
+@section('title', 'Ventas')
 
 
 <section class="section">
 
 
     <div class="section-header">
-        <h3 class="page__heading">Pedidos</h3>
+        <h3 class="page__heading">Ventas</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -24,7 +24,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h1>Detalles del pedido</h1>
+                                    <h1>Detalles del Ventas</h1>
                     
                                     <p><strong>Nombre:</strong> {{ $pedido->Nombre }}</p>
                                     <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
@@ -33,7 +33,7 @@
                                     <p><strong>Total:</strong> {{ $pedido->Total }}</p>
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                     
-                                    <h2>Detalles del pedido</h2>
+                                    <h2>Detalles del Ventas</h2>
                     
                                     <table class="table">
                                         <thead>
@@ -59,7 +59,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <a class="btn btn-dark" href="{{ route('pedidos.index') }} ">Regresar</a>
+                                    <a class="btn btn-dark" href="{{ route('ventas.index') }} ">Regresar</a>
                                 </div>
                             </div>
                         </div>

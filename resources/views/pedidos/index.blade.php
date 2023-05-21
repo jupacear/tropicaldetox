@@ -33,6 +33,7 @@
                             <tbody>
                                 @foreach ($pedidos as $pedido)
                                     @if ($pedido->Estado == 'En_proceso')
+                                        
                                         <tr>
                                             <td>{{ $pedido->id }}</td>
                                             <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
@@ -40,14 +41,19 @@
                                             <td>{{ $pedido->users ? $pedido->users->direccion : 'Null' }}</td>
                                             <td>{{ $pedido->Estado }}</td>
                                             <td>{{ $pedido->Fecha }}</td>
+                                            {{-- <td>{{ $detalles->  }}</td> --}}
+                                            {{-- <td>{{ $detalles->cantidad * $detalles->precio_unitario }}</td> --}}
                                             <td>{{ $pedido->Total }}</td>
+                            
+
+
                                             <td class="text-center">
                                                 {{-- <a class="btn btn-success" href="{{route('pedidos/'.$pedido->id.'/edit')}}">Detalles</a> --}}
                                                 <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
-                                                    
+
                                                     <a href="{{ route('pedidos.show', $pedido->id) }}"
                                                         class="btn btn-sm btn-primary"><i
-                                                        class="fa fa-fw fa-eye"></i>Mostrar</a></a>
+                                                            class="fa fa-fw fa-eye"></i>Mostrar</a></a>
                                                     <a class="btn btn-sm btn-success"
                                                         href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
                                                         <i class="fa fa-fw fa-edit"></i>
@@ -58,8 +64,7 @@
                                                     @method('DELETE')
                                                     @csrf
                                                     <button type="sudmit" class="btn btn-danger btn-sm">
-                                                        <i
-                                                                class="fa fa-fw fa-trash"></i>
+                                                        <i class="fa fa-fw fa-trash"></i>
                                                         Eliminar
                                                     </button>
                                                 </form>

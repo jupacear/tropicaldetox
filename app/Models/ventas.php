@@ -13,4 +13,7 @@ class ventas extends Model
     {
         return $this->belongsTo(User::class, 'id_users');
     }
+    // detalle_pedidos
+
+   
 }

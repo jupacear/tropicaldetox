@@ -2,6 +2,7 @@
 
 @section('title', 'Pedidos')
 @section('content')
+
     <section class="section">
         <div class="section-header">
             <h3 class="page__heading">Crear Pedidos</h3>
@@ -68,7 +69,7 @@
 
                                
                                 
-                               
+{{--                                
                                 <div class="form-group">
                                     <label for="Productos">Productos:</label>
                                     @foreach ($productos as $producto)
@@ -80,7 +81,26 @@
                                             <input style="width:  3em;" type="number" name="Cantidad[]" value="0">
                                         </div>
                                     @endforeach
+                                </div> --}}
+                                
+                                
+                                
+
+                                <div class="form-group">
+                                    <label for="Productos">Productos:</label>
+                                    @foreach ($productos as $producto)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Productos[]" value="{{ $producto->id }}" id="producto-{{ $producto->id }}">
+                                            <label class="form-check-label" for="producto-{{ $producto->id }}">
+                                                {{ $producto->nombre }}
+                                            </label>
+                                            <input style="width:  3em;" type="number" name="Cantidad[]" value="0">
+                                        </div>
+                                    @endforeach
                                 </div>
+
+                                
+                                                                
                                 
                                 
                                 
@@ -88,9 +108,7 @@
 
 
 
-
-
-                                <button type="submit" class="btn btn-primary">Guarda</button>
+                                <button type="submit" class="btn btn-primary" onclick="eliminarCantidadesCero()" >Guarda</button>
                                 <a class="btn btn-dark" href="{{ route('pedidos.index') }} ">Regresar</a>
                             </form>
 
