@@ -83,26 +83,24 @@ class InsumoController extends Controller
             // Obtener el archivo de imagen
             $image = $request->file('imagen');
 
-            // Verificar si la imagen es válida
-            if ($image->isValid()) {
-                // Obtener el contenido de la imagen como cadena binaria
-                $imageData = file_get_contents($image->getRealPath());
+            // Generar un nuevo nombre para el archivo
+            $newName = time() . '_' . $image->getClientOriginalName();
 
-                // Agregar la imagen al arreglo de datos como un archivo cargado
-                $data['imagen'] = [
-                    'name' => $image->getClientOriginalName(),
-                    'type' => $image->getClientMimeType(),
-                    'content' => base64_encode($imageData),
-                ];
-            }
+            // Agregar el nombre del archivo al arreglo de datos
+            $data['imagen'] = $newName;
+
+            // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
+            $image->move(public_path('img/InsumoIMG'), $newName);
         }
 
-
+        // Convertir los datos a JSON
+        $jsonData = json_encode($data);
+        dd($data);
         // Realizar la solicitud POST a la API para crear el insumo
-        $response = Http::post($url, $data);
+        $response = Http::post($url, [], ['body' => $jsonData, 'headers' => ['Content-Type' => 'application/json']]);
+
         if ($response->successful()) {
-            // return response()->json($data);
-            return redirect()->route('insumo.index');
+            return redirect()->route('insumo.index')->with('success', 'Insumo creado correctamente');
         } else {
             // Manejar el caso en que la solicitud no sea exitosa
             $errorMessage = $response->body();

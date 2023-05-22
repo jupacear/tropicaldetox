@@ -41,7 +41,7 @@ class InsumoApiController extends Controller
             'cantidad_disponible' => 'required|numeric',
             'unidad_medida' => 'required',
             'precio_unitario' => 'required|numeric',
-            'activo' => 'boolean',
+            'activo' => 'boolean'
         ]);
 
         // Obtener la imagen del cuerpo de la solicitud
