@@ -16,7 +16,7 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <form method="POST" action="{{ route('insumo.update', $insumo->id) }}" role="form"
+                            <form method="POST" action="{{ route('insumo.update', $insumo['id']) }}" role="form"
                                 enctype="multipart/form-data">
                                 {{ method_field('PATCH') }}
                                 @csrf

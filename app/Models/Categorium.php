@@ -25,9 +25,14 @@ class Categorium extends Model
     'imagen' => 'required|image|mimes:jpg,png|max:2048',
     'nombre' => 'required',
     'descripcion' => 'required',
-    'activo' => 'required',
+    'activo' => '',
   ];
-
+  static $rulesUpdate = [
+    'imagen' => 'image|mimes:jpg,png|max:2048',
+    'nombre' => '',
+    'descripcion' => '',
+    'activo' => '',
+  ];
   protected $perPage = 20;
 
   /**

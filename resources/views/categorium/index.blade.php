@@ -25,6 +25,7 @@
                                             <th style="color:#fff;">Imagen</th>
                                             <th style="color:#fff;">Nombre</th>
                                             <th style="color:#fff;">Descripcion</th>
+                                            <th style="color:#fff;">Estado</th>
                                             <th style="color:#fff;">Opciones</th>
 
                                         </tr>
@@ -33,11 +34,18 @@
                                         @foreach ($categoria as $categorium)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
+                                                <td>
+                                                    @if ($categorium->imagen)
+                                                        <img src="{{ asset($categorium->imagen) }}"
+                                                            alt="Imagen del categoria" width="25">
+                                                    @else
+                                                        Sin imagen
+                                                    @endif
+                                                </td>
 
-                                                <td>{{ $categorium->imagen }}</td>
-                                                <td>{{ $categorium->nombre }}</td>
+                                                <td class="">{{ $categorium->nombre }}</td>
                                                 <td>{{ $categorium->descripcion }}</td>
-
+                                                <td>{{ $categorium->activo }}</td>
                                                 <td>
                                                     <form action="{{ route('categoria.destroy', $categorium->id) }}"
                                                         method="POST">
@@ -49,8 +57,15 @@
                                                                 class="fa fa-fw fa-edit"></i>Editar</a>
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger btn-sm"><i
-                                                                class="fa fa-fw fa-trash"></i>Desactivar</button>
+                                                        @if ($categorium->activo)
+                                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                                <i class="fa fa-fw fa-trash"></i> Desactivar
+                                                            </button>
+                                                        @else
+                                                            <button type="submit" class="btn btn-success btn-sm">
+                                                                <i class="fa fa-fw fa-check"></i> Activar
+                                                            </button>
+                                                        @endif
                                                     </form>
                                                 </td>
                                             </tr>

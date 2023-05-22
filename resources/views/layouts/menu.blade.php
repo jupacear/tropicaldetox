@@ -11,14 +11,14 @@
     <a class="nav-link" href="{{ route('A_clientes.index') }}">
         <i class="fas fa-building"></i><span>Clientes</span>
     </a>
-    <a class="nav-link" href="/Categorias">
-        <i class=" fas fa-building"></i><span>Categoria de productos</span>
+    <a class="nav-link" href="{{route('categoria.index')}}">
+        <i class="fas fa-tags"></i><span>Categoria de productos</span>
     </a>
-    <a class="nav-link" href="/Productos">
-        <i class=" fas fa-building"></i><span>Productos</span>
+    <a class="nav-link" href="{{route('productos.index')}}">
+        <i class="fas fa-cubes"></i><span>Productos</span>
     </a>
     <a class="nav-link" href="/Insumos">
-        <i class=" fas fa-building"></i><span>Insumos</span>
+        <i class="fas fa-box"></i><span>Insumos</span>
     </a>
     <a class="nav-link" href="{{route('pedidos.index')}}">
         <i class="fas fa-boxes"></i><span>Pedidos</span>
