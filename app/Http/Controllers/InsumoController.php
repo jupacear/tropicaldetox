@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Insumo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
 
 /**
  * Class InsumoController
@@ -18,29 +17,14 @@ class InsumoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function index()
-    // {
-    //     $insumos = Insumo::paginate();
-
-    //     return view('insumo.index', compact('insumos'))
-    //         ->with('i', (request()->input('page', 1) - 1) * $insumos->perPage());
-    // }
     public function index()
     {
-        $url = 'http://127.0.0.1:8000/api/insumos'; // URL de la API
-        $response = Http::get($url); // Realizar la solicitud GET a la API
+        $insumos = Insumo::paginate();
 
-        if ($response->successful()) {
-            $insumos = $response->json(); // Obtener los datos JSON de la respuesta
-
-            // Pasar los datos a la vista
-            return view('insumo.index', compact('insumos'));
-        } else {
-            // Manejar el caso en que la solicitud no sea exitosa
-            $errorMessage = $response->body();
-            return back()->withError($errorMessage);
-        }
+        return view('insumo.index', compact('insumos'))
+            ->with('i', (request()->input('page', 1) - 1) * $insumos->perPage());
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -48,22 +32,9 @@ class InsumoController extends Controller
      */
     public function create()
     {
-        $url = 'http://127.0.0.1:8000/api/insumos'; // URL de la API
-
-        $response = Http::get($url); // Realizar la solicitud GET a la API
-        if ($response->successful()) {
-            $insumos = $response->json(); // Obtener los datos JSON de la API
-
-            return view('insumo.create', compact('insumos'));
-        } else {
-            // Manejar el caso en que la solicitud no sea exitosa
-            $errorMessage = $response->body();
-
-            // Redireccionar con mensaje de error
-            return redirect()->back()->withError($errorMessage);
-        }
+        $insumo = new Insumo();
+        return view('insumo.create', compact('insumo'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -72,41 +43,46 @@ class InsumoController extends Controller
      */
     public function store(Request $request)
     {
-        $url = 'http://127.0.0.1:8000/api/insumos'; // URL de la API
+        $request->validate(Insumo::$rules);
 
-        // Obtener los datos del formulario de creación del insumo
-        $data = $request->except('imagen');
-        $data['activo'] = $request->has('activo'); // Convertir el valor del checkbox a booleano
+        // Obtener el valor del checkbox de estado "activo"
+        $activo = $request->has('activo') ? true : false;
 
-        // Verificar si se ha enviado una imagen
+        // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
             // Obtener el archivo de imagen
             $image = $request->file('imagen');
 
-            // Generar un nuevo nombre para el archivo
-            $newName = time() . '_' . $image->getClientOriginalName();
-
-            // Agregar el nombre del archivo al arreglo de datos
-            $data['imagen'] = $newName;
+            // Generar un nombre único para la imagen usando la marca de tiempo actual
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
 
             // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
-            $image->move(public_path('img/InsumoIMG'), $newName);
-        }
+            $image->move(public_path('img/InsumoIMG'), $imageName);
 
-        // Convertir los datos a JSON
-        $jsonData = json_encode($data);
-        dd($data);
-        // Realizar la solicitud POST a la API para crear el insumo
-        $response = Http::post($url, [], ['body' => $jsonData, 'headers' => ['Content-Type' => 'application/json']]);
-
-        if ($response->successful()) {
-            return redirect()->route('insumo.index')->with('success', 'Insumo creado correctamente');
+            // Crear el nuevo registro en la base de datos con la ruta de la imagen y el valor del campo "activo"
+            Insumo::create([
+                'imagen' => 'img/InsumoIMG/' . $imageName,
+                'nombre' => $request->input('nombre'),
+                'descripcion' => $request->input('descripcion'),
+                'activo' => $activo,
+                'cantidad_disponible' => $request->input('cantidad_disponible'),
+                'unidad_medida' => $request->input('unidad_medida'),
+                'precio_unitario' => $request->input('precio_unitario'),
+            ]);
         } else {
-            // Manejar el caso en que la solicitud no sea exitosa
-            $errorMessage = $response->body();
-
-            return redirect()->back()->withError($errorMessage);
+            // Si no se ha enviado una imagen, crear el registro sin el campo de imagen y con el valor del campo "activo"
+            Insumo::create([
+                'nombre' => $request->input('nombre'),
+                'descripcion' => $request->input('descripcion'),
+                'activo' => $activo,
+                'cantidad_disponible' => $request->input('cantidad_disponible'),
+                'unidad_medida' => $request->input('unidad_medida'),
+                'precio_unitario' => $request->input('precio_unitario'),
+            ]);
         }
+
+        return redirect()->route('insumo.index')
+            ->with('success', 'Insumo creado exitosamente.');
     }
 
 
@@ -119,23 +95,10 @@ class InsumoController extends Controller
      */
     public function show($id)
     {
-        $url = 'http://127.0.0.1:8000/api/insumos/' . $id; // URL de la API
+        $insumo = Insumo::find($id);
 
-        $response = Http::get($url); // Realizar la solicitud GET a la API
-
-        if ($response->successful()) {
-            $insumo = $response->json(); // Obtener los datos JSON del insumo
-
-            return view('insumo.show', compact('insumo'));
-        } else {
-            // Manejar el caso en que la solicitud no sea exitosa
-            $errorMessage = $response->body();
-
-            // Redireccionar con mensaje de error
-            return redirect()->back()->withError($errorMessage);
-        }
+        return view('insumo.show', compact('insumo'));
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -217,30 +180,29 @@ class InsumoController extends Controller
      */
     public function destroy($id)
     {
-        $url = 'http://127.0.0.1:8000/api/insumos/' . $id; // URL de la API
+        // Buscar el insumo por ID
+        $insumo = Insumo::find($id);
 
-        $response = Http::delete($url); // Realizar la solicitud DELETE a la API
-
-        if ($response->successful()) {
-            $responseData = $response->json(); // Obtener los datos JSON de la respuesta
-
-            // Verificar el estado actual del insumo en la respuesta
-            $isActive = $responseData['activo'];
-
-            if ($isActive) {
-                $message = 'Insumo desactivado exitosamente';
-            } else {
-                $message = 'Insumo activado exitosamente';
-            }
-
-            // Redireccionar a la lista de insumos con mensaje de éxito
-            return redirect()->route('insumo.index')->with('success', $message);
-        } else {
-            // Manejar el caso en que la solicitud no sea exitosa
-            $errorMessage = $response->body();
-
-            // Redireccionar con mensaje de error
-            return redirect()->back()->withError($errorMessage);
+        // Verificar si se encontró el insumo
+        if (!$insumo) {
+            return redirect()->back()->with('error', 'El insumo no existe');
         }
+
+        // Verificar el estado actual del insumo
+        if ($insumo->activo) {
+            // Si está activo, desactivarlo
+            $insumo->activo = false;
+            $message = 'Insumo desactivado exitosamente';
+        } else {
+            // Si está inactivo, activarlo
+            $insumo->activo = true;
+            $message = 'Insumo activado exitosamente';
+        }
+
+        // Guardar los cambios en la base de datos
+        $insumo->save();
+
+        // Redireccionar a la lista de insumos con mensaje de éxito
+        return redirect()->route('insumo.index')->with('success', $message);
     }
 }

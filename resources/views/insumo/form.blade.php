@@ -40,7 +40,6 @@
                 class="form-control{{ $errors->has('activo') ? ' is-invalid' : '' }}">
             {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
-
         <div class="box-footer mt20">
             <button type="submit" class="btn btn-primary">Enviar</button>
         </div>
