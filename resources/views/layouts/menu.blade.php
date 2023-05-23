@@ -17,7 +17,7 @@
     <a class="nav-link" href="{{route('productos.index')}}">
         <i class="fas fa-cubes"></i><span>Productos</span>
     </a>
-    <a class="nav-link" href="/Insumos">
+    <a class="nav-link" href="{{route('insumo.index')}}">
         <i class="fas fa-box"></i><span>Insumos</span>
     </a>
     <a class="nav-link" href="{{route('pedidos.index')}}">

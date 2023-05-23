@@ -16,12 +16,12 @@
             {{ Form::text('descripcion', $categorium->descripcion, ['class' => 'form-control' . ($errors->has('descripcion') ? ' is-invalid' : ''), 'placeholder' => 'Descripcion']) }}
             {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
         </div>
-        <div class="form-group form-check">
-            {{ Form::checkbox('activo', 1, $categorium->activo, ['class' => 'form-check-input' . ($errors->has('activo') ? ' is-invalid' : ''), 'id' => 'activo']) }}
-            {{ Form::label('activo', 'Estado', ['class' => 'form-check-rigth']) }}
+        <div class="form-group">
+            <label for="activo">Activo</label>
+            <input type="checkbox" name="activo" value="1" {{ old('activo') ? 'checked' : '' }}
+                class="form-control{{ $errors->has('activo') ? ' is-invalid' : '' }}">
             {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
-
     </div>
     <div class="box-footer mt20">
         <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
