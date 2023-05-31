@@ -26,12 +26,12 @@
                                 <div class="col-md-12">
                                     <h1>Detalles del pedido</h1>
                     
+                                    <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                                     <p><strong>Nombre:</strong> {{ $pedido->Nombre }}</p>
                                     <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
                                     <p><strong>Total:</strong> {{ $pedido->Total }}</p>
-                                    <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                     
                                     <h2>Detalles del pedido</h2>
                     
@@ -48,15 +48,21 @@
                                         <tbody>
                                             @foreach ($detalles_pedidos as $detalle)
                                                 <tr>
-                                                    <td>{{ $detalle->Prductos }}</td>
+                                                    <td>{{ $detalle->id }}</td>
                                                     <td>{{ $detalle->Nombre }}</td>
                                                     
                                                     {{-- <td>{{ $detalle->Prductos->nombre }}</td> --}}
+
                                                     <td>{{ $detalle->cantidad }}</td>
                                                     <td>{{ $detalle->precio_unitario }}</td>
-                                                    <td>{{ $detalle->cantidad * $detalle->precio_unitario }}</td>
                                                 </tr>
-                                            @endforeach
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                
+                                                @endforeach
+                                                <td>{{ $detalle->id_pedidos=$pedido->Total}}</td>
                                         </tbody>
                                     </table>
                                     <a class="btn btn-dark" href="{{ route('pedidos.index') }} ">Regresar</a>

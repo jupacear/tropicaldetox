@@ -19,7 +19,7 @@
 
 
                         <a class="btn btn-sm btn-success" href="{{ route('ventas.graficatop10') }}"><i class="fa fa-fw fa-edit"></i>Top 10</a>
-                        <a class="btn btn-sm btn-success" href="{{ route('ventas.informe') }}"><i class="fa fa-fw fa-edit"></i>Top 10</a>
+                        <a class="btn btn-sm btn-success" href="{{ route('ventas.informe') }}"><i class="fa fa-fw fa-edit"></i>grafica000</a>
                        
                         
                         <table id="example" class="table table-striped table-bordered" style="width:100%">

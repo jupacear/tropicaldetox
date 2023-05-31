@@ -48,6 +48,7 @@
                                         <tbody>
                                             @foreach ($detalles_pedidos as $detalle)
                                                 <tr>
+                                                    <td>{{ $detalle->id }}</td>
                                                     <td>{{ $detalle->Prductos }}</td>
                                                     <td>{{ $detalle->Nombre }}</td>
                                                     
