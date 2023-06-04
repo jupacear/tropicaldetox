@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorium;
+use App\Models\Insumo;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        $productos = Producto::paginate();
+        $productos = Producto::with('insumos')->paginate(10);
 
         return view('producto.index', compact('productos'))
             ->with('i', (request()->input('page', 1) - 1) * $productos->perPage());
@@ -37,7 +38,10 @@ class ProductoController extends Controller
         // Obtén las categorías disponibles (nombre y ID) desde el modelo de Categoría
         $categorias = Categorium::pluck('nombre', 'id');
 
-        return view('producto.create', compact('producto', 'categorias'));
+        // Obtén los insumos disponibles (nombre y ID) desde el modelo de Insumo
+        $insumos = Insumo::pluck('nombre', 'id');
+
+        return view('producto.create', compact('producto', 'categorias', 'insumos'));
     }
 
     /**
@@ -55,7 +59,8 @@ class ProductoController extends Controller
             'precio' => 'required',
             'descripcion' => 'required',
             'activo' => '', //No validar para que pueda ser enviado correctamente
-            'categorias_id' => 'required'
+            'categorias_id' => 'required',
+            'insumos' => 'required|array' // Validar que se envíen los insumos como un array
         ]);
 
         $producto = new Producto();
@@ -80,6 +85,12 @@ class ProductoController extends Controller
 
         // Guardar el registro en la base de datos
         $producto->save();
+
+        // Obtener los insumos seleccionados del formulario
+        $insumos = $request->input('insumos');
+
+        // Asociar los insumos al producto a través de la relación de muchos a muchos
+        $producto->insumos()->attach($insumos);
 
         return redirect()->route('productos.index')
             ->with('success', 'Producto creado exitosamente');
@@ -107,8 +118,9 @@ class ProductoController extends Controller
     {
         $producto = Producto::find($id);
         $categorias = Categorium::pluck('nombre', 'id');
-
-        return view('producto.edit', compact('producto', 'categorias'));
+        // Obtén los insumos disponibles (nombre y ID) desde el modelo de Insumo
+        $insumos = Insumo::pluck('nombre', 'id');
+        return view('producto.edit', compact('producto', 'categorias', 'insumos'));
     }
 
     /**
@@ -164,6 +176,9 @@ class ProductoController extends Controller
         // Guardar los cambios en la base de datos
         $producto->save();
 
+        // Sincronizar los insumos en la tabla pivot
+        $insumos = $request->input('insumos');
+        $producto->insumos()->sync($insumos);
         // Redireccionar a la página de índice de productos con un mensaje de éxito
         return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
     }

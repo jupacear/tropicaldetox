@@ -37,7 +37,8 @@ class Producto extends Model
     'precio' => 'numeric',
     'descripcion' => '',
     'activo' => '',
-    'categorias_id' => 'required'
+    'categorias_id' => 'required',
+    'insumos' => 'array' // Validar que los insumos sean un arreglo
   ];
   protected $perPage = 20;
 
@@ -55,5 +56,10 @@ class Producto extends Model
   public function categorium()
   {
     return $this->hasOne('App\Models\Categorium', 'id', 'categorias_id');
+  }
+
+  public function insumos()
+  {
+    return $this->belongsToMany('App\Models\Insumo');
   }
 }

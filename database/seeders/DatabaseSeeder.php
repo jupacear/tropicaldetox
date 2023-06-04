@@ -22,4 +22,5 @@ class DatabaseSeeder extends Seeder
         $this->call(seederTablaPermisos::class);
         $this->call(UserSeeder::class);
     }
+    //php artisan db:seed
 }

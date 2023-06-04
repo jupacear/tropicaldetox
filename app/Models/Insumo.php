@@ -46,8 +46,8 @@ class Insumo extends Model
    * @var array
    */
   protected $fillable = ['imagen', 'nombre', 'cantidad_disponible', 'unidad_medida', 'precio_unitario', 'activo'];
-  // public function productos()
-  // {
-  //   return $this->hasMany('App\Models\Producto', 'insumo_id');
-  // }
+  public function productos()
+  {
+    return $this->hasMany('App\Models\Producto', 'insumo_id');
+  }
 }
