@@ -27,8 +27,13 @@
                                     <h1>Detalles del pedido</h1>
                     
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
-                                    <p><strong>Nombre:</strong> {{ $pedido->Nombre }}</p>
-                                    <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
+                                    @if (!empty($pedido->Nombre))
+                                        <p><strong>Nombre:</strong> {{ $pedido->Nombre }}</p>
+                                    @endif
+
+                                    @if (!empty($pedido->Telefono))
+                                        <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
+                                    @endif
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
                                     <p><strong>Total:</strong> {{ $pedido->Total }}</p>

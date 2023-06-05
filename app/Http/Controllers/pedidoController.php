@@ -44,7 +44,7 @@ class pedidoController extends Controller
     public function create()
     {
         // Retornamos la vista "create" y le pasamos las variables "productos" y "users"
-
+        
         return view('pedidos.create', ['productos' => Producto::all(), 'users' => User::all()]);
 
     }
@@ -204,9 +204,10 @@ class pedidoController extends Controller
     public function edit($id)
     {
         $pedido = Pedido::with('users')->find($id);
+        $pedidos = Pedido::find($id);
         $users = User::all(); // define la variable $users con todos los usuarios
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
-        return view('pedidos.edit', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users]);
+        return view('pedidos.edit', ['pedidos' => $pedidos,'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users]);
     }
 
 
@@ -223,7 +224,19 @@ class pedidoController extends Controller
      */
 
 
-
+     public function updateEstado(Request $request, $id)
+     {
+         $request->validate([
+             'Estado' => 'required|max:200',
+         ]);
+     
+         $pedido = Pedido::find($id);
+         $pedido->Estado = $request->input('Estado');
+         $pedido->save();
+     
+         return redirect()->route('pedidos.index')->with('success', 'Estado actualizado correctamente');
+     }
+     
 
     public function update(Request $request, $id)
     {
@@ -246,10 +259,15 @@ class pedidoController extends Controller
         $pedido->id_users = $request->input('Usuario');
         $pedido->Total = $request->input('Total'); // Guarda el valor del campo "Total" ingresado por el usuario
         $pedido->save();
-    
+     
+        // Eliminar los detalles de pedido existentes asociados con el pedido
+     
+        
+        
         $productos = $request->input('ProductoID');
         $cantidades = $request->input('Cantidad');
         $total = 0;
+        $pedido->detalle_pedidos()->delete();
     
         foreach ($productos as $index => $producto_id) {
             $producto = Producto::find($producto_id);

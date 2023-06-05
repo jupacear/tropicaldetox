@@ -26,17 +26,19 @@
                                 </div>
                             @endif
 
-                            <div class="containeer">
+                            <div class="container">
                                 <ul class="product-list">
                                     <li>
                                         <h2>Productos</h2>
                                     </li>
                                     @foreach ($productos as $producto)
                                         <li>
+                                            <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto"
+                                                width="40em">
                                             <span>{{ $producto->id }}:{{ $producto->nombre }}
                                                 <br>$:{{ $producto->precio }}</span>
                                             <button class="btn btn-primary btn-sm float-right"
-                                                onclick="agregarProducto('{{ $producto->id }}', '{{ $producto->nombre }} ','{{$producto->precio }}')">Agregar</button>
+                                                onclick="agregarProducto('{{ $producto->id }}', '{{ $producto->nombre }}','{{ $producto->precio }}')">Agregar</button>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -53,37 +55,60 @@
 
                                             <ul id="selected-products-list">
                                                 @foreach ($pedido->productos as $producto)
-                                                    <li>{{ $producto->nombre }} - Cantidad: {{ $producto->pivot->cantidad }} - Subtotal: ${{ $producto->precio * $producto->pivot->cantidad }}</li>
-                                                    <input type="hidden" name="Cantidad[]" value="{{ $producto->pivot->cantidad }}">
+                                                    <li data-producto-id="{{ $producto->id }}"
+                                                        data-cantidad="{{ $producto->pivot->cantidad }}"
+                                                        data-subtotal="{{ $producto->precio * $producto->pivot->cantidad }}">
+                                                        {{ $producto->nombre }} - Cantidad:
+                                                        {{ $producto->pivot->cantidad }}
+                                                        - Subtotal: ${{ $producto->precio * $producto->pivot->cantidad }}
+                                                        <button class="btn btn-danger btn-sm quitar-btn"
+                                                            onclick="quitarProducto('{{ $producto->id }}')">Quitar</button>
+                                                    </li>
+                                                    <input type="hidden" name="Cantidad[]"
+                                                        value="{{ $producto->pivot->cantidad }}">
                                                     <input type="hidden" name="ProductoID[]" value="{{ $producto->id }}">
                                                 @endforeach
                                             </ul>
                                             <h4>Total: $<span id="total">{{ $pedido->Total }}</span></h4>
-                                            <input type="hidden" name="Total" id="total-input" value="{{ $pedido->total }}">
+                                            <input type="hidden" name="Total" id="total-input"
+                                                value="{{ $pedido->total }}">
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="Estado">Estado</label>
-                                                <select name="Estado" id="Estado" class="form-control select2" data-live-search="true" required>
+                                                <select name="Estado" id="Estado" class="form-control select2"
+                                                    data-live-search="true" required>
+
                                                     <option value="">Seleccionar Estado</option>
-                                                    <option value="En_proceso" {{ $pedido->Estado == 'En_proceso' ? 'selected' : '' }}>En proceso</option>
-                                                    <option value="Finalizado" {{ $pedido->Estado == 'Finalizado' ? 'selected' : '' }}>Finalizado</option>
+                                                    <option value="En_proceso"
+                                                        {{ $pedido->Estado == 'En_proceso' ? 'selected' : '' }}>En
+                                                        proceso</option>
+                                                    <option value="Finalizado"
+                                                        {{ $pedido->Estado == 'Finalizado' ? 'selected' : '' }}>Finalizado
+                                                    </option>
                                                 </select>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="Usuario">Usuario:</label>
-                                                <select name="Usuario" id="Usuario" class="form-control select2" data-live-search="true" required>
+                                                <select name="Usuario" id="Usuario" class="form-control select2"
+                                                    data-live-search="true" required>
                                                     <option value="">Seleccionar Usuario</option>
                                                     @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}" {{ $pedido->Usuario == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                                                        {{-- {{ $pedido->Usuario == $user->id ? 'selected' : '' }}> --}}
+
+                                                        <option value="{{ $user->id }}"
+                                                            {{ $pedido->Usuario == $user->id ? 'selected' : '' }}>
+                                                            {{ $user->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="Fecha">Fecha</label>
-                                                <input required value="{{ $pedido->Fecha }}" name="Fecha" type="date" class="form-control" id="Fecha" aria-describedby="FechaHelp" placeholder="Fecha">
+                                                <input required value="{{ $pedido->Fecha }}" name="Fecha" type="date"
+                                                    class="form-control" id="Fecha" aria-describedby="FechaHelp"
+                                                    placeholder="Fecha">
                                             </div>
 
                                             <div class="d-flex justify-content-between">
@@ -110,7 +135,14 @@
                                         var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
 
                                         var li = document.createElement('li');
-                                        li.textContent = nombre + ' - Cantidad: ' + cantidad + ' - Subtotal: $' + subtotal;
+                                        li.setAttribute('data-producto-id', id);
+                                        li.setAttribute('data-cantidad', cantidad);
+                                        li.setAttribute('data-subtotal', subtotal);
+                                        li.innerHTML = `
+                                            ${nombre} - Cantidad: ${cantidad} - Subtotal: $${subtotal}
+                                            <button class="btn btn-danger btn-sm quitar-btn"
+                                                onclick="quitarProducto('${id}')">Quitar</button>
+                                        `;
                                         productosSeleccionados.appendChild(li);
 
                                         var inputCantidad = document.createElement('input');
@@ -125,7 +157,8 @@
                                         inputProductoID.value = id;
                                         productosSeleccionados.appendChild(inputProductoID);
 
-                                        var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('li')).map(function(li) {
+                                        var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('li')).map(function(
+                                            li) {
                                             return li.textContent.split(' - Cantidad: ')[0];
                                         });
                                         inputProductosSeleccionados.value = productosSeleccionadosArray.join(', ');
@@ -135,6 +168,52 @@
                                         var totalInput = document.getElementById('total-input');
                                         totalInput.value = total.toFixed(2);
                                     }
+                                }
+
+                                function quitarProducto(id) {
+                                    var producto = document.querySelector(`li[data-producto-id="${id}"]`);
+                                    var cantidad = parseInt(producto.getAttribute('data-cantidad'));
+                                    var subtotal = parseFloat(producto.getAttribute('data-subtotal'));
+
+                                    producto.remove();
+
+                                    var productosSeleccionados = document.getElementById('selected-products-list');
+                                    var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
+                                    var inputCantidadArray = document.getElementsByName('Cantidad[]');
+                                    var inputProductoIDArray = document.getElementsByName('ProductoID[]');
+
+                                    var cantidadIndex, productoIDIndex;
+
+                                    // Buscar el índice del producto a eliminar en los arrays Cantidad[] y ProductoID[]
+                                    for (var i = 0; i < inputProductoIDArray.length; i++) {
+                                        if (inputProductoIDArray[i].value === id) {
+                                            cantidadIndex = i;
+                                            productoIDIndex = i;
+                                            break;
+                                        }
+                                    }
+
+                                    // Eliminar el elemento correspondiente del array Cantidad[]
+                                    inputCantidadArray[cantidadIndex].remove();
+
+                                    // Eliminar el elemento correspondiente del array ProductoID[]
+                                    inputProductoIDArray[productoIDIndex].remove();
+
+                                    var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('li')).map(function(li) {
+                                        return li.textContent.split(' - Cantidad: ')[0];
+                                    });
+                                    inputProductosSeleccionados.value = productosSeleccionadosArray.join(', ');
+
+                                    if (productosSeleccionados.querySelectorAll('li').length === 0) {
+                                        total = 0; // Si no hay productos restantes, establecer el total en 0
+                                    } else {
+                                        total -= subtotal;
+                                    }
+
+                                    totalElement.textContent = total.toFixed(2);
+
+                                    var totalInput = document.getElementById('total-input');
+                                    totalInput.value = total.toFixed(2);
                                 }
                             </script>
 
@@ -146,7 +225,7 @@
     </section>
 
     <style>
-        .containeer {
+        .container {
             width: 20em;
             height: 100vh;
             overflow-y: scroll;
