@@ -17,6 +17,10 @@ class pedido extends Model
 public function detalle_pedidos() {
     return $this->hasMany(detalle_pedidos::class, 'id_pedidos');
 }
-
+public function productos()
+    {
+        return $this->belongsToMany(Producto::class, 'detalle_pedidos', 'id_pedidos', 'id_productos')
+            ->withPivot('cantidad', 'precio_unitario', 'Nombre');
+    }
 
 }

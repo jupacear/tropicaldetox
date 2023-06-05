@@ -16,7 +16,8 @@
                                     <form id="formBuscar" class="form-inline">
                                         <div class="form-group mb-2">
                                             <label for="inputAnio" class="sr-only">Año</label>
-                                            <input type="text" class="form-control" id="inputAnio" placeholder="Ingrese el año">
+                                            <input type="text" class="form-control" id="inputAnio"
+                                                placeholder="Ingrese el año">
                                         </div>
                                         <button type="submit" class="btn btn-primary mb-2">Buscar</button>
                                     </form>
@@ -29,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -37,7 +38,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             // Obtener los datos de cantidadPorMes desde el backend
             var cantidadPorMes = {!! json_encode($cantidadPorMes) !!};
-        
+
             // Obtener el año y mes actual
             var currentDate = new Date();
             var currentYear = currentDate.getFullYear();
@@ -106,7 +107,8 @@
 
                     var cantidadBuscar = 0;
                     for (var j = 0; j < cantidadPorMes.length; j++) {
-                        if (cantidadPorMes[j].year === parseInt(anio) && cantidadPorMes[j].month === month) {
+                        if (cantidadPorMes[j].year === parseInt(anio) && cantidadPorMes[j].month ===
+                            month) {
                             cantidadBuscar = cantidadPorMes[j].total_cantidad;
                             break;
                         }

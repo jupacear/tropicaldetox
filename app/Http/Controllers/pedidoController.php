@@ -44,7 +44,7 @@ class pedidoController extends Controller
     public function create()
     {
         // Retornamos la vista "create" y le pasamos las variables "productos" y "users"
-
+        
         return view('pedidos.create', ['productos' => Producto::all(), 'users' => User::all()]);
 
     }
@@ -64,6 +64,64 @@ class pedidoController extends Controller
 
 
 
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'Nombre' => 'nullable|max:200',
+    //         'Telefono' => 'nullable|max:200',
+    //         'Estado' => 'required|max:200',
+    //         'Fecha' => 'required|date',
+    //         'Usuario' => 'required',
+    //         'ProductoID' => 'required|array',
+    //         'ProductoID.*' => 'integer',
+    //     ]);
+    //     // return response()->json($request);
+
+
+
+    //     $pedido = new Pedido();
+
+    //     $pedido->Nombre = $request->input('Nombre');
+    //     $pedido->Telefono = $request->input('Telefono');
+    //     $pedido->Estado = $request->input('Estado');
+    //     $pedido->Fecha = $request->input('Fecha');
+    //     $pedido->id_users = $request->input('Usuario');
+    //     $pedido->Total = 0;
+    //     $pedido->save();
+
+    //     $productos = $request->input('Productos');
+    //     $cantidades = $request->input('Cantidad');
+        
+
+    //     $total = 0;
+
+
+    //     foreach ($productos as $index => $producto_id) {
+    //         $producto = Producto::find($producto_id);
+    //         $detalles_pedidos = new detalle_pedidos();
+    //         $detalles_pedidos->id_pedidos = $pedido->id;
+    //         $detalles_pedidos->cantidad = $cantidades[$index];
+    //         $detalles_pedidos->precio_unitario = $producto->precio;
+    //         // $detalles_pedidos->precio_unitario =34;
+    //         $detalles_pedidos->id_productos = $producto_id;
+    //         $detalles_pedidos->Nombre = $producto->nombre;
+
+    //         $subtotal = $detalles_pedidos->cantidad * $detalles_pedidos->precio_unitario;
+    //         $total += $subtotal;
+
+    //         $detalles_pedidos->save();
+    //     }
+     
+        
+    //     $pedido->Total = $total;
+    //     $pedido->save();
+
+    //     $pedidos = Pedido::all();
+
+    //     return view('pedidos.index', compact('pedidos'));
+    // }
+
+
     public function store(Request $request)
     {
         $request->validate([
@@ -72,29 +130,25 @@ class pedidoController extends Controller
             'Estado' => 'required|max:200',
             'Fecha' => 'required|date',
             'Usuario' => 'required',
-            'Productos' => 'required|array',
-            'Productos.*' => 'integer',
+            'ProductoID' => 'required|array',
+            'ProductoID.*' => 'integer',
+            'Total' => 'required|numeric', // Agrega la validación para el campo "Total"
         ]);
-        // return response()->json($request);
-
-
-
+    
         $pedido = new Pedido();
-
+    
         $pedido->Nombre = $request->input('Nombre');
         $pedido->Telefono = $request->input('Telefono');
         $pedido->Estado = $request->input('Estado');
         $pedido->Fecha = $request->input('Fecha');
         $pedido->id_users = $request->input('Usuario');
-        $pedido->Total = 0;
+        $pedido->Total = $request->input('Total'); // Guarda el valor del campo "Total" ingresado por el usuario
         $pedido->save();
-
-        $productos = $request->input('Productos');
+    
+        $productos = $request->input('ProductoID');
         $cantidades = $request->input('Cantidad');
-
         $total = 0;
-
-        
+    
         foreach ($productos as $index => $producto_id) {
             $producto = Producto::find($producto_id);
             $detalles_pedidos = new detalle_pedidos();
@@ -103,25 +157,21 @@ class pedidoController extends Controller
             $detalles_pedidos->precio_unitario = $producto->precio;
             $detalles_pedidos->id_productos = $producto_id;
             $detalles_pedidos->Nombre = $producto->nombre;
-
+    
             $subtotal = $detalles_pedidos->cantidad * $detalles_pedidos->precio_unitario;
             $total += $subtotal;
-
+    
             $detalles_pedidos->save();
         }
-
+    
         $pedido->Total = $total;
         $pedido->save();
-
+    
         $pedidos = Pedido::all();
-
+    
         return view('pedidos.index', compact('pedidos'));
     }
-
-
     
-    
-
 
 
 
@@ -154,9 +204,10 @@ class pedidoController extends Controller
     public function edit($id)
     {
         $pedido = Pedido::with('users')->find($id);
+        $pedidos = Pedido::find($id);
         $users = User::all(); // define la variable $users con todos los usuarios
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
-        return view('pedidos.edit', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users]);
+        return view('pedidos.edit', ['pedidos' => $pedidos,'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users]);
     }
 
 
@@ -173,7 +224,19 @@ class pedidoController extends Controller
      */
 
 
-
+     public function updateEstado(Request $request, $id)
+     {
+         $request->validate([
+             'Estado' => 'required|max:200',
+         ]);
+     
+         $pedido = Pedido::find($id);
+         $pedido->Estado = $request->input('Estado');
+         $pedido->save();
+     
+         return redirect()->route('pedidos.index')->with('success', 'Estado actualizado correctamente');
+     }
+     
 
     public function update(Request $request, $id)
     {
@@ -183,28 +246,29 @@ class pedidoController extends Controller
             'Estado' => 'required|max:200',
             'Fecha' => 'required|date',
             'Usuario' => 'required',
-            'Productos' => 'required|array',
-            'Productos.*' => 'integer',
+            'ProductoID' => 'required|array',
+            'ProductoID.*' => 'integer',
+            'Total' => 'required|numeric', // Agrega la validación para el campo "Total"
         ]);
 
         $pedido = Pedido::find($id);
-        $pedido->Nombre = $request->input('Nombre');
+       $pedido->Nombre = $request->input('Nombre');
         $pedido->Telefono = $request->input('Telefono');
         $pedido->Estado = $request->input('Estado');
         $pedido->Fecha = $request->input('Fecha');
         $pedido->id_users = $request->input('Usuario');
-        $pedido->Total = 0;
+        $pedido->Total = $request->input('Total'); // Guarda el valor del campo "Total" ingresado por el usuario
         $pedido->save();
-
+     
         // Eliminar los detalles de pedido existentes asociados con el pedido
-        $pedido->detalle_pedidos()->delete();
-
-        // Crear nuevos detalles de pedido para los nuevos productos seleccionados
-        $productos = $request->input('Productos');
+     
+        
+        
+        $productos = $request->input('ProductoID');
         $cantidades = $request->input('Cantidad');
-
         $total = 0;
-
+        $pedido->detalle_pedidos()->delete();
+    
         foreach ($productos as $index => $producto_id) {
             $producto = Producto::find($producto_id);
             $detalles_pedidos = new detalle_pedidos();
@@ -213,16 +277,16 @@ class pedidoController extends Controller
             $detalles_pedidos->precio_unitario = $producto->precio;
             $detalles_pedidos->id_productos = $producto_id;
             $detalles_pedidos->Nombre = $producto->nombre;
-
+    
             $subtotal = $detalles_pedidos->cantidad * $detalles_pedidos->precio_unitario;
             $total += $subtotal;
-
+    
             $detalles_pedidos->save();
         }
 
         $pedido->Total = $total;
         $pedido->save();
-
+    
         $pedidos = Pedido::all();
         return view('pedidos.index', compact('pedidos'));
 
@@ -267,5 +331,5 @@ class pedidoController extends Controller
 
 
 
-  
+
 }

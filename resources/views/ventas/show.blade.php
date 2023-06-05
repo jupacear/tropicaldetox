@@ -1,9 +1,3 @@
-
-
-
-
-
-
 @extends('layouts.app')
 
 @section('content')
@@ -25,16 +19,23 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <h1>Detalles del Ventas</h1>
-                    
-                                    <p><strong>Nombre:</strong> {{ $pedido->Nombre }}</p>
-                                    <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
+
+                                    @if (!empty($pedido->Nombre))
+                                        <p><strong>Nombre:</strong> {{ $pedido->Nombre }}</p>
+                                    @endif
+
+                                    @if (!empty($pedido->Telefono))
+                                        <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
+                                    @endif
+
+
+                                    <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
                                     <p><strong>Total:</strong> {{ $pedido->Total }}</p>
-                                    <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
-                    
+
                                     <h2>Detalles del Ventas</h2>
-                    
+
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -48,9 +49,10 @@
                                         <tbody>
                                             @foreach ($detalles_pedidos as $detalle)
                                                 <tr>
+                                                    <td>{{ $detalle->id }}</td>
                                                     <td>{{ $detalle->Prductos }}</td>
                                                     <td>{{ $detalle->Nombre }}</td>
-                                                    
+
                                                     {{-- <td>{{ $detalle->Prductos->nombre }}</td> --}}
                                                     <td>{{ $detalle->cantidad }}</td>
                                                     <td>{{ $detalle->precio_unitario }}</td>
@@ -63,7 +65,7 @@
                                 </div>
                             </div>
                         </div>
-                    
+
                     </div>
                 </div>
             </div>
