@@ -68,29 +68,26 @@ class ventasController extends Controller
         ->orderByDesc('total_vendido')
         ->take(3)
         ->get();
+
+
+        $cantidadPorMes = detalle_pedidos::select(
+            \DB::raw('YEAR(created_at) as year'),
+            \DB::raw('MONTH(created_at) as month'),
+            \DB::raw('SUM(cantidad) as total_cantidad')
+        )
+        ->whereHas('pedido', function ($query) {
+            $query->where('Estado', 'Finalizado');
+        })
+        ->groupBy('year', 'month')
+        ->orderBy('year', 'asc')
+        ->orderBy('month', 'asc')
+        ->get();
     
-        return view('ventas.graficatop10', compact('topProductos'));
+        return view('admin.dashboard', compact('topProductos', 'cantidadPorMes'));
     }
     
 
-    public function informe()
-    {
-        $cantidadPorMes = detalle_pedidos::select(
-                \DB::raw('YEAR(created_at) as year'),
-                \DB::raw('MONTH(created_at) as month'),
-                \DB::raw('SUM(cantidad) as total_cantidad')
-            )
-            ->whereHas('pedido', function ($query) {
-                $query->where('Estado', 'Finalizado');
-            })
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'asc')
-            ->orderBy('month', 'asc')
-            ->get();
-    
-        return view('ventas.informe', compact('cantidadPorMes'));
-    }
-    
+   
 
 
 
