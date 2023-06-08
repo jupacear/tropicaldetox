@@ -18,8 +18,10 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesTableSeeder::class);
         $this->call(AdminUserSeeder::class);
         $this->call(CategoriaSeeder::class);
-        $this->call(ProductoSeeder::class);
         $this->call(seederTablaPermisos::class);
         $this->call(UserSeeder::class);
+        $this->call(InsumoSeeder::class);
+        $this->call(ProductoSeeder::class);
     }
+    //php artisan db:seed
 }
