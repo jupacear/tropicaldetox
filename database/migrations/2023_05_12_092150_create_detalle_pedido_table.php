@@ -18,9 +18,11 @@ return new class extends Migration
             $table->unsignedBigInteger('id_pedidos');
             $table->foreign('id_pedidos')->references('id')->on('pedidos');
 
-            
-            
-            $table->string('Prductos');
+            $table->unsignedBigInteger('id_productos');
+            $table->foreign('id_productos')->references('id')->on('productos');
+
+            $table->string('Nombre');
+            // $table->string('Prductos');
             $table->integer('cantidad');
             $table->float('precio_unitario');
             $table->timestamps();

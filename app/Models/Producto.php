@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\detalle_pedidos;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -62,4 +63,13 @@ class Producto extends Model
   {
     return $this->belongsToMany('App\Models\Insumo');
   }
+  public function detallesPedidos()
+    {
+        return $this->hasMany('App\Models\detalle_pedidos', 'id_productos', 'id');
+    }
+    public function producto()
+    {
+        return $this->belongsTo(Productos::class, 'Prductos', 'id');
+    }
+    
 }

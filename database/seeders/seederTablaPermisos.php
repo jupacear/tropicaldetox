@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 //Spatie
+//Spatie
 use Spatie\Permission\Models\Permission;
 
 class seederTablaPermisos extends Seeder

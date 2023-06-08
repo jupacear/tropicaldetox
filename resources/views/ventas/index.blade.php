@@ -8,16 +8,20 @@
 
 
     <div class="section-header">
-        <h3 class="page__heading">Pedidos</h3>
+        <h3 class="page__heading">venta</h3>
     </div>
     <div class="section-body">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
+                    {{-- <a class="btn btn-sm btn-success" href="{{ route('ventas.graficatop10') }}"><i class="fa fa-fw fa-edit"></i> Top 10</a> --}}
                     <div class="card-body">
 
 
-                        {{-- <table class="table table-striped mt-2"> --}}
+                        {{-- <a class="btn btn-sm btn-success" href="{{ route('ventas.graficatop10') }}"><i class="fa fa-fw fa-edit"></i>Top 10</a>
+                        <a class="btn btn-sm btn-success" href="{{ route('ventas.informe') }}"><i class="fa fa-fw fa-edit"></i>grafica</a>
+                       
+                         --}}
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
                                 <th style="color:#fff;">ID</th>
@@ -41,10 +45,15 @@
                                             <td>{{ $venta->Fecha }}</td>
                                             <td>{{ $venta->Total }}</td>
                                             <td class="text-center">
-                                                <a class="btn btn-sm btn-primary" href=""><i
+                                                <a class="btn btn-sm btn-primary" href="{{ route('ventas.show',$venta->id) }}"><i
                                                     class="fa fa-fw fa-eye"></i>Detalles</a>
 
+                                                 
+                                           
+
                                             </td>
+
+
                                         </tr>
                                     @endif
                                 @endforeach
