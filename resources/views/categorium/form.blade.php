@@ -19,14 +19,15 @@
                 </div>
             </div>
         </div>
+        @if(Route::currentRouteName() != 'categoria.create')
         <div class="form-group">
             <label for="activo">Activo</label>
-            <input type="checkbox" name="activo" value="1" {{ old('activo') ? 'checked' : '' }}
-                class="form-control{{ $errors->has('activo') ? ' is-invalid' : '' }}">
+            <input type="checkbox" name="activo" value="1" {{ old('activo') ? 'checked' : '' }} class="form-control{{ $errors->has('activo') ? ' is-invalid' : '' }}">
             {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
+        @endif
     </div>
     <div class="box-footer mt20">
-        <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
+        <button type="submit" class="btn btn-primary">Enviar</button>
     </div>
 </div>

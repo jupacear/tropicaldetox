@@ -48,7 +48,7 @@ class CategoriumController extends Controller
         $request->validate(Categorium::$rules);
 
         // Obtener el valor del campo 'activo' del formulario
-        $activo = $request->has('activo') ? true : false;
+        $activo = true;
 
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
@@ -61,7 +61,7 @@ class CategoriumController extends Controller
             // Mover la imagen a la carpeta "CategoriasIMG" dentro del directorio público
             $image->move(public_path('img/CategoriasIMG'), $imageName);
 
-            // Crear el nuevo registro en la base de datos con la ruta de la imagen y el estado 'activo' o 'inactivo'
+            // Crear el nuevo registro en la base de datos con la ruta de la imagen y el estado 'activo'
             Categorium::create([
                 'imagen' => 'img/CategoriasIMG/' . $imageName,
                 'nombre' => $request->nombre,
@@ -69,7 +69,7 @@ class CategoriumController extends Controller
                 'activo' => $activo,
             ]);
         } else {
-            // Si no se ha enviado una imagen, crear el registro sin el campo de imagen y establecer el estado 'activo' o 'inactivo'
+            // Si no se ha enviado una imagen, crear el registro sin el campo de imagen y establecer el estado 'activo'
             Categorium::create([
                 'nombre' => $request->nombre,
                 'descripcion' => $request->descripcion,

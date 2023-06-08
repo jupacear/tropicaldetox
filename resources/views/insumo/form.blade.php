@@ -34,13 +34,15 @@
             </div>
         </div>
         <div class="form-group">
+            @if(Route::currentRouteName() !== 'insumo.create')
             <label for="activo">Activo</label>
             <input type="checkbox" name="activo" value="1" {{ old('activo') ? 'checked' : '' }} class="form-control{{ $errors->has('activo') ? ' is-invalid' : '' }}">
+            @endif
             {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
-        </div>
     </div>
-    <div class="box-footer mt20">
-        <button type="submit" class="btn btn-primary">Enviar</button>
-    </div>
+</div>
+<div class="box-footer mt20">
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</div>
 </div>

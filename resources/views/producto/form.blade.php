@@ -39,11 +39,14 @@
             </div>
             <div id="additional-insumos"></div>
         </div>
+        @if(Route::currentRouteName() !== 'productos.create')
         <div class="form-group">
             {{ Form::label('activo') }}
             {{ Form::checkbox('activo', 1, $producto->activo ?? true, ['class' => 'form-control' . ($errors->has('activo') ? ' is-invalid' : '')]) }}
             {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
+        @endif
+
     </div>
     <div class="box-footer mt-3">
         <button type="submit" class="btn btn-primary">Enviar</button>

@@ -58,7 +58,6 @@ class ProductoController extends Controller
             'nombre' => 'required',
             'precio' => 'required',
             'descripcion' => 'required',
-            'activo' => '', //No validar para que pueda ser enviado correctamente
             'categorias_id' => 'required',
             'insumos' => 'required|array' // Validar que se envíen los insumos como un array
         ]);
@@ -69,7 +68,7 @@ class ProductoController extends Controller
         $producto->precio = $request->input('precio');
         $producto->categorias_id = $request->input('categorias_id');
         $producto->descripcion = $request->input('descripcion');
-        $producto->activo = $request->has('activo'); // Guarda el estado como true o false según si se seleccionó o no el checkbox
+        $producto->activo = true; // Establecer el valor de "activo" como true
 
         // Verificar si se ha enviado una imagen
         if ($request->hasFile('imagen')) {
@@ -86,9 +85,16 @@ class ProductoController extends Controller
         // Guardar el registro en la base de datos
         $producto->save();
 
-        // Obtener los insumos seleccionados del formulario
+        /// Obtener los insumos seleccionados del formulario
         $insumos = $request->input('insumos');
 
+        // Iterar los insumos y actualizar la cantidad utilizada
+        foreach ($insumos as $insumoId) {
+            $insumo = Insumo::find($insumoId);
+            if ($insumo) {
+                $insumo->save();
+            }
+        }
         // Asociar los insumos al producto a través de la relación de muchos a muchos
         $producto->insumos()->attach($insumos);
 
@@ -178,6 +184,17 @@ class ProductoController extends Controller
 
         // Sincronizar los insumos en la tabla pivot
         $insumos = $request->input('insumos');
+        // Iterar los insumos y actualizar la cantidad utilizada
+        foreach ($insumos as $insumoId) {
+            $insumo = Insumo::find($insumoId);
+            if ($insumo) {
+                // Restar la cantidad previamente utilizada antes de actualizarla
+                $insumo->cantidad_utilizada -= $producto->cantidad_requerida;
+                // Actualizar la cantidad utilizada sumando la cantidad requerida para el producto
+                $insumo->cantidad_utilizada += $request->input('cantidad_requerida');
+                $insumo->save();
+            }
+        }
         $producto->insumos()->sync($insumos);
         // Redireccionar a la página de índice de productos con un mensaje de éxito
         return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
