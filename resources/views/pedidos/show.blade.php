@@ -1,9 +1,3 @@
-
-
-
-
-
-
 @extends('layouts.app')
 
 @section('content')
@@ -25,11 +19,9 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <h1>Detalles del pedido</h1>
-                    
+
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
-                                    @if (!empty($pedido->Nombre))
-                                        <p><strong>Nombre:</strong> {{ $pedido->Nombre }}</p>
-                                    @endif
+
 
                                     @if (!empty($pedido->Telefono))
                                         <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
@@ -37,9 +29,13 @@
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
                                     <p><strong>Total:</strong> {{ $pedido->Total }}</p>
-                    
+
+
+
                                     <h2>Detalles del pedido</h2>
-                    
+                                    @if (!empty($pedido->Nombre))
+                                        <p><strong>descripción:</strong> {{ $pedido->Nombre }}</p>
+                                    @endif
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -55,26 +51,26 @@
                                                 <tr>
                                                     <td>{{ $detalle->id }}</td>
                                                     <td>{{ $detalle->Nombre }}</td>
-                                                    
+
                                                     {{-- <td>{{ $detalle->Prductos->nombre }}</td> --}}
 
                                                     <td>{{ $detalle->cantidad }}</td>
+
                                                     <td>{{ $detalle->precio_unitario }}</td>
                                                 </tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                
-                                                @endforeach
-                                                <td>{{ $detalle->id_pedidos=$pedido->Total}}</td>
+                                            @endforeach
+                                            <td>{{ $detalle->id_pedidos = $pedido->Total }}</td>
                                         </tbody>
                                     </table>
                                     <a class="btn btn-dark" href="{{ route('pedidos.index') }} ">Regresar</a>
                                 </div>
                             </div>
                         </div>
-                    
+
                     </div>
                 </div>
             </div>
