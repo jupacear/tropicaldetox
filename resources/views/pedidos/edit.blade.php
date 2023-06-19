@@ -132,25 +132,43 @@
                                                 </div>
                                                 <h2>Productos Seleccionados:</h2>
                                                 <input type="hidden" name="Productos[]" id="productos-seleccionados-input">
+                                                <div class="table">
 
-                                                <ul id="selected-products-list">
-                                                    @foreach ($pedido->productos as $producto)
-                                                        <li data-producto-id="{{ $producto->id }}"
-                                                            data-cantidad="{{ $producto->pivot->cantidad }}"
-                                                            data-subtotal="{{ $producto->precio * $producto->pivot->cantidad }}">
-                                                            {{ $producto->nombre }} - Cantidad:
-                                                            {{ $producto->pivot->cantidad }}
-                                                            - Subtotal:
-                                                            ${{ $producto->precio * $producto->pivot->cantidad }}
-                                                            <button class="btn btn-danger btn-sm quitar-btn"
-                                                                onclick="quitarProducto('{{ $producto->id }}')">Quitar</button>
-                                                        </li>
-                                                        <input type="hidden" name="Cantidad[]"
-                                                            value="{{ $producto->pivot->cantidad }}">
-                                                        <input type="hidden" name="ProductoID[]"
-                                                            value="{{ $producto->id }}">
-                                                    @endforeach
-                                                </ul>
+                                                    <table id="selected-products-table" class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>Producto</th>
+                                                                <th>Cantidad</th>
+                                                                <th>Subtotal</th>
+                                                                <th>Opciones</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="selected-products-list">
+                                                            @foreach ($pedido->productos as $producto)
+                                                                <tr data-producto-id="{{ $producto->id }}"
+                                                                    data-cantidad="{{ $producto->pivot->cantidad }}"
+                                                                    data-subtotal="{{ $producto->precio * $producto->pivot->cantidad }}">
+                                                                    <td>{{ $producto->id }}</td>
+                                                                    <td>{{ $producto->nombre }}</td>
+                                                                    <td>{{ $producto->pivot->cantidad }}</td>
+                                                                    <td>${{ $producto->precio * $producto->pivot->cantidad }}
+                                                                    </td>
+                                                                    <td>
+                                                                        <button class="btn btn-danger btn-sm quitar-btn"
+                                                                            onclick="quitarProducto('{{ $producto->id }}')">Quitar</button>
+                                                                    </td>
+                                                                    <input type="hidden" name="Cantidad[]"
+                                                                        value="{{ $producto->pivot->cantidad }}">
+                                                                    <input type="hidden" name="ProductoID[]"
+                                                                        value="{{ $producto->id }}">
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
 
                                                 <h4>Total: $<span id="total">{{ $pedido->Total }}</span></h4>
                                                 <input type="hidden" name="Total" id="total-input"
@@ -187,16 +205,21 @@
                                         var productosSeleccionados = document.getElementById('selected-products-list');
                                         var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
 
-                                        var li = document.createElement('li');
-                                        li.setAttribute('data-producto-id', id);
-                                        li.setAttribute('data-cantidad', cantidad);
-                                        li.setAttribute('data-subtotal', subtotal);
-                                        li.innerHTML = `
-                                            ${nombre} - Cantidad: ${cantidad} - Subtotal: $${subtotal}
-                                            <button class="btn btn-danger btn-sm quitar-btn"
-                                                onclick="quitarProducto('${id}')">Quitar</button>
+                                        var tr = document.createElement('tr');
+                                        tr.setAttribute('data-producto-id', id);
+                                        tr.setAttribute('data-cantidad', cantidad);
+                                        tr.setAttribute('data-subtotal', subtotal);
+                                        tr.innerHTML = `
+                                            <td>${id}</td>
+                                            <td>${nombre}</td>
+                                            <td>${cantidad}</td>
+                                            <td>$${subtotal}</td>
+                                            <td>
+                                                <button class="btn btn-danger btn-sm quitar-btn"
+                                                    onclick="quitarProducto('${id}')">Quitar</button>
+                                            </td>
                                         `;
-                                        productosSeleccionados.appendChild(li);
+                                        productosSeleccionados.appendChild(tr);
 
                                         var inputCantidad = document.createElement('input');
                                         inputCantidad.type = 'hidden';
@@ -210,11 +233,11 @@
                                         inputProductoID.value = id;
                                         productosSeleccionados.appendChild(inputProductoID);
 
-                                        var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('li')).map(function(
-                                            li) {
-                                            return li.textContent.split(' - Cantidad: ')[0];
+                                        var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('tr')).map(function(
+                                            tr) {
+                                            return tr.textContent.split('\t');
                                         });
-                                        inputProductosSeleccionados.value = productosSeleccionadosArray.join(', ');
+                                        inputProductosSeleccionados.value = JSON.stringify(productosSeleccionadosArray);
 
                                         totalElement.textContent = total.toFixed(2);
 
@@ -224,49 +247,38 @@
                                 }
 
                                 function quitarProducto(id) {
-                                    var producto = document.querySelector(`li[data-producto-id="${id}"]`);
+                                    var producto = document.querySelector(`tr[data-producto-id="${id}"]`);
                                     var cantidad = parseInt(producto.getAttribute('data-cantidad'));
-                                    var subtotal = parseFloat(producto.getAttribute('data-subtotal'));
+                                    var subtotal = parseInt(producto.getAttribute('data-subtotal'));
 
                                     producto.remove();
 
-                                    var productosSeleccionados = document.getElementById('selected-products-list');
-                                    var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
-                                    var inputCantidadArray = document.getElementsByName('Cantidad[]');
-                                    var inputProductoIDArray = document.getElementsByName('ProductoID[]');
-
-                                    var cantidadIndex, productoIDIndex;
-
-                                    // Buscar el índice del producto a eliminar en los arrays Cantidad[] y ProductoID[]
-                                    for (var i = 0; i < inputProductoIDArray.length; i++) {
-                                        if (inputProductoIDArray[i].value === id) {
-                                            cantidadIndex = i;
-                                            productoIDIndex = i;
-                                            break;
-                                        }
-                                    }
-
-                                    // Eliminar el elemento correspondiente del array Cantidad[]
-                                    inputCantidadArray[cantidadIndex].remove();
-
-                                    // Eliminar el elemento correspondiente del array ProductoID[]
-                                    inputProductoIDArray[productoIDIndex].remove();
-
-                                    var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('li')).map(function(li) {
-                                        return li.textContent.split(' - Cantidad: ')[0];
-                                    });
-                                    inputProductosSeleccionados.value = productosSeleccionadosArray.join(', ');
-
-                                    if (productosSeleccionados.querySelectorAll('li').length === 0) {
-                                        total = 0; // Si no hay productos restantes, establecer el total en 0
-                                    } else {
-                                        total -= subtotal;
-                                    }
+                                    total -= subtotal;
 
                                     totalElement.textContent = total.toFixed(2);
 
                                     var totalInput = document.getElementById('total-input');
                                     totalInput.value = total.toFixed(2);
+
+                                    var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
+                                    var productosSeleccionados = Array.from(document.querySelectorAll('#selected-products-list tr')).map(function(
+                                        tr) {
+                                        return tr.textContent.split('\t');
+                                    });
+
+                                    inputProductosSeleccionados.value = JSON.stringify(productosSeleccionados);
+
+                                    var inputCantidad = document.createElement('input');
+                                    inputCantidad.type = 'hidden';
+                                    inputCantidad.name = 'Cantidad[]';
+                                    inputCantidad.value = cantidad;
+                                    productosSeleccionados.appendChild(inputCantidad);
+
+                                    var inputProductoID = document.createElement('input');
+                                    inputProductoID.type = 'hidden';
+                                    inputProductoID.name = 'ProductoID[]';
+                                    inputProductoID.value = id;
+                                    productosSeleccionados.appendChild(inputProductoID);
                                 }
                             </script>
                             <script>

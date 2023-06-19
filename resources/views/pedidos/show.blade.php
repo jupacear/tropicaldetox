@@ -42,7 +42,6 @@
                                                 <th>ID</th>
                                                 <th>Producto</th>
                                                 <th>Cantidad</th>
-                                                <th>detalles</th>
                                                 <th>Precio unitario</th>
                                                 <th>Total</th>
                                             </tr>
