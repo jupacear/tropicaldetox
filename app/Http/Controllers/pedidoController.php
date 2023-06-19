@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 
 class pedidoController extends Controller
 {
+    function __construct()
+    {
+         
+         $this->middleware('permission:pedidos', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\File;
  */
 class InsumoController extends Controller
 {
+    function __construct()
+    {
+         
+         $this->middleware('permission:insumos', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+    }
     /**
      * Display a listing of the resource.
      *

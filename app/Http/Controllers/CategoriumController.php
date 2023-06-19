@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\DB;
  */
 class CategoriumController extends Controller
 {
+    function __construct()
+    {
+         
+         $this->middleware('permission:categoria de productos', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+    }
     /**
      * Display a listing of the resource.
      *
