@@ -11,6 +11,7 @@ use App\Http\Controllers\CategoriumController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\InsumoController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
+    Route::put('roles/{id}/status', [RolController::class, 'updateStatus'])->name('roles.updateStatus');
+
 
     //clientes
     Route::get('/A_clientes', [UsuarioController::class, 'indexc'])->name('A_clientes.index');

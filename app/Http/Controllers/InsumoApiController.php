@@ -10,6 +10,9 @@ use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 class InsumoApiController extends Controller
 {
+
+    
+    
     /**
      * Display a listing of the resource.
      *

@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\DB;
 
 class ventasController extends Controller
 {
+
+    function __construct()
+    {
+         
+         $this->middleware('permission:ventas', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+         
+    }
+
+    
     public function index()
     {
         $ventas = Pedido::with('users')->get();

@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
  */
 class ProductoController extends Controller
 {
+    function __construct()
+    {
+         
+         $this->middleware('permission:productos', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+    }
     /**
      * Display a listing of the resource.
      *

@@ -15,6 +15,12 @@ use Illuminate\Support\Arr;
 
 class UsuarioController extends Controller
 {
+    function __construct()
+    {
+         
+         $this->middleware('permission:usuarios', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+         $this->middleware('permission:clientes', ['only' => ['createc','storec' , 'destroyc' , 'editc','updatec' , 'indexc' ]]);
+    }
 
 
     public function adminDashboard()

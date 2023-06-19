@@ -14,10 +14,8 @@ class RolController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:ver-rol|crear-rol|editar-rol|borrar-rol', ['only' => ['index']]);
-         $this->middleware('permission:crear-rol', ['only' => ['create','store']]);
-         $this->middleware('permission:editar-rol', ['only' => ['edit','update']]);
-         $this->middleware('permission:borrar-rol', ['only' => ['destroy']]);
+         
+         $this->middleware('permission:roles', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
     }
     /**
      * Display a listing of the resource.
@@ -119,9 +117,33 @@ class RolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+
+     public function destroy($id)
+     {
+         $role = Role::findOrFail($id);
+     
+         if ($role->users()->exists()) {
+             return redirect()->route('roles.index')->with('error', 'No se puede eliminar el rol porque tiene usuarios asociados.');
+         }
+     
+         $restrictedRoles = ['administrador', 'cliente'];
+     
+         if (in_array($role->name, $restrictedRoles)) {
+             return redirect()->route('roles.index')->with('error', 'Este rol no se puede eliminar del sistema.');
+         }
+     
+         $role->delete();
+     
+         return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente.');
+     }
+    public function updateStatus($id)
     {
-        DB::table("roles")->where('id',$id)->delete();
-        return redirect()->route('roles.index');                        
+        $role = Role::find($id);
+        $role->is_active = !$role->is_active; // Invierte el estado actual
+        $role->save();
+
+        return redirect()->route('roles.index')->with('success', 'Estado del rol actualizado correctamente.');
     }
+    
+    
 }

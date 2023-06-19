@@ -30,10 +30,10 @@ class HomeController extends Controller
     if ($user->hasRole('administrador')) {
         return redirect('/admin/dashboard');
     } elseif ($user->hasRole('cliente')) {
-        return redirect('/cliente/dashboard');
+        return view('welcome');
     } else {
         // Redirige a una página predeterminada si el usuario no tiene un rol específico
-        return redirect('/default-page');
+        return redirect('/admin/dashboard');
     }
 }
 }
