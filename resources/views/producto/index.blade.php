@@ -44,7 +44,7 @@ Productos
                                         <td>{{ $producto->nombre }}</td>
                                         <td>{{ $producto->precio }}</td>
                                         <td>{{ $producto->descripcion }}</td>
-                                        <td>{{ $producto->activo }}</td>
+                                        <td>{{ $producto->activo ? 'Activo' : 'Inactivo' }}</td>
                                         <td>{{ $producto->categorium->nombre }}</td>
                                         <td>
                                             @foreach ($producto->insumos as $insumo)
@@ -59,7 +59,7 @@ Productos
                                                 <a class="btn btn-sm btn-success" href="{{ route('productos.edit', $producto->id) }}"><i class="fa fa-fw fa-edit"></i> Editar</a>
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-form-id="deleteProductForm-{{ $producto->id }}"><i class="fa fa-fw fa-trash"></i> Eliminar</button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-form-id="deleteProductForm-{{ $producto->id }}"><i class="fa fa-fw fa-minus-circle"></i> Eliminar</button>
                                             </form>
                                         </td>
                                     </tr>
