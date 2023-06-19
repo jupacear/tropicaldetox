@@ -37,6 +37,14 @@
                     <button type="button" class="btn btn-primary btn-sm ml-2" id="add-insumo">Agregar insumo</button>
                 </div>
             </div>
+            <div class="form-group col-md-2">
+                {{ Form::label('cantidad_utilizada', 'Cantidad a utilizar') }}
+                {{ Form::number('cantidad_utilizada', null, ['class' => 'form-control' . ($errors->has('cantidad_utilizada') ? ' is-invalid' : ''), 'placeholder' => 'Cantidad a utilizar']) }}
+                @error('cantidad_utilizada')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
             <div id="additional-insumos"></div>
         </div>
         @if(Route::currentRouteName() !== 'productos.create')
