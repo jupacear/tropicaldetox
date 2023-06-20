@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Pedido')
+@section('title', 'Crear Pedido')
 @section('content')
 
     {{-- <section class="section"> --}}
@@ -38,6 +38,60 @@
                                         <input type="text" id="busqueda" class="form-control"
                                             placeholder="Ingrese el nombre del producto">
                                     </div>
+                                    <button class="btn btn-info btn-sm " data-toggle="modal"
+                                        data-target="#Personalizados">Personalizados</button>
+                                    <!-- Modal Personalizados-->
+                                    <div class="modal fade my-modal" id="Personalizados" tabindex="-1" role="dialog"
+                                        aria-labelledby="Personalizados" aria-hidden="true"
+                                        style="position: absolute; z-index: 1050;">
+
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="Personalizados">
+                                                        Producto Personalizados</h5>
+
+
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="modal-body">
+                                                    <div class="insumos">
+                                                        <h5>Insumo</h5>
+                                                        @foreach ($Insumo as $Insumos)
+                                                            <div class="insumo" data-id="{{ $Insumos->id }}">
+                                                                <img src="{{ asset($Insumos->imagen) }}"
+                                                                    alt="Imagen del producto" width="40em">
+                                                                <span>{{ $Insumos->id }}: {{ $Insumos->nombre }} $:
+                                                                    {{ $Insumos->precio_unitario }}</span>
+                                                                <button type="button"
+                                                                    class="btn btn-success agregar-insumo">Agregar</button>
+                                                                <br>
+                                                            </div>
+                                                        @endforeach
+
+                                                    </div>
+                                                    <div class="insumos_selecionados">
+                                                        <h5>Insumo selecionados</h5>
+
+                                                    </div>
+                                                </div>
+                                                <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" id="crearPersonalizados"
+                                                        data-dismiss="modal">Crear</button>
+
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal Personalizados-->
                                     @foreach ($productos as $producto)
                                         <li>
 
@@ -97,8 +151,8 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="Usuario">Usuario:</label>
-                                                        <select name="Usuario" id="Usuario" class="form-control select2"
-                                                            data-live-search="true" required>
+                                                        <select name="Usuario" id="Usuario"
+                                                            class="form-control select2" data-live-search="true" required>
                                                             @foreach ($users as $user)
                                                                 @if ($pedido->id_users == $user->id)
                                                                     <option value="{{ $user->id }}" selected>
@@ -116,8 +170,8 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="Estado">Estado</label>
-                                                        <select name="Estado" id="Estado" class="form-control select2"
-                                                            data-live-search="true" required>
+                                                        <select name="Estado" id="Estado"
+                                                            class="form-control select2" data-live-search="true" required>
 
                                                             <option value="">Seleccionar Estado</option>
                                                             <option value="En_proceso"
@@ -131,7 +185,8 @@
                                                     </div>
                                                 </div>
                                                 <h2>Productos Seleccionados:</h2>
-                                                <input type="hidden" name="Productos[]" id="productos-seleccionados-input">
+                                                <input type="hidden" name="Productos[]"
+                                                    id="productos-seleccionados-input">
                                                 <div class="table">
 
                                                     <table id="selected-products-table" class="table table-bordered">
@@ -166,6 +221,8 @@
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
+                                                        <input type="hidden" name="personalizadosArray"
+                                                            id="personalizadosArray">
                                                     </table>
                                                 </div>
 
@@ -299,6 +356,121 @@
                                     });
                                 });
                             </script>
+
+
+
+                            <script>
+                                $(document).ready(function() {
+                                    var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
+
+                                    $('.agregar-insumo').click(function() {
+                                        if ($('.insumos_selecionados li').length < maxSeleccionados) {
+                                            var insumoId = $(this).closest('.insumo').data('id');
+                                            var insumoNombre = $(this).siblings('span').text();
+
+                                            // Crea un elemento de lista con el nombre del insumo seleccionado
+                                            var listItem = $('<li>').text(insumoNombre);
+
+                                            // Agrega el insumo seleccionado a la lista de insumos seleccionados
+                                            $('.insumos_selecionados').append(listItem);
+                                        } else {
+                                            alert('Ya has seleccionado la cantidad máxima de productos.');
+                                        }
+                                    });
+
+                                    $('#Personalizados').on('hidden.bs.modal', function() {
+                                        // Elimina todos los insumos seleccionados
+                                        $('.insumos_selecionados').empty();
+                                    });
+
+                                });
+                            </script>
+
+
+
+                         
+<script>
+    var personalizadosArray = [];
+
+    document.getElementById('crearPersonalizados').addEventListener('click', function() {
+        var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
+            function(li) {
+                return li.textContent.trim();
+            }
+        );
+
+        var tableBody = document.getElementById('selected-products-list');
+        var total = 0;
+
+        insumosSeleccionados.forEach(function(insumo) {
+            var data = insumo.split(':');
+            var precio = parseFloat(data[2].trim());
+            var id = parseFloat(data[0].trim());
+            var cantidad = 1;
+            var subtotal = precio * cantidad;
+            total += subtotal;
+        });
+
+        var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
+        
+        var num = personalizadosArray.length + 1;
+        personalizado['Nombre'] = "Personalizado " + num;
+        personalizado['insumos'] = insumosSeleccionados;
+        // personalizado['id'] = insumosSeleccionados.id;
+
+        personalizadosArray.push(personalizado);
+
+        var row = document.createElement('tr');
+        var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
+        row.innerHTML = `
+            <td></td>
+            <td>${personalizado.Nombre}</td>
+            <td>${insumosSeleccionados.length}</td>
+            <td>$${total.toFixed(2)}</td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+            </td>
+        `;
+        row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
+        tableBody.appendChild(row);
+
+        var totalElement = document.getElementById('total');
+        totalElement.textContent = total.toFixed(2);
+        var totalSection = document.getElementById('total-section');
+        totalSection.style.display = 'block';
+
+        console.log('Datos personalizados:', personalizadosArray);
+
+        var personalizadosArrayInput = document.getElementById('personalizadosArray');
+        personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
+    });
+
+    function quitarProductoPersonalizados(id) {
+        // Obtener el personalizado correspondiente al ID
+        var personalizado = personalizadosArray[id];
+
+        // Eliminar el personalizado del array
+        personalizadosArray.splice(id, 1);
+
+        // Recalcular el total
+        var total = 0;
+        personalizadosArray.forEach(function(personalizado) {
+            total += personalizado.insumos.length;
+        });
+
+        // Eliminar la fila de la tabla
+        var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
+        if (row) {
+            row.remove();
+        }
+
+        // Actualizar el total mostrado
+        var totalElement = document.getElementById('total');
+        totalElement.textContent = total.toFixed(2);
+    }
+</script>
+
+
                         </div>
                     </div>
                 </div>

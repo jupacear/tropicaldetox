@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Pedido')
+@section('title', 'Crear Pedido')
 @section('content')
 
     <section class="" style=" margin: 40px;
@@ -45,9 +45,11 @@
 
 
                                     <!-- Modal Personalizados-->
+
                                     <div class="modal fade my-modal" id="Personalizados" tabindex="-1" role="dialog"
                                         aria-labelledby="Personalizados" aria-hidden="true"
                                         style="position: absolute; z-index: 1050;">
+
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -85,7 +87,8 @@
                                                 </div>
                                                 <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" id="crearPersonalizados" data-dismiss="modal">Crear</button>
+                                                    <button type="button" class="btn btn-primary" id="crearPersonalizados"
+                                                        data-dismiss="modal">Crear</button>
 
                                                     <button type="button" class="btn btn-secondary"
                                                         data-dismiss="modal">Cerrar</button>
@@ -93,6 +96,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Modal Personalizados-->
                                     @foreach ($productos as $producto)
                                         <li>
 
@@ -176,6 +180,9 @@
                                                     <tbody id="selected-products-list">
 
                                                     </tbody>
+                                                    <input type="hidden" name="personalizadosArray"
+                                                        id="personalizadosArray">
+
                                                 </table>
                                             </div>
 
@@ -331,59 +338,95 @@
                                             alert('Ya has seleccionado la cantidad máxima de productos.');
                                         }
                                     });
+
+                                    $('#Personalizados').on('hidden.bs.modal', function() {
+                                        // Elimina todos los insumos seleccionados
+                                        $('.insumos_selecionados').empty();
+                                    });
                                 });
                             </script>
-<script>
-    var productosPersonalizados = [];
 
-    document.getElementById('crearPersonalizados').addEventListener('click', function() {
-        var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(function(li) {
-            return li.textContent.trim();
-        });
 
-        // Imprimir los datos en la tabla
-        var tableBody = document.getElementById('selected-products-list');
-        var total = 0;
+                            <script>
+                                var personalizadosArray = [];
 
-        // Limpiar la tabla
-        tableBody.innerHTML = '';
+                                document.getElementById('crearPersonalizados').addEventListener('click', function() {
+                                    var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
+                                        function(li) {
+                                            return li.textContent.trim();
+                                        }
+                                    );
 
-        insumosSeleccionados.forEach(function(insumo) {
-            var data = insumo.split(':');
-            var id = data[0].trim();
-            var nombre = data[1].trim();
-            var precio = parseFloat(data[2].trim());
-            var cantidad = 1; // Puedes establecer la cantidad como desees
-            var subtotal = precio * cantidad;
-            total += subtotal;
+                                    var tableBody = document.getElementById('selected-products-list');
+                                    var total = 0;
 
-            var row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${id}</td>
-                <td>${nombre}</td>
-                <td>${cantidad}</td>
-                <td>$${subtotal.toFixed(2)}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')">Quitar</button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-        });
+                                    insumosSeleccionados.forEach(function(insumo) {
+                                        var data = insumo.split(':');
+                                        var precio = parseFloat(data[2].trim());
+                                        var id = parseFloat(data[0].trim());
+                                        var cantidad = 1;
+                                        var subtotal = precio * cantidad;
+                                        total += subtotal;
+                                    });
 
-        // Actualizar el total
-        var totalElement = document.getElementById('total');
-        totalElement.textContent = total.toFixed(2);
-        var totalSection = document.getElementById('total-section');
-        totalSection.style.display = 'block';
+                                    var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
+                                    
+                                    var num = personalizadosArray.length + 1;
+                                    personalizado['Nombre'] = "Personalizado " + num;
+                                    personalizado['insumos'] = insumosSeleccionados;
+                                    // personalizado['id'] = insumosSeleccionados.id;
 
-        // Cerrar el modal y borrar los datos del modal
-        var modal = document.getElementById('Personalizados');
-        modal.style.display = 'none';
-        var insumosSeleccionadosContainer = document.querySelector('.insumos_selecionados');
-        insumosSeleccionadosContainer.innerHTML = '';
-    });
-</script>
+                                    personalizadosArray.push(personalizado);
 
+                                    var row = document.createElement('tr');
+                                    var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
+                                    row.innerHTML = `
+                                        <td></td>
+                                        <td>${personalizado.Nombre}</td>
+                                        <td>${insumosSeleccionados.length}</td>
+                                        <td>$${total.toFixed(2)}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                        </td>
+                                    `;
+                                    row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
+                                    tableBody.appendChild(row);
+
+                                    var totalElement = document.getElementById('total');
+                                    totalElement.textContent = total.toFixed(2);
+                                    var totalSection = document.getElementById('total-section');
+                                    totalSection.style.display = 'block';
+
+                                    console.log('Datos personalizados:', personalizadosArray);
+
+                                    var personalizadosArrayInput = document.getElementById('personalizadosArray');
+                                    personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
+                                });
+
+                                function quitarProductoPersonalizados(id) {
+                                    // Obtener el personalizado correspondiente al ID
+                                    var personalizado = personalizadosArray[id];
+
+                                    // Eliminar el personalizado del array
+                                    personalizadosArray.splice(id, 1);
+
+                                    // Recalcular el total
+                                    var total = 0;
+                                    personalizadosArray.forEach(function(personalizado) {
+                                        total += personalizado.insumos.length;
+                                    });
+
+                                    // Eliminar la fila de la tabla
+                                    var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
+                                    if (row) {
+                                        row.remove();
+                                    }
+
+                                    // Actualizar el total mostrado
+                                    var totalElement = document.getElementById('total');
+                                    totalElement.textContent = total.toFixed(2);
+                                }
+                            </script>
 
                         </div>
                     </div>
