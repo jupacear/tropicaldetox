@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Pedido')
+@section('title', 'Crear Pedido')
 @section('content')
 
     <section class="" style=" margin: 40px;
@@ -180,6 +180,9 @@
                                                     <tbody id="selected-products-list">
 
                                                     </tbody>
+                                                    <input type="hidden" name="personalizadosArray"
+                                                        id="personalizadosArray">
+
                                                 </table>
                                             </div>
 
@@ -335,88 +338,89 @@
                                             alert('Ya has seleccionado la cantidad máxima de productos.');
                                         }
                                     });
+
+                                    $('#Personalizados').on('hidden.bs.modal', function() {
+                                        // Elimina todos los insumos seleccionados
+                                        $('.insumos_selecionados').empty();
+                                    });
                                 });
-
-
-
-
-                                
                             </script>
+
+
                             <script>
+                                var personalizadosArray = [];
+
                                 document.getElementById('crearPersonalizados').addEventListener('click', function() {
                                     var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
                                         function(li) {
                                             return li.textContent.trim();
-                                        });
+                                        }
+                                    );
 
-                                    var idInsumoArray = [];
-                                    var nombreInsumoArray = [];
-                                    var precioInsumoArray = [];
-
-                                    // Imprimir los datos en la tabla
                                     var tableBody = document.getElementById('selected-products-list');
                                     var total = 0;
 
-                                    // Limpiar la tabla
-                                    tableBody.innerHTML = '';
-
                                     insumosSeleccionados.forEach(function(insumo) {
                                         var data = insumo.split(':');
-                                        var id = data[0].trim();
-                                        var nombre = data[1].trim();
                                         var precio = parseFloat(data[2].trim());
-                                        var cantidad = 1; // Puedes establecer la cantidad como desees
+                                        var id = parseFloat(data[0].trim());
+                                        var cantidad = 1;
                                         var subtotal = precio * cantidad;
                                         total += subtotal;
-
-                                        idInsumoArray.push(id);
-                                        nombreInsumoArray.push(nombre);
-                                        precioInsumoArray.push(precio);
-
-                                        var row = document.createElement('tr');
-                                        row.innerHTML = `
-                                        <td>${id}</td>
-                                        <td>${nombre}</td>
-                                        <td>${cantidad}</td>
-                                        <td>$${subtotal.toFixed(2)}</td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoo('${id}')">Quitar</button>
-                                        </td>
-                                        `;
-                                        row.setAttribute('data-id', id); // Agrega este atributo con el ID del producto
-                                        tableBody.appendChild(row);
-                                   
                                     });
 
-                                    // Actualizar el total
+                                    var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
+                                    
+                                    var num = personalizadosArray.length + 1;
+                                    personalizado['Nombre'] = "Personalizado " + num;
+                                    personalizado['insumos'] = insumosSeleccionados;
+                                    // personalizado['id'] = insumosSeleccionados.id;
+
+                                    personalizadosArray.push(personalizado);
+
+                                    var row = document.createElement('tr');
+                                    var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
+                                    row.innerHTML = `
+                                        <td></td>
+                                        <td>${personalizado.Nombre}</td>
+                                        <td>${insumosSeleccionados.length}</td>
+                                        <td>$${total.toFixed(2)}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                        </td>
+                                    `;
+                                    row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
+                                    tableBody.appendChild(row);
+
                                     var totalElement = document.getElementById('total');
                                     totalElement.textContent = total.toFixed(2);
                                     var totalSection = document.getElementById('total-section');
                                     totalSection.style.display = 'block';
 
-                                    // Aquí puedes hacer uso de los arrays idInsumoArray, nombreInsumoArray y precioInsumoArray
-                                    console.log('ID de los insumos:', idInsumoArray);
-                                    console.log('Nombres de los insumos:', nombreInsumoArray);
-                                    console.log('Precios de los insumos:', precioInsumoArray);
+                                    console.log('Datos personalizados:', personalizadosArray);
+
+                                    var personalizadosArrayInput = document.getElementById('personalizadosArray');
+                                    personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 });
-                            </script>
 
-                            <script>
-                                function quitarProductoo(id) {
-                                    // Obtener la fila correspondiente al ID del producto
-                                    var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
+                                function quitarProductoPersonalizados(id) {
+                                    // Obtener el personalizado correspondiente al ID
+                                    var personalizado = personalizadosArray[id];
 
-                                    // Eliminar la fila de la tabla
-                                    if (row) {
-                                        row.remove();
-                                    }
+                                    // Eliminar el personalizado del array
+                                    personalizadosArray.splice(id, 1);
 
                                     // Recalcular el total
                                     var total = 0;
-                                    var subtotalElements = document.querySelectorAll('#selected-products-list td:nth-child(4)');
-                                    subtotalElements.forEach(function(element) {
-                                        total += parseFloat(element.textContent.replace('$', ''));
+                                    personalizadosArray.forEach(function(personalizado) {
+                                        total += personalizado.insumos.length;
                                     });
+
+                                    // Eliminar la fila de la tabla
+                                    var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
+                                    if (row) {
+                                        row.remove();
+                                    }
 
                                     // Actualizar el total mostrado
                                     var totalElement = document.getElementById('total');
