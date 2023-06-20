@@ -132,7 +132,7 @@ class pedidoController extends Controller
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
 
         // Pasar el pedido y sus detalles a la vista
-        return view('pedidos.show', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos]);
+        return view('pedidos.show', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos,]);
 
     }
 
@@ -149,7 +149,7 @@ class pedidoController extends Controller
         $pedidos = Pedido::find($id);
         $users = User::all(); // define la variable $users con todos los usuarios
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
-        return view('pedidos.edit', ['pedidos' => $pedidos,'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users]);
+        return view('pedidos.edit', ['pedidos' => $pedidos,'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users,'Insumo'=>Insumo::all()]);
     }
 
 
