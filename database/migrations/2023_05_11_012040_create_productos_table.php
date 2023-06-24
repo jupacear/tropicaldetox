@@ -22,8 +22,6 @@ return new class extends Migration
             $table->boolean('activo')->default(true);
             $table->unsignedBigInteger('categorias_id');
             $table->foreign('categorias_id')->references('id')->on('categoria')->onDelete('cascade');
-            // $table->unsignedBigInteger('insumo_id');
-            // $table->foreign('insumo_id')->references('id')->on('insumos')->onDelete('cascade');
             $table->timestamps();
         });
     }
