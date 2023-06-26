@@ -4,8 +4,14 @@
 @section('content')
 
     {{-- <section class="section"> --}}
-    <section class="" style=" margin: 40px;
-    padding: 20px;">
+    <section class=""
+        style=" 
+    padding: 40px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+    ">
         <div class="section-header">
             <h3 class="page__heading">Editar Pedido</h3>
         </div>
@@ -192,7 +198,6 @@
                                                     <table id="selected-products-table" class="table table-bordered">
                                                         <thead>
                                                             <tr>
-                                                                <th>ID</th>
                                                                 <th>Producto</th>
                                                                 <th>Cantidad</th>
                                                                 <th>Subtotal</th>
@@ -205,7 +210,6 @@
                                                                 <tr data-producto-id="{{ $producto->id }}"
                                                                     data-cantidad="{{ $producto->pivot->cantidad }}"
                                                                     data-subtotal="{{ $producto->precio * $producto->pivot->cantidad }}">
-                                                                    <td>{{ $producto->id }}</td>
                                                                     <td>{{ $producto->nombre }}</td>
                                                                     <td>{{ $producto->pivot->cantidad }}</td>
                                                                     <td>${{ $producto->precio * $producto->pivot->cantidad }}
@@ -220,6 +224,25 @@
                                                                         value="{{ $producto->id }}">
                                                                 </tr>
                                                             @endforeach
+                                                            <?php $per = ''; ?>
+                                                            @foreach ($personaliza as $personalizas)
+                                                                @if (!($personalizas->nombre == $per))
+                                                                    <?php $per = $personalizas->nombre; ?>
+                                                                    <tr>
+                                                                        <td>{{ $personalizas->nombre }}</td>
+                                                                        <td>{{ $personalizas->cantidad }}</td>
+                                                                        <td>{{ $personalizas->Subtotal }}</td>
+                                                                        <td>
+                                                                            <button type="button"
+                                                                                class="btn btn-danger btn-sm quitar-btn"
+                                                                                onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
+
+
+
                                                         </tbody>
                                                         <input type="hidden" name="personalizadosArray"
                                                             id="personalizadosArray">
@@ -249,8 +272,40 @@
                             </div>
 
                             <script>
+                                // Obtener el elemento del total actual
                                 var totalElement = document.getElementById('total');
+
+                                // Obtener el valor actual del total
+                                var currentTotal = parseFloat(totalElement.textContent);
+
+                                // Calcular el nuevo total sumando el valor del pedido y el valor total
+                                var pedidoTotal = parseFloat("{{ $pedido->Total }}");
+                                var nuevoTotal = pedidoTotal + currentTotal;
+
+                                // Actualizar el valor del total en el elemento HTML
+                                totalElement.textContent = nuevoTotal.toFixed(2);
+
+                                // Obtener el elemento del input oculto para el total
+                                var totalInput = document.getElementById('total-input');
+
+                                // Actualizar el valor del input oculto
+                                totalInput.value = nuevoTotal.toFixed(2);
+
+
+
+                                // var totalElement = document.getElementById('total');
                                 var total = parseFloat(totalElement.textContent);
+
+
+
+
+
+
+
+
+
+
+
 
                                 function agregarProducto(id, nombre, precio) {
                                     var cantidad = prompt('Ingrese la cantidad del producto "' + nombre + '":');
@@ -267,7 +322,6 @@
                                         tr.setAttribute('data-cantidad', cantidad);
                                         tr.setAttribute('data-subtotal', subtotal);
                                         tr.innerHTML = `
-                                            <td>${id}</td>
                                             <td>${nombre}</td>
                                             <td>${cantidad}</td>
                                             <td>$${subtotal}</td>
@@ -300,6 +354,9 @@
 
                                         var totalInput = document.getElementById('total-input');
                                         totalInput.value = total.toFixed(2);
+
+
+
                                     }
                                 }
 
@@ -388,87 +445,136 @@
 
 
 
-                         
-<script>
-    var personalizadosArray = [];
 
-    document.getElementById('crearPersonalizados').addEventListener('click', function() {
-        var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
-            function(li) {
-                return li.textContent.trim();
-            }
-        );
+                            <script>
+                                var personalizadosArray = [];
 
-        var tableBody = document.getElementById('selected-products-list');
-        var total = 0;
+                                document.getElementById('crearPersonalizados').addEventListener('click', function() {
+                                    var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
+                                        function(li) {
+                                            return li.textContent.trim();
+                                        }
+                                    );
 
-        insumosSeleccionados.forEach(function(insumo) {
-            var data = insumo.split(':');
-            var precio = parseFloat(data[2].trim());
-            var id = parseFloat(data[0].trim());
-            var cantidad = 1;
-            var subtotal = precio * cantidad;
-            total += subtotal;
-        });
+                                    var tableBody = document.getElementById('selected-products-list');
+                                    var total = 0;
 
-        var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
-        
-        var num = personalizadosArray.length + 1;
-        personalizado['Nombre'] = "Personalizado " + num;
-        personalizado['insumos'] = insumosSeleccionados;
-        // personalizado['id'] = insumosSeleccionados.id;
+                                    insumosSeleccionados.forEach(function(insumo) {
+                                        var data = insumo.split(':');
+                                        var precio = parseFloat(data[2].trim());
+                                        var id = parseFloat(data[0].trim());
+                                        var cantidad = 1;
+                                        var subtotal = precio * cantidad;
+                                        total += subtotal;
+                                    });
 
-        personalizadosArray.push(personalizado);
+                                    var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
 
-        var row = document.createElement('tr');
-        var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
-        row.innerHTML = `
-            <td></td>
-            <td>${personalizado.Nombre}</td>
-            <td>${insumosSeleccionados.length}</td>
-            <td>$${total.toFixed(2)}</td>
-            <td>
-                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
-            </td>
-        `;
-        row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
-        tableBody.appendChild(row);
+                                    var num = personalizadosArray.length + 1;
+                                    personalizado['Nombre'] = "Personalizado " + num;
+                                    personalizado['insumos'] = insumosSeleccionados;
+                                    personalizado['Subtotal'] = total;
 
-        var totalElement = document.getElementById('total');
-        totalElement.textContent = total.toFixed(2);
-        var totalSection = document.getElementById('total-section');
-        totalSection.style.display = 'block';
+                                    personalizadosArray.push(personalizado);
 
-        console.log('Datos personalizados:', personalizadosArray);
+                                    var row = document.createElement('tr');
+                                    var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
+                                    row.innerHTML = `
+                                <td>${personalizado.Nombre}</td>
+                                <td>${insumosSeleccionados.length}</td>
+                                <td>$${total.toFixed(2)}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                </td>
+                                     `;
+                                    row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
+                                    tableBody.appendChild(row);
 
-        var personalizadosArrayInput = document.getElementById('personalizadosArray');
-        personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
-    });
+                                    var totalElement = document.getElementById('total');
+                                    totalElement.textContent = total.toFixed(2);
 
-    function quitarProductoPersonalizados(id) {
-        // Obtener el personalizado correspondiente al ID
-        var personalizado = personalizadosArray[id];
+                                    var totalSection = document.getElementById('total-section');
+                                    if (totalSection) {
+                                        totalSection.style.display = 'block';
+                                    }
 
-        // Eliminar el personalizado del array
-        personalizadosArray.splice(id, 1);
+                                    console.log('Datos personalizados:', personalizadosArray);
 
-        // Recalcular el total
-        var total = 0;
-        personalizadosArray.forEach(function(personalizado) {
-            total += personalizado.insumos.length;
-        });
+                                    var personalizadosArrayInput = document.getElementById('personalizadosArray');
+                                    personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
+                                });
 
-        // Eliminar la fila de la tabla
-        var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
-        if (row) {
-            row.remove();
-        }
+                                function quitarProductoPersonalizados(id) {
+                                    // Obtener el personalizado correspondiente al ID
+                                    var personalizado = personalizadosArray[id];
 
-        // Actualizar el total mostrado
-        var totalElement = document.getElementById('total');
-        totalElement.textContent = total.toFixed(2);
-    }
-</script>
+                                    // Eliminar el personalizado del array
+                                    personalizadosArray.splice(id, 1);
+
+                                    // Recalcular el total
+                                    var total = 0;
+                                    personalizadosArray.forEach(function(personalizado) {
+                                        total += personalizado.insumos.length;
+                                    });
+
+                                    // Eliminar la fila de la tabla
+                                    var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
+                                    if (row) {
+                                        row.remove();
+                                    }
+
+                                    // Actualizar el total mostrado
+                                    var totalElement = document.getElementById('total');
+                                    totalElement.textContent = total.toFixed(2);
+
+                                    // Actualizar el campo oculto con los datos actualizados
+                                    var personalizadosArrayInput = document.getElementById('personalizadosArray');
+                                    personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
+                                }
+
+
+
+
+
+
+
+                                @foreach ($personaliza as $personalizas)
+                                    var personalizado = {};
+                                    personalizado['Nombre'] = '{{ $personalizas->nombre }}';
+
+                                    var insumos = [];
+                                    @foreach (\App\Models\ProducPerz::where('id', $personalizas->id)->get() as $producPerz)
+                                        var insumoObj = {
+                                            'id': {{ $producPerz->insumos }},
+                                            'cantidad': {{ $producPerz->cantidad }},
+                                        };
+                                        insumos.push(insumoObj);
+                                    @endforeach
+
+                                    personalizado['Insumos'] = insumos;
+                                    personalizado['Subtotal'] = '{{ $personalizas->Subtotal }}';
+
+                                    personalizadosArray.push(personalizado);
+                                @endforeach
+
+                                var personalizadosArrayJson = JSON.stringify(personalizadosArray);
+                                console.log(personalizadosArray);
+                            </script>
+
+
+
+                            {{-- @foreach ($personaliza as $personalizas)
+                                <script>
+                                    var personalizado = {};
+                                    personalizado['Nombre'] = '{{ $personalizas->nombre }}';
+                                    personalizado['insumos'] = {!! $personalizas->insumos !!}; // No es necesario decodificar los datos de los insumos
+                                    personalizado['Subtotal'] = '{{ $personalizas->Subtotal }}';
+
+                                    personalizadosArray.push(personalizado);
+                                    console.log(personalizado);
+                                    console.log(personalizadosArray);
+                                </script>
+                            @endforeach --}}
 
 
                         </div>

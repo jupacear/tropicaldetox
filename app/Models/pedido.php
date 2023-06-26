@@ -23,4 +23,9 @@ public function productos()
             ->withPivot('cantidad', 'precio_unitario', 'Nombre');
     }
 
+    public function productosPersonalizados()
+    {
+        return $this->hasMany(producPerz::class, 'id_pedidos');
+    }
+
 }
