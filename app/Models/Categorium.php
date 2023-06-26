@@ -22,7 +22,7 @@ class Categorium extends Model
 {
 
   static $rules = [
-    'imagen' => 'required|image|mimes:jpg,png|max:2048',
+    'imagen' => 'image|mimes:jpg,png|max:2048',
     'nombre' => 'required',
     'descripcion' => 'required',
     'activo' => '',

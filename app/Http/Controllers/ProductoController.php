@@ -55,88 +55,61 @@ class ProductoController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    // Restar las cantidades de los insumos asociados al producto
-    //        $insumos = $producto->insumos;
-    //        foreach ($insumos as $insumo) {
-    //            $pivotRow = DB::table('insumo_producto')
-    //                ->where('insumo_id', $insumo->id)
-    //                ->where('producto_id', $producto->id)
-    //                ->first();
 
-    //            $cantidad_restante = $insumo->cantidad_disponible - ($pivotRow->cantidad * $cantidades[$index]);
-    //            $insumo->cantidad_disponible = $cantidad_restante;
-    //            $insumo->save();
-    //        }
-    //    }
     public function store(Request $request)
     {
         $request->validate([
-            'imagen' => 'required|image|mimes:jpg,png|max:2048',
+            'imagen' => 'image|mimes:jpg,png|max:2048',
             'nombre' => 'required',
             'precio' => 'required',
             'descripcion' => 'required',
             'categorias_id' => 'required',
             'insumos' => 'required|array', // Validar que se envíen los insumos como un array
-            'cantidad_utilizada' => 'required', // Validar que se envíen las cantidades utilizadas como un array
-            'cantidad_utilizada.*' => 'integer|min:1' // Validar que las cantidades utilizadas sean enteros y mayores o iguales a 1
+            'cantidad_utilizada' => 'required|array' // Validar que se envíen las cantidades utilizadas como un array    
         ]);
-    
+
         $producto = new Producto();
-    
+
         $producto->nombre = $request->input('nombre');
         $producto->precio = $request->input('precio');
         $producto->categorias_id = $request->input('categorias_id');
         $producto->descripcion = $request->input('descripcion');
         $producto->activo = true; // Establecer el valor de "activo" como true
-    
+        $cantidadUtilizada = $request->input('cantidad_utilizada');
+
+
+
         // Verificar si se ha enviado una imagen
         if ($request->hasFile('imagen')) {
             $image = $request->file('imagen');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-    
+
             // Mover la imagen a la carpeta "img" dentro del directorio público
             $image->move(public_path('img/ProductosIMG'), $imageName);
-    
+
             // Asignar la ruta de la imagen al modelo
             $producto->imagen = 'img/ProductosIMG/' . $imageName;
         }
-    
-        // Obtener los insumos seleccionados del formulario
-        $insumos = $request->input('insumos');
-        $cantidadesUtilizadas = $request->input('cantidad_utilizada');
-        $valid = true;
-    
-        // Iterar los insumos y verificar la cantidad disponible antes de crear el producto
-        foreach ($insumos as $index => $insumoId) {
-            $insumo = Insumo::find($insumoId);
-    
-            // Verificar si el insumo existe y si la cantidad disponible es mayor o igual a la cantidad utilizada
-            if ($insumo && $insumo->cantidad_disponible >= $cantidadesUtilizadas[$index]) {
-                $insumo->cantidad_disponible -= $cantidadesUtilizadas[$index];
-                $insumo->save();
-            } else {
-                // Si el insumo no existe o la cantidad disponible es insuficiente, establecer el indicador de validez como falso
-                $valid = false;
-                break;
-            }
-        }
-    
-        // Si el indicador de validez es falso, mostrar un mensaje de error y redirigir hacia atrás
-        if (!$valid) {
-            return redirect()->back()->withErrors('El insumo seleccionado no tiene la cantidad disponible requerida.');
-        }
-    
+
         // Guardar el registro en la base de datos
         $producto->save();
-    
+
+        /// Obtener los insumos seleccionados del formulario
+        $insumos = $request->input('insumos');
+
+        // Iterar los insumos y actualizar la cantidad utilizada
+        foreach ($insumos as $insumoId) {
+            $insumo = Insumo::find($insumoId);
+            if ($insumo) {
+                $insumo->save();
+            }
+        }
         // Asociar los insumos al producto a través de la relación de muchos a muchos
         $producto->insumos()->attach($insumos);
-    
+
         return redirect()->route('productos.index')
             ->with('success', 'Producto creado exitosamente');
     }
-    
-    
     /**
      * Display the specified resource.
      *
@@ -220,22 +193,11 @@ class ProductoController extends Controller
 
         // Sincronizar los insumos en la tabla pivot
         $insumos = $request->input('insumos');
-        // Iterar los insumos y actualizar la cantidad utilizada
-        foreach ($insumos as $insumoId) {
-            $insumo = Insumo::find($insumoId);
-            if ($insumo) {
-                // Restar la cantidad previamente utilizada antes de actualizarla
-                $insumo->cantidad_utilizada -= $producto->cantidad_requerida;
-                // Actualizar la cantidad utilizada sumando la cantidad requerida para el producto
-                $insumo->cantidad_utilizada += $request->input('cantidad_requerida');
-                $insumo->save();
-            }
-        }
+
         $producto->insumos()->sync($insumos);
         // Redireccionar a la página de índice de productos con un mensaje de éxito
         return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
     }
-
 
     /**
      * @param int $id
