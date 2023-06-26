@@ -13,13 +13,28 @@ Actualizar Insumo
     </div>
 
     <div class="section-body">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+        @endif
         <div class="row">
             <div class="col-lg-12">
                 @includeif('partials.errors')
 
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('insumo.update', $insumo['id']) }}" role="form" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('insumo.update', $insumo->id) }}" role="form" enctype="multipart/form-data">
                             {{ method_field('PATCH') }}
                             @csrf
 

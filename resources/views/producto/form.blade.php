@@ -8,9 +8,15 @@
             </div>
             <div class="form-group col-md-6">
                 {{ Form::label('imagen') }}
+                @if ($producto->imagen)
+                <div>
+                    <img src="{{ asset($producto->imagen) }}" alt="Imagen actual" width="200">
+                </div>
+                @endif
                 {{ Form::file('imagen', ['class' => 'form-control' . ($errors->has('imagen') ? ' is-invalid' : ''), 'placeholder' => 'Imagen']) }}
                 {!! $errors->first('imagen', '<div class="invalid-feedback">:message</div>') !!}
             </div>
+
         </div>
         <div class="form-row">
             <div class="form-group col-md-6">
@@ -38,14 +44,13 @@
                 </div>
             </div>
             <div class="form-group col-md-2">
-                {{ Form::label('cantidad_utilizada', 'Cantidad a utilizar') }}
-                {{ Form::number('cantidad_utilizada', null, ['class' => 'form-control' . ($errors->has('cantidad_utilizada') ? ' is-invalid' : ''), 'placeholder' => 'Cantidad a utilizar']) }}
+                {{ Form::label('cantidad_utilizada[]', 'Cantidad a utilizar') }}
+                {{ Form::number('cantidad_utilizada[]', null, ['class' => 'form-control' . ($errors->has('cantidad_utilizada') ? ' is-invalid' : ''), 'placeholder' => 'Cantidad a utilizar']) }}
                 @error('cantidad_utilizada')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div id="additional-insumos"></div>
         </div>
         @if(Route::currentRouteName() !== 'productos.create')
         <div class="form-group">
@@ -54,6 +59,7 @@
             {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
         </div>
         @endif
+        <div id="additional-insumos"></div>
 
     </div>
     <div class="box-footer mt-3">
@@ -71,6 +77,13 @@
             // Crear un nuevo div para el selector de insumo y agregarlo al contenedor
             var newInsumoDiv = $("<div></div>").addClass("form-group mt-3").append(insumosSelect);
             $("#additional-insumos").append(newInsumoDiv);
+
+            // Agregar el campo "cantidad a utilizar" al nuevo div
+            var cantidadUtilizadaInput = $("<div class='form-group col-md-2'>" +
+                "<label for='cantidad_utilizada'>Cantidad a utilizar</label>" +
+                "<input type='number' name='cantidad_utilizada[]' class='form-control'>" +
+                "</div>");
+            newInsumoDiv.append(cantidadUtilizadaInput);
         });
     });
 </script>
