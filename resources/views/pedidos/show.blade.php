@@ -37,19 +37,20 @@
                                         <p><strong>descripción:</strong> {{ $pedido->Nombre }}</p>
                                     @endif
                                     <table class="table">
+
+
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
                                                 <th>Producto</th>
                                                 <th>Cantidad</th>
                                                 <th>Precio unitario</th>
-                                                <th>Total</th>
                                             </tr>
                                         </thead>
+
                                         <tbody>
+
                                             @foreach ($detalles_pedidos as $detalle)
                                                 <tr>
-                                                    <td>{{ $detalle->id }}</td>
                                                     <td>{{ $detalle->Nombre }}</td>
 
                                                     {{-- <td>{{ $detalle->Prductos->nombre }}</td> --}}
@@ -58,12 +59,34 @@
 
                                                     <td>{{ $detalle->precio_unitario }}</td>
                                                 </tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
                                             @endforeach
-                                            <td>{{ $detalle->id_pedidos = $pedido->Total }}</td>
+
+
+                                            <?php $per = ''; ?>
+                                            @foreach ($personaliza as $personalizas)
+                                                @if (!($personalizas->nombre == $per))
+                                                    <?php $per = $personalizas->nombre; ?>
+                                                    <tr>
+                                                        <td>{{ $personalizas->nombre }}</td>
+                                                        <td>{{ $personalizas->cantidad }}</td>
+                                                        <td>{{ $personalizas->Subtotal }}</td>
+                                                        <td>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+
+                                            <thead>
+                                                <tr>
+                                                    <th>Total</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th> {{ $detalles_pedidos->id_pedidos = $pedido->Total }}</th>
+                                                </tr>
+                                            </thead>
+
+                                            {{-- <tr> {{ $detalle->id_pedidos = $pedido->Total }}</tr> --}}
+                                            {{-- <td>{{ $detalle->id_pedidos = $pedido->Total }}</td> --}}
                                         </tbody>
                                     </table>
                                     <a class="btn btn-dark" href="{{ route('pedidos.index') }} ">Regresar</a>

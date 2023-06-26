@@ -113,28 +113,42 @@ class pedidoController extends Controller
 
 
 
-   
+
 
 
         $personalizadosArray = json_decode($request->input('personalizadosArray'), true);
-        foreach ($personalizadosArray as $personalizado) {
-            // Guardar los datos del personalizado en la base de datos
-            $insumos = $personalizado['insumos'];
-            $id = '';
+        if (!empty($personalizadosArray)) {
 
-            foreach ($insumos as $insumo) {
-                $insumoData = explode(':', $insumo);
-                $id = trim($insumoData[0]);
-                
-                            $personalizadoModel = new producPerz();
-                            $personalizadoModel->cantidad = 1;
-                            $personalizadoModel->id_pedidos = $pedido->id;
-                            $personalizadoModel->insumos = $id;
-                            // ...
-                            $personalizadoModel->save();
+            foreach ($personalizadosArray as $personalizado) {
+                // Guardar los datos del personalizado en la base de datos
+                $insumos = $personalizado['insumos'];
+                $Nombre = $personalizado['Nombre'];
+                $subtotal = $personalizado['Subtotal'];
+                $id = '';
+                $Nombres = "";
+
+
+                foreach ($insumos as $insumo) {
+                    $insumoData = explode(':', $insumo);
+                    $NombreData = explode(':', $Nombre);
+                    $subtotaldata = explode(':', $subtotal);
+
+                    $id = trim($insumoData[0]);
+                    $Nombres = trim($NombreData[0]);
+                    $subtotal = trim($subtotaldata[0]);
+
+                    $personalizadoModel = new producPerz();
+                    $personalizadoModel->nombre = $Nombres;
+                    $personalizadoModel->cantidad = 1;
+                    $personalizadoModel->Subtotal = $subtotal;
+
+                    $personalizadoModel->id_pedidos = $pedido->id;
+                    $personalizadoModel->insumos = $id;
+                    // ...
+                    $personalizadoModel->save();
+                }
             }
         }
-
         $pedido->Total = $total;
         $pedido->save();
 
@@ -160,8 +174,10 @@ class pedidoController extends Controller
 
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
 
+        $personaliza = producPerz::where('id_pedidos', $id)->get();
+
         // Pasar el pedido y sus detalles a la vista
-        return view('pedidos.show', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos,]);
+        return view('pedidos.show', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'personaliza' => $personaliza]);
 
     }
 
@@ -172,17 +188,38 @@ class pedidoController extends Controller
      * @param  \App\Models\pedido  $pedido
      * @return \Illuminate\Http\Response
      */
+
+
+
+
+
+
+    // public function edit($id)
+    // {
+    //     $pedido = Pedido::with('users')->find($id);
+    //     $pedidos = Pedido::find($id);
+    //     $personaliza = producPerz::find($id);
+
+    //     $users = User::all(); // define la variable $users con todos los usuarios
+    //     $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
+    //     return view('pedidos.edit', ['pedidos' => $pedidos, 'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users, 'Insumo' => Insumo::all(), $personaliza=>"personaliza"]);
+    // }
+
+
+
     public function edit($id)
     {
         $pedido = Pedido::with('users')->find($id);
         $pedidos = Pedido::find($id);
+        // $personaliza = producPerz::where('id_pedidos', $id)->first();
+        $personaliza = producPerz::where('id_pedidos', $id)->get();
+
+
         $users = User::all(); // define la variable $users con todos los usuarios
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
-        return view('pedidos.edit', ['pedidos' => $pedidos, 'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users, 'Insumo' => Insumo::all()]);
+
+        return view('pedidos.edit', ['pedidos' => $pedidos, 'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users, 'Insumo' => Insumo::all(), 'personaliza' => $personaliza]);
     }
-
-
-
 
 
 
@@ -193,6 +230,14 @@ class pedidoController extends Controller
      * @param  \App\Models\pedido  $pedido
      * @return \Illuminate\Http\Response
      */
+
+
+
+
+
+
+
+
 
 
     public function updateEstado(Request $request, $id)
@@ -209,6 +254,20 @@ class pedidoController extends Controller
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -217,24 +276,22 @@ class pedidoController extends Controller
             'Usuario' => 'required',
             'ProductoID' => 'required|array',
             'ProductoID.*' => 'integer',
-            'Total' => 'required|numeric', // Agrega la validación para el campo "Total"
+            'Total' => 'required|numeric',
         ]);
 
         $pedido = Pedido::find($id);
         $pedido->Nombre = $request->input('Nombre');
         $pedido->Estado = $request->input('Estado');
         $pedido->id_users = $request->input('Usuario');
-        $pedido->Total = $request->input('Total'); // Guarda el valor del campo "Total" ingresado por el usuario
+        $pedido->Total = $request->input('Total');
         $pedido->save();
 
         // Eliminar los detalles de pedido existentes asociados con el pedido
-
-
+        $pedido->detalle_pedidos()->delete();
 
         $productos = $request->input('ProductoID');
         $cantidades = $request->input('Cantidad');
         $total = 0;
-        $pedido->detalle_pedidos()->delete();
 
         foreach ($productos as $index => $producto_id) {
             $producto = Producto::find($producto_id);
@@ -251,39 +308,52 @@ class pedidoController extends Controller
             $detalles_pedidos->save();
         }
 
-        
-   
-
-   
+        $pedido->productosPersonalizados()->delete();
 
 
         $personalizadosArray = json_decode($request->input('personalizadosArray'), true);
+        // return response()->json($personalizadosArray);
 
         if (!empty($personalizadosArray)) {
             foreach ($personalizadosArray as $personalizado) {
+                // Guardar los datos del personalizado en la base de datos
                 $insumos = $personalizado['insumos'];
-        
+                $Nombre = $personalizado['Nombre'];
+                $subtotal = $personalizado['Subtotal'];
+                // $subtotal = $personalizado['Subtotal'];
+
+                $id = '';
+                $Nombres = "";
+
+
                 foreach ($insumos as $insumo) {
                     $insumoData = explode(':', $insumo);
-                    $id = trim($insumoData[0]);
-                    
-                    $personalizadoModel = new producPerz();
-                    $personalizadoModel->cantidad = 1;
-                    $personalizadoModel->id_pedidos = $pedido->id;
-                    $personalizadoModel->insumos = $id;
-                    // ...
-                    $personalizadoModel->save();
+
+                        $NombreData = explode(':', $Nombre);
+                        $subtotaldata = explode(':', $subtotal);
+
+                        $id = trim($insumoData[0]);
+                        $Nombres = trim($NombreData[0]);
+                        $subtotal = trim($subtotaldata[0]);
+
+
+                        $personalizadoModel = new producPerz();
+                        $personalizadoModel->nombre = $Nombres;
+                        $personalizadoModel->cantidad = 1;
+                        $personalizadoModel->id_pedidos = $pedido->id;
+                        $personalizadoModel->insumos = $id;
+                        $personalizadoModel->Subtotal = $subtotal;
+
+                        $personalizadoModel->save();
                 }
             }
         }
-        
 
         $pedido->Total = $total;
         $pedido->save();
 
         $pedidos = Pedido::all();
         return view('pedidos.index', compact('pedidos'));
-
     }
 
 
@@ -313,6 +383,9 @@ class pedidoController extends Controller
 
         // Eliminar los detalles del pedido
         detalle_pedidos::where('id_pedidos', $pedido->id)->delete();
+
+        // Eliminar los detalles del pedido en la tabla produc_perzs
+        producPerz::where('id_pedidos', $pedido->id)->delete();
 
         // Eliminar el pedido
         $pedido->delete();

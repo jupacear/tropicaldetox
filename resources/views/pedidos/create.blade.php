@@ -3,8 +3,14 @@
 @section('title', 'Crear Pedido')
 @section('content')
 
-    <section class="" style=" margin: 40px;
-    padding: 20px;">
+    <section class=""
+        style=" 
+    padding: 40px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+    ">
         <div class="section-header">
             <h3 class="page__heading">Crear Pedido</h3>
         </div>
@@ -71,7 +77,7 @@
                                                             <div class="insumo" data-id="{{ $Insumos->id }}">
                                                                 <img src="{{ asset($Insumos->imagen) }}"
                                                                     alt="Imagen del producto" width="40em">
-                                                                <span>{{ $Insumos->id }}: {{ $Insumos->nombre }} $:
+                                                                <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
                                                                     {{ $Insumos->precio_unitario }}</span>
                                                                 <button type="button"
                                                                     class="btn btn-success agregar-insumo">Agregar</button>
@@ -367,13 +373,15 @@
                                         var cantidad = 1;
                                         var subtotal = precio * cantidad;
                                         total += subtotal;
+
                                     });
 
                                     var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
-                                    
+
                                     var num = personalizadosArray.length + 1;
                                     personalizado['Nombre'] = "Personalizado " + num;
                                     personalizado['insumos'] = insumosSeleccionados;
+                                    personalizado['Subtotal'] = total;
                                     // personalizado['id'] = insumosSeleccionados.id;
 
                                     personalizadosArray.push(personalizado);
