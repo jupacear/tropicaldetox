@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Dompdf\Dompdf;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
@@ -78,6 +78,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/grafica', [ventasController::class, 'graficatop10'])->name('admin.grafica');
     // Route::get('/admin/dashboard', [ventasController::class, 'informe'])->name('admin.dashboard');
     Route::resource('ventas', ventasController::class);
+    Route::get('pdf/{id}', [pedidoController::class, 'showPdf'])->name('pdf');
+
 
 
     // diego

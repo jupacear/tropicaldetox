@@ -1,14 +1,6 @@
-@extends('layouts.app')
-
-@section('content')
-@section('title', 'Ventas')
-
-
-<section class="section">
-
 
     <div class="section-header">
-        <h3 class="page__heading">Ventas</h3>
+        <h3 class="page__heading">Informe de Ventas</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -28,7 +20,6 @@
                                         <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
                                     @endif
 
-                                    <a href="{{ route('pdf', ['id' => $pedido->id]) }}" class="btn btn-primary">Descargar PDF</a>
 
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
@@ -62,7 +53,6 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <a class="btn btn-dark" href="{{ route('ventas.index') }} ">Regresar</a>
                                 </div>
                             </div>
                         </div>
@@ -72,13 +62,4 @@
             </div>
         </div>
     </div>
-</section>
 
-
-
-
-
-
-
-
-@endsection

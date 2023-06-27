@@ -19,10 +19,13 @@ return new class extends Migration
             $table->foreign('id_pedidos')->references('id')->on('pedidos');
 
             $table->unsignedBigInteger('insumos');
-            $table->foreign('insumos')->references('id')->on('pedidos');
+            $table->foreign('insumos')->references('id')->on('insumos');
 
             $table->integer('cantidad');
             $table->timestamps();
+            
+            $table->string("nombre");
+            $table->float('Subtotal');
         });
     }
 
