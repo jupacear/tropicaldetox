@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\DB;
 
 class ventasController extends Controller
 {
+    public function admingrafica()
+    {
+        // Lógica y datos necesarios para el dashboard del administrador
+
+        return view('admin.grafica');
+    }
 
     function __construct()
     {
@@ -92,7 +98,7 @@ class ventasController extends Controller
         ->orderBy('month', 'asc')
         ->get();
     
-        return view('admin.dashboard', compact('topProductos', 'cantidadPorMes'));
+        return view('admin.grafica', compact('topProductos', 'cantidadPorMes'));
     }
     
 

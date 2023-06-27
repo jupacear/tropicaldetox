@@ -67,9 +67,19 @@ class RolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
+{
+    $role = Role::find($id);
+    $permissions = Permission::get();
+    $rolePermissions = DB::table("role_has_permissions")
+        ->where("role_has_permissions.role_id", $id)
+        ->pluck('role_has_permissions.permission_id')
+        ->all();
+
+    return view('roles.show', compact('role', 'permissions', 'rolePermissions'));
+}
+    
+
+
 
     /**
      * Show the form for editing the specified resource.

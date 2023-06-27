@@ -48,7 +48,7 @@
                                                 <td>{{ $usuario->email }}</td>
                                                 <td>
                                                     <a class="btn btn-sm btn-success" href="{{ route('A_clientes.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
-      
+                                                    <a class="btn btn-sm btn-primary" href="{{ route('A_clientes.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i>Mostrar</a>
       
                                                       {!! Form::open([
                                                           'method' => 'DELETE',

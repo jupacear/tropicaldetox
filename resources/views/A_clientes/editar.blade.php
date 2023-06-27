@@ -3,7 +3,15 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h3 class="page__heading">Editar Cliente</h3>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group d-flex align-items-center">
+                    <a href="{{ route('A_clientes.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                    <h3 class="page__heading ml-3 mb-0" style="margin-top: 5px;">Editar Cliente</h3>
+                </div>
+            </div>
+            
         </div>
         <div class="section-body">
             <div class="row">
@@ -91,6 +99,8 @@
                         <div class="col-xs-12 col-sm-12 col-md 12">
                             <div class="form-group">
                             <button type="submit" class="btn btn-primary">Guardar</button>
+                            
+                            
                             </div>
                             </div>
                             </div>

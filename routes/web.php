@@ -29,9 +29,11 @@ Route::get('/', function () {
 });
 
 
-Route::middleware(['role:administrador'])->group(function () {
-    Route::get('/admin/dashboard', [UsuarioController::class, 'adminDashboard'])->name('admin.dashboard');
-});
+
+Route::get('/admin/dashboard', [UsuarioController::class, 'adminDashboard'])->name('admin.dashboard');
+
+
+
 
 Route::middleware(['role:cliente'])->group(function () {
     Route::get('/cliente/dashboard', [UsuarioController::class, 'clienteDashboard'])->name('cliente.dashboard');
@@ -50,16 +52,21 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
 
+    Route::get('/roles/{id}/show', 'RolController@show')->name('roles.show');
     Route::resource('roles', RolController::class);
+    
+    Route::get('/usuarios/{id}/show','UsuarioController@show')->name('usuarios.show');
     Route::resource('usuarios', UsuarioController::class);
     Route::put('roles/{id}/status', [RolController::class, 'updateStatus'])->name('roles.updateStatus');
 
+    Route::put('/user/password', [UsuarioController::class, 'updatePassword'])->name('usuarios.updatePassword');
 
     //clientes
+
     Route::get('/A_clientes', [UsuarioController::class, 'indexc'])->name('A_clientes.index');
     Route::get('/A_clientes/create', [UsuarioController::class, 'createc'])->name('A_clientes.create');
     Route::post('/A_clientes', [UsuarioController::class, 'storec'])->name('A_clientes.store');
-    Route::get('/A_clientes/{id}', [UsuarioController::class, 'showc'])->name('A_clientes.show');
+    Route::get('/A_clientes/{id}/show',[UsuarioController::class, 'showc'])->name('A_clientes.show');
     Route::get('/A_clientes/{id}/edit', [UsuarioController::class, 'editc'])->name('A_clientes.edit');
     Route::match(['put', 'patch'], '/A_clientes/{id}', [UsuarioController::class, 'updatec'])->name('A_clientes.update');
     Route::delete('/A_clientes/{id}', [UsuarioController::class, 'destroyc'])->name('A_clientes.destroy');
@@ -68,7 +75,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::put('/pedidos/{id}/updateEstado', [pedidoController::class, 'updateEstado'])->name('pedidos.updateEstado');
     Route::resource('pedidos',  pedidoController::class);
-    Route::get('/admin/dashboard', [ventasController::class, 'graficatop10'])->name('admin.dashboard');
+    Route::get('/admin/grafica', [ventasController::class, 'graficatop10'])->name('admin.grafica');
     // Route::get('/admin/dashboard', [ventasController::class, 'informe'])->name('admin.dashboard');
     Route::resource('ventas', ventasController::class);
 

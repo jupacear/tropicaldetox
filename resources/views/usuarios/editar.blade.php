@@ -3,7 +3,14 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h3 class="page__heading">Editar Usuario</h3>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group d-flex align-items-center">
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                    <h3 class="page__heading ml-3 mb-0" style="margin-top: 5px;">Editar Usuario</h3>
+                </div>
+            </div>
         </div>
         <div class="section-body">
             <div class="row">
