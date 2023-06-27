@@ -55,7 +55,7 @@
 
                                             <td>
                                               <a class="btn btn-sm btn-success" href="{{ route('usuarios.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
-
+                                              <a class="btn btn-sm btn-primary" href="{{ route('usuarios.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i>Mostrar</a>
 
                                                 {!! Form::open([
                                                     'method' => 'DELETE',

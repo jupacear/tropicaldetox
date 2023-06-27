@@ -30,6 +30,13 @@ class UsuarioController extends Controller
         return view('admin.dashboard');
     }
 
+    public function admingrafica()
+    {
+        // Lógica y datos necesarios para el dashboard del administrador
+
+        return view('admin.grafica');
+    }
+
     public function clienteDashboard()
     {
         // Lógica y datos necesarios para el dashboard del cliente
@@ -114,11 +121,11 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'apellidos' => 'required',
+            'name' => 'required|max:50',
+            'apellidos' => 'required|max:50',
             'estado' => 'boolean',
-            'documento' => 'nullable|string|max:255|unique:users,documento',
-            'telefono' => 'nullable',
+            'documento' => 'nullable|string||max:10|unique:users,documento',
+            'telefono' => 'nullable|max:10',
             'direccion' => 'nullable',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
@@ -148,12 +155,12 @@ class UsuarioController extends Controller
     public function storec(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'apellidos' => 'required',
+            'name' => 'required|max:30',
+            'apellidos' => 'required|max:30',
             'estado' => 'boolean',
-            'documento' => 'nullable|string|max:255|unique:users,documento',
-            'telefono' => 'nullable',
-            'direccion'=> 'nullable',
+            'documento' => 'required|string|max:255|unique:users,documento',
+            'telefono' => 'required|max:10',
+            'direccion'=> 'required|max:50',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
             'roles' => 'required'
@@ -184,9 +191,18 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
+{
+    $user = User::findOrFail($id);
+    return view('usuarios.show', compact('user'));
+
+}
+
+public function showc($id)
+{
+    $user = User::findOrFail($id);
+    return view('A_clientes.show', compact('user'));
+
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -264,9 +280,9 @@ class UsuarioController extends Controller
             'name' => 'required',
             'apellidos' => 'required',
             'estado' => 'boolean',
-            'documento' => 'nullable',
-            'telefono' => 'nullable',
-            'direccion' => 'nullable',
+            'documento' => 'required',
+            'telefono' => 'required',
+            'direccion' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
             'roles' => 'required'
@@ -310,4 +326,26 @@ class UsuarioController extends Controller
         User::find($id)->delete();
         return redirect()->route('A_clientes.index');
     }
+
+    public function updatePassword(Request $request)
+{
+    $user = Auth::user();
+
+    $request->validate([
+        'current_password' => 'required',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    // Verificar si la contraseña actual ingresada coincide con la contraseña actual del usuario
+    if (!Hash::check($request->current_password, $user->password)) {
+        return redirect()->back()->withErrors(['current_password' => 'La contraseña actual no es válida.']);
+    }
+
+    // Actualizar la contraseña
+    $user->password = Hash::make($request->password);
+    $user->save();
+
+    return redirect()->back()->with('success', 'La contraseña se ha actualizado correctamente.');
+}
+
 }
