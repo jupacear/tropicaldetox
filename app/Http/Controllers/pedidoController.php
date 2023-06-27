@@ -8,6 +8,7 @@ use App\Models\detalle_pedidos;
 use App\Models\pedido_personalizado;
 use App\Models\Personalizado;
 use App\Models\producPerz;
+use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use App\Models\pedido;
 use App\Models\Producto;
@@ -180,7 +181,18 @@ class pedidoController extends Controller
         return view('pedidos.show', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'personaliza' => $personaliza]);
 
     }
+    public function showPdf($id)
+    {
+        $dompdf = new Dompdf();
+        $pedido = Pedido::find($id);
+        $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
+        $personaliza = producPerz::where('id_pedidos', $id)->get();
 
+        $dompdf->loadHtml(view('ventas.showPDF', compact('pedido','detalles_pedidos','personaliza')));
+        $dompdf->render();
+        return $dompdf->stream();
+    }
+    
 
     /**
      * Show the form for editing the specified resource.

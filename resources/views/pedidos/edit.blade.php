@@ -538,6 +538,7 @@
 
 
 
+
                                 @foreach ($personaliza as $personalizas)
                                     var personalizado = {};
                                     personalizado['Nombre'] = '{{ $personalizas->nombre }}';
@@ -559,6 +560,9 @@
 
                                 var personalizadosArrayJson = JSON.stringify(personalizadosArray);
                                 console.log(personalizadosArray);
+
+                                var personalizadosArrayInput = document.getElementById('personalizadosArray');
+                                personalizadosArrayInput.value = personalizadosArrayJson;
                             </script>
 
 
