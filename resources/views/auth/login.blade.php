@@ -25,7 +25,7 @@
                     <label for="email">Email</label>
                     <input aria-describedby="emailHelpBlock" id="email" type="email"
                            class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
-                           placeholder="Enter Email" tabindex="1"
+                           placeholder="ingrese su Email" tabindex="1"
                            value="{{ (Cookie::get('email') !== null) ? Cookie::get('email') : old('email') }}" autofocus
                            required>
                     <div class="invalid-feedback">
@@ -56,13 +56,13 @@
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
                                id="remember"{{ (Cookie::get('remember') !== null) ? 'checked' : '' }}>
-                        <label class="custom-control-label" for="remember">Remember Me</label>
+                        <label class="custom-control-label" for="remember">Recuerdame</label>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                        Login
+                        Inicar Sesion
                     </button>
                 </div>
             </form>
