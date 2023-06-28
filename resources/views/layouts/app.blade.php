@@ -62,7 +62,7 @@
     </div>
 
     @include('profile.change_password')
-    @include('profile.edit_profile')
+    
 
 </body>
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>

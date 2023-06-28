@@ -12,7 +12,8 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\InsumoController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RoleController;
-
+use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\contrasenaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +29,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
+Route::get('/NewPassword2',  [contrasenaController::class,'NewPassword2'])->name('NewPassword2')->middleware('auth');
+Route::post('/change/password2',  [contrasenaController::class,'changePassword2'])->name('changePassword2');
+
+Route::get('/NewPassword',  [UserSettingsController::class,'NewPassword'])->name('NewPassword')->middleware('auth');
+Route::post('/change/password',  [UserSettingsController::class,'changePassword'])->name('changePassword');
 
 
 Route::get('/admin/dashboard', [UsuarioController::class, 'adminDashboard'])->name('admin.dashboard');
