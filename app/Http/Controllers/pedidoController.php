@@ -361,6 +361,29 @@ class pedidoController extends Controller
             }
         }
 
+        $personalizadosArray2 = json_decode($request->input('personalizadosArray2'), true);
+        if (!empty($personalizadosArray2)) {
+            foreach ($personalizadosArray2 as $personalizado) {
+                // Guardar los datos del personalizado en la base de datos
+                $insumos = $personalizado['Insumos'];
+                $Nombre = $personalizado['Nombre'];
+                $subtotal = $personalizado['Subtotal'];
+    
+                foreach ($insumos as $insumo) {
+                    $id = $insumo['id'];
+    
+                    $personalizadoModel = new producPerz();
+                    $personalizadoModel->nombre = $Nombre;
+                    $personalizadoModel->cantidad = 1;
+                    $personalizadoModel->id_pedidos = $pedido->id;
+                    $personalizadoModel->insumos = $id;
+                    $personalizadoModel->Subtotal = $subtotal;
+    
+                    $personalizadoModel->save();
+                }
+            }
+        }
+
         $pedido->Total = $total;
         $pedido->save();
 
