@@ -235,7 +235,8 @@
                                                                         <td>
                                                                             <button type="button"
                                                                                 class="btn btn-danger btn-sm quitar-btn"
-                                                                                onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                                                                onclick="quitarProductoPersonalizados2(this)">Quitar</button>
+
                                                                         </td>
                                                                     </tr>
                                                                 @endif
@@ -246,13 +247,16 @@
                                                         </tbody>
                                                         <input type="hidden" name="personalizadosArray"
                                                             id="personalizadosArray">
+
+                                                        <input type="hidden" name="personalizadosArray2"
+                                                            id="personalizadosArray2">
                                                     </table>
                                                 </div>
 
 
                                                 <h4>Total: $<span id="total">{{ $pedido->Total }}</span></h4>
                                                 <input type="hidden" name="Total" id="total-input"
-                                                    value="{{ $pedido->Total + $pedido->total }}">
+                                                    value="{{ $pedido->Total }}">
                                             </div>
 
                                             <div class="form-group">
@@ -539,30 +543,120 @@
 
 
 
+                                var personalizadosArray2 = [];
+                                var nombresRepetidos = [];
+
                                 @foreach ($personaliza as $personalizas)
                                     var personalizado = {};
                                     personalizado['Nombre'] = '{{ $personalizas->nombre }}';
+                                    personalizado['Insumos'] = [];
 
-                                    var insumos = [];
                                     @foreach (\App\Models\ProducPerz::where('id', $personalizas->id)->get() as $producPerz)
                                         var insumoObj = {
                                             'id': {{ $producPerz->insumos }},
                                             'cantidad': {{ $producPerz->cantidad }},
                                         };
-                                        insumos.push(insumoObj);
+
+                                        personalizado['Insumos'].push(insumoObj);
                                     @endforeach
 
-                                    personalizado['Insumos'] = insumos;
                                     personalizado['Subtotal'] = '{{ $personalizas->Subtotal }}';
 
-                                    personalizadosArray.push(personalizado);
+                                    personalizadosArray2.push(personalizado);
+
+                                    // Verificar si el nombre de pedido ya ha sido registrado
+                                    if (nombresRepetidos.indexOf('{{ $personalizas->nombre }}') === -1) {
+                                        nombresRepetidos.push('{{ $personalizas->nombre }}');
+                                    }
                                 @endforeach
 
-                                var personalizadosArrayJson = JSON.stringify(personalizadosArray);
-                                console.log(personalizadosArray);
+                                var totalPorNombre = {};
+                                var totalGeneral = 0;
 
-                                var personalizadosArrayInput = document.getElementById('personalizadosArray');
-                                personalizadosArrayInput.value = personalizadosArrayJson;
+                                personalizadosArray2.forEach(function(personalizado) {
+                                    var nombre = personalizado['Nombre'];
+                                    var subtotal = parseFloat(personalizado['Subtotal']);
+
+                                    if (nombresRepetidos.indexOf(nombre) !== -1) {
+                                        // Solo tomar el primer total de un nombre de pedido repetido
+                                        if (!totalPorNombre.hasOwnProperty(nombre)) {
+                                            totalPorNombre[nombre] = subtotal;
+                                            totalGeneral += subtotal;
+                                        }
+                                    } else {
+                                        totalPorNombre[nombre] = subtotal;
+                                        totalGeneral += subtotal;
+                                    }
+                                });
+
+                                // Obtener el elemento del campo oculto
+                                var totalInput = document.getElementById('total-input');
+
+                                // Obtener el elemento del total en el encabezado
+                                var totalElement = document.getElementById('total');
+
+                                // Obtener el valor del campo oculto
+                                var totalValue = parseFloat(totalInput.value);
+
+                                // Obtener el valor existente en el elemento del total en el encabezado
+                                var existingTotal = parseFloat(totalElement.textContent);
+
+                                // Calcular el nuevo total sumando el valor del campo oculto al valor existente
+                                var newTotal = existingTotal + totalValue;
+
+                                // Actualizar el contenido del elemento del total en el encabezado con el nuevo total calculado
+                                totalElement.textContent = newTotal.toFixed(2);
+
+
+
+
+                                function quitarProductoPersonalizados2(button) {
+                                    var row = button.closest('tr'); // Obtener la fila que contiene el botón
+
+                                    // Obtener los datos de la fila
+                                    var nombre = row.cells[0].textContent;
+                                    var cantidad = row.cells[1].textContent;
+                                    var subtotal = row.cells[2].textContent;
+
+                                    // Eliminar la fila de la tabla
+                                    row.remove();
+
+                                    // Actualizar el campo oculto con los datos actualizados
+                                    var personalizadosArray2Input = document.getElementById('personalizadosArray2');
+                                    personalizadosArray2Input.value = obtenerPersonalizadosArray2Actualizado();
+
+                                    // Recalcular el total restando el subtotal eliminado
+                                    var totalInput = document.getElementById('total-input');
+                                    var total = parseFloat(totalInput.value) - parseFloat(subtotal);
+                                    total = total < 0 ? 0 : total; // Verificar si el total es menor que cero y establecerlo en cero si es así
+                                    totalInput.value = total;
+
+                                    // Actualizar el elemento de visualización del total
+                                    var totalElement = document.getElementById('total');
+                                    totalElement.textContent = total.toFixed(2);
+                                }
+
+                                function obtenerPersonalizadosArray2Actualizado() {
+                                    var personalizadosArray2Actualizado = [];
+
+                                    // Recorrer las filas de la tabla de personalizados
+                                    var filas = document.querySelectorAll('tr[data-producto-id]');
+                                    filas.forEach(function(row) {
+                                        var nombre = row.cells[0].textContent;
+                                        var cantidad = row.cells[1].textContent;
+                                        var subtotal = row.cells[2].textContent;
+
+                                        var personalizado = {
+                                            'Nombre': nombre,
+                                            'Insumos': [],
+                                            'Subtotal': subtotal
+                                        };
+
+                                        personalizadosArray2Actualizado.push(personalizado);
+                                    });
+
+                                    return JSON.stringify(personalizadosArray2Actualizado);
+                                }
                             </script>
 
 
