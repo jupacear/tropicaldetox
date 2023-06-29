@@ -1,13 +1,13 @@
-@extends('layouts.app')
+@include('cliente.nav')
 
-@section('content')
+
 
 <div class="container mb-5" style="background-color: #fff;">
     <!--- Mensajes -->
     <h2 class="text-center">Cambiar contraseña <hr></h2>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form action="{{ route('changePassword2') }}" method="POST" class="needs-validation" novalidate>
+            <form action="{{ route('changecontrasena') }}" method="POST" class="needs-validation" novalidate>
                 @csrf 
 
                 <div class="row mb-3">
@@ -57,4 +57,5 @@
     </div>
 </div>
 
-@endsection
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

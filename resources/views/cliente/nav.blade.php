@@ -68,46 +68,47 @@
                         
                         <!-- Código de autenticación -->
                         @if (Route::has('login'))
-                            @auth
-                                <li class="nav-item">
-                                    <a href="{{ url('/home') }}" class="nav-link">Panel</a>
-                                    <div class="d-sm-none d-lg-inline-block">
+                        @auth
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle nav-link-lg nav-link-user" data-toggle="dropdown">
                                         Hola, {{ \Illuminate\Support\Facades\Auth::user()->first_name }}
-                                    </div>
-                                    <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                                        <div class="d-sm-none d-lg-inline-block">
-                                            Hola, {{ \Illuminate\Support\Facades\Auth::user()->first_name }}
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <div class="dropdown-title">
+                                            Bienvenido, {{ \Illuminate\Support\Facades\Auth::user()->name }}
                                         </div>
-                                    </a>
-                                    <div class="dropdown-title">
-                                        Bienvenido, {{ \Illuminate\Support\Facades\Auth::user()->name }}
+                                        <a href="{{ url('/home') }}" class="nav-link">Panel</a>
+                                        
+                                        <a class="dropdown-item" href="{{ route('newperfil') }}">
+                                            {{ __('Perfil') }}
+                                        </a>
+                                        
+                                        
+                                        <a class="dropdown-item" href="{{ route('newcontrasena') }}">
+                                            {{ __('Cambio de contraseña') }}
+                                        </a>
+                                        <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"
+                   onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </a>
+                <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
+                    {{ csrf_field() }}
+                </form>
                                     </div>
-                                    <a class="dropdown-item has-icon edit-profile" href="#" data-id="{{ \Auth::id() }}">
-                                        <i class="fa fa-user"></i> Editar perfil
-                                    </a>
-                                    <a class="dropdown-item has-icon" data-toggle="modal" data-target="#changePasswordModal"
-                                        href="#" data-id="{{ \Auth::id() }}">
-                                        <i class="fa fa-lock"></i> Cambiar contraseña
-                                    </a>
-                                    <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"
-                                        onclick="event.preventDefault(); localStorage.clear(); document.getElementById('logout-form').submit();">
-                                        <i class="fas fa-sign-out-alt"></i> Salir
-                                    </a>
-                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
-                                        {{ csrf_field() }}
-                                    </form>
-                                </li>
-                            @else
+                                </div>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a href="{{ route('login') }}" class="nav-link">Iniciar sesión</a>
+                            </li>
+                            @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a href="{{ route('login') }}" class="nav-link">Iniciar sesión</a>
+                                    <a href="{{ route('register') }}" class="nav-link">Registro</a>
                                 </li>
-                                @if (Route::has('register'))
-                                    <li class="nav-item">
-                                        <a href="{{ route('register') }}" class="nav-link">Registro</a>
-                                    </li>
-                                @endif
-                            @endauth
-                        @endif
+                            @endif
+                        @endauth
+                    @endif
                         <!-- Fin del código de autenticación -->
                     </ul>
                 </div>
@@ -143,6 +144,8 @@
     <script src="js/form-validator.min.js"></script>
     <script src="js/contact-form-script.js"></script>
     <script src="js/custom.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

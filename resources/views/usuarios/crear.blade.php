@@ -43,6 +43,10 @@
                         
                         {!! Form::open(['route' => 'usuarios.store', 'method' => 'POST']) !!}
                         <div class="row">
+                            <div id="documentoDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}" class="col-sm-6">
+                                <label for="documento" class="col-form-label">Documento:</label>
+                                {!! Form::text('documento', null, ['class' => 'form-control']) !!}
+                            </div>
                             <div id="nombreDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}" class="col-sm-6">
                                 <div class="form-group">
                                     <label for="name" class="col-form-label">Nombre:</label>
@@ -64,20 +68,16 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div id="documentoDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}" class="col-sm-4">
-                                    <label for="documento" class="col-form-label">Documento:</label>
-                                    {!! Form::text('documento', null, ['class' => 'form-control']) !!}
-                                </div>
-                                <div id="telefonoDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}" class="col-sm-4">
+                                
+                                <div id="telefonoDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}" class="col-sm-6">
                                     <label for="telefono" class="col-form-label">Teléfono:</label>
                                     {!! Form::text('telefono', null, ['class' => 'form-control']) !!}
                                 </div>
-                                <div id="direccionDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}" class="col-sm-4">
+                                <div id="direccionDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}" class="col-sm-6">
                                     <label for="direccion" class="col-form-label">Dirección:</label>
                                     {!! Form::text('direccion', null, ['class' => 'form-control']) !!}
                                 </div>
-                            </div>
+                            
                             <div id="emailDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}" class="col-sm-6">
                                 <div class="form-group">
                                     <label for="email" class="col-form-label">E-mail:</label>
@@ -104,7 +104,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-sm-2"></div>
+                            
                             <div class="col-sm-10">
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>

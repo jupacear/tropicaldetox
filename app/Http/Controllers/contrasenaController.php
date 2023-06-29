@@ -11,61 +11,80 @@ use Illuminate\Support\Facades\DB; //Necesario
 
 class contrasenaController extends Controller
 {
-
-    public function NewPassword2(){
+    public function NewPassword2()
+    {
         return view('profile.cambiarc');
     }
 
-    
-    public function changePassword2(Request $request){    
-        
-        $user           = Auth::user();
-        $userId         = $user->id;
-        $userEmail      = $user->email;
-        $userPassword   = $user->password;
+    public function changePassword2(Request $request)
+{
+    $request->validate([
+        'password_actual' => 'required',
+        'password' => 'required|min:6',
+        'confirm_password' => 'required|same:password',
+    ]);
 
-        if($request->password_actual !=""){
-            $NuewPass   = $request->password;
-            $confirPass = $request->confirm_password;
-            $name       = $request->name;
+    $user = Auth::user();
+    $userPassword = $user->password;
 
-                //Verifico si la clave actual es igual a la clave del usuario en session
-                if (Hash::check($request->password_actual, $userPassword)) {
+    if (Hash::check($request->password_actual, $userPassword)) {
+        $NuewPass = $request->password;
+        $confirPass = $request->confirm_password;
 
-                    //Valido que tanto la 1 como 2 clave sean iguales
-                    if($NuewPass == $confirPass){
-                        //Valido que la clave no sea Menor a 6 digitos
-                        if(strlen($NuewPass) >= 6){
-                            $user->password = Hash::make($request->password);
-                            $sqlBD = DB::table('users')
-                                  ->where('id', $user->id)
-                                  ->update(['password' => $user->password], ['name' => $user->name]);
-                    
-                            return redirect()->back()->with('updateClave','La clave fue cambiada correctamente.');
-                        }else{
-                            return redirect()->back()->with('clavemenor','Recuerde la clave debe ser mayor a 6 digitos.');
-                        }
-        
-                }else{
-                    return redirect()->back()->with('claveIncorrecta','Por favor verifique las claves no coinciden.');
-                }
-           
-            }else{
-                return back()->withErrors(['password_actual'=>'La Clave no Coinciden']);
+        if ($NuewPass == $confirPass) {
+            if (strlen($NuewPass) >= 6) {
+                $user->password = Hash::make($request->password);
+                $user->save();
+
+                return redirect()->back()->with('updateClave', 'La clave fue cambiada correctamente.');
+            } else {
+                return redirect()->back()->with('clavemenor', 'Recuerde que la clave debe tener al menos 6 caracteres.');
             }
-
-
-        }else{
-            $name       = $request->name;
-            $sqlBDUpdateName = DB::table('users')
-                            ->where('id', $user->id)
-                            ->update(['name' => $name]);
-            return redirect()->back()->with('name','El nombre fue cambiado correctamente.');;
-
+        } else {
+            return redirect()->back()->with('claveIncorrecta', 'Por favor, verifique que las claves coincidan.');
         }
+    } else {
+        return back()->withErrors(['password_actual' => 'La clave actual no coincide.']);
+    }
+}
 
-        
+public function newcontrasena()
+    {
+        return view('cliente.cambiar');
+    }
 
+    public function changecontrasena(Request $request)
+{
+    $request->validate([
+        'password_actual' => 'required',
+        'password' => 'required|min:6',
+        'confirm_password' => 'required|same:password',
+    ]);
+
+    $user = Auth::user();
+    $userPassword = $user->password;
+
+    if (Hash::check($request->password_actual, $userPassword)) {
+        $NuewPass = $request->password;
+        $confirPass = $request->confirm_password;
+
+        if ($NuewPass == $confirPass) {
+            if (strlen($NuewPass) >= 6) {
+                $user->password = Hash::make($request->password);
+                $user->save();
+
+                return redirect()->back()->with('updateClave', 'La clave fue cambiada correctamente.');
+            } else {
+                return redirect()->back()->with('clavemenor', 'Recuerde que la clave debe tener al menos 6 caracteres.');
+            }
+        } else {
+            return redirect()->back()->with('claveIncorrecta', 'Por favor, verifique que las claves coincidan.');
+        }
+    } else {
+        return back()->withErrors(['password_actual' => 'La clave actual no coincide.']);
+    }
 }
 
 }
+
+
