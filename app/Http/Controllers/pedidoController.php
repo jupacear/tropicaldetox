@@ -362,6 +362,8 @@ class pedidoController extends Controller
         }
 
         $personalizadosArray2 = json_decode($request->input('personalizadosArray2'), true);
+        // return response()->json($personalizadosArray2);
+
         if (!empty($personalizadosArray2)) {
             foreach ($personalizadosArray2 as $personalizado) {
                 // Guardar los datos del personalizado en la base de datos
