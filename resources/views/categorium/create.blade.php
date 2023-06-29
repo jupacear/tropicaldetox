@@ -27,10 +27,15 @@ Crear Categoria
         @endif
         <div class="row">
             <div class="col-lg-12">
+
                 <div class="card">
+
                     @includeif('partials.errors')
 
                     <div class="card-body">
+                        <a href="{{ route('categoria.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
                         <form method="POST" action="{{ route('categoria.store') }}" role="form" enctype="multipart/form-data">
                             @csrf
 

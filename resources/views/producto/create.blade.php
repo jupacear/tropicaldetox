@@ -31,6 +31,9 @@ Crear Producto
                     @includeif('partials.errors')
 
                     <div class="card-body">
+                        <a href="{{ route('productos.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
                         <form method="POST" action="{{ route('productos.store') }}" role="form" enctype="multipart/form-data">
                             @csrf
 

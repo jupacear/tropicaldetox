@@ -34,6 +34,9 @@ Actualizar Insumo
 
                 <div class="card">
                     <div class="card-body">
+                        <a href="{{ route('insumo.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
                         <form method="POST" action="{{ route('insumo.update', $insumo->id) }}" role="form" enctype="multipart/form-data">
                             {{ method_field('PATCH') }}
                             @csrf

@@ -68,11 +68,11 @@ Categoria
                                                 @method('DELETE')
                                                 @if ($categorium->activo)
                                                 <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fa fa-fw fa-minus-circle"></i> Desactivar
+                                                    <i class="fa fa-fw fa-toggle-on"></i> Desactivar
                                                 </button>
                                                 @else
                                                 <button type="submit" class="btn btn-success btn-sm">
-                                                    <i class="fa fa-fw fa-check"></i> Activar
+                                                    <i class="fa fa-fw fa-toggle-off"></i> Activar
                                                 </button>
                                                 @endif
                                             </form>
