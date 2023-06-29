@@ -588,6 +588,9 @@
                                         totalGeneral += subtotal;
                                     }
                                 });
+// Actualizar el campo oculto con los datos actualizados
+var personalizadosArray2Input = document.getElementById('personalizadosArray2');
+personalizadosArray2Input.value = JSON.stringify(personalizadosArray2);
 
                                 // Obtener el elemento del campo oculto
                                 var totalInput = document.getElementById('total-input');
@@ -608,7 +611,7 @@
                                 totalElement.textContent = newTotal.toFixed(2);
 
 
-
+                                console.log(personalizadosArray2)
 
                                 function quitarProductoPersonalizados2(button) {
                                     var row = button.closest('tr'); // Obtener la fila que contiene el botón
