@@ -176,7 +176,6 @@
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th>ID</th>
                                                             <th>Nombre</th>
                                                             <th>Cantidad</th>
                                                             <th>Subtotal</th>
@@ -234,7 +233,6 @@
                                         row.setAttribute('data-cantidad', cantidad);
                                         row.setAttribute('data-subtotal', subtotal);
                                         row.innerHTML = `
-                                                <td>${id}</td>
                                                 <td>${nombre}</td>
                                                 <td>${cantidad}</td>
                                                 <td>$${subtotal}</td>
@@ -365,13 +363,13 @@
 
                                     var tableBody = document.getElementById('selected-products-list');
                                     var total = 0;
-
+                                    var subtotal=0
                                     insumosSeleccionados.forEach(function(insumo) {
                                         var data = insumo.split(':');
                                         var precio = parseFloat(data[2].trim());
                                         var id = parseFloat(data[0].trim());
                                         var cantidad = 1;
-                                        var subtotal = precio * cantidad;
+                                        subtotal = precio * cantidad;
                                         total += subtotal;
 
                                     });
@@ -381,7 +379,7 @@
                                     var num = personalizadosArray.length + 1;
                                     personalizado['Nombre'] = "Personalizado " + num;
                                     personalizado['insumos'] = insumosSeleccionados;
-                                    personalizado['Subtotal'] = total;
+                                    personalizado['Subtotal'] = subtotal;
                                     // personalizado['id'] = insumosSeleccionados.id;
 
                                     personalizadosArray.push(personalizado);
@@ -389,10 +387,9 @@
                                     var row = document.createElement('tr');
                                     var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
                                     row.innerHTML = `
-                                        <td></td>
                                         <td>${personalizado.Nombre}</td>
                                         <td>${insumosSeleccionados.length}</td>
-                                        <td>$${total.toFixed(2)}</td>
+                                        <td>$${subtotal.toFixed(2)}</td>
                                         <td>
                                             <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
                                         </td>
