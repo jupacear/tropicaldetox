@@ -31,6 +31,9 @@ Crear Insumo
                     @includeif('partials.errors')
 
                     <div class="card-body">
+                        <a href="{{ route('insumo.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
                         <form method="POST" action="{{ route('insumo.store') }}" role="form" enctype="multipart/form-data">
                             @csrf
 

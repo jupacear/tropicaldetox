@@ -16,6 +16,9 @@ Mostrar Producto
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <a href="{{ route('productos.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
                         <div class="form-group">
                             <strong>Imagen:</strong>
                             <img src="{{ asset($producto->imagen) }}" class="img-thumbnail" alt="Imagen del producto" width="115px">
