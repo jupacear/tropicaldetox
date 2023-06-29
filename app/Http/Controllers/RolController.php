@@ -17,6 +17,22 @@ class RolController extends Controller
          
          $this->middleware('permission:roles', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
     }
+
+    public function activate(Role $role)
+    {
+        $role->estado = true;
+        $role->save();
+        
+        return redirect()->back()->with('success', 'Rol activado exitosamente.');
+    }
+    
+    public function deactivate(Role $role)
+    {
+        $role->estado = false;
+        $role->save();
+        
+        return redirect()->back()->with('success', 'Rol desactivado exitosamente.');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -146,14 +162,6 @@ class RolController extends Controller
      
          return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente.');
      }
-    public function updateStatus($id)
-    {
-        $role = Role::find($id);
-        $role->is_active = !$role->is_active; // Invierte el estado actual
-        $role->save();
-
-        return redirect()->route('roles.index')->with('success', 'Estado del rol actualizado correctamente.');
-    }
     
     
 }

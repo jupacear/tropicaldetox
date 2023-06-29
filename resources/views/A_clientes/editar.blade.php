@@ -33,6 +33,12 @@
 
                             {!! Form::model($user, ['method' => 'PATCH','route' => ['A_clientes.update', $user->id]]) !!}
                         <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                <label for="documento">Documento</label>
+                                {!! Form::text('documento', null, array('class' => 'form-control')) !!}
+                                </div>
+                                </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="name">Nombre</label>
@@ -54,12 +60,7 @@
                         </select>
                         </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                        <div class="form-group">
-                        <label for="documento">Documento</label>
-                        {!! Form::text('documento', null, array('class' => 'form-control')) !!}
-                        </div>
-                        </div>
+                        
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="telefono">Teléfono</label>
@@ -90,17 +91,17 @@
                         {!! Form::password('confirm-password', array('class' => 'form-control')) !!}
                         </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                        <div class="form-group">
-                        <label for="">Roles</label>
-                        {!! Form::select('roles[]', $roles, $userRole, array('class' => 'form-control')) !!}
+                        <div class="col-xs-12 col-sm-6 col-md-6" style="display: none;">
+                            <div class="form-group">
+                                <label for="">Roles</label>
+                                {!! Form::select('roles[]', $roles, $userRole, array('class' => 'form-control')) !!}
+                            </div>
                         </div>
-                        </div>
+                        
                         <div class="col-xs-12 col-sm-12 col-md 12">
                             <div class="form-group">
                             <button type="submit" class="btn btn-primary">Guardar</button>
-                            
-                            
+        
                             </div>
                             </div>
                             </div>

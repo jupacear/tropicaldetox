@@ -30,12 +30,29 @@ Route::get('/', function () {
 });
 
 
-
+//cambiar contraseña administrador
 Route::get('/NewPassword2',  [contrasenaController::class,'NewPassword2'])->name('NewPassword2')->middleware('auth');
 Route::post('/change/password2',  [contrasenaController::class,'changePassword2'])->name('changePassword2');
-
+//editar perfil de administrador
 Route::get('/NewPassword',  [UserSettingsController::class,'NewPassword'])->name('NewPassword')->middleware('auth');
 Route::post('/change/password',  [UserSettingsController::class,'changePassword'])->name('changePassword');
+
+
+//editar perfil de cliente
+Route::get('/newperfil',  [UserSettingsController::class,'newperfil'])->name('newperfil')->middleware('auth');
+Route::post('/change/changeperfil',  [UserSettingsController::class,'changeperfil'])->name('changeperfil');
+
+
+//cambiar contraseña perfil
+Route::get('/newcontrasena',  [contrasenaController::class,'newcontrasena'])->name('newcontrasena')->middleware('auth');
+Route::post('/change/changecontrasena',  [contrasenaController::class,'changecontrasena'])->name('changecontrasena');
+
+
+Route::put('/roles/{role}/activate', [RolController::class, 'activate'])->name('roles.activate');
+Route::put('/roles/{role}/deactivate', [RolController::class, 'deactivate'])->name('roles.deactivate');
+
+
+
 
 
 Route::get('/admin/dashboard', [UsuarioController::class, 'adminDashboard'])->name('admin.dashboard');

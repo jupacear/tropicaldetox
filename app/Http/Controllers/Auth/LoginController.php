@@ -43,15 +43,13 @@ class LoginController extends Controller
             Auth::logout(); // Desconectar al usuario si está inactivo
             return redirect()->back()->withErrors(['account' => 'Su cuenta está inactiva.']); // Redirigir con un mensaje de error
         }
-    
-        // Verificar si el rol asociado al usuario está inactivo
-        $rol = $user->rol;
-        if ($rol && !$rol->is_active) {
-            Auth::logout(); // Desconectar al usuario si el rol está inactivo
-            return redirect()->back()->withErrors(['account' => 'El rol asociado está inactivo.']); // Redirigir con un mensaje de error
+
+        if (!$user->roles->first()->estado) {
+            Auth::logout(); // Desconectar al usuario si está inactivo
+            return redirect()->back()->withErrors(['account' => 'Su cuenta está inactiva.']); // Redirigir con un mensaje de error
         }
     
-        return redirect()->intended($this->redirectTo); // Redirigir al destino previsto después de iniciar sesión
+       
     }
     
 

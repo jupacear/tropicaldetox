@@ -32,6 +32,12 @@
 
                         {!! Form::model($user, ['method' => 'PATCH','route' => ['usuarios.update', $user->id]]) !!}
                         <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                <label for="documento">Documento</label>
+                                {!! Form::text('documento', null, array('class' => 'form-control')) !!}
+                                </div>
+                                </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="name">Nombre</label>
@@ -53,12 +59,7 @@
                         </select>
                         </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-6">
-                        <div class="form-group">
-                        <label for="documento">Documento</label>
-                        {!! Form::text('documento', null, array('class' => 'form-control')) !!}
-                        </div>
-                        </div>
+                        
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="telefono">Teléfono</label>

@@ -26,28 +26,35 @@
                                                         <i class="fa fa-fw fa-edit"></i>Editar
                                                     </a>
                                                 @endif
-                                
-                                            
+
                                                 <a class="btn btn-sm btn-primary" href="{{ route('roles.show', $role->id) }}">
                                                     <i class="fa fa-fw fa-eye"></i>Mostrar
                                                 </a>
-                                
+
                                                 @if ($role->name !== 'administrador')
-                                                    {!! Form::open([
-                                                        'method' => 'PUT',
-                                                        'route' => ['roles.updateStatus', $role->id],
-                                                        'style' => 'display:inline',
-                                                    ]) !!}
-                                                    <button type="submit" class="btn btn-sm btn-info">
-                                                        @if ($role->is_active)
+                                                    @if ($role->estado)
+                                                        {!! Form::open([
+                                                            'method' => 'PUT',
+                                                            'route' => ['roles.deactivate', $role->id],
+                                                            'style' => 'display:inline',
+                                                        ]) !!}
+                                                        <button type="submit" class="btn btn-sm btn-info">
                                                             <i class="fa fa-fw fa-toggle-on"></i>Desactivar
-                                                        @else
+                                                        </button>
+                                                        {!! Form::close() !!}
+                                                    @else
+                                                        {!! Form::open([
+                                                            'method' => 'PUT',
+                                                            'route' => ['roles.activate', $role->id],
+                                                            'style' => 'display:inline',
+                                                        ]) !!}
+                                                        <button type="submit" class="btn btn-sm btn-info">
                                                             <i class="fa fa-fw fa-toggle-off"></i>Activar
-                                                        @endif
-                                                    </button>
-                                                    {!! Form::close() !!}
+                                                        </button>
+                                                        {!! Form::close() !!}
+                                                    @endif
                                                 @endif
-                                
+
                                                 @if ($role->name !== 'administrador' && $role->name !== 'cliente')
                                                     {!! Form::open([
                                                         'method' => 'DELETE',
@@ -60,7 +67,7 @@
                                                     </button>
                                                     {!! Form::close() !!}
                                                 @endif
-                                
+
                                                 @if ($role->users->isNotEmpty() && $role->name !== 'administrador' && $role->name !== 'cliente')
                                                     <span class="text-danger">Alerta: Hay usuarios asociados, por lo tanto, no se puede eliminar.</span>
                                                 @endif
@@ -68,13 +75,13 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                
+
                             </table>
-                            
+
                             <script>
                                 function confirmDelete(event) {
                                     var hasUsers = event.target.closest('tr').getAttribute('data-has-users');
-                                    
+
                                     if (hasUsers === 'true') {
                                         alert("No se puede eliminar el rol porque tiene usuarios asociados.");
                                         event.preventDefault();
@@ -87,13 +94,13 @@
                             <div class="pagination justify-content-end">
                                 {!! $roles->links() !!} 
                             </div>       
-                            
+
                             <script>
                                 $(document).ready(function() {
                                     var table = $('#example').DataTable({
                                         responsive: true
                                     });
-                        
+
                                     new $.fn.dataTable.FixedHeader(table);
                                 });
                             </script>
@@ -102,6 +109,6 @@
                 </div>
             </div>
         </div>
-        
-        </section>
+
+    </section>
 @endsection
