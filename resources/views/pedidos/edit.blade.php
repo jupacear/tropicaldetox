@@ -588,9 +588,9 @@
                                         totalGeneral += subtotal;
                                     }
                                 });
-// Actualizar el campo oculto con los datos actualizados
-var personalizadosArray2Input = document.getElementById('personalizadosArray2');
-personalizadosArray2Input.value = JSON.stringify(personalizadosArray2);
+                                // Actualizar el campo oculto con los datos actualizados
+                                var personalizadosArray2Input = document.getElementById('personalizadosArray2');
+                                personalizadosArray2Input.value = JSON.stringify(personalizadosArray2);
 
                                 // Obtener el elemento del campo oculto
                                 var totalInput = document.getElementById('total-input');
