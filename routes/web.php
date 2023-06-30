@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\contrasenaController;
+use App\Models\Categorium;
+use App\Models\Producto;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,28 +26,44 @@ use App\Http\Controllers\contrasenaController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// Vista cliente
 Route::get('/', function () {
-    return view('welcome');
-});
+    $categorias = Categorium::where('activo', true)->get(); // Obtén todas las categorías activas
+    $productos = Producto::all(); // Obtén todos los productos
 
+    return view('welcome', compact('categorias', 'productos'));
+})->name('Bienvenido');
+
+// Vista cliente
+Route::get('/Producto', function () {
+    $productos = Producto::all();
+    $categorias = Categorium::where('activo', true)->get(); // Obtén todas las categorías activas
+
+    return view('cliente.productos', compact('productos','categorias'));
+})->name('Productos');
+
+// Vista cliente
+Route::get('/Categoria', function () {
+
+    return view('cliente.about',);
+})->name('Nosotros');
 
 //cambiar contraseña administrador
-Route::get('/NewPassword2',  [contrasenaController::class,'NewPassword2'])->name('NewPassword2')->middleware('auth');
-Route::post('/change/password2',  [contrasenaController::class,'changePassword2'])->name('changePassword2');
+Route::get('/NewPassword2',  [contrasenaController::class, 'NewPassword2'])->name('NewPassword2')->middleware('auth');
+Route::post('/change/password2',  [contrasenaController::class, 'changePassword2'])->name('changePassword2');
 //editar perfil de administrador
-Route::get('/NewPassword',  [UserSettingsController::class,'NewPassword'])->name('NewPassword')->middleware('auth');
-Route::post('/change/password',  [UserSettingsController::class,'changePassword'])->name('changePassword');
+Route::get('/NewPassword',  [UserSettingsController::class, 'NewPassword'])->name('NewPassword')->middleware('auth');
+Route::post('/change/password',  [UserSettingsController::class, 'changePassword'])->name('changePassword');
 
 
 //editar perfil de cliente
-Route::get('/newperfil',  [UserSettingsController::class,'newperfil'])->name('newperfil')->middleware('auth');
-Route::post('/change/changeperfil',  [UserSettingsController::class,'changeperfil'])->name('changeperfil');
+Route::get('/newperfil',  [UserSettingsController::class, 'newperfil'])->name('newperfil')->middleware('auth');
+Route::post('/change/changeperfil',  [UserSettingsController::class, 'changeperfil'])->name('changeperfil');
 
 
 //cambiar contraseña perfil
-Route::get('/newcontrasena',  [contrasenaController::class,'newcontrasena'])->name('newcontrasena')->middleware('auth');
-Route::post('/change/changecontrasena',  [contrasenaController::class,'changecontrasena'])->name('changecontrasena');
+Route::get('/newcontrasena',  [contrasenaController::class, 'newcontrasena'])->name('newcontrasena')->middleware('auth');
+Route::post('/change/changecontrasena',  [contrasenaController::class, 'changecontrasena'])->name('changecontrasena');
 
 
 Route::put('/roles/{role}/activate', [RolController::class, 'activate'])->name('roles.activate');
@@ -79,8 +97,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/roles/{id}/show', 'RolController@show')->name('roles.show');
     Route::resource('roles', RolController::class);
-    
-    Route::get('/usuarios/{id}/show','UsuarioController@show')->name('usuarios.show');
+
+    Route::get('/usuarios/{id}/show', 'UsuarioController@show')->name('usuarios.show');
     Route::resource('usuarios', UsuarioController::class);
     Route::put('roles/{id}/status', [RolController::class, 'updateStatus'])->name('roles.updateStatus');
 
@@ -91,7 +109,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/A_clientes', [UsuarioController::class, 'indexc'])->name('A_clientes.index');
     Route::get('/A_clientes/create', [UsuarioController::class, 'createc'])->name('A_clientes.create');
     Route::post('/A_clientes', [UsuarioController::class, 'storec'])->name('A_clientes.store');
-    Route::get('/A_clientes/{id}/show',[UsuarioController::class, 'showc'])->name('A_clientes.show');
+    Route::get('/A_clientes/{id}/show', [UsuarioController::class, 'showc'])->name('A_clientes.show');
     Route::get('/A_clientes/{id}/edit', [UsuarioController::class, 'editc'])->name('A_clientes.edit');
     Route::match(['put', 'patch'], '/A_clientes/{id}', [UsuarioController::class, 'updatec'])->name('A_clientes.update');
     Route::delete('/A_clientes/{id}', [UsuarioController::class, 'destroyc'])->name('A_clientes.destroy');
