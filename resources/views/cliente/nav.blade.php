@@ -34,7 +34,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{route('Productos')}}">Productos</a></li>
                     <!-- Carrito de compras -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link" id="carrito-link">
                             <p>Mi Carrito <i class="fa fa-shopping-bag nav-link"><span class="badge">3</span> </i></p>
                         </a>
                     </li>
@@ -91,17 +91,7 @@
         <!-- End Side Menu -->
     </nav>
     <!-- End Navigation -->
-    <!-- Start Top Search -->
-    <div class="top-search">
-        <div class="container">
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Search">
-                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
-            </div>
-        </div>
-    </div>
-    <!-- End Top Search -->
+
 </header>
 
 
@@ -124,3 +114,11 @@
 <script src="js/custom.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById("carrito-link").addEventListener("click", function(event) {
+        event.preventDefault(); // Evita que el enlace se comporte como un enlace normal
+
+        var sideDiv = document.querySelector(".side");
+        sideDiv.classList.toggle("side-on"); // Agrega o quita la clase "side-on" al <div class="side">
+    });
+</script>
