@@ -25,6 +25,7 @@
 
 <body>
     @include('cliente.nav')
+    @include('cliente.carrito');
 
 
     <!-- Start Products  -->

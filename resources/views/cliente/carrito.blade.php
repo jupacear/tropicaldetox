@@ -1,5 +1,7 @@
 <!-- Start Side Menu -->
+
 <div class="side">
+
     <a href="#" class="close-side"><i class="fa fa-times"></i></a>
     <li class="cart-box">
         <ul class="cart-list">
