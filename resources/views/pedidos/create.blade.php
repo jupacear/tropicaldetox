@@ -266,6 +266,7 @@
                                         var totalInput = document.getElementById('total-input');
                                         totalInput.value = total.toFixed(2);
                                     }
+
                                 }
 
                                 function quitarProducto(id) {
@@ -301,6 +302,8 @@
                                     inputProductoID.name = 'ProductoID[]';
                                     inputProductoID.value = id;
                                     productosSeleccionados.appendChild(inputProductoID);
+                                    personalizadosArray.splice(id, 1);
+
                                 }
                             </script>
 
@@ -358,79 +361,72 @@
                                     var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
                                         function(li) {
                                             return li.textContent.trim();
-                                        }
-                                    );
+                                        });
 
                                     var tableBody = document.getElementById('selected-products-list');
-                                    var total = 0;
-                                    var subtotal=0
+                                    var subtotal = 0;
                                     insumosSeleccionados.forEach(function(insumo) {
                                         var data = insumo.split(':');
                                         var precio = parseFloat(data[2].trim());
-                                        var id = parseFloat(data[0].trim());
                                         var cantidad = 1;
-                                        subtotal = precio * cantidad;
-                                        total += subtotal;
-
+                                        subtotal += precio * cantidad;
                                     });
 
                                     var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
 
                                     var num = personalizadosArray.length + 1;
-                                    personalizado['Nombre'] = "Personalizado " + num;
+                                    personalizado['Nombre'] = 'Personalizado ' + num;
                                     personalizado['insumos'] = insumosSeleccionados;
                                     personalizado['Subtotal'] = subtotal;
-                                    // personalizado['id'] = insumosSeleccionados.id;
 
                                     personalizadosArray.push(personalizado);
 
                                     var row = document.createElement('tr');
                                     var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
                                     row.innerHTML = `
-                                        <td>${personalizado.Nombre}</td>
-                                        <td>${insumosSeleccionados.length}</td>
-                                        <td>$${subtotal.toFixed(2)}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
-                                        </td>
-                                    `;
+                                                <td>${personalizado.Nombre}</td>
+                                                <td>${insumosSeleccionados.length}</td>
+                                                <td>$${subtotal.toFixed(2)}</td>
+                                                <td>
+                                                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                                </td>
+                                            `;
                                     row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
                                     tableBody.appendChild(row);
 
-                                    var totalElement = document.getElementById('total');
+                                    total += subtotal; // Sumar el subtotal al total existente
+
                                     totalElement.textContent = total.toFixed(2);
-                                    var totalSection = document.getElementById('total-section');
                                     totalSection.style.display = 'block';
 
-                                    console.log('Datos personalizados:', personalizadosArray);
+                                    var totalInput = document.getElementById('total-input');
+                                    totalInput.value = total.toFixed(2);
 
                                     var personalizadosArrayInput = document.getElementById('personalizadosArray');
                                     personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 });
 
-                                function quitarProductoPersonalizados(id) {
-                                    // Obtener el personalizado correspondiente al ID
-                                    var personalizado = personalizadosArray[id];
 
-                                    // Eliminar el personalizado del array
-                                    personalizadosArray.splice(id, 1);
+                                function quitarProductoPersonalizados(index) {
+                                    var productoPersonalizado = personalizadosArray[index];
+                                    var subtotal = productoPersonalizado.Subtotal;
+                                    personalizadosArray.splice(index, 1); // Eliminar el producto personalizado del array
 
-                                    // Recalcular el total
-                                    var total = 0;
-                                    personalizadosArray.forEach(function(personalizado) {
-                                        total += personalizado.insumos.length;
-                                    });
+                                    var tableBody = document.getElementById('selected-products-list');
+                                    var row = document.querySelector(`tr[data-id="${index}"]`);
+                                    row.remove();
+                                    total -= subtotal;
 
-                                    // Eliminar la fila de la tabla
-                                    var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
-                                    if (row) {
-                                        row.remove();
-                                    }
-
-                                    // Actualizar el total mostrado
                                     var totalElement = document.getElementById('total');
                                     totalElement.textContent = total.toFixed(2);
+
+                                    var totalInput = document.getElementById('total-input');
+                                    totalInput.value = total.toFixed(2);
+
+                                    var personalizadosArrayInput = document.getElementById('personalizadosArray');
+                                    personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 }
+                                console.log(personalizadosArray);
                             </script>
 
                         </div>
