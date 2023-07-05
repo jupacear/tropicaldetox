@@ -25,7 +25,6 @@
 
 <body>
     @include('cliente.nav')
-    @include('cliente.carrito');
 
 
     <!-- Start Products  -->
@@ -65,7 +64,7 @@
                             <!-- Imagen del producto -->
                             <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
                             <div class="mask-icon">
-                                <a class="cart" href="#">Agregar al carrito</a>
+                                <a class="cart" href="{{ route('agregarCarrito', ['productoId' => $producto->id, 'cantidad' => 1]) }}">Agregar al carrito</a>
                             </div>
                         </div>
                         <div class="why-text">

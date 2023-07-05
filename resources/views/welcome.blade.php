@@ -42,20 +42,21 @@
     <div id="slides-shop" class="cover-slides">
         <ul class="slides-container">
             @foreach ($productos as $producto)
-            @if ($producto->activo)
-            <li class="text-center">
-                <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Bienvenido a <br> Tropical Detox</strong></h1>
-                            <p class="m-b-40">¡Disfrute de una pagina de jugos <br> de todo tipo de sabores junto con personalizados!</p>
-                            <p><a class="btn hvr-hover" href="{{ route('Productos') }}">Productos</a></p>
+                @if ($producto->activo)
+                    <li class="text-center">
+                        <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h1 class="m-b-20"><strong>Bienvenido a <br> Tropical Detox</strong></h1>
+                                    <p class="m-b-40">¡Disfrute de una pagina de jugos <br> de todo tipo de sabores
+                                        junto con personalizados!</p>
+                                    <p><a class="btn hvr-hover" href="{{ route('Productos') }}">Productos</a></p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </li>
-            @endif
+                    </li>
+                @endif
             @endforeach
         </ul>
     </div>
@@ -77,18 +78,18 @@
                     </div>
                 </div>
                 @foreach ($categorias as $categoria)
-                @if ($categoria->activo)
-                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                    <div class="shop-cat-box">
-                        @if ($categoria->imagen)
-                        <img src="{{ asset($categoria->imagen) }}" alt="Imagen de la categoría" />
-                        @else
-                        <img class="img-fluid" src="images/logo.png" alt="Imagen por defecto" />
-                        @endif
-                        <a class="btn hvr-hover" href="#">{{ $categoria->nombre }}</a>
-                    </div>
-                </div>
-                @endif
+                    @if ($categoria->activo)
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <div class="shop-cat-box">
+                                @if ($categoria->imagen)
+                                    <img src="{{ asset($categoria->imagen) }}" alt="Imagen de la categoría" />
+                                @else
+                                    <img class="img-fluid" src="images/logo.png" alt="Imagen por defecto" />
+                                @endif
+                                <a class="btn hvr-hover" href="#">{{ $categoria->nombre }}</a>
+                            </div>
+                        </div>
+                    @endif
                 @endforeach
             </div>
         </div>
@@ -109,32 +110,37 @@
 
             <div class="row justify-content-center">
                 @foreach ($productos as $producto)
-                @if ($producto->activo)
-                <div class="col-lg-3 col-md-6 col-sm-6 special-grid">
-                    <!-- Cartas -->
-                    <div class="products-single fix">
-                        <div class="box-img-hover">
-                            <!-- Imagen del producto -->
-                            <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
-                            <div class="mask-icon">
-                                <ul>
-                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Mostrar"><i class="fas fa-eye"></i></a></li>
-                                </ul>
-                                <a class="cart" href="#">Agregar al carrito</a>
+                    @if ($producto->activo)
+                        <div class="col-lg-3 col-md-6 col-sm-6 special-grid">
+                            <!-- Cartas -->
+                            <div class="products-single fix">
+                                <div class="box-img-hover">
+                                    <!-- Imagen del producto -->
+                                    <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
+                                    <div class="mask-icon">
+                                        <ul>
+                                            <li><a href="#" data-toggle="tooltip" data-placement="right"
+                                                    title="Mostrar"><i class="fas fa-eye"></i></a></li>
+                                        </ul>
+                                        <div class="mask-icon">
+                                            <a class="cart"
+                                                href="{{ route('agregarCarrito', ['productoId' => $producto->id, 'cantidad' => 1]) }}">Agregar
+                                                al carrito</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="why-text">
+                                    <!-- Nombre del producto -->
+                                    <h4>{{ $producto->nombre }}</h4>
+                                    <!-- Precio del producto -->
+                                    <h5>{{ $producto->precio }}</h5>
+                                    <!-- Descripción del producto -->
+                                    <p>{{ $producto->descripcion }}</p>
+                                </div>
                             </div>
+                            <!-- End Cartas -->
                         </div>
-                        <div class="why-text">
-                            <!-- Nombre del producto -->
-                            <h4>{{ $producto->nombre }}</h4>
-                            <!-- Precio del producto -->
-                            <h5>{{ $producto->precio }}</h5>
-                            <!-- Descripción del producto -->
-                            <p>{{ $producto->descripcion }}</p>
-                        </div>
-                    </div>
-                    <!-- End Cartas -->
-                </div>
-                @endif
+                    @endif
                 @endforeach
             </div>
 
@@ -146,16 +152,16 @@
     <div class="instagram-box">
         <div class="main-instagram owl-carousel owl-theme">
             @foreach ($productos as $producto)
-            @if ($producto->activo)
-            <div class="item">
-                <div class="ins-inner-box">
-                    <img src="{{ asset($producto->imagen) }}" alt="No hay imagen disponible" width="100" />
-                    <div class="hov-in">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+                @if ($producto->activo)
+                    <div class="item">
+                        <div class="ins-inner-box">
+                            <img src="{{ asset($producto->imagen) }}" alt="No hay imagen disponible" width="100" />
+                            <div class="hov-in">
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            @endif
+                @endif
             @endforeach
         </div>
     </div>

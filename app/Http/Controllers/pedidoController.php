@@ -9,6 +9,7 @@ use App\Models\pedido_personalizado;
 use App\Models\Personalizado;
 use App\Models\producPerz;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\pedido;
 use App\Models\Producto;
@@ -452,8 +453,110 @@ class pedidoController extends Controller
 
 
 
+    public function carrito()
+    {
+        $carrito = session('carrito.productos', []);
+        return view('cliente.carrito', compact('carrito'));
+    }
+
+    public function agregarCarrito($productoId, $cantidad)
+    {
+        $producto = Producto::find($productoId);
+    
+        if ($producto) {
+            $subtotal = $producto->precio * $cantidad;
+    
+            // Agregar los datos del producto al carrito de compras
+            session()->push('carrito.productos', [
+                'id' => $producto->id,
+                'nombre' => $producto->nombre,
+                'precio' => $producto->precio,
+                'cantidad' => $cantidad,
+                'subtotal' => $subtotal,
+            ]);
+    
+            // Redirigir al usuario al carrito de compras
+            // return redirect()->route('carrito')->with('success', 'Producto agregado al carrito correctamente.');
+
+        }
+    
+        // Redirigir al usuario en caso de no encontrar el producto
+        return redirect()->back()->with('error', 'No se encontró el producto.');
+    }
+    public function eliminarProductoCarrito($indice)
+{
+    $carrito = session('carrito.productos', []);
+    
+    if (isset($carrito[$indice])) {
+        unset($carrito[$indice]);
+        session(['carrito.productos' => $carrito]);
+        return redirect()->route('carrito')->with('success', 'Producto eliminado del carrito correctamente.');
+    }
+    
+    return redirect()->back()->with('error', 'No se encontró el producto en el carrito.');
+}
+
+public function actualizarCantidadCarrito(Request $request, $indice)
+{
+    $carrito = session('carrito.productos', []);
+    
+    if (isset($carrito[$indice])) {
+        $cantidad = $request->input('cantidad');
+        $subtotal = $carrito[$indice]['precio'] * $cantidad;
+        
+        $carrito[$indice]['cantidad'] = $cantidad;
+        $carrito[$indice]['subtotal'] = $subtotal;
+        
+        session(['carrito.productos' => $carrito]);
+        return redirect()->route('carrito')->with('success', 'Cantidad del producto actualizada correctamente.');
+    }
+    
+    return redirect()->back()->with('error', 'No se encontró el producto en el carrito.');
+}
 
 
+
+public function guardarPedido(Request $request)
+{
+    $carrito = session('carrito.productos', []);
+
+    // Verificar si el carrito está vacío
+    if (empty($carrito)) {
+        return redirect()->back()->with('error', 'El carrito está vacío. Agrega productos antes de guardar el pedido.');
+    }
+
+    $pedido = new Pedido();
+    $pedido->Nombre = 'Pedido ' . date('Y-m-d H:i:s');
+    $pedido->Estado = 'En_proceso';
+    $pedido->Fecha = now();
+    $pedido->id_users = Auth::user()->id;
+    $pedido->Total = 0; // Actualizar el valor del campo "Total" después de calcular el total real del pedido
+
+    $pedido->save();
+
+    $total = 0;
+
+    foreach ($carrito as $producto) {
+        $detalle_pedido = new detalle_pedidos();
+        $detalle_pedido->id_pedidos = $pedido->id;
+        $detalle_pedido->cantidad = $producto['cantidad'];
+        $detalle_pedido->precio_unitario = $producto['precio'];
+        $detalle_pedido->id_productos = $producto['id'];
+        $detalle_pedido->Nombre = $producto['nombre'];
+
+        $subtotal = $producto['cantidad'] * $producto['precio'];
+        $total += $subtotal;
+
+        $detalle_pedido->save();
+    }
+
+    $pedido->Total = $total;
+    $pedido->save();
+
+    session()->forget('carrito'); // Eliminar el carrito de la sesión después de guardar el pedido
+
+    return redirect()->route('carrito')->with('success', 'Pedido guardado correctamente.');
+}
 
 
 }
