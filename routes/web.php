@@ -123,8 +123,19 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('ventas', ventasController::class);
     Route::get('pdf/{id}', [pedidoController::class, 'showPdf'])->name('pdf');
 
+    // Route::get('/carrito', 'App\Http\Controllers\PedidoController@carrito')->name('carrito');
+    // Route::get('/carrito', [App\Http\Controllers\PedidoController::class, 'carrito'])->name('carrito');
+    // Route::get('/carrito', [PedidoController::class, 'carrito'])->name('carrito');
 
+    
+    Route::get('/carrito', [pedidoController::class, 'carrito'])->name('carrito');
+    Route::get('/carrito/agregar/{productoId}/{cantidad}', [PedidoController::class, 'agregarCarrito'])->name('agregarCarrito');
+    Route::delete('/carrito/{indice}', [pedidoController::class, 'eliminarProductoCarrito'])->name('eliminarProductoCarrito');
+    Route::put('/carrito/{indice}', [pedidoController::class, 'actualizarCantidadCarrito'])->name('actualizarCantidadCarrito');
+    Route::post('/guardar-pedido', [PedidoController::class, 'guardarPedido'])->name('guardarPedido');
 
+    // Route::post('/carrito', [PedidoController::class, 'carrito'])->name('carrito');
+    
     // diego
 
     Route::resource('Categorias', CategoriumController::class)->names('categoria');

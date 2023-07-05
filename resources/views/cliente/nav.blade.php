@@ -19,64 +19,93 @@
         <div class="container">
             <!-- Start Header Navigation -->
             <div class="navbar-header">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu"
+                    aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="{{route('Bienvenido')}}"><img src="images/logo2.png" class="logo" alt=""></a>
+                <a class="navbar-brand" href="{{ route('Bienvenido') }}"><img src="images/logo2.png"
+                        style="max-width: 5em" class="logo" alt=""></a>
             </div>
             <!-- End Header Navigation -->
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
-                    <li class="search nav-item"><a href="#" class="nav-link"><i class="fa fa-search"></i></a></li>
-                    <li class="nav-item active"><a class="nav-link" href="{{route('Bienvenido')}}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{route('Productos')}}">Productos</a></li>
-                    <!-- Carrito de compras -->
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" id="carrito-link">
-                            <p>Mi Carrito <i class="fa fa-shopping-bag nav-link"><span class="badge">3</span> </i></p>
-                        </a>
-                    </li>
+                    <li class="nav-item active"><a class="nav-link" href="{{ route('Bienvenido') }}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('Productos') }}">Productos</a></li>
+
+                    @if (empty(session('carrito.productos')))
+                        <li class="nav-item">
+                            <a href="{{ route('carrito') }}" class="nav-link" id="carrito-link">
+                                <p>Mi Carrito <i class="fa fa-shopping-bag nav-link">
+                                        <span class="badge">
+                                            0
+                                        </span>
+                                    </i></p>
+                            </a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a href="{{ route('carrito') }}" class="nav-link" id="carrito-link">
+                                <p>Mi Carrito <i class="fa fa-shopping-bag nav-link">
+                                        <span class="badge">
+                                            {{ count(session('carrito.productos', [])) }}
+                                        </span>
+                                    </i>
+                                </p>
+                            </a>
+                        </li>
+                    @endif
+
+                    <script>
+                        function mostrarAlerta() {
+                            alert("El carrito está vacío");
+                            // Redireccionar a otra página
+                            window.location.href = "{{ route('carrito') }}";
+                        }
+                    </script>
+
+
                     <!-- End Carrito de compras -->
                     <!-- Código de autenticación -->
                     @if (Route::has('login'))
-                    @auth
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <a href="#" class="nav-link dropdown-toggle nav-link-lg nav-link-user" data-toggle="dropdown">
-                                Hola, {{ \Illuminate\Support\Facades\Auth::user()->name }}
-                            </a>
-                            <div class="dropdown-menu">
-                                <a href="{{ url('/home') }}" class="nav-link">Panel</a>
+                        @auth
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle nav-link-lg nav-link-user"
+                                        data-toggle="dropdown">
+                                        Hola, {{ \Illuminate\Support\Facades\Auth::user()->name }}
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a href="{{ url('/home') }}" class="nav-link">Panel</a>
 
-                                <a class="dropdown-item" href="{{ route('newperfil') }}">
-                                    {{ __('Perfil') }}
-                                </a>
-                                <a class="dropdown-item" href="{{ route('newcontrasena') }}">
-                                    {{ __('Cambio de contraseña') }}
-                                </a>
-                                <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger" onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt"></i> Salir
-                                </a>
-                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
-                                    {{ csrf_field() }}
-                                </form>
-                            </div>
-                        </div>
+                                        <a class="dropdown-item" href="{{ route('newperfil') }}">
+                                            {{ __('Perfil') }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('newcontrasena') }}">
+                                            {{ __('Cambio de contraseña') }}
+                                        </a>
+                                        <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"
+                                            onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
+                                            <i class="fas fa-sign-out-alt"></i> Salir
+                                        </a>
+                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </div>
+                                </div>
 
-                    </li>
-
-                    @else
-                    <li class="nav-item">
-                        <a href="{{ route('login') }}" class="nav-link">Iniciar sesión</a>
-                    </li>
-                    @if (Route::has('register'))
-                    <li class="nav-item">
-                        <a href="{{ route('register') }}" class="nav-link">Registro</a>
-                    </li>
-                    @endif
-                    @endauth
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a href="{{ route('login') }}" class="nav-link">Iniciar sesión</a>
+                            </li>
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a href="{{ route('register') }}" class="nav-link">Registro</a>
+                                </li>
+                            @endif
+                        @endauth
                     @endif
                     <!-- Fin del código de autenticación -->
                 </ul>
