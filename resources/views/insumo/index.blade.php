@@ -77,11 +77,11 @@ Insumo
                                                 @method('DELETE')
                                                 @if ($insumo->activo)
                                                 <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fa fa-fw fa-minus-circle"></i> Desactivar
+                                                    <i class="fa fa-fw fa-toggle-off"></i> Desactivar
                                                 </button>
                                                 @else
                                                 <button type="submit" class="btn btn-success btn-sm">
-                                                    <i class="fa fa-fw fa-check"></i> Activar
+                                                    <i class="fa fa-fw fa-toggle-on"></i> Activar
                                                 </button>
                                                 @endif
                                             </form>

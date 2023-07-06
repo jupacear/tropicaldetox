@@ -21,7 +21,7 @@ class InsumoSeeder extends Seeder
                 'activo' => true,
                 'cantidad_disponible' => 0,
                 'unidad_medida' => 'Bolsa',
-                'precio_unitario' => 9.99,
+                'precio_unitario' => 9000,
             ],
             [
                 'imagen' => 'img/logo.png',
@@ -29,7 +29,7 @@ class InsumoSeeder extends Seeder
                 'activo' => true,
                 'cantidad_disponible' => 0,
                 'unidad_medida' => 'Bolsa',
-                'precio_unitario' => 5.99,
+                'precio_unitario' => 5000,
             ],
             [
                 'imagen' => 'img/logo.png',
@@ -37,7 +37,7 @@ class InsumoSeeder extends Seeder
                 'activo' => true,
                 'cantidad_disponible' => 0,
                 'unidad_medida' => 'Bolsa',
-                'precio_unitario' => 5.99,
+                'precio_unitario' => 5000,
             ],
         ];
 

@@ -276,40 +276,9 @@
                             </div>
 
                             <script>
-                                // Obtener el elemento del total actual
                                 var totalElement = document.getElementById('total');
-
-                                // Obtener el valor actual del total
-                                var currentTotal = parseFloat(totalElement.textContent);
-
-                                // Calcular el nuevo total sumando el valor del pedido y el valor total
-                                var pedidoTotal = parseFloat("{{ $pedido->Total }}");
-                                var nuevoTotal = pedidoTotal + currentTotal;
-
-                                // Actualizar el valor del total en el elemento HTML
-                                totalElement.textContent = nuevoTotal.toFixed(2);
-
-                                // Obtener el elemento del input oculto para el total
                                 var totalInput = document.getElementById('total-input');
-
-                                // Actualizar el valor del input oculto
-                                totalInput.value = nuevoTotal.toFixed(2);
-
-
-
-                                // var totalElement = document.getElementById('total');
                                 var total = parseFloat(totalElement.textContent);
-
-
-
-
-
-
-
-
-
-
-
 
                                 function agregarProducto(id, nombre, precio) {
                                     var cantidad = prompt('Ingrese la cantidad del producto "' + nombre + '":');
@@ -326,14 +295,13 @@
                                         tr.setAttribute('data-cantidad', cantidad);
                                         tr.setAttribute('data-subtotal', subtotal);
                                         tr.innerHTML = `
-                                            <td>${nombre}</td>
-                                            <td>${cantidad}</td>
-                                            <td>$${subtotal}</td>
-                                            <td>
-                                                <button class="btn btn-danger btn-sm quitar-btn"
-                                                    onclick="quitarProducto('${id}')">Quitar</button>
-                                            </td>
-                                        `;
+                                      <td>${nombre}</td>
+                                      <td>${cantidad}</td>
+                                      <td>$${subtotal.toFixed(2)}</td>
+                                      <td>
+                                        <button class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')">Quitar</button>
+                                      </td>
+                                    `;
                                         productosSeleccionados.appendChild(tr);
 
                                         var inputCantidad = document.createElement('input');
@@ -349,18 +317,13 @@
                                         productosSeleccionados.appendChild(inputProductoID);
 
                                         var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('tr')).map(function(
-                                            tr) {
+                                        tr) {
                                             return tr.textContent.split('\t');
                                         });
                                         inputProductosSeleccionados.value = JSON.stringify(productosSeleccionadosArray);
 
                                         totalElement.textContent = total.toFixed(2);
-
-                                        var totalInput = document.getElementById('total-input');
                                         totalInput.value = total.toFixed(2);
-
-
-
                                     }
                                 }
 
@@ -374,8 +337,6 @@
                                     total -= subtotal;
 
                                     totalElement.textContent = total.toFixed(2);
-
-                                    var totalInput = document.getElementById('total-input');
                                     totalInput.value = total.toFixed(2);
 
                                     var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
@@ -398,7 +359,42 @@
                                     inputProductoID.value = id;
                                     productosSeleccionados.appendChild(inputProductoID);
                                 }
+
+                                const busquedaInput = document.getElementById('busqueda');
+                                const productItems = document.querySelectorAll('.product-list li');
+
+                                busquedaInput.addEventListener('input', function() {
+                                    const searchTerm = busquedaInput.value.toLowerCase();
+
+                                    productItems.forEach(function(item) {
+                                        const nombreProducto = item.textContent.toLowerCase();
+
+                                        if (nombreProducto.includes(searchTerm)) {
+                                            item.style.display = 'block';
+                                        } else {
+                                            item.style.display = 'none';
+                                        }
+                                    });
+                                });
+
+                                $(document).ready(function() {
+                                    var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
+
+                                    $('#selected-products-list').on('DOMSubtreeModified', function() {
+                                        var productosSeleccionados = document.querySelectorAll('#selected-products-list tr');
+                                        var seleccionadosCount = productosSeleccionados.length;
+
+                                        if (seleccionadosCount >= maxSeleccionados) {
+                                            $('.product-list li').addClass('disabled');
+                                            $('.product-list li').find('button').prop('disabled', true);
+                                        } else {
+                                            $('.product-list li').removeClass('disabled');
+                                            $('.product-list li').find('button').prop('disabled', false);
+                                        }
+                                    });
+                                });
                             </script>
+
                             <script>
                                 const busquedaInput = document.getElementById('busqueda');
                                 const productItems = document.querySelectorAll('.product-list li');
@@ -484,13 +480,13 @@
                                     var row = document.createElement('tr');
                                     var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
                                     row.innerHTML = `
-                                <td>${personalizado.Nombre}</td>
-                                <td>${insumosSeleccionados.length}</td>
-                                <td>$${total.toFixed(2)}</td>
-                                <td>
-                                    <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
-                                </td>
-                                     `;
+                                        <td>${personalizado.Nombre}</td>
+                                        <td>${insumosSeleccionados.length}</td>
+                                        <td>$${total.toFixed(2)}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                        </td>
+                                            `;
                                     row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
                                     tableBody.appendChild(row);
 
@@ -588,27 +584,28 @@
                                         totalGeneral += subtotal;
                                     }
                                 });
+                                // Actualizar el campo oculto con los datos actualizados
+                                var personalizadosArray2Input = document.getElementById('personalizadosArray2');
+                                personalizadosArray2Input.value = JSON.stringify(personalizadosArray2);
 
-                                // Obtener el elemento del campo oculto
                                 var totalInput = document.getElementById('total-input');
+                                var totalValue = parseFloat(totalInput.value);
 
                                 // Obtener el elemento del total en el encabezado
                                 var totalElement = document.getElementById('total');
-
-                                // Obtener el valor del campo oculto
-                                var totalValue = parseFloat(totalInput.value);
 
                                 // Obtener el valor existente en el elemento del total en el encabezado
                                 var existingTotal = parseFloat(totalElement.textContent);
 
                                 // Calcular el nuevo total sumando el valor del campo oculto al valor existente
-                                var newTotal = existingTotal + totalValue;
+                                var newTotal = totalValue;
 
                                 // Actualizar el contenido del elemento del total en el encabezado con el nuevo total calculado
                                 totalElement.textContent = newTotal.toFixed(2);
 
 
 
+                                console.log(personalizadosArray2)
 
                                 function quitarProductoPersonalizados2(button) {
                                     var row = button.closest('tr'); // Obtener la fila que contiene el botón
@@ -661,18 +658,7 @@
 
 
 
-                            {{-- @foreach ($personaliza as $personalizas)
-                                <script>
-                                    var personalizado = {};
-                                    personalizado['Nombre'] = '{{ $personalizas->nombre }}';
-                                    personalizado['insumos'] = {!! $personalizas->insumos !!}; // No es necesario decodificar los datos de los insumos
-                                    personalizado['Subtotal'] = '{{ $personalizas->Subtotal }}';
 
-                                    personalizadosArray.push(personalizado);
-                                    console.log(personalizado);
-                                    console.log(personalizadosArray);
-                                </script>
-                            @endforeach --}}
 
 
                         </div>
