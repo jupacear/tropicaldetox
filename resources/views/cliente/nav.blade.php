@@ -33,28 +33,22 @@
                 <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
                     <li class="nav-item active"><a class="nav-link" href="{{ route('Bienvenido') }}">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('Productos') }}">Productos</a></li>
+                
 
                     @if (empty(session('carrito.productos')))
-                        <li class="nav-item">
-                            <a href="{{ route('carrito') }}" class="nav-link" id="carrito-link">
-                                <p>Mi Carrito <i class="fa fa-shopping-bag nav-link">
-                                        <span class="badge">
-                                            0
-                                        </span>
-                                    </i></p>
-                            </a>
-                        </li>
+                  
+                    <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">Productos<i class="fa fa-shopping-bag nav-link">
+                        <span class="badge">
+                            0
+                        </span>
+                    </i></a></li>
                     @else
-                        <li class="nav-item">
-                            <a href="{{ route('carrito') }}" class="nav-link" id="carrito-link">
-                                <p>Mi Carrito <i class="fa fa-shopping-bag nav-link">
-                                        <span class="badge">
-                                            {{ count(session('carrito.productos', [])) }}
-                                        </span>
-                                    </i>
-                                </p>
-                            </a>
-                        </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">Productos<i class="fa fa-shopping-bag nav-link">
+                        <span class="badge">
+                            {{ count(session('carrito.productos', [])) }}
+                        </span>
+                    </i></a></li>
+                  
                     @endif
 
                     <script>
