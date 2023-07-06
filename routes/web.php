@@ -42,12 +42,6 @@ Route::get('/Producto', function () {
     return view('cliente.productos', compact('productos','categorias'));
 })->name('Productos');
 
-// Vista cliente
-Route::get('/Categoria', function () {
-
-    return view('cliente.about',);
-})->name('Nosotros');
-
 //cambiar contraseña administrador
 Route::get('/NewPassword2',  [contrasenaController::class, 'NewPassword2'])->name('NewPassword2')->middleware('auth');
 Route::post('/change/password2',  [contrasenaController::class, 'changePassword2'])->name('changePassword2');

@@ -118,10 +118,6 @@
                                     <!-- Imagen del producto -->
                                     <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
                                     <div class="mask-icon">
-                                        <ul>
-                                            <li><a href="#" data-toggle="tooltip" data-placement="right"
-                                                    title="Mostrar"><i class="fas fa-eye"></i></a></li>
-                                        </ul>
                                         <div class="mask-icon">
                                             <a class="cart"
                                                 href="{{ route('agregarCarrito', ['productoId' => $producto->id, 'cantidad' => 1]) }}">Agregar
