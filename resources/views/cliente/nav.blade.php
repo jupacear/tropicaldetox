@@ -71,7 +71,9 @@
                                         Hola, {{ \Illuminate\Support\Facades\Auth::user()->name }}
                                     </a>
                                     <div class="dropdown-menu">
+                                        @can('administrador')
                                         <a href="{{ url('/home') }}" class="nav-link">Panel</a>
+                                      @endcan
 
                                         <a class="dropdown-item" href="{{ route('newperfil') }}">
                                             {{ __('Perfil') }}

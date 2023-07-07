@@ -56,16 +56,14 @@
                                                 @endif
 
                                                 @if ($role->name !== 'administrador' && $role->name !== 'cliente')
-                                                    {!! Form::open([
-                                                        'method' => 'DELETE',
-                                                        'route' => ['roles.destroy', $role->id],
-                                                        'style' => 'display:inline',
-                                                        'onsubmit' => 'return confirmDelete(event)'
-                                                    ]) !!}
-                                                    <button type="submit" class="btn btn-sm btn-danger" {{ $role->users->isNotEmpty() ? 'disabled' : '' }}>
-                                                        <i class="fa fa-fw fa-trash"></i>Eliminar
-                                                    </button>
-                                                    {!! Form::close() !!}
+                                                {!! Form::open([
+                                                    'method' => 'DELETE',
+                                                    'route' => ['roles.destroy', $role->id],
+                                                    'style' => 'display:inline',
+                                                    'class' => 'delete-form'
+                                                ]) !!}
+                                                <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(this)"><i class="fa fa-fw fa-trash"></i>Eliminar</button>
+                                                {!! Form::close() !!}
                                                 @endif
 
                                                 @if ($role->users->isNotEmpty() && $role->name !== 'administrador' && $role->name !== 'cliente')
@@ -79,16 +77,7 @@
                             </table>
 
                             <script>
-                                function confirmDelete(event) {
-                                    var hasUsers = event.target.closest('tr').getAttribute('data-has-users');
-
-                                    if (hasUsers === 'true') {
-                                        alert("No se puede eliminar el rol porque tiene usuarios asociados.");
-                                        event.preventDefault();
-                                    } else {
-                                        return confirm("¿Seguro que quieres eliminar este rol?");
-                                    }
-                                }
+                                
                             </script>
                             <!-- Centramos la paginacion a la derecha -->
                             <div class="pagination justify-content-end">
@@ -104,6 +93,26 @@
                                     new $.fn.dataTable.FixedHeader(table);
                                 });
                             </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function confirmDelete(button) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará el rol. No podrás deshacer esta acción.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        button.closest('.delete-form').submit();
+      }
+    });
+  }
+</script>
                         </div>
                     </div>
                 </div>

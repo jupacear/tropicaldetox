@@ -69,13 +69,13 @@ public function newcontrasena()
         $confirPass = $request->confirm_password;
 
         if ($NuewPass == $confirPass) {
-            if (strlen($NuewPass) >= 6) {
+            if (strlen($NuewPass) >= 3) {
                 $user->password = Hash::make($request->password);
                 $user->save();
 
                 return redirect()->back()->with('updateClave', 'La clave fue cambiada correctamente.');
             } else {
-                return redirect()->back()->with('clavemenor', 'Recuerde que la clave debe tener al menos 6 caracteres.');
+                return redirect()->back()->with('clavemenor', 'Recuerde que la clave debe tener al menos 3 caracteres.');
             }
         } else {
             return redirect()->back()->with('claveIncorrecta', 'Por favor, verifique que las claves coincidan.');

@@ -66,9 +66,15 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:roles,name',
+            'name' => 'required|unique:roles,name|max:20',
             'permission' => 'required',
+        ], [
+            'name.required' => 'El nombre del rol es requerido.',
+            'name.unique' => 'El nombre del rol ya está en uso.',
+            'name.max' => 'El nombre del rol debe tener máximo 20 caracteres.',
+            'permission.required' => 'Debe seleccionar al menos un permiso para el rol.',
         ]);
+        
     
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions($request->input('permission'));
@@ -122,20 +128,26 @@ class RolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-            'permission' => 'required',
-        ]);
-    
-        $role = Role::find($id);
-        $role->name = $request->input('name');
-        $role->save();
-    
-        $role->syncPermissions($request->input('permission'));
-    
-        return redirect()->route('roles.index');                        
-    }
+{
+    $this->validate($request, [
+        'name' => 'required|max:20',
+        'permission' => 'required',
+    ], [
+        'name.required' => 'El nombre del rol es requerido.',
+        'name.unique' => 'El nombre del rol ya está en uso.',
+        'name.max' => 'El nombre del rol debe tener máximo 20 caracteres.',
+        'permission.required' => 'Debe seleccionar al menos un permiso para el rol.',
+    ]);
+
+    $role = Role::find($id);
+    $role->name = $request->input('name');
+    $role->save();
+
+    $role->syncPermissions($request->input('permission'));
+
+    return redirect()->route('roles.index');                        
+}
+
 
     /**
      * Remove the specified resource from storage.

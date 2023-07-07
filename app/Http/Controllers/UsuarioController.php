@@ -121,16 +121,42 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|max:50',
-            'apellidos' => 'required|max:50',
+            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
             'estado' => 'boolean',
-            'documento' => 'nullable|string||max:10|unique:users,documento',
-            'telefono' => 'nullable|max:10',
-            'direccion' => 'nullable',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
+            'documento' => [
+                'nullable',
+                'string',
+                'min:8',
+                'max:15',
+                'unique:users,documento',
+                'regex:/^[0-9]+$/'
+            ],
+            'telefono' => 'nullable|numeric|digits:10',
+            'direccion' => 'nullable|max:50',
+            'email' => 'required|email|unique:users,email|max:60',
+            'password' => 'required|same:confirm-password|max:15',
             'roles' => 'required'
-            
+        ], [
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.regex' => 'El campo nombre solo debe contener letras.',
+            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'apellidos.required' => 'El campo apellidos es obligatorio.',
+            'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'documento.min' => 'El campo documento debe tener al menos 8 dígitos.',
+            'documento.unique' => 'El documento ingresado ya está en uso.',
+            'documento.regex' => 'El campo documento solo puede contener números.',
+            'telefono.numeric' => 'El campo teléfono debe contener solo números.',
+            'telefono.digits' => 'El campo teléfono debe tener exactamente 10 dígitos.',
+            'email.required' => 'El campo email es obligatorio.',
+            'email.email' => 'El campo email debe ser una dirección de correo válida.',
+            'email.max' => 'El campo email no debe tener más de 60 caracteres.',
+            'email.unique' => 'El email ingresado ya está en uso.',
+            'password.required' => 'El campo contraseña es obligatorio.',
+            'password.same' => 'El campo contraseña y confirmación de contraseña deben ser iguales.',
+            'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
+            'roles.required' => 'Debe seleccionar un rol.'
         ]);
 
        
@@ -155,17 +181,49 @@ class UsuarioController extends Controller
     public function storec(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|max:30',
-            'apellidos' => 'required|max:30',
+            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
             'estado' => 'boolean',
-            'documento' => 'required|string|max:255|unique:users,documento',
-            'telefono' => 'required|max:10',
-            'direccion'=> 'required|max:50',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
+            'documento' => [
+                'required',
+                'string',
+                'min:8',
+                'max:15',
+                'unique:users,documento',
+                'regex:/^[0-9]+$/'
+            ],
+            'telefono' => 'required|numeric|digits:10',
+            'direccion' => 'required|max:50',
+            'email' => 'required|email|unique:users,email|max:60',
+            'password' => 'required|same:confirm-password|max:15',
             'roles' => 'required'
-            
+        ], [
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.regex' => 'El campo nombre solo debe contener letras.',
+            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'apellidos.required' => 'El campo apellidos es obligatorio.',
+            'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'estado.required' => 'El campo estado es requerido.',
+            'documento.min' => 'El campo documento debe tener al menos 8 dígitos.',
+            'documento.required' => 'El campo documento es obligatorio.',
+            'documento.unique' => 'El documento ingresado ya está en uso.',
+            'documento.regex' => 'El campo documento solo puede contener números.',
+            'telefono.required' => 'El campo teléfono es obligatorio.',
+            'telefono.numeric' => 'El campo teléfono debe ser valido sin extensiones solo numeros colombianos.',
+            'telefono.digits' => 'El campo teléfono no es valido.',
+            'direccion.required' => 'El campo dirección es obligatorio.',
+            'direccion.max' => 'El campo dirección no debe tener más de 50 caracteres.',
+            'email.required' => 'El campo email es obligatorio.',
+            'email.email' => 'El campo email debe ser una dirección de correo válida.',
+            'email.max' => 'El campo email no debe tener más de 60 caracteres.',
+            'email.unique' => 'El email ingresado ya está en uso.',
+            'password.required' => 'El campo contraseña es obligatorio.',
+            'password.same' => 'El campo contraseña y confirmación de contraseña deben ser iguales.',
+            'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
+            'roles.required' => 'Debe seleccionar un rol.'
         ]);
+        
 
        
     
@@ -241,17 +299,42 @@ public function showc($id)
      
     public function update(Request $request, $id)
     {
+
         $this->validate($request, [
-            'name' => 'required',
-            'apellidos' => 'required',
+            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
             'estado' => 'boolean',
-            'documento' => 'nullable',
-            'telefono' => 'nullable',
-            'direccion' => 'nullable',
+            'documento' => [
+                'nullable',
+                'string',
+                'max:15',
+                'regex:/^[0-9]+$/'
+            ],
+            'telefono' => 'nullable|numeric|digits:10',
+            'direccion' => 'nullable|max:50',
             'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
+            'password' => 'same:confirm-password|max:15',
             'roles' => 'required'
+        ], [
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.regex' => 'El campo nombre solo debe contener letras.',
+            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'apellidos.required' => 'El campo apellidos es obligatorio.',
+            'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'telefono.numeric' => 'El campo teléfono no válido.',
+            'telefono.digits' => 'El campo teléfono no válido.',
+            'email.required' => 'El campo email es obligatorio.',
+            'email.email' => 'El campo email debe ser una dirección de correo válida.',
+            'email.max' => 'El campo email no debe tener más de 60 caracteres.',
+            'password.required' => 'El campo contraseña es obligatorio.',
+            'password.same' => 'El campo contraseña y confirmación de contraseña deben ser iguales.',
+            'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
+            'roles.required' => 'Debe seleccionar un rol.'
         ]);
+        
+
+        
     
         $input = $request->all();
         if(!empty($input['password'])){ 
@@ -277,16 +360,51 @@ public function showc($id)
     public function updatec(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'apellidos' => 'required',
+            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
             'estado' => 'boolean',
-            'documento' => 'required',
-            'telefono' => 'required',
-            'direccion' => 'required',
+            'documento' => [
+                'required',
+                'string',
+                'max:15',
+                'regex:/^[0-9]+$/',
+                function ($attribute, $value, $fail) use ($id) {
+                    $existingUser = User::where('documento', $value)->first();
+                    
+                    if ($existingUser && $existingUser->id != $id) {
+                        $fail('Este documento ya está siendo utilizado por otro usuario.');
+                    }
+                }
+            ],
+            'telefono' => 'required|numeric|digits:10',
+            'direccion' => 'required|max:50',
             'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
+            'password' => 'same:confirm-password|max:15',
             'roles' => 'required'
+        ], [
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.regex' => 'El campo nombre solo debe contener letras.',
+            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'apellidos.required' => 'El campo apellidos es obligatorio.',
+            'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'documento.required' => 'El campo documento es obligatorio.',
+            'documento.regex' => 'El campo documento no válido.',
+            'documento.max' => 'El campo documento no debe tener más de 15 caracteres.',
+            'telefono.required' => 'El campo teléfono es obligatorio.',
+            'telefono.numeric' => 'El campo teléfono debe contener solo números.',
+            'telefono.digits' => 'El campo teléfono debe tener 10 dígitos.',
+            'direccion.required' => 'El campo dirección es obligatorio.',
+            'direccion.max' => 'El campo dirección no debe tener más de 50 caracteres.',
+            'email.required' => 'El campo email es obligatorio.',
+            'email.email' => 'El campo email debe ser una dirección de correo válida.',
+            'email.max' => 'El campo email no debe tener más de 60 caracteres.',
+            'password.required' => 'El campo contraseña es obligatorio.',
+            'password.same' => 'El campo contraseña y confirmación de contraseña deben ser iguales.',
+            'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
+            'roles.required' => 'Debe seleccionar un rol.'
         ]);
+        
     
         $input = $request->all();
         if(!empty($input['password'])){ 
