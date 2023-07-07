@@ -93,30 +93,6 @@ Productos
     </div>
 </section>
 
-<!-- Modal de confirmación -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>¿Estás seguro de que quieres eliminar este producto?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <form id="deleteProductForm" action="#" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     $(document).ready(function() {
@@ -126,20 +102,27 @@ Productos
 
         new $.fn.dataTable.FixedHeader(table);
     });
-
+    // Sweet alert
     $(document).ready(function() {
         var deleteFormId;
 
-        // Captura el evento click del botón de eliminar y guarda el ID del formulario
+        // Captura el evento click del botón de eliminar y muestra la alerta de confirmación
         $(document).on('click', '[data-toggle="modal"][data-target="#confirmDeleteModal"]', function() {
             deleteFormId = $(this).data('form-id');
-        });
-
-        // Captura el evento submit del formulario del modal y envía la solicitud de eliminación
-        $('#confirmDeleteModal').on('submit', '#deleteProductForm', function(e) {
-            e.preventDefault(); // Evita el envío del formulario
-            $('#' + deleteFormId).submit(); // Envía la solicitud de eliminación
-            $('#confirmDeleteModal').modal('hide'); // Cierra el modal
+            Swal.fire({
+                title: 'Confirmar Eliminación',
+                text: '¿Estás seguro de que quieres eliminar este producto?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#' + deleteFormId).submit(); // Envía la solicitud de eliminación
+                }
+            });
         });
     });
 </script>

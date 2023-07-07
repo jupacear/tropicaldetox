@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categorium;
+use App\Models\Producto;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -38,6 +40,7 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
+        $data = $this->indexData();
         // Verificar si el usuario está inactivo
         if (!$user->estado) {
             Auth::logout(); // Desconectar al usuario si está inactivo
@@ -50,19 +53,21 @@ class LoginController extends Controller
         }
 
         $user = Auth::user();
-    
-    if ($user->hasRole('administrador')) {
-        return redirect('/admin/dashboard');
-    } elseif ($user->hasRole('cliente')) {
-        return view('welcome');
-    } else {
-        // Redirige a una página predeterminada si el usuario no tiene un rol específico
-        return redirect('/admin/dashboard');
-    }
 
-    
-       
+        if ($user->hasRole('administrador')) {
+            return redirect('/admin/dashboard');
+        } elseif ($user->hasRole('cliente')) {
+            return view('welcome', $data);
+        } else {
+            // Redirige a una página predeterminada si el usuario no tiene un rol específico
+            return redirect('/admin/dashboard');
+        }
     }
-    
+    public function indexData()
+    {
+        $categorias = Categorium::where('activo', true)->get();
+        $productos = Producto::all();
 
+        return compact('categorias', 'productos');
+    }
 }
