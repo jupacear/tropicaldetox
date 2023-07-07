@@ -19,10 +19,10 @@
                         <div class="card-body">
                      
                         @if ($errors->any())                                                
-                            <div class="alert alert-dark alert-dismissible fade show" role="alert">
+                            <div class="alert alert-danger" role="alert">
                             <strong>¡Revise los campos!</strong>                        
                                 @foreach ($errors->all() as $error)                                    
-                                    <span class="badge badge-danger">{{ $error }}</span>
+                                <li>{{ $error }}</li>
                                 @endforeach                        
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -36,18 +36,33 @@
                                 <div class="form-group">
                                 <label for="documento">Documento</label>
                                 {!! Form::text('documento', null, array('class' => 'form-control')) !!}
+                                @if ($errors->has('documento'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('documento') }}
+                                        </div>
+                                    @endif
                                 </div>
                                 </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="name">Nombre</label>
                         {!! Form::text('name', null, array('class' => 'form-control')) !!}
+                        @if ($errors->has('name'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('name') }}
+                                        </div>
+                                    @endif
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="apellidos">Apellidos</label>
                         {!! Form::text('apellidos', null, array('class' => 'form-control')) !!}
+                        @if ($errors->has('apellidos'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('apellidos') }}
+                                        </div>
+                                    @endif
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
@@ -64,36 +79,62 @@
                         <div class="form-group">
                         <label for="telefono">Teléfono</label>
                         {!! Form::text('telefono', null, array('class' => 'form-control')) !!}
+                        @if ($errors->has('telefono'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('telefono') }}
+                                        </div>
+                                    @endif
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="direccion">Dirección</label>
                         {!! Form::text('direccion', null, array('class' => 'form-control')) !!}
+                        @if ($errors->has('direccion'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('direccion') }}
+                                        </div>
+                                    @endif
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="email">E-mail</label>
                         {!! Form::text('email', null, array('class' => 'form-control')) !!}
+                        @if ($errors->has('email'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('email') }}
+                                        </div>
+                                    @endif
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="password">Password</label>
                         {!! Form::password('password', array('class' => 'form-control')) !!}
+                        @if ($errors->has('password'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('password') }}
+                                        </div>
+                                    @endif
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="confirm-password">Confirmar Password</label>
                         {!! Form::password('confirm-password', array('class' => 'form-control')) !!}
+                        @if ($errors->has('confirm-password'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('confirm-password') }}
+                                        </div>
+                                    @endif
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
                         <label for="">Roles</label>
                         {!! Form::select('roles[]', $roles, $userRole, array('class' => 'form-control')) !!}
+                        
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md 12">

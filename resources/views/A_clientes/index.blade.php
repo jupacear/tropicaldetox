@@ -49,15 +49,15 @@
                                                 <td>
                                                     <a class="btn btn-sm btn-success" href="{{ route('A_clientes.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
                                                     <a class="btn btn-sm btn-primary" href="{{ route('A_clientes.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i>Mostrar</a>
-      
-                                                      {!! Form::open([
-                                                          'method' => 'DELETE',
-                                                          'route' => ['A_clientes.destroy', $usuario->id],
-                                                          'style' => 'display:inline',
-                                                      ]) !!}
-                                                      <button type="submit" class="btn btn-danger btn-sm"><i
-                                                              class="fa fa-fw fa-trash"></i>Eliminar</button>
-                                                      {!! Form::close() !!}
+                                                  
+                                                    {!! Form::open([
+                                                      'method' => 'DELETE',
+                                                      'route' => ['A_clientes.destroy', $usuario->id],
+                                                      'style' => 'display:inline',
+                                                      'onsubmit' => 'confirmDelete(event, this)',
+                                                    ]) !!}
+                                                      <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i>Eliminar</button>
+                                                    {!! Form::close() !!}
                                                   </td>
                                             </tr>
                                         @endif
@@ -83,5 +83,27 @@
             new $.fn.dataTable.FixedHeader(table);
         });
     </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function confirmDelete(event, form) {
+    event.preventDefault();
+    
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará al cliente. No podrás deshacer esta acción.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        form.submit();
+      }
+    });
+  }
+</script>
 @endsection
 

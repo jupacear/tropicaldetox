@@ -53,19 +53,43 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            
-            
-            'name' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
+            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
             'estado',
-            'documento' => 'required|string|max:255|unique:users',
-            'telefono' => 'required|string|max:255',
-            'direccion' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'documento' => [
+                'required',
+                'string',
+                'max:15',
+                'unique:users,documento',
+                'regex:/^[0-9]+$/'
+            ],
+            'telefono' => 'required|numeric|digits:10',
+            'direccion' => 'required|max:50',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-
-        
-        
+        ], [
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.regex' => 'El campo nombre solo debe contener letras.',
+            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'apellidos.required' => 'El campo apellidos es obligatorio.',
+            'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'documento.required' => 'El campo documento es obligatorio.',
+            'documento.unique' => 'El documento ingresado ya está registrado.',
+            'documento.regex' => 'El campo documento no válido.',
+            'documento.max' => 'El campo documento no debe tener más de 15 caracteres.',
+            'telefono.required' => 'El campo teléfono es obligatorio.',
+            'telefono.numeric' => 'El campo teléfono debe contener solo números.',
+            'telefono.digits' => 'El campo teléfono debe tener 10 dígitos.',
+            'direccion.required' => 'El campo dirección es obligatorio.',
+            'direccion.max' => 'El campo dirección no debe tener más de 50 caracteres.',
+            'email.required' => 'El campo email es obligatorio.',
+            'email.email' => 'El campo email debe ser una dirección de correo válida.',
+            'email.unique' => 'El email ingresado ya está registrado.',
+            'password.required' => 'El campo contraseña es obligatorio.',
+            'password.string' => 'El campo contraseña debe ser una cadena de texto.',
+            'password.min' => 'El campo contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'La confirmación de contraseña no coincide.',
         ]);
     }
 
@@ -78,13 +102,13 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $existingUser = User::where('documento', $data['documento'])->first();
-
+    
         if ($existingUser) {
             return redirect()->route('register')
                 ->withInput($data)
                 ->withErrors(['documento' => 'El documento ya está registrado.']);
         }
-
+    
         $user =  User::create([
             'name' => $data['name'],
             'apellidos' => $data['apellidos'],
@@ -94,15 +118,13 @@ class RegisterController extends Controller
             'direccion' => $data['direccion'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-
-            
         ]);
-
+    
         $role = Role::findByName('cliente');
         $user->assignRole($role);
-
+    
         return $user;
     }
-
+    
     
 }
