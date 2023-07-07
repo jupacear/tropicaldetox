@@ -71,8 +71,8 @@
                                         <form action="{{ route('actualizarCantidadCarrito', $indice) }}" method="POST">
                                             @csrf
                                             @method('PUT')
-                                            <input type="number" name="cantidad" value="{{ $producto['cantidad'] }}">
-                                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                                            <input type="number" name="cantidad" min="1" value="{{ $producto['cantidad'] }}">
+                                            <button type="submit" class="btn third">Actualizar</button>
                                         </form>
                                     </td>
                                     <td>{{ $producto['subtotal'] }}</td>
@@ -81,7 +81,7 @@
                                         <form action="{{ route('eliminarProductoCarrito', $indice) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                            <button type="submit" class="btn thirdd">Eliminar</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -92,27 +92,76 @@
                 </div>
             </div>
         </div>
+        {{-- <div class="d-flex justify-content-center " > --}}
+            @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
+                <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">Guardar Pedido</button>
+            @else
+                <form action="{{ route('guardarPedido') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn third">Guardar Pedido</button>
+
+                </form>
+            @endif
+        {{-- </div> --}}
     </div>
     <!-- Tu código HTML existente del carrito -->
 
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<style>
 
-    @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
-        <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">Guardar Pedido</button>
-    @else
-        <form action="{{ route('guardarPedido') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-primary">Guardar Pedido</button>
-        </form>
-    @endif
 
+.third {
+  border-color: #0069D9;
+  color: #ffffff;
+  box-shadow: 0 0 40px 40px #007bff inset, 0 0 0 0 #037bfc;
+  -webkit-transition: all 150ms ease-in-out;
+  transition: all 150ms ease-in-out;
+}
+.third:hover {
+  box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
+  color: #000000;
+
+}
+.thirdd {
+  border-color: #ae0017;
+  color: #ffffff;
+  box-shadow: 0 0 40px 40px #ae0017 inset, 0 0 0 0 #ae0017;
+  -webkit-transition: all 150ms ease-in-out;
+  transition: all 150ms ease-in-out;
+}
+.thirdd:hover {
+  box-shadow: 0 0 10px 0 #eb0221 inset, 0 0 10px 4px #ff0022;
+  color: #000000;
+
+}
+
+
+</style>
     <script>
         function mostrarAlerta() {
             alert('El nombre de usuario está vacío. Por favor, inicie sesión.');
         }
     </script>
 
-
+<script>
+    // Validar la entrada del usuario antes de enviar el formulario
+    document.querySelector('form').addEventListener('submit', function(event) {
+      var cantidadInput = document.getElementById('cantidad');
+      var cantidad = parseInt(cantidadInput.value);
+  
+      if (cantidad <= 0) {
+        alert('La cantidad debe ser mayor que 0.');
+        event.preventDefault(); // Evitar que el formulario se envíe
+      }
+    });
+  </script>
 
 
     <!-- Continúa con el resto del código HTML del carrito -->

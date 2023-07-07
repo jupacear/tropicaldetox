@@ -419,6 +419,8 @@
 
                                     var personalizadosArrayInput = document.getElementById('personalizadosArray');
                                     personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
+                                    console.log(personalizadosArray);
+
                                 });
 
 
@@ -441,7 +443,6 @@
                                     var personalizadosArrayInput = document.getElementById('personalizadosArray');
                                     personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 }
-                                console.log(personalizadosArray);
                             </script>
 
                         </div>
