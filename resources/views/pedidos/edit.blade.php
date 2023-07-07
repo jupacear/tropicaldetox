@@ -6,7 +6,7 @@
     {{-- <section class="section"> --}}
     <section class="" style="">
         <div
-        style="  
+            style="  
         padding: 40px;
         background-color: #ffffff;
         border: 1px solid #ffffff;
@@ -16,14 +16,13 @@
         width: 180%;
         right: 2.3em;
         bottom: 1em;
-        "
-        >
+        ">
             <div class="section-header">
                 <h3 class="page__heading">Crear Pedido</h3>
             </div>
 
         </div>
-     
+
 
         <div class="section-body">
             <div class="row">
@@ -271,7 +270,10 @@
 
                                                 <h4>Total: $<span id="total">{{ $pedido->Total }}</span></h4>
                                                 <input type="hidden" name="Total" id="total-input"
-                                                    value="{{ $pedido->Total }}"> 
+                                                    value="{{ $pedido->Total }}">
+
+
+
                                             </div>
 
                                             <div class="form-group">
@@ -392,22 +394,7 @@
                                     });
                                 });
 
-                                $(document).ready(function() {
-                                    var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
-
-                                    $('#selected-products-list').on('DOMSubtreeModified', function() {
-                                        var productosSeleccionados = document.querySelectorAll('#selected-products-list tr');
-                                        var seleccionadosCount = productosSeleccionados.length;
-
-                                        if (seleccionadosCount >= maxSeleccionados) {
-                                            $('.product-list li').addClass('disabled');
-                                            $('.product-list li').find('button').prop('disabled', true);
-                                        } else {
-                                            $('.product-list li').removeClass('disabled');
-                                            $('.product-list li').find('button').prop('disabled', false);
-                                        }
-                                    });
-                                });
+                               
                             </script>
 
                             <script>
@@ -468,10 +455,12 @@
                                     var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
                                         function(li) {
                                             return li.textContent.trim();
-                                        });
+                                        }
+                                    );
 
                                     var tableBody = document.getElementById('selected-products-list');
                                     var subtotal = 0;
+
                                     insumosSeleccionados.forEach(function(insumo) {
                                         var data = insumo.split(':');
                                         var precio = parseFloat(data[2].trim());
@@ -482,7 +471,7 @@
                                     var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
 
                                     var num = personalizadosArray.length + 1;
-                                    personalizado['Nombre'] = 'Personalizado ' + num;
+                                    personalizado['Nombre'] = "Personalizado " + num;
                                     personalizado['insumos'] = insumosSeleccionados;
                                     personalizado['Subtotal'] = subtotal;
 
@@ -491,46 +480,59 @@
                                     var row = document.createElement('tr');
                                     var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
                                     row.innerHTML = `
-                                                <td>${personalizado.Nombre}</td>
-                                                <td>${insumosSeleccionados.length}</td>
-                                                <td>$${subtotal.toFixed(2)}</td>
-                                                <td>
-                                                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
-                                                </td>
-                                            `;
+                                        <td>${personalizado.Nombre}</td>
+                                        <td>${insumosSeleccionados.length}</td>
+                                        <td>$${subtotal.toFixed(2)}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                        </td>
+                                    `;
                                     row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
                                     tableBody.appendChild(row);
 
-                                    total += subtotal; // Sumar el subtotal al total existente
-
+                                    var totalElement = document.getElementById('total');
+                                    var total = parseFloat(totalElement.textContent) + subtotal;
                                     totalElement.textContent = total.toFixed(2);
-                                    totalSection.style.display = 'block';
 
-                                    var totalInput = document.getElementById('total-input');
-                                    totalInput.value = total.toFixed(2);
+                                    var totalSection = document.getElementById('total-section');
+                                    if (totalSection) {
+                                        totalSection.style.display = 'block';
+                                    }
+
+                                    console.log('Datos personalizados:', personalizadosArray);
 
                                     var personalizadosArrayInput = document.getElementById('personalizadosArray');
                                     personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 });
-                                  function quitarProductoPersonalizados(index) {
-                                    var productoPersonalizado = personalizadosArray[index];
-                                    var subtotal = productoPersonalizado.Subtotal;
-                                    personalizadosArray.splice(index, 1); // Eliminar el producto personalizado del array
 
-                                    var tableBody = document.getElementById('selected-products-list');
-                                    var row = document.querySelector(`tr[data-id="${index}"]`);
-                                    row.remove();
-                                    total -= subtotal;
 
+                                function quitarProductoPersonalizados(id) {
+                                    // Obtener el personalizado correspondiente al ID
+                                    var personalizado = personalizadosArray[id];
+
+                                    // Restar el subtotal del producto eliminado al total
+                                    var subtotalEliminado = personalizado.Subtotal;
                                     var totalElement = document.getElementById('total');
+                                    var total = parseFloat(totalElement.textContent) - subtotalEliminado;
                                     totalElement.textContent = total.toFixed(2);
 
-                                    var totalInput = document.getElementById('total-input');
-                                    totalInput.value = total.toFixed(2);
+                                    // Eliminar el personalizado del array
+                                    personalizadosArray.splice(id, 1);
 
+                                    // Eliminar la fila de la tabla
+                                    var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
+                                    if (row) {
+                                        row.remove();
+                                    }
+
+                                    // Actualizar el campo oculto con los datos actualizados
                                     var personalizadosArrayInput = document.getElementById('personalizadosArray');
                                     personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 }
+
+
+
+
 
 
 
