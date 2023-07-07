@@ -4,23 +4,35 @@
 @section('content')
 
     {{-- <section class="section"> --}}
-    <section class=""
-        style=" 
-    padding: 40px;
-  background-color: #f8f8f8;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-bottom: 20px;
-    ">
-        <div class="section-header">
-            <h3 class="page__heading">Editar Pedido</h3>
+    <section class="" style="">
+        <div
+        style="  
+        padding: 40px;
+        background-color: #ffffff;
+        border: 1px solid #ffffff;
+        margin-bottom: 20px; 
+        height: 5em;
+        position: relative;
+        width: 180%;
+        right: 2.3em;
+        bottom: 1em;
+        "
+        >
+            <div class="section-header">
+                <h3 class="page__heading">Crear Pedido</h3>
+            </div>
+
         </div>
+     
+
         <div class="section-body">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-
+                            <a href="{{ route('pedidos.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
                             @if ($errors->any())
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                     <ul>
@@ -99,46 +111,49 @@
                                     </div>
                                     <!-- Modal Personalizados-->
                                     @foreach ($productos as $producto)
-                                        <li>
+                                        @if ($producto->activo)
+                                            <li>
 
-                                            <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto"
-                                                width="40em">
-                                            <span>{{ $producto->id }}:{{ $producto->nombre }}
-                                                <br>$:{{ $producto->precio }}</span>
-                                            <button class="btn btn-primary btn-sm float-right"
-                                                onclick="agregarProducto('{{ $producto->id }}', '{{ $producto->nombre }}','{{ $producto->precio }}')">Agregar</button>
-                                            <button class="btn btn-info btn-sm float-right" data-toggle="modal"
-                                                data-target="#productModal_{{ $producto->id }}">Detalles</button>
-                                        </li>
+                                                <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto"
+                                                    width="40em">
+                                                <span>{{ $producto->id }}:{{ $producto->nombre }}
+                                                    <br>$:{{ $producto->precio }}</span>
+                                                <button class="btn btn-primary btn-sm float-right"
+                                                    onclick="agregarProducto('{{ $producto->id }}', '{{ $producto->nombre }}','{{ $producto->precio }}')">Agregar</button>
+                                                <button class="btn btn-info btn-sm float-right" data-toggle="modal"
+                                                    data-target="#productModal_{{ $producto->id }}">Detalles</button>
+                                            </li>
 
-                                        <!-- Modal -->
-                                        <div class="modal fade my-modal" id="productModal_{{ $producto->id }}"
-                                            tabindex="-1" role="dialog"
-                                            aria-labelledby="productModalLabel_{{ $producto->id }}" aria-hidden="true"
-                                            style="position: absolute; z-index: 1050;">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="productModalLabel_{{ $producto->id }}">
-                                                            Detalles del producto</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>ID: {{ $producto->id }}</p>
-                                                        <p>Nombre: {{ $producto->nombre }}</p>
-                                                        <p>Precio: ${{ $producto->precio }}</p>
-                                                        <!-- Agrega aquí más detalles del producto si es necesario -->
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cerrar</button>
+                                            <!-- Modal -->
+                                            <div class="modal fade my-modal" id="productModal_{{ $producto->id }}"
+                                                tabindex="-1" role="dialog"
+                                                aria-labelledby="productModalLabel_{{ $producto->id }}" aria-hidden="true"
+                                                style="position: absolute; z-index: 1050;">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="productModalLabel_{{ $producto->id }}">
+                                                                Detalles del producto</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>ID: {{ $producto->id }}</p>
+                                                            <p>Nombre: {{ $producto->nombre }}</p>
+                                                            <p>Precio: ${{ $producto->precio }}</p>
+                                                            <!-- Agrega aquí más detalles del producto si es necesario -->
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Cerrar</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endforeach
                                 </ul>
                             </div>
@@ -256,7 +271,7 @@
 
                                                 <h4>Total: $<span id="total">{{ $pedido->Total }}</span></h4>
                                                 <input type="hidden" name="Total" id="total-input"
-                                                    value="{{ $pedido->Total }}">
+                                                    value="{{ $pedido->Total }}"> 
                                             </div>
 
                                             <div class="form-group">
@@ -268,7 +283,7 @@
 
                                             <div class="d-flex justify-content-between">
                                                 <button type="submit" class="btn btn-primary">Actualizar Pedido</button>
-                                                <a class="btn btn-dark" href="{{ route('pedidos.index') }}">Regresar</a>
+                                                {{-- <a class="btn btn-dark" href="{{ route('pedidos.index') }}">Regresar</a> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -317,7 +332,7 @@
                                         productosSeleccionados.appendChild(inputProductoID);
 
                                         var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('tr')).map(function(
-                                        tr) {
+                                            tr) {
                                             return tr.textContent.split('\t');
                                         });
                                         inputProductosSeleccionados.value = JSON.stringify(productosSeleccionadosArray);
@@ -453,81 +468,66 @@
                                     var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
                                         function(li) {
                                             return li.textContent.trim();
-                                        }
-                                    );
+                                        });
 
                                     var tableBody = document.getElementById('selected-products-list');
-                                    var total = 0;
-
+                                    var subtotal = 0;
                                     insumosSeleccionados.forEach(function(insumo) {
                                         var data = insumo.split(':');
                                         var precio = parseFloat(data[2].trim());
-                                        var id = parseFloat(data[0].trim());
                                         var cantidad = 1;
-                                        var subtotal = precio * cantidad;
-                                        total += subtotal;
+                                        subtotal += precio * cantidad;
                                     });
 
                                     var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
 
                                     var num = personalizadosArray.length + 1;
-                                    personalizado['Nombre'] = "Personalizado " + num;
+                                    personalizado['Nombre'] = 'Personalizado ' + num;
                                     personalizado['insumos'] = insumosSeleccionados;
-                                    personalizado['Subtotal'] = total;
+                                    personalizado['Subtotal'] = subtotal;
 
                                     personalizadosArray.push(personalizado);
 
                                     var row = document.createElement('tr');
                                     var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
                                     row.innerHTML = `
-                                        <td>${personalizado.Nombre}</td>
-                                        <td>${insumosSeleccionados.length}</td>
-                                        <td>$${total.toFixed(2)}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
-                                        </td>
+                                                <td>${personalizado.Nombre}</td>
+                                                <td>${insumosSeleccionados.length}</td>
+                                                <td>$${subtotal.toFixed(2)}</td>
+                                                <td>
+                                                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
+                                                </td>
                                             `;
                                     row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
                                     tableBody.appendChild(row);
 
-                                    var totalElement = document.getElementById('total');
+                                    total += subtotal; // Sumar el subtotal al total existente
+
                                     totalElement.textContent = total.toFixed(2);
+                                    totalSection.style.display = 'block';
 
-                                    var totalSection = document.getElementById('total-section');
-                                    if (totalSection) {
-                                        totalSection.style.display = 'block';
-                                    }
-
-                                    console.log('Datos personalizados:', personalizadosArray);
+                                    var totalInput = document.getElementById('total-input');
+                                    totalInput.value = total.toFixed(2);
 
                                     var personalizadosArrayInput = document.getElementById('personalizadosArray');
                                     personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 });
+                                  function quitarProductoPersonalizados(index) {
+                                    var productoPersonalizado = personalizadosArray[index];
+                                    var subtotal = productoPersonalizado.Subtotal;
+                                    personalizadosArray.splice(index, 1); // Eliminar el producto personalizado del array
 
-                                function quitarProductoPersonalizados(id) {
-                                    // Obtener el personalizado correspondiente al ID
-                                    var personalizado = personalizadosArray[id];
+                                    var tableBody = document.getElementById('selected-products-list');
+                                    var row = document.querySelector(`tr[data-id="${index}"]`);
+                                    row.remove();
+                                    total -= subtotal;
 
-                                    // Eliminar el personalizado del array
-                                    personalizadosArray.splice(id, 1);
-
-                                    // Recalcular el total
-                                    var total = 0;
-                                    personalizadosArray.forEach(function(personalizado) {
-                                        total += personalizado.insumos.length;
-                                    });
-
-                                    // Eliminar la fila de la tabla
-                                    var row = document.querySelector(`#selected-products-list tr[data-id="${id}"]`);
-                                    if (row) {
-                                        row.remove();
-                                    }
-
-                                    // Actualizar el total mostrado
                                     var totalElement = document.getElementById('total');
                                     totalElement.textContent = total.toFixed(2);
 
-                                    // Actualizar el campo oculto con los datos actualizados
+                                    var totalInput = document.getElementById('total-input');
+                                    totalInput.value = total.toFixed(2);
+
                                     var personalizadosArrayInput = document.getElementById('personalizadosArray');
                                     personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 }
