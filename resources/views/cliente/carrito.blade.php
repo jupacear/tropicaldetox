@@ -96,11 +96,17 @@
             @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
                 <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">Guardar Pedido</button>
             @else
-                <form action="{{ route('guardarPedido') }}" method="POST">
+                {{-- <form action="{{ route('guardarPedido') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn third">Guardar Pedido</button>
 
+                </form> --}}
+                <form id="formulario-guadar-pedido" action="{{ route('guardarPedido') }}" method="POST">
+                    @csrf
+
+                    <button type="button" class="btn third" onclick="confirmarGuardarPedido()">Guardar Pedido</button>
                 </form>
+                
             @endif
         {{-- </div> --}}
     </div>
@@ -114,6 +120,32 @@
 <br>
 <br>
 <br>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmarGuardarPedido() {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción guardará el pedido.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario confirma la eliminación, enviar el formulario
+                var form = document.getElementById('formulario-guadar-pedido');
+                form.submit();
+            }
+        });
+    }
+        
+        
+     
+</script>
+
 <style>
 
 
