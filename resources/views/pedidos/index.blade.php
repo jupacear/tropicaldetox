@@ -3,12 +3,28 @@
 @section('content')
 @section('title', 'Pedidos')
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <section class="section">
     <div class="section-header">
         <h3 class="page__heading">Pedidos</h3>
     </div>
     <div class="section-body">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+        @endif
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -50,6 +66,10 @@
                                             <td>{{ $pedido->Fecha }}</td>
                                             <td>{{ $pedido->Total }}</td>
                                             <td class="text-center">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
+                                                    <i class="fa fa-fw fa-trash"></i>
+                                                    Eliminar
+                                                </button>
                                                 <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
                                                     <a href="{{ route('pedidos.show', $pedido->id) }}"
                                                         class="btn btn-sm btn-primary"><i
@@ -59,12 +79,16 @@
                                                         <i class="fa fa-fw fa-edit"></i>
                                                         Editar
                                                     </a>
-                                                    @method('DELETE')
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                    {{-- @method('DELETE')
+                                                    @csrf --}}
+                                                    {{-- <button type="submit" class="btn btn-danger btn-sm">
                                                         <i class="fa fa-fw fa-trash"></i>
                                                         Eliminar
-                                                    </button>
+                                                    </button> --}}
+                                                </form>
+                                                <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
+                                                    @method('DELETE')
+                                                    @csrf
                                                 </form>
                                             </td>
                                         </tr>
@@ -78,6 +102,27 @@
         </div>
     </div>
 </section>
+<script>
+    function confirmarEliminacion(pedidoId) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción eliminará el pedido.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si el usuario confirma la eliminación, enviar el formulario
+                var form = document.getElementById('form-eliminar-' + pedidoId);
+                form.submit();
+            }
+        });
+    }
+</script>
+
 <script>
     function cambiarEstado(pedidoId) {
         var form = document.getElementById('form-estado-' + pedidoId);
