@@ -98,15 +98,18 @@
                             </div>
                         </div>
                         
-                        <div class="col-xs-12 col-sm-12 col-md 12">
-                            <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Guardar</button>
-        
+                        
                             </div>
-                            </div>
-                            </div>
-                            {!! Form::close() !!}
+
+                            <div class="col-xs-12 col-sm-12 col-md 12">
+                                <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+            
+                                </div>
+                                </div>
+                            
                     </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>

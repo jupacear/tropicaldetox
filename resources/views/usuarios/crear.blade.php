@@ -31,19 +31,20 @@
                                 </div>
                             @endif
 
+                           
+
+                            {!! Form::open(['route' => 'usuarios.store', 'method' => 'POST']) !!}
                             <div class="form-group">
                                 <label for="rol">Rol:</label>
                                 <select class="form-control" id="rol" name="rol">
                                     <option value="">Elige una opción</option>
-                                    @foreach ($roles as $rol)
-                                        <option value="{{ $rol }}" {{ old('rol') == $rol ? 'selected' : '' }}>
-                                            {{ $rol }}</option>
+                                    @foreach ($roles as $rolItem)
+                                        <option value="{{ $rolItem }}" {{ old('rol') == $rolItem ? 'selected' : '' }}>
+                                            {{ $rolItem }}
+                                        </option>
                                     @endforeach
                                 </select>
-
                             </div>
-
-                            {!! Form::open(['route' => 'usuarios.store', 'method' => 'POST']) !!}
                             <div class="row">
                                 <div id="documentoDiv" style="{{ old('rol') ? 'display: block;' : 'display: none;' }}"
                                     class="col-sm-6">

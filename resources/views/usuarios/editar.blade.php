@@ -131,11 +131,15 @@
                         </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-6">
-                        <div class="form-group">
-                        <label for="">Roles</label>
-                        {!! Form::select('roles[]', $roles, $userRole, array('class' => 'form-control')) !!}
-                        
-                        </div>
+                            
+                            
+                            <div class="form-group">
+                                <label for="roles">Rol:</label>
+                                {!! Form::select('roles', $roles, $userRole, array('class' => 'form-control')) !!}
+                            </div>
+                            
+                            
+                            
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md 12">
                             <div class="form-group">
@@ -151,3 +155,5 @@
         </div>
     </section>
 @endsection
+
+

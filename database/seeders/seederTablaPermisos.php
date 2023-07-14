@@ -18,22 +18,7 @@ class seederTablaPermisos extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        $permisos = [
-            //tabla roles
-            'dashboard',
-            'roles',
-            'usuarios',
-            'clientes',
-            'categoria de productos',
-            'productos',
-            'insumos',
-            'pedidos',
-            'ventas',
-        ];
-        //añadir los permisos a la tabla
-        foreach($permisos as $permiso){
-            Permission::create(['name' => $permiso]);
-        }
+        
         //
     }
 }

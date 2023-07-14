@@ -2,23 +2,23 @@
 
     @can('dashboard')
     <a class="nav-link" href="/admin/grafica">
-        <i class=" fas fa-building"></i><span>Dashboard</span>
+        <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
     </a>
     @endcan
 
     @can('roles')
     <a class="nav-link" href="/roles">
-        <i class=" fas fa-building"></i><span>Roles</span>
+        <i class="fas fa-user-tag"></i><span>Roles</span>
     </a>
     @endcan
     @can('usuarios')
     <a class="nav-link" href="/usuarios">
-        <i class=" fas fa-building"></i><span>Usuarios</span>
+        <i class="fas fa-users"></i><span>Usuarios</span>
     </a>
     @endcan
     @can('clientes')
     <a class="nav-link" href="{{ route('A_clientes.index') }}">
-        <i class="fas fa-building"></i><span>Clientes</span>
+        <i class="fas fa-user-tie"></i><span>Clientes</span>
     </a>
     @endcan
     @can('categoria de productos')
