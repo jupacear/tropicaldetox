@@ -6,8 +6,8 @@
     Admin Login
 @endsection
 @section('content')
-    <div class="card card-primary">
-        <div class="card-header"><h4>Login</h4></div>
+<div class="card card-primary form-border">
+        <div class="card-header"><h2>Login</h2></div>
 
         <div class="card-body">
             <form method="POST" action="{{ route('login') }}">
@@ -52,21 +52,32 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+
+                <br>
+                
+                {{-- <div class="form-group">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
                                id="remember"{{ (Cookie::get('remember') !== null) ? 'checked' : '' }}>
                         <label class="custom-control-label" for="remember">Recuerdame</label>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                        Iniciar Sesion
+                    <button id="miBoton" type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                        Iniciar Sesión
                     </button>
                 </div>
             </form>
         </div>
     </div>
+
+    <div class="mt-5 text-muted text-center">
+        No estas registrado? ? <a
+                href="{{ route('register') }}">Registrate</a>
+    </div>
+    
+    
+    
 @endsection
 

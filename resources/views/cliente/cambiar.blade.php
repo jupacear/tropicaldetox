@@ -1,6 +1,21 @@
 @include('cliente.nav')
 
 
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+@if (Session::has('sweet-alert'))
+    <script>
+        Swal.fire({
+            icon: '{{ Session::get("sweet-alert.type") }}',
+            title: '{{ Session::get("sweet-alert.title") }}',
+            text: '{{ Session::get("sweet-alert.text") }}',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+@endif
 
 <div class="container mb-5" style="background-color: #fff;">
     <!--- Mensajes -->
@@ -57,5 +72,6 @@
     </div>
 </div>
 
+@include('cliente.footer')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

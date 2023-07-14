@@ -6,6 +6,11 @@
             <h3 class="page__heading">Usuarios</h3>
         </div>
         <div class="section-body">
+            @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+        @endif
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -54,8 +59,9 @@
                                             </td>
 
                                             <td>
-                                                <a class="btn btn-sm btn-success" href="{{ route('usuarios.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
                                                 <a class="btn btn-sm btn-primary" href="{{ route('usuarios.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i>Mostrar</a>
+                                                <a class="btn btn-sm btn-success" href="{{ route('usuarios.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
+                                                
                                               
                                                 {!! Form::open([
                                                     'method' => 'DELETE',
