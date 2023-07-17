@@ -14,8 +14,8 @@ class InsumoController extends Controller
 {
     function __construct()
     {
-         
-         $this->middleware('permission:insumos', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+
+        $this->middleware('permission:insumos', ['only' => ['create', 'store', 'destroy', 'edit', 'update', 'index']]);
     }
     /**
      * Display a listing of the resource.
@@ -49,18 +49,18 @@ class InsumoController extends Controller
     public function store(Request $request)
     {
         $request->validate(Insumo::$rules);
-    
+
         // Verificar si se ha enviado un archivo de imagen
         if ($request->hasFile('imagen')) {
             // Obtener el archivo de imagen
             $image = $request->file('imagen');
-    
+
             // Generar un nombre único para la imagen usando la marca de tiempo actual
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-    
+
             // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
             $image->move(public_path('img/InsumoIMG'), $imageName);
-    
+
             // Crear el nuevo registro en la base de datos con la ruta de la imagen y el valor "activo" establecido en true
             Insumo::create([
                 'imagen' => 'img/InsumoIMG/' . $imageName,
@@ -74,6 +74,7 @@ class InsumoController extends Controller
         } else {
             // Si no se ha enviado una imagen, crear el registro sin el campo de imagen y con el valor "activo" establecido en true
             Insumo::create([
+                'imagen' => 'img/logo.png', // Ruta del logo predeterminado
                 'nombre' => $request->input('nombre'),
                 'descripcion' => $request->input('descripcion'),
                 'activo' => true, // Establecer el valor "activo" en true
@@ -82,10 +83,11 @@ class InsumoController extends Controller
                 'precio_unitario' => $request->input('precio_unitario'),
             ]);
         }
-    
+
         return redirect()->route('insumo.index')
             ->with('success', 'Insumo creado exitosamente.');
     }
+
     /**
      * Display the specified resource.
      *
