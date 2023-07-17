@@ -616,67 +616,7 @@ class pedidoController extends Controller
 
 
 
-    public function carrito()
-    {
-        $carrito = session('carrito.productos', []);
-        return view('cliente.carrito', compact('carrito'));
-    }
-
-    public function agregarCarrito($productoId, $cantidad)
-    {
-        $producto = Producto::find($productoId);
-
-        if ($producto) {
-            $subtotal = $producto->precio * $cantidad;
-
-            // Agregar los datos del producto al carrito de compras
-            session()->push('carrito.productos', [
-                'id' => $producto->id,
-                'nombre' => $producto->nombre,
-                'precio' => $producto->precio,
-                'cantidad' => $cantidad,
-                'subtotal' => $subtotal,
-            ]);
-
-            // Redirigir al usuario al carrito de compras
-            // return redirect()->route('carrito')->with('success', 'Producto agregado al carrito correctamente.');
-
-        }
-
-        // Redirigir al usuario en caso de no encontrar el producto
-        return redirect()->back()->with('error', 'No se encontró el producto.');
-    }
-    public function eliminarProductoCarrito($indice)
-    {
-        $carrito = session('carrito.productos', []);
-
-        if (isset($carrito[$indice])) {
-            unset($carrito[$indice]);
-            session(['carrito.productos' => $carrito]);
-            return redirect()->route('carrito')->with('success', 'Producto eliminado del carrito correctamente.');
-        }
-
-        return redirect()->back()->with('error', 'No se encontró el producto en el carrito.');
-    }
-
-    public function actualizarCantidadCarrito(Request $request, $indice)
-    {
-        $carrito = session('carrito.productos', []);
-
-        if (isset($carrito[$indice])) {
-            $cantidad = $request->input('cantidad');
-            $subtotal = $carrito[$indice]['precio'] * $cantidad;
-
-            $carrito[$indice]['cantidad'] = $cantidad;
-            $carrito[$indice]['subtotal'] = $subtotal;
-
-            session(['carrito.productos' => $carrito]);
-            return redirect()->route('carrito')->with('success', 'Cantidad del producto actualizada correctamente.');
-        }
-
-        return redirect()->back()->with('error', 'No se encontró el producto en el carrito.');
-    }
-
+ 
 
 
     public function guardarPedido(Request $request)
@@ -698,9 +638,9 @@ class pedidoController extends Controller
                 }
             }
         }
-
         $pedido = new Pedido();
-        $pedido->Nombre = 'Pedido ' . date('Y-m-d H:i:s');
+        $pedido->Nombre = $request->input('Nombre');
+        // $pedido->Nombre = 'Pedido ' . date('Y-m-d H:i:s');
         $pedido->Estado = 'En_proceso';
         $pedido->Fecha = now();
         $pedido->id_users = Auth::user()->id;
@@ -742,6 +682,33 @@ class pedidoController extends Controller
         return redirect()->route('carrito')->with('success', 'Pedido guardado correctamente.');
     }
 
+    public function verpedido()
+    {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        $userDirecion =Auth::user()->direccion;
+        // Obtener todos los pedidos asociados al usuario
+        $pedidos = Pedido::where('id_users', $user->id)->get();
 
+        return view('cliente.pedidos', compact('pedidos', 'userDirecion'));
+    }
+
+
+
+
+
+    public function showcliente($iddd)
+{
+     // Recuperar el pedido y sus detalles de la base de datos
+        $pedido = Pedido::with('users')->find($iddd);
+
+        $detalles_pedidos = detalle_pedidos::where('id_pedidos', $iddd)->get();
+
+        $personaliza = producPerz::where('id_pedidos', $iddd)->get();
+
+        // Pasar el pedido y sus detalles a la vista
+        return view('cliente.Detalles', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'personaliza' => $personaliza]);
+  
+}
 
 }

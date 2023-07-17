@@ -60,71 +60,85 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('Bienvenido') }}">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('Productos') }}">Productos</a>
-                    </li>
-    
+
+                    <li class="nav-item active"><a class="nav-link" href="{{ route('Bienvenido') }}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('Productos') }}">Productos</a></li>
+
+
                     @if (empty(session('carrito.productos')))
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('carrito') }}">Productos
-                            <i class="fa fa-shopping-bag nav-link">
-                                <span class="badge">0</span>
-                            </i>
-                        </a>
-                    </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
+                                    class="fa fa-shopping-bag nav-link">
+                                    <span class="badge">
+                                        0
+                                    </span>
+                                </i></a></li>
                     @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('carrito') }}">Productos
-                            <i class="fa fa-shopping-bag nav-link">
-                                <span class="badge">{{ count(session('carrito.productos', [])) }}</span>
-                            </i>
-                        </a>
-                    </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
+                                    class="fa fa-shopping-bag nav-link">
+                                    <span class="badge">
+                                        {{ count(session('carrito.productos', [])) }}
+                                    </span>
+                                </i></a></li>
                     @endif
-    
+                    @if (!empty(\Illuminate\Support\Facades\Auth::user()->name))
+                    <li class="nav-item"><a class="nav-link" href="{{ route('verpedido') }}">Pedidos</a></li>
+                    @else
+                    {{--  --}}
+                    @endif
+                
+
+                    <script>
+                        function mostrarAlerta() {
+                            alert("El carrito está vacío");
+                            // Redireccionar a otra página
+                            window.location.href = "{{ route('carrito') }}";
+                        }
+                    </script>
+
+
+                    <!-- End Carrito de compras -->
+                    <!-- Código de autenticación -->
                     @if (Route::has('login'))
-                    @auth
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <a href="#" class="nav-link dropdown-toggle nav-link-lg nav-link-user" data-toggle="dropdown">
-                                <span class="user-name">Hola, {{ \Illuminate\Support\Facades\Auth::user()->name }}</span>
-                                <span class="menu-indicator">&#9660;</span>
-                                
-                              </a>
-                            <div class="dropdown-menu">
-                                @unless (Auth::user()->hasRole('cliente'))
-                                <a href="{{ url('/home') }}" class="nav-link">Panel</a>
-                                @endunless
-    
-                                <a class="dropdown-item" href="{{ route('newperfil') }}">
-                                    {{ __('Perfil') }}
-                                </a>
-                                <a class="dropdown-item" href="{{ route('newcontrasena') }}">
-                                    {{ __('Cambio de contraseña') }}
-                                </a>
-                                <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"
-                                    onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt"></i> Salir
-                                </a>
-                                <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
-                                    {{ csrf_field() }}
-                                </form>
-                            </div>
-                        </div>
-                    </li>
-                    @else
-                    <li class="nav-item">
-                        <a href="{{ route('login') }}" class="nav-link">Iniciar sesión</a>
-                    </li>
-                    @if (Route::has('register'))
-                    <li class="nav-item">
-                        <a href="{{ route('register') }}" class="nav-link">Registro</a>
-                    </li>
-                    @endif
-                    @endauth
+                        @auth
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle nav-link-lg nav-link-user"
+                                        data-toggle="dropdown">
+                                        Hola, {{ \Illuminate\Support\Facades\Auth::user()->name }}
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        @can('administrador')
+                                            <a href="{{ url('/home') }}" class="nav-link">Panel</a>
+                                        @endcan
+
+                                        <a class="dropdown-item" href="{{ route('newperfil') }}">
+                                            {{ __('Perfil') }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('newcontrasena') }}">
+                                            {{ __('Cambio de contraseña') }}
+                                        </a>
+                                        <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"
+                                            onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">
+                                            <i class="fas fa-sign-out-alt"></i> Salir
+                                        </a>
+                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a href="{{ route('login') }}" class="nav-link">Iniciar sesión</a>
+                            </li>
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a href="{{ route('register') }}" class="nav-link">Registro</a>
+                                </li>
+                            @endif
+                        @endauth
+
                     @endif
                 </ul>
             </div>

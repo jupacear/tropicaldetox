@@ -26,20 +26,20 @@
     @include('cliente.nav')
 
     <div class="container">
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         @endif
 
         @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
+            <div class="alert alert-success">
+                <p>{{ $message }}</p>
+            </div>
         @endif
         <div class="row">
             <div class="col-lg-12">
@@ -52,6 +52,7 @@
             <div class="col-lg-12">
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
+                        
                         <thead>
                             <tr>
                                 <th>Producto</th>
@@ -71,7 +72,8 @@
                                         <form action="{{ route('actualizarCantidadCarrito', $indice) }}" method="POST">
                                             @csrf
                                             @method('PUT')
-                                            <input type="number" name="cantidad" min="1" value="{{ $producto['cantidad'] }}">
+                                            <input type="number" name="cantidad" min="1"
+                                                value="{{ $producto['cantidad'] }}">
                                             <button type="submit" class="btn third">Actualizar</button>
                                         </form>
                                     </td>
@@ -93,75 +95,121 @@
             </div>
         </div>
         {{-- <div class="d-flex justify-content-center " > --}}
-            @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
-                <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">Guardar Pedido</button>
-            @else
-                <form action="{{ route('guardarPedido') }}" method="POST">
+        @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
+            <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">Guardar Pedido</button>
+        @else
+            {{-- <form action="{{ route('guardarPedido') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn third">Guardar Pedido</button>
 
-                </form>
-            @endif
+                </form> --}}
+            <form id="formulario-guadar-pedido" action="{{ route('guardarPedido') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="Nombre">si vas a utilizar otras dirección ponlo aqui:</label>
+                    <input type="text" name="Nombre" id="Nombre" class="form-control">
+                </div>
+                <button type="button" class="btn third" onclick="confirmarGuardarPedido()">Guardar Pedido</button>
+            </form>
+        @endif
         {{-- </div> --}}
     </div>
     <!-- Tu código HTML existente del carrito -->
 
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<style>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-.third {
-  border-color: #0069D9;
-  color: #ffffff;
-  box-shadow: 0 0 40px 40px #007bff inset, 0 0 0 0 #037bfc;
-  -webkit-transition: all 150ms ease-in-out;
-  transition: all 150ms ease-in-out;
-}
-.third:hover {
-  box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
-  color: #000000;
-
-}
-.thirdd {
-  border-color: #ae0017;
-  color: #ffffff;
-  box-shadow: 0 0 40px 40px #ae0017 inset, 0 0 0 0 #ae0017;
-  -webkit-transition: all 150ms ease-in-out;
-  transition: all 150ms ease-in-out;
-}
-.thirdd:hover {
-  box-shadow: 0 0 10px 0 #eb0221 inset, 0 0 10px 4px #ff0022;
-  color: #000000;
-
-}
-
-
-</style>
     <script>
-        function mostrarAlerta() {
-            alert('El nombre de usuario está vacío. Por favor, inicie sesión.');
+        function confirmarGuardarPedido() {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción guardará el pedido.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Cancelar',
+                cancelButtonText: 'Guardar'
+            }).then((result) => {
+                if (!result.isConfirmed) {
+                    // Si el usuario confirma la eliminación, enviar el formulario
+                    var form = document.getElementById('formulario-guadar-pedido');
+                    form.submit();
+                }
+            });
         }
     </script>
 
-<script>
-    // Validar la entrada del usuario antes de enviar el formulario
-    document.querySelector('form').addEventListener('submit', function(event) {
-      var cantidadInput = document.getElementById('cantidad');
-      var cantidad = parseInt(cantidadInput.value);
-  
-      if (cantidad <= 0) {
-        alert('La cantidad debe ser mayor que 0.');
-        event.preventDefault(); // Evitar que el formulario se envíe
-      }
-    });
-  </script>
+    <style>
+        .third {
+            border-color: #0069D9;
+            color: #ffffff;
+            box-shadow: 0 0 40px 40px #007bff inset, 0 0 0 0 #037bfc;
+            -webkit-transition: all 150ms ease-in-out;
+            transition: all 150ms ease-in-out;
+        }
+
+        .third:hover {
+            box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
+            color: #000000;
+
+        }
+
+        .thirdd {
+            border-color: #ae0017;
+            color: #ffffff;
+            box-shadow: 0 0 40px 40px #ae0017 inset, 0 0 0 0 #ae0017;
+            -webkit-transition: all 150ms ease-in-out;
+            transition: all 150ms ease-in-out;
+        }
+
+        .thirdd:hover {
+            box-shadow: 0 0 10px 0 #eb0221 inset, 0 0 10px 4px #ff0022;
+            color: #000000;
+
+        }
+    </style>
+    <script>
+        function mostrarAlerta() {
+            // alert('El nombre de usuario está vacío. Por favor, inicie sesión.');
+
+            Swal.fire({
+                title: 'Usted no está registrado',
+                text: 'Para tener acceso a este servicio debes iniciar sesión. ¿Desea iniciar sesión?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Ok',
+                confirmButtonText: 'Iniciar sesión'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('login') }}";
+                }
+            });
+
+        }
+    </script>
+
+    <script>
+        // Validar la entrada del usuario antes de enviar el formulario
+        document.querySelector('form').addEventListener('submit', function(event) {
+            var cantidadInput = document.getElementById('cantidad');
+            var cantidad = parseInt(cantidadInput.value);
+
+            if (cantidad <= 0) {
+                alert('La cantidad debe ser mayor que 0.');
+                event.preventDefault(); // Evitar que el formulario se envíe
+            }
+        });
+    </script>
 
 
     <!-- Continúa con el resto del código HTML del carrito -->
