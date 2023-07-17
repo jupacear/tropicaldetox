@@ -76,11 +76,11 @@ Insumo
                                                 @csrf
                                                 @method('DELETE')
                                                 @if ($insumo->activo)
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fa fa-fw fa-toggle-off"></i> Desactivar
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmDesactivateInsumo(event)">
+                                                    <i class="fa fa-fw fa-toggle-on"></i> Desactivar
                                                 </button>
                                                 @else
-                                                <button type="submit" class="btn btn-success btn-sm">
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmActivateInsumo(event)">
                                                     <i class="fa fa-fw fa-toggle-on"></i> Activar
                                                 </button>
                                                 @endif
@@ -91,10 +91,6 @@ Insumo
                                 </tbody>
                             </table>
                         </div>
-                        <!-- Centramos la paginacion a la derecha -->
-                        <div class="pagination justify-content-end">
-                            {!! $insumos->links() !!}
-                        </div>
 
                     </div>
                 </div>
@@ -102,7 +98,41 @@ Insumo
         </div>
     </div>
 </section>
+<script>
+    function confirmDesactivateInsumo(event) {
+        event.preventDefault();
+        var form = $(event.target).closest('form');
+        Swal.fire({
+            icon: 'warning',
+            title: '¿Estás seguro?',
+            text: 'Esta acción desactivará la categoría',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, desactivar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    }
 
+    function confirmActivateInsumo(event) {
+        event.preventDefault();
+        var form = $(event.target).closest('form');
+        Swal.fire({
+            icon: 'warning',
+            title: '¿Estás seguro?',
+            text: 'Esta acción activará la categoría',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, activar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    }
+</script>
 <script>
     $(document).ready(function() {
         var table = $('#example').DataTable({
