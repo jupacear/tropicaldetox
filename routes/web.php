@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CarritoController;
 use Illuminate\Support\Facades\Route;
 use Dompdf\Dompdf;
 use App\Http\Controllers\HomeController;
@@ -83,6 +84,13 @@ Route::middleware(['role:cliente'])->group(function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+    // modulos de Johan 
+
+Route::get('/carrito', [CarritoController::class, 'carrito'])->name('carrito');
+Route::get('/carrito/agregar/{productoId}/{cantidad}', [CarritoController::class, 'agregarCarrito'])->name('agregarCarrito');
+Route::delete('/carrito/{indice}', [CarritoController::class, 'eliminarProductoCarrito'])->name('eliminarProductoCarrito');
+Route::put('/carrito/{indice}', [CarritoController::class, 'actualizarCantidadCarrito'])->name('actualizarCantidadCarrito');
+    // modulos de Johan 
 
 
 Auth::routes();
@@ -117,18 +125,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('ventas', ventasController::class);
     Route::get('pdf/{id}', [pedidoController::class, 'showPdf'])->name('pdf');
 
+
+
+    Route::post('/guardar-pedido', [pedidoController::class, 'guardarPedido'])->name('guardarPedido');
+    Route::get('/pedidoss', [pedidoController::class, 'verpedido'])->name('verpedido');
+    Route::get('/cliente/{id}', [pedidoController::class, 'showcliente'])->name('cliente.Detalles');
+
+
+
     // Route::get('/carrito', 'App\Http\Controllers\PedidoController@carrito')->name('carrito');
     // Route::get('/carrito', [App\Http\Controllers\PedidoController::class, 'carrito'])->name('carrito');
     // Route::get('/carrito', [PedidoController::class, 'carrito'])->name('carrito');
 
     
-    Route::get('/carrito', [pedidoController::class, 'carrito'])->name('carrito');
-    Route::get('/carrito/agregar/{productoId}/{cantidad}', [PedidoController::class, 'agregarCarrito'])->name('agregarCarrito');
-    Route::delete('/carrito/{indice}', [pedidoController::class, 'eliminarProductoCarrito'])->name('eliminarProductoCarrito');
-    Route::put('/carrito/{indice}', [pedidoController::class, 'actualizarCantidadCarrito'])->name('actualizarCantidadCarrito');
-    Route::post('/guardar-pedido', [PedidoController::class, 'guardarPedido'])->name('guardarPedido');
 
     // Route::post('/carrito', [PedidoController::class, 'carrito'])->name('carrito');
+    // modulos de Johan 
     
     // diego
 

@@ -1,7 +1,51 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="es">
 
-@section('content')
-@section('title', 'Pedidos')
+<head>
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+
+<body>
+    @include('cliente.nav')
+
+    <div class="container">
+      
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1>Tus pedidos</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <section class="section">
+
+
+                    <div class="section-header">
+                        <h3 class="page__heading">Pedidos</h3>
+                    </div>
+                    <div class="section-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="container">
+                                            <div class="row">
+                                               @section('title', 'Pedidos')
 
 
 <section class="section">
@@ -34,10 +78,8 @@
 
                                     <h2>Detalles del pedido</h2>
                                     @if (!empty($pedido->Nombre))
-                                        <p style="font-size: 1.5em"><strong>descripción:</strong> {{ $pedido->Nombre }}</p>
+                                        <p><strong>descripción:</strong> {{ $pedido->Nombre }}</p>
                                     @endif
-                                    <p style="font-size: 1.5em"><strong>direccion:</strong> {{ Auth::user()->direccion }}</p>
-                                    
                                     <table class="table">
 
 
@@ -46,8 +88,6 @@
                                                 <th>Producto</th>
                                                 <th>Cantidad</th>
                                                 <th>Precio unitario</th>
-                                                <th>sub Total</th>
-
                                             </tr>
                                         </thead>
 
@@ -62,8 +102,6 @@
                                                     <td>{{ $detalle->cantidad }}</td>
 
                                                     <td>{{ $detalle->precio_unitario }}</td>
-                                                    <td>{{ $detalle->cantidad * $detalle->precio_unitario }}</td>
-
                                                 </tr>
                                             @endforeach
 
@@ -76,17 +114,18 @@
                                                         <td>{{ $personalizas->nombre }}</td>
                                                         <td>{{ $personalizas->cantidad }}</td>
                                                         <td>{{ $personalizas->Subtotal }}</td>
-                                                       
+                                                        <td>
+                                                        </td>
                                                     </tr>
                                                 @endif
                                             @endforeach
 
                                             <thead>
                                                 <tr>
-                                                    <th>Total:</th>
+                                                    <th>Total</th>
+                                                    <th></th>
+                                                    <th></th>
                                                     <th> {{ $detalles_pedidos->id_pedidos = $pedido->Total }}</th>
-                                                    <th></th>
-                                                    <th></th>
                                                 </tr>
                                             </thead>
 
@@ -113,4 +152,52 @@
 
 
 
-@endsection
+                                            </div>
+                                        </div>
+                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+    </div>
+    <!-- Tu código HTML existente del carrito -->
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+    <script>
+        function mostrarAlerta() {
+            alert('El nombre de usuario está vacío. Por favor, inicie sesión.');
+        }
+    </script>
+
+
+
+
+    <!-- Continúa con el resto del código HTML del carrito -->
+
+    @include('cliente.footer')
+    <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+    <!-- ALL JS FILES -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="js/jquery.superslides.min.js"></script>
+    <script src="js/bootstrap-select.js"></script>
+    <script src="js/inewsticker.js"></script>
+</body>
