@@ -2,8 +2,24 @@
 
 @section('content')
 
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+@if (Session::has('sweet-alert'))
+    <script>
+        Swal.fire({
+            icon: '{{ Session::get("sweet-alert.type") }}',
+            title: '{{ Session::get("sweet-alert.title") }}',
+            text: '{{ Session::get("sweet-alert.text") }}',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+@endif
 <div class="container mb-5" style="background-color: #fff;">
     <!--- Mensajes -->
+    
     <h2 class="text-center">Cambiar contraseña <hr></h2>
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -56,5 +72,44 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.querySelector('form');
+        
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                return;
+            }
+            
+            event.preventDefault();
+            
+            Swal.fire({
+                title: 'Cambio de contraseña exitoso',
+                text: 'La contraseña se ha cambiado correctamente.',
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/home';
+                }
+            });
+        });
+    });
+</script>
+
+@if (Session::has('sweet-alert'))
+    <script>
+        Swal.fire({
+            icon: '{{ Session::get("sweet-alert.type") }}',
+            title: '{{ Session::get("sweet-alert.title") }}',
+            text: '{{ Session::get("sweet-alert.text") }}',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+@endif
 
 @endsection

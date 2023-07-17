@@ -7,6 +7,34 @@
     <link rel="stylesheet" href="css/responsive.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/custom.css">
+    <style>
+     .nav-link-user {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-right: 5px;
+}
+
+.date {
+  font-size: 0.9em;
+  color: gray;
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.nav-item {
+    margin-left: 10px;
+}
+
+    </style>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -15,7 +43,7 @@
 <!-- Start Main Top -->
 <header class="main-header">
     <!-- Start Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-default bootsnav" style="border-bottom: 3px solid rgb(81, 124, 46);">
         <div class="container">
             <!-- Start Header Navigation -->
             <div class="navbar-header">
@@ -23,14 +51,16 @@
                     aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="{{ route('Bienvenido') }}"><img src="images/logo2.png"
-                        style="max-width: 5em" class="logo" alt=""></a>
+                <a class="navbar-brand" href="{{ route('Bienvenido') }}">
+                    <img src="images/logo2.png" style="max-width: 5em" class="logo" alt="">
+                </a>
             </div>
             <!-- End Header Navigation -->
-
+    
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
+
                     <li class="nav-item active"><a class="nav-link" href="{{ route('Bienvenido') }}">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('Productos') }}">Productos</a></li>
 
@@ -108,18 +138,11 @@
                                 </li>
                             @endif
                         @endauth
+
                     @endif
-                    <!-- Fin del código de autenticación -->
                 </ul>
             </div>
-
-            <!-- /.navbar-collapse -->
-
-            <!-- Start Atribute Navigation -->
-            <!-- End Atribute Navigation -->
         </div>
-        <!-- Start Side Menu -->
-        <!-- End Side Menu -->
     </nav>
     <!-- End Navigation -->
 
@@ -153,3 +176,4 @@
         sideDiv.classList.toggle("side-on"); // Agrega o quita la clase "side-on" al <div class="side">
     });
 </script>
+

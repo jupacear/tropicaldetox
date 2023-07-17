@@ -23,19 +23,14 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    <div class="login-brand">
-                        <img src="{{ asset('img/logo.png') }}" alt="logo" width="100"
-                             class="shadow-light">
-                    </div>
+                    
                     @yield('content')
-                    <div class="simple-footer">
-{{--                        Copyright &copy; {{ getSettingValue('application_name') }}  {{ date('Y') }}--}}
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+
 
 <!-- General JS Scripts -->
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
@@ -49,5 +44,7 @@
 <script src="{{ asset('web/js/stisla.js') }}"></script>
 <script src="{{ asset('web/js/scripts.js') }}"></script>
 <!-- Page Specific JS File -->
+
+@include('cliente.footer')
 </body>
 </html>

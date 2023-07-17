@@ -22,11 +22,39 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
          // Crear el rol de administrador
+         $permisos = [
+            //tabla roles
+            'dashboard',
+            'roles',
+            'usuarios',
+            'clientes',
+            'categoria de productos',
+            'productos',
+            'insumos',
+            'pedidos',
+            'ventas',
+        ];
 
+        
+        foreach($permisos as $permiso){
+            Permission::create(['name' => $permiso]);
+        }
 
       
         $adminRole = Role::create(['name' => 'administrador']);
-        $adminRole->syncPermissions(Permission::all());
+
+        $permissions = [
+            'dashboard',
+            'roles',
+            'usuarios',
+            'clientes',
+            'categoria de productos',
+            'productos',
+            'insumos',
+            'pedidos',
+            'ventas',
+        ];
+        $adminRole->syncPermissions($permissions);
         
         // Otros roles y asignaciones de permisos si es necesario
         $clientRole = Role::create(['name' => 'cliente']);

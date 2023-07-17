@@ -118,16 +118,155 @@ class UsuarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // public function store(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+    //         'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
+    //         'estado' => 'boolean',
+    //         'documento' => [
+    //             'nullable',
+    //             'string',
+    //             'min:8',
+    //             'max:15',
+    //             'unique:users,documento',
+    //             'regex:/^[0-9]+$/'
+    //         ],
+    //         'telefono' => 'nullable|numeric|digits:10',
+    //         'direccion' => 'nullable|max:50',
+    //         'email' => 'required|email|unique:users,email|max:60',
+    //         'password' => 'required|same:confirm-password|max:15',
+    //         'roles' => 'required'
+    //     ], [
+    //         'name.required' => 'El campo nombre es obligatorio.',
+    //         'name.regex' => 'El campo nombre solo debe contener letras.',
+    //         'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+    //         'apellidos.required' => 'El campo apellidos es obligatorio.',
+    //         'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
+    //         'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+    //         'documento.min' => 'El campo documento debe tener al menos 8 dígitos.',
+    //         'documento.unique' => 'El documento ingresado ya está en uso.',
+    //         'documento.regex' => 'El campo documento solo puede contener números.',
+    //         'telefono.numeric' => 'El campo teléfono debe contener solo números.',
+    //         'telefono.digits' => 'El campo teléfono debe tener exactamente 10 dígitos.',
+    //         'email.required' => 'El campo email es obligatorio.',
+    //         'email.email' => 'El campo email debe ser una dirección de correo válida.',
+    //         'email.max' => 'El campo email no debe tener más de 60 caracteres.',
+    //         'email.unique' => 'El email ingresado ya está en uso.',
+    //         'password.required' => 'El campo contraseña es obligatorio.',
+    //         'password.same' => 'El campo contraseña y confirmación de contraseña deben ser iguales.',
+    //         'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
+    //         'roles.required' => 'Debe seleccionar un rol.'
+    //     ]);
+
+       
+    
+    //     $input = $request->all();
+    //     $input['password'] = Hash::make($input['password']);
+        
+    //     // Asegurarse de que el campo 'estado' esté presente en la solicitud y tener un valor booleano
+    //     $input['estado'] = $request->has('estado');
+        
+    //     $user = User::create($input);
+    //     $user->assignRole($request->input('roles'));
+        
+    //     $userEstado = $user->estado;
+    //     return redirect()->route('usuarios.index')->with('userEstado', $userEstado);
+       
+        
+    // }
+
+    // //clientes
+
+    // public function storec(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
+    //         'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
+    //         'estado' => 'boolean',
+    //         'documento' => [
+    //             'required',
+    //             'string',
+    //             'min:8',
+    //             'max:15',
+    //             'unique:users,documento',
+    //             'regex:/^[0-9]+$/'
+    //         ],
+    //         'telefono' => 'required|numeric|digits:10',
+    //         'direccion' => 'required|max:50',
+    //         'email' => 'required|email|unique:users,email|max:60',
+    //         'password' => 'required|same:confirm-password|max:15',
+    //         'roles' => 'required'
+    //     ], [
+    //         'name.required' => 'El campo nombre es obligatorio.',
+    //         'name.regex' => 'El campo nombre solo debe contener letras.',
+    //         'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+    //         'apellidos.required' => 'El campo apellidos es obligatorio.',
+    //         'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
+    //         'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+    //         'estado.required' => 'El campo estado es requerido.',
+    //         'documento.min' => 'El campo documento debe tener al menos 8 dígitos.',
+    //         'documento.required' => 'El campo documento es obligatorio.',
+    //         'documento.unique' => 'El documento ingresado ya está en uso.',
+    //         'documento.regex' => 'El campo documento solo puede contener números.',
+    //         'telefono.required' => 'El campo teléfono es obligatorio.',
+    //         'telefono.numeric' => 'El campo teléfono debe ser valido sin extensiones solo numeros colombianos.',
+    //         'telefono.digits' => 'El campo teléfono no es valido.',
+    //         'direccion.required' => 'El campo dirección es obligatorio.',
+    //         'direccion.max' => 'El campo dirección no debe tener más de 50 caracteres.',
+    //         'email.required' => 'El campo email es obligatorio.',
+    //         'email.email' => 'El campo email debe ser una dirección de correo válida.',
+    //         'email.max' => 'El campo email no debe tener más de 60 caracteres.',
+    //         'email.unique' => 'El email ingresado ya está en uso.',
+    //         'password.required' => 'El campo contraseña es obligatorio.',
+    //         'password.same' => 'El campo contraseña y confirmación de contraseña deben ser iguales.',
+    //         'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
+    //         'roles.required' => 'Debe seleccionar un rol.'
+    //     ]);
+        
+
+       
+    
+    //     $input = $request->all();
+    //     $input['password'] = Hash::make($input['password']);
+        
+    //     // Asegurarse de que el campo 'estado' esté presente en la solicitud y tener un valor booleano
+    //     $input['estado'] = $request->has('estado');
+        
+    //     $user = User::create($input);
+    //     $user->assignRole($request->input('roles'));
+        
+    //     $userEstado = $user->estado;
+    //     return redirect()->route('A_clientes.index')->with('userEstado', $userEstado);
+       
+        
+    // }
+
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
+        $rol = $request->input('rol');
+
+        
+    
+        $roleAdministrador = Role::where('name', 'administrador')->first();
+    
+        if ($roleAdministrador && $rol === $roleAdministrador->name) {
+            return $this->storeAdmin($request);
+        } else {
+            return $this->storeCliente($request);
+        }
+    }
+
+    private function storeAdmin(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
             'estado' => 'boolean',
             'documento' => [
                 'nullable',
                 'string',
-                'min:8',
+                'min:6',
                 'max:15',
                 'unique:users,documento',
                 'regex:/^[0-9]+$/'
@@ -144,7 +283,7 @@ class UsuarioController extends Controller
             'apellidos.required' => 'El campo apellidos es obligatorio.',
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
             'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
-            'documento.min' => 'El campo documento debe tener al menos 8 dígitos.',
+            'documento.min' => 'El documento debe ser valido.',
             'documento.unique' => 'El documento ingresado ya está en uso.',
             'documento.regex' => 'El campo documento solo puede contener números.',
             'telefono.numeric' => 'El campo teléfono debe contener solo números.',
@@ -158,36 +297,37 @@ class UsuarioController extends Controller
             'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
             'roles.required' => 'Debe seleccionar un rol.'
         ]);
-
-       
     
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
-        
-        // Asegurarse de que el campo 'estado' esté presente en la solicitud y tener un valor booleano
+    
+        // Asegurarse de que el campo 'estado' esté presente en la solicitud y tenga un valor booleano
         $input['estado'] = $request->has('estado');
-        
+    
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
-        
+    
         $userEstado = $user->estado;
-        return redirect()->route('usuarios.index')->with('userEstado', $userEstado);
-       
-        
+
+
+        if ($user->hasRole('cliente')) {
+        return redirect()->route('A_clientes.index')->with('userEstado', $userEstado)->with('success', 'Cliente creado exitosamente');
+        } else {
+        return redirect()->route('usuarios.index')->with('userEstado', $userEstado)->with('success', 'Usuario creado exitosamente');
+        }
+
     }
-
-    //clientes
-
-    public function storec(Request $request)
+    
+    private function storeCliente(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
+        $validatedData = $request->validate([
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
             'estado' => 'boolean',
             'documento' => [
                 'required',
                 'string',
-                'min:8',
+                'min:6',
                 'max:15',
                 'unique:users,documento',
                 'regex:/^[0-9]+$/'
@@ -205,13 +345,13 @@ class UsuarioController extends Controller
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
             'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
             'estado.required' => 'El campo estado es requerido.',
-            'documento.min' => 'El campo documento debe tener al menos 8 dígitos.',
+            'documento.min' => 'El campo documento debe tener al menos 6 dígitos.',
             'documento.required' => 'El campo documento es obligatorio.',
             'documento.unique' => 'El documento ingresado ya está en uso.',
             'documento.regex' => 'El campo documento solo puede contener números.',
             'telefono.required' => 'El campo teléfono es obligatorio.',
-            'telefono.numeric' => 'El campo teléfono debe ser valido sin extensiones solo numeros colombianos.',
-            'telefono.digits' => 'El campo teléfono no es valido.',
+            'telefono.numeric' => 'El campo teléfono debe ser válido sin extensiones, solo números colombianos.',
+            'telefono.digits' => 'El campo teléfono no es válido.',
             'direccion.required' => 'El campo dirección es obligatorio.',
             'direccion.max' => 'El campo dirección no debe tener más de 50 caracteres.',
             'email.required' => 'El campo email es obligatorio.',
@@ -223,24 +363,24 @@ class UsuarioController extends Controller
             'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
             'roles.required' => 'Debe seleccionar un rol.'
         ]);
-        
-
-       
     
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
-        
-        // Asegurarse de que el campo 'estado' esté presente en la solicitud y tener un valor booleano
+    
+        // Asegurarse de que el campo 'estado' esté presente en la solicitud y tenga un valor booleano
         $input['estado'] = $request->has('estado');
-        
+    
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
-        
+    
         $userEstado = $user->estado;
-        return redirect()->route('A_clientes.index')->with('userEstado', $userEstado);
-       
-        
+        if ($user->hasRole('cliente')) {
+            return redirect()->route('A_clientes.index')->with('userEstado', $userEstado)->with('success', 'Cliente creado exitosamente');
+        } else {
+            return redirect()->route('usuarios.index')->with('userEstado', $userEstado)->with('success', 'Usuario creado exitosamente');
+        }
     }
+    
 
     /**
      * Display the specified resource.
@@ -296,17 +436,31 @@ public function showc($id)
      * @return \Illuminate\Http\Response
      */
 
+     public function update(Request $request, $id)
+{
+    $rol = $request->input('roles');
+    // dd($rol);
+
+    $roleAdministrador = Role::where('name', 'administrador')->first();
+
+    if ($roleAdministrador && $rol === $roleAdministrador->name) {
+        return $this->updateA($request, $id); // Pasa $id como argumento
+    } else {
+        return $this->updatec($request, $id); // Pasa $id como argumento
+    }
+}
      
-    public function update(Request $request, $id)
+    public function updateA(Request $request, $id)
     {
 
         $this->validate($request, [
-            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
             'estado' => 'boolean',
             'documento' => [
                 'nullable',
                 'string',
+                'min:6',
                 'max:15',
                 'regex:/^[0-9]+$/'
             ],
@@ -349,9 +503,13 @@ public function showc($id)
     
         $user->assignRole($request->input('roles'));
     
-        return redirect()->route('usuarios.index');
+        
 
-
+        if ($user->hasRole('cliente')) {
+            return redirect()->route('A_clientes.index')->with('success', 'Cliente actualizado exitosamente');
+        } else {
+            return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado exitosamente');
+        }
         
     }
 
@@ -360,12 +518,13 @@ public function showc($id)
     public function updatec(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|regex:/^[A-Za-z]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
             'estado' => 'boolean',
             'documento' => [
                 'required',
                 'string',
+                'min:6',
                 'max:15',
                 'regex:/^[0-9]+$/',
                 function ($attribute, $value, $fail) use ($id) {
@@ -419,8 +578,13 @@ public function showc($id)
     
         $user->assignRole($request->input('roles'));
     
-        return redirect()->route('A_clientes.index');
+        if ($user->hasRole('cliente')) {
+            return redirect()->route('A_clientes.index')->with('success', 'Cliente actualizado exitosamente');
+        } else {
+            return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado exitosamente');
+        }
 
+        
 
         
     }

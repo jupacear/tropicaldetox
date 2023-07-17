@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert; // Importa la clase Alert
+use Illuminate\Support\Facades\Session;
+
+use Illuminate\Support\Facades\Redirect;
 
 
 class RolController extends Controller
@@ -22,16 +26,28 @@ class RolController extends Controller
     {
         $role->estado = true;
         $role->save();
-        
-        return redirect()->back()->with('success', 'Rol activado exitosamente.');
+    
+        Session::flash('sweet-alert', [
+            'type' => 'success',
+            'title' => 'Rol activado',
+            'text' => 'El rol se ha activado exitosamente.'
+        ]);
+    
+        return redirect()->back();
     }
     
     public function deactivate(Role $role)
     {
         $role->estado = false;
         $role->save();
-        
-        return redirect()->back()->with('success', 'Rol desactivado exitosamente.');
+    
+        Session::flash('sweet-alert', [
+            'type' => 'success',
+            'title' => 'Rol desactivado',
+            'text' => 'El rol se ha desactivado exitosamente.'
+        ]);
+    
+        return redirect()->back();
     }
     /**
      * Display a listing of the resource.
@@ -79,7 +95,9 @@ class RolController extends Controller
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions($request->input('permission'));
     
-        return redirect()->route('roles.index');                        
+        return redirect()->route('roles.index')->with('success', 'Rol creado exitosamente');  
+        
+        
     }
 
     /**
@@ -145,7 +163,7 @@ class RolController extends Controller
 
     $role->syncPermissions($request->input('permission'));
 
-    return redirect()->route('roles.index');                        
+    return redirect()->route('roles.index')->with('success', 'Rol actualizado exitosamente');                        
 }
 
 

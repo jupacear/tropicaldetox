@@ -1,18 +1,26 @@
 @include('cliente.nav')
-
-
-
-<div class="container mb-5" style="background-color: #fff;">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+@if (Session::has('sweet-alert'))
+    <script>
+        Swal.fire({
+            icon: '{{ Session::get("sweet-alert.type") }}',
+            title: '{{ Session::get("sweet-alert.title") }}',
+            text: '{{ Session::get("sweet-alert.text") }}',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+@endif
+<div class="container mb-5 mt-3" style="background-color: #fff;">
     <!-- Mensajes -->
-
-
     <h2 class="text-center">Actualizar mis datos</h2>
     <hr>
-    
     <div class="row justify-content-center">
         <div class="col-md-8">
             <form action="{{ route('changeperfil') }}" method="POST" class="needs-validation" novalidate>
-
                 @csrf
     
                 <div class="row mb-3">
@@ -39,13 +47,10 @@
                 <div class="row mb-3">
                     <div class="form-group mt-3 col-md-6">
                         <label for="documento">Documento</label>
-                        <input type="text" name="documento" value="{{ Auth::user()->documento }}" class="form-control @error('documento') is-invalid @enderror">
-                        @error('documento')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
+                        <input type="text" name="documento" value="{{ Auth::user()->documento }}" class="form-control" readonly>
+                        <small class="form-text text-muted">Para editar el documento contactate con los administradores.</small>
                     </div>
+                    
                     <div class="form-group mt-3 col-md-6">
                         <label for="telefono">Teléfono</label>
                         <input type="text" name="telefono" value="{{ Auth::user()->telefono }}" class="form-control @error('telefono') is-invalid @enderror">
@@ -88,5 +93,14 @@
         </div>
     </div>
 </div>
+
+@include('cliente.footer')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+    .content-container {
+    margin-top: 50px; /* Espacio superior */
+    margin-bottom: 50px; /* Espacio inferior */
+}
+</style>
