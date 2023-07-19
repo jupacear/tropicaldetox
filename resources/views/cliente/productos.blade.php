@@ -20,12 +20,10 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/custom.css">
     <title>Productos</title>
-
 </head>
 
 <body>
     @include('cliente.nav')
-
 
     <!-- Start Products  -->
     <div class="products-box">
@@ -34,10 +32,10 @@
                 <div class="col-lg-12">
                     <div class="title-all text-center">
                         <h1>Productos & Categorias</h1>
-                        <p>Descubre nuestra amplia selección de jugos frescos y deliciosos,
-                            junto con una variedad de categorías que se adaptan a tus preferencias.
-                            Disfruta de sabores únicos y opciones personalizadas para satisfacer tu sed de jugos naturales y saludables.
-                            ¡Explora nuestras categorías y encuentra tu jugo favorito!.</p>
+                        <p>Descubre nuestra amplia selección de jugos frescos y deliciosos, junto con una variedad de
+                            categorías que se adaptan a tus preferencias. Disfruta de sabores únicos y opciones
+                            personalizadas para satisfacer tu sed de jugos naturales y saludables. ¡Explora nuestras
+                            categorías y encuentra tu jugo favorito!.</p>
                     </div>
                 </div>
             </div>
@@ -47,45 +45,48 @@
                         <div class="button-group filter-button-group">
                             <button class="active" data-filter="*">Todos</button>
                             @foreach ($categorias as $categoria)
-                            <button data-filter=".{{ $categoria->id }}">{{ $categoria->nombre }}</button>
+                                <button data-filter=".{{ $categoria->id }}">{{ $categoria->nombre }}</button>
                             @endforeach
-
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center special-list">
                 @foreach ($productos as $producto)
-                @if ($producto->activo)
-                <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id}}">
-                    <!-- Cartas -->
-                    <div class="products-single fix ">
-                        <div class="box-img-hover">
-                            <!-- Imagen del producto -->
-                            <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
-                            <div class="mask-icon">
-                                <a class="cart" href="{{ route('agregarCarrito', ['productoId' => $producto->id, 'cantidad' => 1]) }}">Agregar al carrito</a>
+                    @if ($producto->activo)
+                        <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
+                            <!-- Cartas -->
+                            <div class="products-single fix">
+                                <div class="box-img-hover">
+                                    <!-- Imagen del producto -->
+                                    <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
+                                    <div class="mask-icon">
+                                        <!-- ... -->
+                                        <a class="cart" href="#" data-producto-id="{{ $producto->id }}"
+                                            data-producto-nombre="{{ $producto->nombre }}"
+                                            data-producto-precio="{{ $producto->precio }}"
+                                            onclick="agregarAlCarrito(event)">Agregar al carrito</a>
+                                        <!-- ... -->
+
+                                    </div>
+                                </div>
+                                <div class="why-text">
+                                    <!-- Nombre del producto -->
+                                    <h4>{{ $producto->nombre }}</h4>
+                                    <!-- Precio del producto -->
+                                    <h5>{{ $producto->precio }}</h5>
+                                    <!-- Descripción del producto -->
+                                    <p>{{ $producto->descripcion }}</p>
+                                </div>
                             </div>
+                            <!-- End Cartas -->
                         </div>
-                        <div class="why-text">
-                            <!-- Nombre del producto -->
-                            <h4>{{ $producto->nombre }}</h4>
-                            <!-- Precio del producto -->
-                            <h5>{{ $producto->precio }}</h5>
-                            <!-- Descripción del producto -->
-                            <p>{{ $producto->descripcion }}</p>
-                        </div>
-                    </div>
-                    <!-- End Cartas -->
-                </div>
-                @endif
+                    @endif
                 @endforeach
             </div>
-
         </div>
     </div>
     <!-- End Products  -->
-
 
     @include('cliente.footer')
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
@@ -107,6 +108,43 @@
     <script src="js/contact-form-script.js"></script>
     <script src="js/custom.js"></script>
 
+    <script>
+        function agregarAlCarrito(event) {
+            event.preventDefault();
+
+            // Obtener el carrito del Local Storage
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+            // Obtener los datos del producto del enlace
+            let productoId = event.target.dataset.productoId;
+            let nombreS = event.target.dataset.productoNombre;
+            let precioS = event.target.dataset.productoPrecio;
+
+            // Buscar el producto en el carrito
+            let productoEnCarrito = carrito.find(item => item.id === productoId);
+
+            if (productoEnCarrito) {
+                // Si el producto ya existe en el carrito, actualizar la cantidad
+                productoEnCarrito.cantidad += 1;
+            } else {
+                // Si el producto no existe en el carrito, agregarlo
+                let producto = {
+                    id: productoId,
+                    nombre: nombreS,
+                    precio: precioS,
+                    cantidad: 1
+                };
+
+                carrito.push(producto);
+            }
+
+            // Guardar el carrito actualizado en el Local Storage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+
+            // Mostrar un mensaje de éxito o redirigir al usuario si deseas
+            alert('Producto agregado al carrito exitosamente');
+        }
+    </script>
 </body>
 
 </html>

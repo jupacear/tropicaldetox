@@ -52,7 +52,6 @@
             <div class="col-lg-12">
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
-                        
                         <thead>
                             <tr>
                                 <th>Producto</th>
@@ -62,60 +61,30 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($carrito as $indice => $producto)
-                                <tr>
-                                    <td>{{ $producto['nombre'] }}</td>
-                                    <td>{{ $producto['precio'] }}</td>
-                                    <td>
-                                        <!-- Formulario para actualizar la cantidad del producto -->
-                                        <form action="{{ route('actualizarCantidadCarrito', $indice) }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="number" name="cantidad" min="1"
-                                                value="{{ $producto['cantidad'] }}">
-                                            <button type="submit" class="btn third">Actualizar</button>
-                                        </form>
-                                    </td>
-                                    <td>{{ $producto['subtotal'] }}</td>
-                                    <td>
-                                        <!-- Formulario para eliminar el producto del carrito -->
-                                        <form action="{{ route('eliminarProductoCarrito', $indice) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn thirdd">Eliminar</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
+                        <tbody class="carrito-body">
+                            <!-- Filas de productos en el carrito -->
                         </tbody>
-
                     </table>
                 </div>
             </div>
         </div>
-        {{-- <div class="d-flex justify-content-center " > --}}
+
         @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
             <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">Guardar Pedido</button>
         @else
-            {{-- <form action="{{ route('guardarPedido') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn third">Guardar Pedido</button>
-
-                </form> --}}
             <form id="formulario-guadar-pedido" action="{{ route('guardarPedido') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="Nombre">si vas a utilizar otras dirección ponlo aqui:</label>
                     <input type="text" name="Nombre" id="Nombre" class="form-control">
                 </div>
-                <button type="button" class="btn third" onclick="confirmarGuardarPedido()">Guardar Pedido</button>
+                <button type="button" class="btn btn-primary" onclick="confirmarGuardarPedido()">Guardar
+                    Pedido</button>
+                <!-- Agrega el botón para guardar el pedido -->
+
             </form>
         @endif
-        {{-- </div> --}}
     </div>
-    <!-- Tu código HTML existente del carrito -->
-
 
     <br>
     <br>
@@ -127,6 +96,146 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            let tablaCarrito = document.querySelector('.carrito-body');
+            tablaCarrito.innerHTML = '';
+            let total = 0; // Variable para almacenar el total del pedido
+
+            carrito.forEach(function(producto) {
+                let fila = document.createElement('tr');
+
+                let columnaProducto = document.createElement('td');
+                columnaProducto.textContent = producto.nombre; // Nombre del producto
+                fila.appendChild(columnaProducto);
+
+                let columnaPrecio = document.createElement('td');
+                columnaPrecio.textContent = producto.precio; // Precio del producto
+                fila.appendChild(columnaPrecio);
+
+                let columnaCantidad = document.createElement('td');
+                let inputCantidad = document.createElement('input');
+                inputCantidad.type = 'number';
+                inputCantidad.min = 1;
+                inputCantidad.value = producto.cantidad;
+                inputCantidad.addEventListener('change', function() {
+                    actualizarCantidadCarrito(carrito.indexOf(producto), parseInt(inputCantidad
+                        .value));
+                });
+                columnaCantidad.appendChild(inputCantidad);
+                fila.appendChild(columnaCantidad);
+
+                let columnaSubtotal = document.createElement('td');
+                producto.subtotal = producto.precio * producto.cantidad; // Calcular el subtotal
+                columnaSubtotal.textContent = producto.subtotal;
+                fila.appendChild(columnaSubtotal);
+
+                let columnaAcciones = document.createElement('td');
+                let botonEliminar = document.createElement('button');
+                botonEliminar.textContent = 'Eliminar';
+                botonEliminar.className = 'btn btn-danger';
+                botonEliminar.addEventListener('click', function() {
+                    eliminarProductoCarrito(carrito.indexOf(producto));
+                });
+                columnaAcciones.appendChild(botonEliminar);
+                fila.appendChild(columnaAcciones);
+
+                tablaCarrito.appendChild(fila);
+
+                total += producto.subtotal; // Actualizar el total del pedido
+            });
+
+            // Mostrar el total en el carrito
+            let filaTotal = document.createElement('tr');
+            let columnaTotalEtiqueta = document.createElement('td');
+            columnaTotalEtiqueta.textContent = 'Total:';
+            columnaTotalEtiqueta.setAttribute('colspan', 3);
+            filaTotal.appendChild(columnaTotalEtiqueta);
+
+            let columnaTotal = document.createElement('td');
+            columnaTotal.textContent = total;
+            filaTotal.appendChild(columnaTotal);
+
+            tablaCarrito.appendChild(filaTotal);
+        });
+
+        function actualizarCantidadCarrito(indice, cantidad) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito[indice].cantidad = cantidad;
+            carrito[indice].subtotal = carrito[indice].precio * cantidad; // Actualizar el subtotal
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            actualizarSubtotalEnDOM(indice, carrito[indice].subtotal); // Actualizar el subtotal en el DOM
+            actualizarTotalEnDOM(); // Actualizar el total en el DOM
+        }
+
+        function actualizarSubtotalEnDOM(indice, subtotal) {
+            let tablaCarrito = document.querySelector('.carrito-body');
+            let fila = tablaCarrito.children[indice];
+            let columnaSubtotal = fila.querySelector('td:nth-child(4)');
+            columnaSubtotal.textContent = subtotal;
+        }
+
+        function actualizarTotalEnDOM() {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            let total = 0;
+            carrito.forEach(function(producto) {
+                total += producto.subtotal;
+            });
+            let columnaTotal = document.querySelector('.carrito-body tr:last-child td:last-child');
+            columnaTotal.textContent = total;
+        }
+
+        function agregarProductoCarrito(producto) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            let existe = carrito.find(item => item.id === producto.id);
+
+            if (existe) {
+                existe.cantidad += producto.cantidad;
+                existe.subtotal = existe.precio * existe.cantidad; // Actualizar el subtotal
+            } else {
+                let subtotal = producto.precio * producto.cantidad;
+                carrito.push({
+                    id: producto.id,
+                    nombre: producto.nombre,
+                    precio: producto.precio,
+                    cantidad: producto.cantidad,
+                    subtotal: subtotal
+                });
+            }
+
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            location.reload();
+        }
+
+        function agregarProductoCarrito(producto) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            let existe = carrito.find(item => item.id === producto.id);
+
+            if (existe) {
+                existe.cantidad += producto.cantidad;
+                existe.subtotal = existe.precio * existe.cantidad;
+            } else {
+                let subtotal = producto.precio * producto.cantidad;
+                carrito.push({
+                    id: producto.id,
+                    nombre: producto.nombre,
+                    precio: producto.precio,
+                    cantidad: producto.cantidad,
+                    subtotal: subtotal
+                });
+            }
+
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            location.reload();
+        }
+
+        function eliminarProductoCarrito(indice) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.splice(indice, 1);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            location.reload();
+        }
+
         function confirmarGuardarPedido() {
             Swal.fire({
                 title: '¿Estás seguro?',
@@ -139,47 +248,13 @@
                 cancelButtonText: 'Guardar'
             }).then((result) => {
                 if (!result.isConfirmed) {
-                    // Si el usuario confirma la eliminación, enviar el formulario
                     var form = document.getElementById('formulario-guadar-pedido');
                     form.submit();
                 }
             });
         }
-    </script>
 
-    <style>
-        .third {
-            border-color: #0069D9;
-            color: #ffffff;
-            box-shadow: 0 0 40px 40px #007bff inset, 0 0 0 0 #037bfc;
-            -webkit-transition: all 150ms ease-in-out;
-            transition: all 150ms ease-in-out;
-        }
-
-        .third:hover {
-            box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
-            color: #000000;
-
-        }
-
-        .thirdd {
-            border-color: #ae0017;
-            color: #ffffff;
-            box-shadow: 0 0 40px 40px #ae0017 inset, 0 0 0 0 #ae0017;
-            -webkit-transition: all 150ms ease-in-out;
-            transition: all 150ms ease-in-out;
-        }
-
-        .thirdd:hover {
-            box-shadow: 0 0 10px 0 #eb0221 inset, 0 0 10px 4px #ff0022;
-            color: #000000;
-
-        }
-    </style>
-    <script>
         function mostrarAlerta() {
-            // alert('El nombre de usuario está vacío. Por favor, inicie sesión.');
-
             Swal.fire({
                 title: 'Usted no está registrado',
                 text: 'Para tener acceso a este servicio debes iniciar sesión. ¿Desea iniciar sesión?',
@@ -194,28 +269,10 @@
                     window.location.href = "{{ route('login') }}";
                 }
             });
-
         }
+
+       
     </script>
-
-    <script>
-        // Validar la entrada del usuario antes de enviar el formulario
-        document.querySelector('form').addEventListener('submit', function(event) {
-            var cantidadInput = document.getElementById('cantidad');
-            var cantidad = parseInt(cantidadInput.value);
-
-            if (cantidad <= 0) {
-                alert('La cantidad debe ser mayor que 0.');
-                event.preventDefault(); // Evitar que el formulario se envíe
-            }
-        });
-    </script>
-
-
-    <!-- Continúa con el resto del código HTML del carrito -->
-
-    @include('cliente.footer')
-    <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
     <!-- ALL JS FILES -->
     <script src="js/jquery-3.2.1.min.js"></script>
@@ -225,4 +282,16 @@
     <script src="js/jquery.superslides.min.js"></script>
     <script src="js/bootstrap-select.js"></script>
     <script src="js/inewsticker.js"></script>
+    {{-- <script src="js/bootsnav.js"></script> --}}
+    <script src="js/images-loded.min.js"></script>
+    <script src="js/isotope.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/baguetteBox.min.js"></script>
+    <script src="js/form-validator.min.js"></script>
+    <script src="js/contact-form-script.js"></script>
+    <script src="js/custom.js"></script>
+
+
 </body>
+
+</html>
