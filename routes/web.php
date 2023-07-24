@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CarritoController;
+use App\Models\Insumo;
 use Illuminate\Support\Facades\Route;
 use Dompdf\Dompdf;
 use App\Http\Controllers\HomeController;
@@ -40,8 +41,9 @@ Route::get('/', function () {
 Route::get('/Producto', function () {
     $productos = Producto::all();
     $categorias = Categorium::where('activo', true)->get(); // Obtén todas las categorías activas
-
-    return view('cliente.productos', compact('productos', 'categorias'));
+    $Insumo = Insumo::all();
+    
+    return view('cliente.productos', compact('productos', 'categorias','Insumo'));
 })->name('Productos');
 
 //cambiar contraseña administrador
@@ -123,7 +125,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('ventas', ventasController::class);
     Route::get('pdf/{id}', [pedidoController::class, 'showPdf'])->name('pdf');
    // Rutas para guardar el pedido
-Route::post('/guardar-pedido', 'PedidoController@guardarPedido')->name('guardarPedido');
+   Route::post('/guardar-pedido', [PedidoController::class, 'guardarPedido'])->name('guardarPedido');
 
 
     

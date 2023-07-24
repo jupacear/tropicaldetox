@@ -62,7 +62,7 @@
 
 
 
-                                    <!-- Modal Personalizados-->
+                                    <!-- Modal #Personalizados-->
 
                                     <div class="modal fade my-modal" id="Personalizados" tabindex="-1" role="dialog"
                                         aria-labelledby="Personalizados" aria-hidden="true"

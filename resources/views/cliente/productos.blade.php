@@ -44,12 +44,66 @@
                     <div class="special-menu text-center">
                         <div class="button-group filter-button-group">
                             <button class="active" data-filter="*">Todos</button>
+                            <button class="active" data-toggle="modal"
+                                data-target="#Personalizados">Personalizado</button>
                             @foreach ($categorias as $categoria)
-                                <button data-filter=".{{ $categoria->id }}">{{ $categoria->nombre }}</button>
+                                @if ($categoria->nombre != 'Personalizados')
+                                    <button data-filter=".{{ $categoria->id }}">{{ $categoria->nombre }}</button>
+                                @endif
                             @endforeach
                         </div>
                     </div>
                 </div>
+                <!-- Modal Personalizados-->
+
+                <div class="modal fade my-modal" id="Personalizados" tabindex="-1" role="dialog"
+                    aria-labelledby="Personalizados" aria-hidden="true" style="position: absolute; z-index: 1050;">
+
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="Personalizados">
+                                    Producto Personalizados</h5>
+
+
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+
+                            <div class="modal-body">
+                                <div class="insumos">
+                                    <h5>Insumo</h5>
+                                    @foreach ($Insumo as $Insumos)
+                                        <div class="insumo" data-id="{{ $Insumos->id }}">
+                                            <img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto"
+                                                width="40em">
+                                            <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
+                                                {{ $Insumos->precio_unitario }}</span>
+                                            <button type="button"
+                                                class="btn btn-success agregar-insumo">Agregar</button>
+                                            <br>
+                                        </div>
+                                    @endforeach
+
+                                </div>
+                                <div class="insumos_selecionados">
+                                    <h5>Insumo selecionados</h5>
+
+                                </div>
+                            </div>
+                            <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="crearPersonalizados"
+                                    data-dismiss="modal">Crear</button>
+
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Personalizados-->
             </div>
             <div class="row justify-content-center special-list">
                 @foreach ($productos as $producto)
@@ -144,6 +198,49 @@
             // Mostrar un mensaje de éxito o redirigir al usuario si deseas
             alert('Producto agregado al carrito exitosamente');
         }
+
+
+
+
+
+
+        $(document).ready(function() {
+            var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
+
+            $('.agregar-insumo').click(function() {
+                if ($('.insumos_selecionados li').length < maxSeleccionados) {
+                    var insumoId = $(this).closest('.insumo').data('id');
+                    var insumoNombre = $(this).siblings('span').text();
+
+                    // Crea un elemento de lista con el nombre del insumo seleccionado
+                    var listItem = $('<li>').text(insumoNombre);
+
+                    // Agrega el insumo seleccionado a la lista de insumos seleccionados
+                    $('.insumos_selecionados').append(listItem);
+                } else {
+                    alert('Ya has seleccionado la cantidad máxima de productos.');
+                }
+            });
+
+            $('#Personalizados').on('hidden.bs.modal', function() {
+                // Elimina todos los insumos seleccionados
+                $('.insumos_selecionados').empty();
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     </script>
 </body>
 

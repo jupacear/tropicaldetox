@@ -78,10 +78,8 @@
                     <label for="Nombre">si vas a utilizar otras dirección ponlo aqui:</label>
                     <input type="text" name="Nombre" id="Nombre" class="form-control">
                 </div>
-                <button type="button" class="btn btn-primary" onclick="confirmarGuardarPedido()">Guardar
-                    Pedido</button>
-                <!-- Agrega el botón para guardar el pedido -->
-
+                <input type="hidden" name="carrito" id="carrito" value="">
+                <button type="submit" class="btn btn-primary">Guardar Pedido</button>
             </form>
         @endif
     </div>
@@ -185,49 +183,15 @@
             columnaTotal.textContent = total;
         }
 
-        function agregarProductoCarrito(producto) {
+
+
+
+        document.getElementById('formulario-guadar-pedido').addEventListener('submit', function(event) {
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            let existe = carrito.find(item => item.id === producto.id);
+            document.getElementById('carrito').value = JSON.stringify(carrito);
+        });
 
-            if (existe) {
-                existe.cantidad += producto.cantidad;
-                existe.subtotal = existe.precio * existe.cantidad; // Actualizar el subtotal
-            } else {
-                let subtotal = producto.precio * producto.cantidad;
-                carrito.push({
-                    id: producto.id,
-                    nombre: producto.nombre,
-                    precio: producto.precio,
-                    cantidad: producto.cantidad,
-                    subtotal: subtotal
-                });
-            }
 
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-            location.reload();
-        }
-
-        function agregarProductoCarrito(producto) {
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            let existe = carrito.find(item => item.id === producto.id);
-
-            if (existe) {
-                existe.cantidad += producto.cantidad;
-                existe.subtotal = existe.precio * existe.cantidad;
-            } else {
-                let subtotal = producto.precio * producto.cantidad;
-                carrito.push({
-                    id: producto.id,
-                    nombre: producto.nombre,
-                    precio: producto.precio,
-                    cantidad: producto.cantidad,
-                    subtotal: subtotal
-                });
-            }
-
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-            location.reload();
-        }
 
         function eliminarProductoCarrito(indice) {
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
@@ -248,11 +212,16 @@
                 cancelButtonText: 'Guardar'
             }).then((result) => {
                 if (!result.isConfirmed) {
+                    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+                    let carritoInput = document.getElementById('carrito');
+                    carritoInput.value = JSON.stringify(carrito);
                     var form = document.getElementById('formulario-guadar-pedido');
                     form.submit();
+                    localStorage.removeItem('carrito'); // Borra el carrito del Local Storage
                 }
             });
         }
+
 
         function mostrarAlerta() {
             Swal.fire({
@@ -270,8 +239,6 @@
                 }
             });
         }
-
-       
     </script>
 
     <!-- ALL JS FILES -->

@@ -621,7 +621,7 @@ class pedidoController extends Controller
 
     public function guardarPedido(Request $request)
     {
-        $carrito = session('carrito.productos', []);
+        $carrito = json_decode($request->input('carrito', '[]'), true);        // return response()->json($carrito);
 
         // Verificar si el carrito está vacío
         if (empty($carrito)) {
@@ -638,6 +638,7 @@ class pedidoController extends Controller
                 }
             }
         }
+
         $pedido = new Pedido();
         $pedido->Nombre = $request->input('Nombre');
         // $pedido->Nombre = 'Pedido ' . date('Y-m-d H:i:s');
@@ -675,12 +676,15 @@ class pedidoController extends Controller
         }
 
         $pedido->Total = $total;
+
         $pedido->save();
+        echo '<script>localStorage.removeItem("carrito");</script>';
+        
+    // return response()->json($personalizadosArray);
 
-        session()->forget('carrito'); // Eliminar el carrito de la sesión después de guardar el pedido
-
-        return redirect()->route('carrito')->with('success', 'Pedido guardado correctamente.');
+        return redirect()->route('verpedido')->with('success', 'Pedido guardado correctamente.');
     }
+
 
     public function verpedido()
     {
