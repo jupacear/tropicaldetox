@@ -5,20 +5,25 @@
 
     <section class=""style="">
         <div
-        style="  
+            style="
         padding: 40px;
         background-color: #ffffff;
         border: 1px solid #ffffff;
-        margin-bottom: 20px; 
+        margin-bottom: 20px;
         height: 5em;
         position: relative;
         width: 180%;
         right: 2.3em;
         bottom: 1em;
-        "
-        >
+        ">
             <div class="section-header">
-                <h3 class="page__heading">Crear Pedido</h3>
+                <div style="display: flex;position: relative;bottom: 1em">
+
+                    <a href="{{ route('pedidos.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                    <h3 class="page__heading ml-3 mb-0">Crear Pedido</h3>
+                </div>
             </div>
 
         </div>
@@ -28,9 +33,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('pedidos.index') }}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Volver
-                            </a>
+
 
                             @if ($errors->any())
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">

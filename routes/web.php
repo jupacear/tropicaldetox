@@ -42,7 +42,7 @@ Route::get('/Producto', function () {
     $productos = Producto::all();
     $categorias = Categorium::where('activo', true)->get(); // Obtén todas las categorías activas
     $Insumo = Insumo::all();
-    
+
     return view('cliente.productos', compact('productos', 'categorias','Insumo'));
 })->name('Productos');
 
@@ -87,10 +87,10 @@ Route::middleware(['role:cliente'])->group(function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// modulos de Johan 
+// modulos de Johan
 
 Route::get('/carrito', [CarritoController::class, 'carrito'])->name('carrito');
-// modulos de Johan 
+// modulos de Johan
 
 
 Auth::routes();
@@ -116,8 +116,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::match(['put', 'patch'], '/A_clientes/{id}', [UsuarioController::class, 'updatec'])->name('A_clientes.update');
     Route::delete('/A_clientes/{id}', [UsuarioController::class, 'destroyc'])->name('A_clientes.destroy');
 
-    // modulos de Johan 
-    
+    // modulos de Johan
+
     Route::put('/pedidos/{id}/updateEstado', [pedidoController::class, 'updateEstado'])->name('pedidos.updateEstado');
     Route::resource('pedidos', pedidoController::class);
     Route::get('/admin/grafica', [ventasController::class, 'graficatop10'])->name('admin.grafica');
@@ -128,15 +128,15 @@ Route::group(['middleware' => ['auth']], function () {
    Route::post('/guardar-pedido', [PedidoController::class, 'guardarPedido'])->name('guardarPedido');
 
 
-    
+
 
 
     // routes/web.php
 
 
     Route::get('/pedidoss', [pedidoController::class, 'verpedido'])->name('verpedido');
-    Route::get('/cliente/{id}', [pedidoController::class, 'showcliente'])->name('cliente.Detalles');
-
+    Route::get('/cliente/pedidos/{id}', [CarritoController::class, 'show'])->name('Detalle');
+    
 
 
     // Route::get('/carrito', 'App\Http\Controllers\PedidoController@carrito')->name('carrito');
@@ -146,7 +146,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     // Route::post('/carrito', [PedidoController::class, 'carrito'])->name('carrito');
-    // modulos de Johan 
+    // modulos de Johan
 
     // diego
 

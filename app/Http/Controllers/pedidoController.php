@@ -42,7 +42,6 @@ class pedidoController extends Controller
         // return view('pedidos.index', ["pedidos"=>$pedidos,"producto"=>$producto]);
 
         return view('pedidos.index', compact('pedidos'));
-
     }
 
 
@@ -58,7 +57,6 @@ class pedidoController extends Controller
         // Retornamos la vista "create" y le pasamos las variables "productos" y "users"
 
         return view('pedidos.create', ['productos' => Producto::all(), 'users' => User::all(), 'Insumo' => Insumo::all()]);
-
     }
 
     /**
@@ -132,7 +130,7 @@ class pedidoController extends Controller
                     $insumo = Insumo::find($id);
                     if ($insumo) {
                         $insumo->cantidad_disponible -= 1;
-                         if ($insumo->cantidad_disponible < 3) {
+                        if ($insumo->cantidad_disponible < 3) {
                             $pedidos = Pedido::all();
                             return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
 
@@ -205,7 +203,6 @@ class pedidoController extends Controller
 
         // Pasar el pedido y sus detalles a la vista
         return view('pedidos.show', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'personaliza' => $personaliza]);
-
     }
     public function showPdf($id)
     {
@@ -278,8 +275,7 @@ class pedidoController extends Controller
         $pedido->Estado = $request->input('Estado');
         $pedido->save();
 
-        return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');
-        ;
+        return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');;
     }
 
     // public function updateEstado(Request $request, $id)
@@ -514,8 +510,6 @@ class pedidoController extends Controller
                     $personalizadoModel->Subtotal = $subtotal;
 
                     $personalizadoModel->save();
-
-
                 }
             }
         }
@@ -616,7 +610,7 @@ class pedidoController extends Controller
 
 
 
- 
+
 
 
     public function guardarPedido(Request $request)
@@ -679,10 +673,9 @@ class pedidoController extends Controller
 
         $pedido->save();
         echo '<script>localStorage.removeItem("carrito");</script>';
-        
-    // return response()->json($personalizadosArray);
 
-        return redirect()->route('verpedido')->with('success', 'Pedido guardado correctamente.');
+        // return response()->json($personalizadosArray);
+        return redirect()->route('verpedido')->with('success', 'Pedido guardado correctamente.')->with('pedidoGuardado', true);
     }
 
 
@@ -690,29 +683,22 @@ class pedidoController extends Controller
     {
         // Obtener el usuario autenticado
         $user = Auth::user();
-        $userDirecion =Auth::user()->direccion;
+        $userDirecion = Auth::user()->direccion;
         // Obtener todos los pedidos asociados al usuario
         $pedidos = Pedido::where('id_users', $user->id)->get();
 
         return view('cliente.pedidos', compact('pedidos', 'userDirecion'));
     }
 
+    public function show1($id)
+    {
+        // Recuperar el pedido y sus detalles de la base de datos
+        $pedido = Pedido::with('users')->find($id); // Cambiar 'users' por 'user'
+        $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
 
-
-
-
-    public function showcliente($iddd)
-{
-     // Recuperar el pedido y sus detalles de la base de datos
-        $pedido = Pedido::with('users')->find($iddd);
-
-        $detalles_pedidos = detalle_pedidos::where('id_pedidos', $iddd)->get();
-
-        $personaliza = producPerz::where('id_pedidos', $iddd)->get();
+        $personaliza = producPerz::where('id_pedidos', $id)->get();
 
         // Pasar el pedido y sus detalles a la vista
-        return view('cliente.Detalles', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'personaliza' => $personaliza]);
-  
-}
-
+        return view('cliente.Detalles', compact('pedido', 'detalles_pedidos', 'personaliza'));
+    }
 }

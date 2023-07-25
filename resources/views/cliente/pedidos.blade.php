@@ -73,9 +73,11 @@
                                     <td>{{ $userDirecion }}</td>
                                     <td>{{ $pedido->Total }}</td>
                                     <td>
-                                        <a href="{{ route('cliente.Detalles', ['id' => $pedido->id]) }}"
-                                            class="btn btn-primary">Ver detalle</a>
+                                        <!-- Enlace para ver el detalle del pedido -->
+                                        <a href="{{ route('Detalle', $pedido->id) }}" class="btn btn-info">Ver Detalle</a>
                                     </td>
+
+
 
                                 </tr>
                             @endforeach

@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/responsive.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/custom.css">
-    <title>Productos</title>
+    <title>Productos</title>z
 </head>
 
 <body>
@@ -201,46 +201,71 @@
 
 
 
-
-
-
         $(document).ready(function() {
-            var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
+        var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
+        var numeroPersonalizado = 1; // Variable para el número autoincrementable
 
-            $('.agregar-insumo').click(function() {
-                if ($('.insumos_selecionados li').length < maxSeleccionados) {
-                    var insumoId = $(this).closest('.insumo').data('id');
-                    var insumoNombre = $(this).siblings('span').text();
+        // Evento al hacer clic en el botón "Agregar" de un insumo
+        $('.agregar-insumo').click(function() {
+            if ($('.insumos_selecionados li').length < maxSeleccionados) {
+                var insumoId = $(this).closest('.insumo').data('id');
+                var insumoNombre = $(this).siblings('span').text();
+                var insumoPrecio = parseFloat($(this).siblings('span').text().match(/\d+/)[0]); // Extraer el precio del texto
 
-                    // Crea un elemento de lista con el nombre del insumo seleccionado
-                    var listItem = $('<li>').text(insumoNombre);
-
-                    // Agrega el insumo seleccionado a la lista de insumos seleccionados
-                    $('.insumos_selecionados').append(listItem);
-                } else {
-                    alert('Ya has seleccionado la cantidad máxima de productos.');
-                }
-            });
-
-            $('#Personalizados').on('hidden.bs.modal', function() {
-                // Elimina todos los insumos seleccionados
-                $('.insumos_selecionados').empty();
-            });
+                // Crea un elemento de lista con el nombre y precio del insumo seleccionado
+                var listItem = $('<li>').text(`${insumoId} : ${insumoNombre} $: ${insumoPrecio}`);
+                $('.insumos_selecionados').append(listItem);
+            } else {
+                alert('Ya has seleccionado la cantidad máxima de productos.');
+            }
         });
 
+        // Evento al hacer clic en el botón "Crear" del modal
+        $('#crearPersonalizados').click(function() {
+            var personalizado = {
+                Nombre: `Personalizado ${numeroPersonalizado}`, // Nombre con número autoincrementable
+                Subtotal: 0,
+                insumos: []
+            };
 
+            // Obtener los detalles de cada insumo seleccionado
+            $('.insumos_selecionados li').each(function() {
+                var insumoDetalles = $(this).text();
+                personalizado.insumos.push(insumoDetalles);
 
+                // Sumar el precio del insumo al subtotal
+                var insumoPrecio = parseFloat(insumoDetalles.match(/\d+/)[0]);
+                personalizado.Subtotal += insumoPrecio;
+            });
 
+            // Incrementar el número para el siguiente producto personalizado
+            numeroPersonalizado++;
 
+            // Obtener el arreglo de productos personalizados almacenados en el Local Storage
+            var productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
 
+            // Agregar el producto personalizado actual al arreglo
+            productosPersonalizados.push(personalizado);
 
+            // Guardar el arreglo actualizado en el Local Storage con la clave "productosPersonalizados"
+            localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizados));
 
+            // Elimina todos los insumos seleccionados de la lista
+            $('.insumos_selecionados').empty();
 
+            alert('Producto personalizado creado exitosamente.');
+        });
 
+        // Al cargar la página, verifica si hay datos guardados en el Local Storage y muestra los insumos seleccionados previamente
+        var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+        if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+            productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
+                var listItem = $('<li>').text(`Nombre: ${productoPersonalizado.Nombre}, Subtotal: ${productoPersonalizado.Subtotal}`);
+                $('.insumos_selecionados').append(listItem);
+            });
+        }
+    });
 
-
-
-        
     </script>
 </body>
 

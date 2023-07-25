@@ -70,7 +70,7 @@
         </div>
 
         @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
-            <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">Guardar Pedido</button>
+            <button type="submit" class="btn third" onclick="mostrarAlerta()">Guardar Pedido</button>
         @else
             <form id="formulario-guadar-pedido" action="{{ route('guardarPedido') }}" method="POST">
                 @csrf
@@ -79,7 +79,7 @@
                     <input type="text" name="Nombre" id="Nombre" class="form-control">
                 </div>
                 <input type="hidden" name="carrito" id="carrito" value="">
-                <button type="submit" class="btn btn-primary">Guardar Pedido</button>
+                <button type="submit" class="btn third">Guardar Pedido</button>
             </form>
         @endif
     </div>
@@ -131,7 +131,7 @@
                 let columnaAcciones = document.createElement('td');
                 let botonEliminar = document.createElement('button');
                 botonEliminar.textContent = 'Eliminar';
-                botonEliminar.className = 'btn btn-danger';
+                botonEliminar.className = 'btn thirdd';
                 botonEliminar.addEventListener('click', function() {
                     eliminarProductoCarrito(carrito.indexOf(producto));
                 });
@@ -199,6 +199,19 @@
             localStorage.setItem('carrito', JSON.stringify(carrito));
             location.reload();
         }
+        
+        document.getElementById('formulario-guadar-pedido').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita que el formulario se envíe de inmediato
+
+            // Aquí puedes realizar las operaciones que desees antes de enviar el formulario
+            // Por ejemplo, si necesitas validar algo antes de enviar el pedido, puedes hacerlo aquí
+
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            document.getElementById('carrito').value = JSON.stringify(carrito);
+
+            // Mostrar el mensaje de confirmación para guardar el pedido
+            confirmarGuardarPedido();
+        });
 
         function confirmarGuardarPedido() {
             Swal.fire({
@@ -240,7 +253,35 @@
             });
         }
     </script>
+<style>
+    .third {
+        border-color: #0069D9;
+        color: #ffffff;
+        box-shadow: 0 0 40px 40px #007bff inset, 0 0 0 0 #037bfc;
+        -webkit-transition: all 150ms ease-in-out;
+        transition: all 150ms ease-in-out;
+    }
 
+    .third:hover {
+        box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
+        color: #000000;
+
+    }
+
+    .thirdd {
+        border-color: #ae0017;
+        color: #ffffff;
+        box-shadow: 0 0 40px 40px #ae0017 inset, 0 0 0 0 #ae0017;
+        -webkit-transition: all 150ms ease-in-out;
+        transition: all 150ms ease-in-out;
+    }
+
+    .thirdd:hover {
+        box-shadow: 0 0 10px 0 #eb0221 inset, 0 0 10px 4px #ff0022;
+        color: #000000;
+
+    }
+</style>
     <!-- ALL JS FILES -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>
