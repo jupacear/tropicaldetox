@@ -76,17 +76,17 @@
                                             <td>{{ $pedido->Fecha }}</td>
                                             <td>{{ $pedido->Total }}</td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
-                                                    <i class="fa fa-fw fa-trash"></i>
-                                                </button>
                                                 <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
                                                     <a href="{{ route('pedidos.show', $pedido->id) }}"
                                                         class="btn btn-sm btn-primary"><i
-                                                            class="fa fa-fw fa-eye"></i></a></a>
-                                                    <a class="btn btn-sm btn-success"
+                                                        class="fa fa-fw fa-eye"></i></a></a>
+                                                        <a class="btn btn-sm btn-success"
                                                         href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
                                                         <i class="fa fa-fw fa-edit"></i>
                                                     </a>
+                                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
+                                                        <i class="fa fa-fw fa-trash"></i>
+                                                    </button>
                                                     {{-- @method('DELETE')
                                                     @csrf --}}
                                                     {{-- <button type="submit" class="btn btn-danger btn-sm">

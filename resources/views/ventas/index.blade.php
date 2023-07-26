@@ -68,7 +68,7 @@
                                             <td class="text-center">
                                                 <a class="btn btn-sm btn-primary"
                                                     href="{{ route('ventas.show', $venta->id) }}"><i
-                                                        class="fa fa-fw fa-eye"></i>Detalles</a>
+                                                        class="fa fa-fw fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @endif
