@@ -4,7 +4,7 @@
     <!-- Site CSS -->
     <link rel="stylesheet" href="css/style.css">
     <!-- Responsive CSS -->
-    <link rel="stylesheet" href="css/responsive.css">
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/custom.css">
     <style>
@@ -56,7 +56,7 @@
                 </a>
             </div>
             <!-- End Header Navigation -->
-    
+
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
@@ -68,9 +68,9 @@
                     @if (empty(session('carrito.productos')))
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
                                     class="fa fa-shopping-bag nav-link">
-                                    <span class="badge">
+                                    {{-- <span class="badge">
                                         0
-                                    </span>
+                                    </span> --}}
                                 </i></a></li>
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
@@ -85,7 +85,7 @@
                     @else
                     {{--  --}}
                     @endif
-                
+
 
                     <script>
                         function mostrarAlerta() {
@@ -176,4 +176,3 @@
         sideDiv.classList.toggle("side-on"); // Agrega o quita la clase "side-on" al <div class="side">
     });
 </script>
-

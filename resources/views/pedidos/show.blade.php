@@ -8,7 +8,10 @@
 
 
     <div class="section-header">
-        <h3 class="page__heading">Pedidos</h3>
+        <a href="{{ route('pedidos.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+        <h3 class="page__heading ml-3 mb-0">Pedido</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -34,10 +37,18 @@
 
                                     <h2>Detalles del pedido</h2>
                                     @if (!empty($pedido->Nombre))
-                                        <p style="font-size: 1.5em"><strong>descripción:</strong> {{ $pedido->Nombre }}</p>
+                                        <p style="font-size: 1.5em"><strong>descripción:</strong> {{ $pedido->Nombre }}
+                                        </p>
                                     @endif
-                                    <p style="font-size: 1.5em"><strong>direccion:</strong> {{ Auth::user()->direccion }}</p>
-                                    
+
+                                    @if ($pedido->Direcion)
+                                        <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:
+                                                {{ $pedido->Direcion }}</strong></p>
+                                    @else
+                                        <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:
+                                                {{ $pedido->users->direccion }}</strong></p>
+                                    @endif
+
                                     <table class="table">
 
 
@@ -76,7 +87,7 @@
                                                         <td>{{ $personalizas->nombre }}</td>
                                                         <td>{{ $personalizas->cantidad }}</td>
                                                         <td>{{ $personalizas->Subtotal }}</td>
-                                                       
+
                                                     </tr>
                                                 @endif
                                             @endforeach
@@ -94,7 +105,7 @@
                                             {{-- <td>{{ $detalle->id_pedidos = $pedido->Total }}</td> --}}
                                         </tbody>
                                     </table>
-                                    <a class="btn btn-dark" href="{{ route('pedidos.index') }} ">Regresar</a>
+                                    {{-- <a class="btn btn-dark" href="{{ route('pedidos.index') }} ">Regresar</a> --}}
                                 </div>
                             </div>
                         </div>

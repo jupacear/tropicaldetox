@@ -52,7 +52,6 @@
             <div class="col-lg-12">
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
-                        
                         <thead>
                             <tr>
                                 <th>Producto</th>
@@ -62,60 +61,42 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($carrito as $indice => $producto)
-                                <tr>
-                                    <td>{{ $producto['nombre'] }}</td>
-                                    <td>{{ $producto['precio'] }}</td>
-                                    <td>
-                                        <!-- Formulario para actualizar la cantidad del producto -->
-                                        <form action="{{ route('actualizarCantidadCarrito', $indice) }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="number" name="cantidad" min="1"
-                                                value="{{ $producto['cantidad'] }}">
-                                            <button type="submit" class="btn third">Actualizar</button>
-                                        </form>
-                                    </td>
-                                    <td>{{ $producto['subtotal'] }}</td>
-                                    <td>
-                                        <!-- Formulario para eliminar el producto del carrito -->
-                                        <form action="{{ route('eliminarProductoCarrito', $indice) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn thirdd">Eliminar</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
+                        <tbody class="carrito-body">
+                            <!-- Filas de productos en el carrito -->
                         </tbody>
+                        <tr>
+
+                            <th colspan="3">
+                                Total del Pedido:
+                            </th>
+                            <th>
+                                <span id="totalPedido">0.00</span>
+                            </th>
+                        </tr>
 
                     </table>
                 </div>
             </div>
         </div>
-        {{-- <div class="d-flex justify-content-center " > --}}
-        @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
-            <button type="submit" class="btn btn-primary" onclick="mostrarAlerta()">Guardar Pedido</button>
-        @else
-            {{-- <form action="{{ route('guardarPedido') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn third">Guardar Pedido</button>
 
-                </form> --}}
+        @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
+            <button type="submit" class="btn third" onclick="mostrarAlerta()">Guardar Pedido</button>
+        @else
             <form id="formulario-guadar-pedido" action="{{ route('guardarPedido') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="Nombre">si vas a utilizar otras dirección ponlo aqui:</label>
-                    <input type="text" name="Nombre" id="Nombre" class="form-control">
+                    <input type="text" name="Direcion" id="Direcion" class="form-control">
                 </div>
-                <button type="button" class="btn third" onclick="confirmarGuardarPedido()">Guardar Pedido</button>
+                <input type="hidden" name="carrito" id="carrito" value="">
+                <input type="hidden" name="productosPersonalizados" id="productosPersonalizados" value="">
+                <button type="submit" class="btn third">Guardar Pedido</button>
             </form>
         @endif
-        {{-- </div> --}}
     </div>
-    <!-- Tu código HTML existente del carrito -->
-
+    @if(session('script'))
+    {!! session('script') !!}
+@endif
 
     <br>
     <br>
@@ -127,6 +108,216 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        function calcularTotalPedido() {
+            let totalPedido = 0;
+
+            // Sumar los totales de los productos personalizados
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
+                    totalPedido += productoPersonalizado.Subtotal;
+                });
+            }
+
+            // Sumar los totales de los productos del carrito
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.forEach(function(producto) {
+                totalPedido += producto.subtotal;
+            });
+
+            return totalPedido; // Asegúrate de que el total tenga solo 2 decimales
+        }
+        // ... (Código JavaScript existente) ...
+        function mostrarProductosPersonalizados() {
+            // ... (Código JavaScript existente) ...
+
+            // Mostrar el total en el carrito
+            let filaTotal = document.createElement('tr');
+            let columnaTotalEtiqueta = document.createElement('td');
+            columnaTotalEtiqueta.textContent = 'Total:';
+            columnaTotalEtiqueta.setAttribute('colspan', 3);
+            filaTotal.appendChild(columnaTotalEtiqueta);
+
+            let columnaTotal = document.createElement('td');
+            columnaTotal.textContent = total.toFixed(2); // Asegúrate de que el total tenga solo 2 decimales
+            filaTotal.appendChild(columnaTotal);
+
+            tablaCarrito.appendChild(filaTotal);
+        }
+
+        // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
+        // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
+        $(document).ready(function() {
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            var carritoBody = $('.carrito-body');
+
+            var total = 0; // Variable para almacenar el total del pedido
+
+            if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                productosPersonalizadosGuardados.forEach(function(productoPersonalizado, index) {
+                    // Crea una nueva fila en la tabla con los datos del producto personalizado
+                    var row = $('<tr>');
+                    row.append($('<td>').text(productoPersonalizado.Nombre));
+                    row.append($('<td>').text(productoPersonalizado.Subtotal.toFixed(2)));
+
+                    // La cantidad en productos personalizados siempre será 1, ya que es un producto único
+                    row.append($('<td>').text('1'));
+
+                    // El subtotal en productos personalizados será el mismo que el total, ya que solo hay un producto
+                    row.append($('<td>').text(productoPersonalizado.Subtotal.toFixed(2)));
+
+                    // Agrega la fila a la tabla
+                    carritoBody.append(row);
+
+
+                    // Agregar botón de eliminar para productos personalizados
+                    let columnaAcciones = document.createElement('td');
+                    let botonEliminar = document.createElement('button');
+                    botonEliminar.textContent = 'Eliminar';
+                    botonEliminar.className = 'btn thirdd';
+                    botonEliminar.addEventListener('click', function() {
+                        eliminarProductoPersonalizado(index);
+                    });
+                    columnaAcciones.appendChild(botonEliminar);
+                    row.append(columnaAcciones);
+
+
+                });
+
+
+            }
+
+        });
+
+        // ... (Funciones existentes) ...
+
+        function eliminarProductoPersonalizado(index) {
+            let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
+            productosPersonalizadosGuardados.splice(index, 1);
+            localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizadosGuardados));
+            location.reload();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
+
+            // Actualizar el valor del campo oculto con los productos personalizados
+            document.getElementById('productosPersonalizados').value = JSON.stringify(productosPersonalizados);
+
+
+
+
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            let tablaCarrito = document.querySelector('.carrito-body');
+            tablaCarrito.innerHTML = '';
+            let total = 0; // Variable para almacenar el total del pedido
+
+            carrito.forEach(function(producto) {
+                let fila = document.createElement('tr');
+
+                let columnaProducto = document.createElement('td');
+                columnaProducto.textContent = producto.nombre; // Nombre del producto
+                fila.appendChild(columnaProducto);
+
+                let columnaPrecio = document.createElement('td');
+                columnaPrecio.textContent = producto.precio; // Precio del producto
+                fila.appendChild(columnaPrecio);
+
+                let columnaCantidad = document.createElement('td');
+                let inputCantidad = document.createElement('input');
+                inputCantidad.type = 'number';
+                inputCantidad.min = 1;
+                inputCantidad.value = producto.cantidad;
+                inputCantidad.addEventListener('change', function() {
+                    actualizarCantidadCarrito(carrito.indexOf(producto), parseInt(inputCantidad
+                        .value));
+                });
+                columnaCantidad.appendChild(inputCantidad);
+                fila.appendChild(columnaCantidad);
+
+                let columnaSubtotal = document.createElement('td');
+                producto.subtotal = producto.precio * producto.cantidad; // Calcular el subtotal
+                columnaSubtotal.textContent = producto.subtotal;
+                fila.appendChild(columnaSubtotal);
+
+                let columnaAcciones = document.createElement('td');
+                let botonEliminar = document.createElement('button');
+                botonEliminar.textContent = 'Eliminar';
+                botonEliminar.className = 'btn thirdd';
+                botonEliminar.addEventListener('click', function() {
+                    eliminarProductoCarrito(carrito.indexOf(producto));
+                });
+                columnaAcciones.appendChild(botonEliminar);
+                fila.appendChild(columnaAcciones);
+
+                tablaCarrito.appendChild(fila);
+
+            });
+
+
+            let totalPedido = calcularTotalPedido();
+            document.getElementById('totalPedido').textContent = totalPedido;
+
+
+
+        });
+
+        function actualizarCantidadCarrito(indice, cantidad) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito[indice].cantidad = cantidad;
+            carrito[indice].subtotal = carrito[indice].precio * cantidad; // Actualizar el subtotal
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            actualizarSubtotalEnDOM(indice, carrito[indice].subtotal); // Actualizar el subtotal en el DOM
+            actualizarTotalEnDOM(); // Actualizar el total en el DOM
+        }
+
+        function actualizarSubtotalEnDOM(indice, subtotal) {
+            let tablaCarrito = document.querySelector('.carrito-body');
+            let fila = tablaCarrito.children[indice];
+            let columnaSubtotal = fila.querySelector('td:nth-child(4)');
+            columnaSubtotal.textContent = subtotal;
+        }
+
+        function actualizarTotalEnDOM() {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            let total = 0;
+            carrito.forEach(function(producto) {
+                total += producto.subtotal;
+            });
+            // let columnaTotal = document.querySelector('.carrito-body tr:last-child td:last-child');
+            columnaTotal.textContent = total;
+        }
+
+
+
+
+        document.getElementById('formulario-guadar-pedido').addEventListener('submit', function(event) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            document.getElementById('carrito').value = JSON.stringify(carrito);
+        });
+
+
+
+        function eliminarProductoCarrito(indice) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.splice(indice, 1);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            location.reload();
+        }
+
+        document.getElementById('formulario-guadar-pedido').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita que el formulario se envíe de inmediato
+
+            // Aquí puedes realizar las operaciones que desees antes de enviar el formulario
+            // Por ejemplo, si necesitas validar algo antes de enviar el pedido, puedes hacerlo aquí
+
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            document.getElementById('carrito').value = JSON.stringify(carrito);
+
+            // Mostrar el mensaje de confirmación para guardar el pedido
+            confirmarGuardarPedido();
+        });
+
         function confirmarGuardarPedido() {
             Swal.fire({
                 title: '¿Estás seguro?',
@@ -139,13 +330,38 @@
                 cancelButtonText: 'Guardar'
             }).then((result) => {
                 if (!result.isConfirmed) {
-                    // Si el usuario confirma la eliminación, enviar el formulario
+                    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+                    let carritoInput = document.getElementById('carrito');
+                    carritoInput.value = JSON.stringify(carrito);
                     var form = document.getElementById('formulario-guadar-pedido');
                     form.submit();
+                    localStorage.removeItem('carrito'); // Borra el carrito del Local Storage
+                }
+            });
+        }
+
+
+        function mostrarAlerta() {
+            Swal.fire({
+                title: 'Usted no está registrado',
+                text: 'Para tener acceso a este servicio debes iniciar sesión. ¿Desea iniciar sesión?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'Ok',
+                confirmButtonText: 'Iniciar sesión'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('login') }}";
                 }
             });
         }
     </script>
+
+
+
+
 
     <style>
         .third {
@@ -176,47 +392,6 @@
 
         }
     </style>
-    <script>
-        function mostrarAlerta() {
-            // alert('El nombre de usuario está vacío. Por favor, inicie sesión.');
-
-            Swal.fire({
-                title: 'Usted no está registrado',
-                text: 'Para tener acceso a este servicio debes iniciar sesión. ¿Desea iniciar sesión?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Ok',
-                confirmButtonText: 'Iniciar sesión'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{{ route('login') }}";
-                }
-            });
-
-        }
-    </script>
-
-    <script>
-        // Validar la entrada del usuario antes de enviar el formulario
-        document.querySelector('form').addEventListener('submit', function(event) {
-            var cantidadInput = document.getElementById('cantidad');
-            var cantidad = parseInt(cantidadInput.value);
-
-            if (cantidad <= 0) {
-                alert('La cantidad debe ser mayor que 0.');
-                event.preventDefault(); // Evitar que el formulario se envíe
-            }
-        });
-    </script>
-
-
-    <!-- Continúa con el resto del código HTML del carrito -->
-
-    @include('cliente.footer')
-    <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
-
     <!-- ALL JS FILES -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>
@@ -225,4 +400,16 @@
     <script src="js/jquery.superslides.min.js"></script>
     <script src="js/bootstrap-select.js"></script>
     <script src="js/inewsticker.js"></script>
+    {{-- <script src="js/bootsnav.js"></script> --}}
+    <script src="js/images-loded.min.js"></script>
+    <script src="js/isotope.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/baguetteBox.min.js"></script>
+    <script src="js/form-validator.min.js"></script>
+    <script src="js/contact-form-script.js"></script>
+    <script src="js/custom.js"></script>
+
+
 </body>
+
+</html>

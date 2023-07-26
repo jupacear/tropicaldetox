@@ -56,7 +56,6 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Nueva Direccion</th>
                                 <th>Estado</th>
                                 <th>Fecha</th>
                                 <th>Dirección</th>
@@ -67,15 +66,26 @@
                         <tbody>
                             @foreach ($pedidos as $pedido)
                                 <tr>
-                                    <td>{{ $pedido->Nombre }}</td>
                                     <td>{{ $pedido->Estado }}</td>
                                     <td>{{ $pedido->Fecha }}</td>
-                                    <td>{{ $userDirecion }}</td>
+
+
+                                    <td>
+                                        @if( $pedido->Direcion)
+                                        {{  $pedido->Direcion }}
+                                        @else
+                                        {{ $pedido->users->direccion }}
+
+                                        @endif
+                                    </td>
+
                                     <td>{{ $pedido->Total }}</td>
                                     <td>
-                                        <a href="{{ route('cliente.Detalles', ['id' => $pedido->id]) }}"
-                                            class="btn btn-primary">Ver detalle</a>
+                                        <!-- Enlace para ver el detalle del pedido -->
+                                        <a href="{{ route('Detalle', $pedido->id) }}" class="btn btn-info">Ver Detalle</a>
                                     </td>
+
+
 
                                 </tr>
                             @endforeach

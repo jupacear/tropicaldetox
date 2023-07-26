@@ -40,9 +40,16 @@
 
                                     <table class="table">
                                         @if (!empty($pedido->Nombre))
-                                            <p style="font-size: 1.5em"><strong>descripción:</strong> {{ $pedido->Nombre }}</p>
+                                            <p style="font-size: 1.5em"><strong>descripción:</strong>
+                                                {{ $pedido->Nombre }}</p>
                                         @endif
-                                        <p style="font-size: 1.5em"><strong>direccion:</strong> {{ Auth::user()->direccion }}</p>
+                                        @if ($pedido->Direcion)
+                                            <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:
+                                                    {{ $pedido->Direcion }}</strong></p>
+                                        @else
+                                            <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:
+                                                    {{ $pedido->users->direccion }}</strong></p>
+                                        @endif
                                         <thead>
                                             <tr>
                                                 <th>Producto</th>
