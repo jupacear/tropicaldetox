@@ -7,7 +7,10 @@ Crear Insumo
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Crear Insumo</h3>
+        <a href="{{ route('insumo.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+        <h3 class="page__heading ml-3 mb-0">Crear Insumo</h3>
     </div>
     <div class="section-body">
         @if ($errors->any())
@@ -31,9 +34,6 @@ Crear Insumo
                     @includeif('partials.errors')
 
                     <div class="card-body">
-                        <a href="{{ route('insumo.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Volver
-                        </a>
                         <form method="POST" action="{{ route('insumo.store') }}" role="form" enctype="multipart/form-data">
                             @csrf
 

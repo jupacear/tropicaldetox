@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CarritoController;
+use App\Models\Insumo;
 use Illuminate\Support\Facades\Route;
 use Dompdf\Dompdf;
 use App\Http\Controllers\HomeController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\contrasenaController;
 use App\Models\Categorium;
 use App\Models\Producto;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,26 +41,27 @@ Route::get('/', function () {
 Route::get('/Producto', function () {
     $productos = Producto::all();
     $categorias = Categorium::where('activo', true)->get(); // Obtén todas las categorías activas
+    $Insumo = Insumo::all();
 
-    return view('cliente.productos', compact('productos','categorias'));
+    return view('cliente.productos', compact('productos', 'categorias','Insumo'));
 })->name('Productos');
 
 //cambiar contraseña administrador
-Route::get('/NewPassword2',  [contrasenaController::class, 'NewPassword2'])->name('NewPassword2')->middleware('auth');
-Route::post('/change/password2',  [contrasenaController::class, 'changePassword2'])->name('changePassword2');
+Route::get('/NewPassword2', [contrasenaController::class, 'NewPassword2'])->name('NewPassword2')->middleware('auth');
+Route::post('/change/password2', [contrasenaController::class, 'changePassword2'])->name('changePassword2');
 //editar perfil de administrador
-Route::get('/NewPassword',  [UserSettingsController::class, 'NewPassword'])->name('NewPassword')->middleware('auth');
-Route::post('/change/password',  [UserSettingsController::class, 'changePassword'])->name('changePassword');
+Route::get('/NewPassword', [UserSettingsController::class, 'NewPassword'])->name('NewPassword')->middleware('auth');
+Route::post('/change/password', [UserSettingsController::class, 'changePassword'])->name('changePassword');
 
 
 //editar perfil de cliente
-Route::get('/newperfil',  [UserSettingsController::class, 'newperfil'])->name('newperfil')->middleware('auth');
-Route::post('/change/changeperfil',  [UserSettingsController::class, 'changeperfil'])->name('changeperfil');
+Route::get('/newperfil', [UserSettingsController::class, 'newperfil'])->name('newperfil')->middleware('auth');
+Route::post('/change/changeperfil', [UserSettingsController::class, 'changeperfil'])->name('changeperfil');
 
 
 //cambiar contraseña perfil
-Route::get('/newcontrasena',  [contrasenaController::class, 'newcontrasena'])->name('newcontrasena')->middleware('auth');
-Route::post('/change/changecontrasena',  [contrasenaController::class, 'changecontrasena'])->name('changecontrasena');
+Route::get('/newcontrasena', [contrasenaController::class, 'newcontrasena'])->name('newcontrasena')->middleware('auth');
+Route::post('/change/changecontrasena', [contrasenaController::class, 'changecontrasena'])->name('changecontrasena');
 
 
 Route::put('/roles/{role}/activate', [RolController::class, 'activate'])->name('roles.activate');
@@ -83,6 +87,10 @@ Route::middleware(['role:cliente'])->group(function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+// modulos de Johan
+
+Route::get('/carrito', [CarritoController::class, 'carrito'])->name('carrito');
+// modulos de Johan
 
 
 Auth::routes();
@@ -108,28 +116,38 @@ Route::group(['middleware' => ['auth']], function () {
     Route::match(['put', 'patch'], '/A_clientes/{id}', [UsuarioController::class, 'updatec'])->name('A_clientes.update');
     Route::delete('/A_clientes/{id}', [UsuarioController::class, 'destroyc'])->name('A_clientes.destroy');
 
-    // modulos de Johan 
+    // modulos de Johan
 
     Route::put('/pedidos/{id}/updateEstado', [pedidoController::class, 'updateEstado'])->name('pedidos.updateEstado');
-    Route::resource('pedidos',  pedidoController::class);
+    Route::resource('pedidos', pedidoController::class);
     Route::get('/admin/grafica', [ventasController::class, 'graficatop10'])->name('admin.grafica');
     // Route::get('/admin/dashboard', [ventasController::class, 'informe'])->name('admin.dashboard');
     Route::resource('ventas', ventasController::class);
     Route::get('pdf/{id}', [pedidoController::class, 'showPdf'])->name('pdf');
+   // Rutas para guardar el pedido
+   Route::post('/guardar-pedido', [PedidoController::class, 'guardarPedido'])->name('guardarPedido');
+
+
+
+
+
+    // routes/web.php
+
+
+    Route::get('/pedidoss', [pedidoController::class, 'verpedido'])->name('verpedido');
+    Route::get('/cliente/pedidos/{id}', [CarritoController::class, 'show'])->name('Detalle');
+    
+
 
     // Route::get('/carrito', 'App\Http\Controllers\PedidoController@carrito')->name('carrito');
     // Route::get('/carrito', [App\Http\Controllers\PedidoController::class, 'carrito'])->name('carrito');
     // Route::get('/carrito', [PedidoController::class, 'carrito'])->name('carrito');
 
-    
-    Route::get('/carrito', [pedidoController::class, 'carrito'])->name('carrito');
-    Route::get('/carrito/agregar/{productoId}/{cantidad}', [PedidoController::class, 'agregarCarrito'])->name('agregarCarrito');
-    Route::delete('/carrito/{indice}', [pedidoController::class, 'eliminarProductoCarrito'])->name('eliminarProductoCarrito');
-    Route::put('/carrito/{indice}', [pedidoController::class, 'actualizarCantidadCarrito'])->name('actualizarCantidadCarrito');
-    Route::post('/guardar-pedido', [PedidoController::class, 'guardarPedido'])->name('guardarPedido');
+
 
     // Route::post('/carrito', [PedidoController::class, 'carrito'])->name('carrito');
-    
+    // modulos de Johan
+
     // diego
 
     Route::resource('Categorias', CategoriumController::class)->names('categoria');

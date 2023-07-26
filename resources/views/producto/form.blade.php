@@ -43,13 +43,13 @@
                     <button type="button" class="btn btn-primary btn-sm ml-2" id="add-insumo">Agregar insumo</button>
                 </div>
             </div>
-            <div class="form-group col-md-2">
+            <!-- <div class="form-group col-md-2">
                 {{ Form::label('cantidad_utilizada[]', 'Cantidad a utilizar') }}
                 {{ Form::number('cantidad_utilizada[]', null, ['class' => 'form-control' . ($errors->has('cantidad_utilizada') ? ' is-invalid' : ''), 'placeholder' => 'Cantidad a utilizar']) }}
                 @error('cantidad_utilizada')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-            </div>
+            </div> -->
 
         </div>
         @if(Route::currentRouteName() !== 'productos.create')
@@ -79,11 +79,11 @@
             $("#additional-insumos").append(newInsumoDiv);
 
             // Agregar el campo "cantidad a utilizar" al nuevo div
-            var cantidadUtilizadaInput = $("<div class='form-group col-md-2'>" +
-                "<label for='cantidad_utilizada'>Cantidad a utilizar</label>" +
-                "<input type='number' name='cantidad_utilizada[]' class='form-control'>" +
-                "</div>");
-            newInsumoDiv.append(cantidadUtilizadaInput);
+            // var cantidadUtilizadaInput = $("<div class='form-group col-md-2'>" +
+            //     "<label for='cantidad_utilizada'>Cantidad a utilizar</label>" +
+            //     "<input type='number' name='cantidad_utilizada[]' class='form-control'>" +
+            //     "</div>");
+            // newInsumoDiv.append(cantidadUtilizadaInput);
         });
     });
 </script>

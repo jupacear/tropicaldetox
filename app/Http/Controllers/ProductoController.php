@@ -15,8 +15,8 @@ class ProductoController extends Controller
 {
     function __construct()
     {
-         
-         $this->middleware('permission:productos', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+
+        $this->middleware('permission:productos', ['only' => ['create', 'store', 'destroy', 'edit', 'update', 'index']]);
     }
     /**
      * Display a listing of the resource.
@@ -65,7 +65,7 @@ class ProductoController extends Controller
             'descripcion' => 'required',
             'categorias_id' => 'required',
             'insumos' => 'required|array', // Validar que se envíen los insumos como un array
-            'cantidad_utilizada' => 'required|array' // Validar que se envíen las cantidades utilizadas como un array    
+            //  'cantidad_utilizada' => 'required|array' // Validar que se envíen las cantidades utilizadas como un array    
         ]);
 
         $producto = new Producto();
@@ -75,9 +75,7 @@ class ProductoController extends Controller
         $producto->categorias_id = $request->input('categorias_id');
         $producto->descripcion = $request->input('descripcion');
         $producto->activo = true; // Establecer el valor de "activo" como true
-        $cantidadUtilizada = $request->input('cantidad_utilizada');
-
-
+        //  $cantidadUtilizada = $request->input('cantidad_utilizada');
 
         // Verificar si se ha enviado una imagen
         if ($request->hasFile('imagen')) {
@@ -89,6 +87,9 @@ class ProductoController extends Controller
 
             // Asignar la ruta de la imagen al modelo
             $producto->imagen = 'img/ProductosIMG/' . $imageName;
+        } else {
+            // Si no se ha enviado una imagen, establecer la ruta del logo predeterminado
+            $producto->imagen = 'img/logo.png';
         }
 
         // Guardar el registro en la base de datos
@@ -110,6 +111,7 @@ class ProductoController extends Controller
         return redirect()->route('productos.index')
             ->with('success', 'Producto creado exitosamente');
     }
+
     /**
      * Display the specified resource.
      *
