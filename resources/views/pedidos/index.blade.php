@@ -48,7 +48,17 @@
                                             <td>{{ $pedido->id }}</td>
                                             <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
                                             <td>{{ $pedido->users ? $pedido->users->telefono : 'Null' }}</td>
-                                            <td>{{ $pedido->users ? $pedido->users->direccion : 'Null' }}</td>
+                                            <td>
+                                                @if( $pedido->Direcion)
+                                                {{  $pedido->Direcion }}
+                                                @else
+                                                {{ $pedido->users->direccion }}
+
+                                                @endif
+                                            </td>
+
+
+
                                             <td>
                                                 <form action="{{ route('pedidos.updateEstado', $pedido->id) }}"
                                                     method="POST" id="form-estado-{{ $pedido->id }}">
@@ -68,16 +78,14 @@
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
                                                     <i class="fa fa-fw fa-trash"></i>
-                                                    Eliminar
                                                 </button>
                                                 <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
                                                     <a href="{{ route('pedidos.show', $pedido->id) }}"
                                                         class="btn btn-sm btn-primary"><i
-                                                            class="fa fa-fw fa-eye"></i>Mostrar</a></a>
+                                                            class="fa fa-fw fa-eye"></i></a></a>
                                                     <a class="btn btn-sm btn-success"
                                                         href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
                                                         <i class="fa fa-fw fa-edit"></i>
-                                                        Editar
                                                     </a>
                                                     {{-- @method('DELETE')
                                                     @csrf --}}

@@ -64,6 +64,16 @@
                         <tbody class="carrito-body">
                             <!-- Filas de productos en el carrito -->
                         </tbody>
+                        <tr>
+
+                            <th colspan="3">
+                                Total del Pedido:
+                            </th>
+                            <th>
+                                <span id="totalPedido">0.00</span>
+                            </th>
+                        </tr>
+
                     </table>
                 </div>
             </div>
@@ -76,13 +86,17 @@
                 @csrf
                 <div class="form-group">
                     <label for="Nombre">si vas a utilizar otras dirección ponlo aqui:</label>
-                    <input type="text" name="Nombre" id="Nombre" class="form-control">
+                    <input type="text" name="Direcion" id="Direcion" class="form-control">
                 </div>
                 <input type="hidden" name="carrito" id="carrito" value="">
+                <input type="hidden" name="productosPersonalizados" id="productosPersonalizados" value="">
                 <button type="submit" class="btn third">Guardar Pedido</button>
             </form>
         @endif
     </div>
+    @if(session('script'))
+    {!! session('script') !!}
+@endif
 
     <br>
     <br>
@@ -94,7 +108,105 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        function calcularTotalPedido() {
+            let totalPedido = 0;
+
+            // Sumar los totales de los productos personalizados
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
+                    totalPedido += productoPersonalizado.Subtotal;
+                });
+            }
+
+            // Sumar los totales de los productos del carrito
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.forEach(function(producto) {
+                totalPedido += producto.subtotal;
+            });
+
+            return totalPedido; // Asegúrate de que el total tenga solo 2 decimales
+        }
+        // ... (Código JavaScript existente) ...
+        function mostrarProductosPersonalizados() {
+            // ... (Código JavaScript existente) ...
+
+            // Mostrar el total en el carrito
+            let filaTotal = document.createElement('tr');
+            let columnaTotalEtiqueta = document.createElement('td');
+            columnaTotalEtiqueta.textContent = 'Total:';
+            columnaTotalEtiqueta.setAttribute('colspan', 3);
+            filaTotal.appendChild(columnaTotalEtiqueta);
+
+            let columnaTotal = document.createElement('td');
+            columnaTotal.textContent = total.toFixed(2); // Asegúrate de que el total tenga solo 2 decimales
+            filaTotal.appendChild(columnaTotal);
+
+            tablaCarrito.appendChild(filaTotal);
+        }
+
+        // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
+        // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
+        $(document).ready(function() {
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            var carritoBody = $('.carrito-body');
+
+            var total = 0; // Variable para almacenar el total del pedido
+
+            if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                productosPersonalizadosGuardados.forEach(function(productoPersonalizado, index) {
+                    // Crea una nueva fila en la tabla con los datos del producto personalizado
+                    var row = $('<tr>');
+                    row.append($('<td>').text(productoPersonalizado.Nombre));
+                    row.append($('<td>').text(productoPersonalizado.Subtotal.toFixed(2)));
+
+                    // La cantidad en productos personalizados siempre será 1, ya que es un producto único
+                    row.append($('<td>').text('1'));
+
+                    // El subtotal en productos personalizados será el mismo que el total, ya que solo hay un producto
+                    row.append($('<td>').text(productoPersonalizado.Subtotal.toFixed(2)));
+
+                    // Agrega la fila a la tabla
+                    carritoBody.append(row);
+
+
+                    // Agregar botón de eliminar para productos personalizados
+                    let columnaAcciones = document.createElement('td');
+                    let botonEliminar = document.createElement('button');
+                    botonEliminar.textContent = 'Eliminar';
+                    botonEliminar.className = 'btn thirdd';
+                    botonEliminar.addEventListener('click', function() {
+                        eliminarProductoPersonalizado(index);
+                    });
+                    columnaAcciones.appendChild(botonEliminar);
+                    row.append(columnaAcciones);
+
+
+                });
+
+
+            }
+
+        });
+
+        // ... (Funciones existentes) ...
+
+        function eliminarProductoPersonalizado(index) {
+            let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
+            productosPersonalizadosGuardados.splice(index, 1);
+            localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizadosGuardados));
+            location.reload();
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
+            let productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
+
+            // Actualizar el valor del campo oculto con los productos personalizados
+            document.getElementById('productosPersonalizados').value = JSON.stringify(productosPersonalizados);
+
+
+
+
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             let tablaCarrito = document.querySelector('.carrito-body');
             tablaCarrito.innerHTML = '';
@@ -140,21 +252,14 @@
 
                 tablaCarrito.appendChild(fila);
 
-                total += producto.subtotal; // Actualizar el total del pedido
             });
 
-            // Mostrar el total en el carrito
-            let filaTotal = document.createElement('tr');
-            let columnaTotalEtiqueta = document.createElement('td');
-            columnaTotalEtiqueta.textContent = 'Total:';
-            columnaTotalEtiqueta.setAttribute('colspan', 3);
-            filaTotal.appendChild(columnaTotalEtiqueta);
 
-            let columnaTotal = document.createElement('td');
-            columnaTotal.textContent = total;
-            filaTotal.appendChild(columnaTotal);
+            let totalPedido = calcularTotalPedido();
+            document.getElementById('totalPedido').textContent = totalPedido;
 
-            tablaCarrito.appendChild(filaTotal);
+
+
         });
 
         function actualizarCantidadCarrito(indice, cantidad) {
@@ -179,7 +284,7 @@
             carrito.forEach(function(producto) {
                 total += producto.subtotal;
             });
-            let columnaTotal = document.querySelector('.carrito-body tr:last-child td:last-child');
+            // let columnaTotal = document.querySelector('.carrito-body tr:last-child td:last-child');
             columnaTotal.textContent = total;
         }
 
@@ -199,7 +304,7 @@
             localStorage.setItem('carrito', JSON.stringify(carrito));
             location.reload();
         }
-        
+
         document.getElementById('formulario-guadar-pedido').addEventListener('submit', function(event) {
             event.preventDefault(); // Evita que el formulario se envíe de inmediato
 
@@ -253,35 +358,40 @@
             });
         }
     </script>
-<style>
-    .third {
-        border-color: #0069D9;
-        color: #ffffff;
-        box-shadow: 0 0 40px 40px #007bff inset, 0 0 0 0 #037bfc;
-        -webkit-transition: all 150ms ease-in-out;
-        transition: all 150ms ease-in-out;
-    }
 
-    .third:hover {
-        box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
-        color: #000000;
 
-    }
 
-    .thirdd {
-        border-color: #ae0017;
-        color: #ffffff;
-        box-shadow: 0 0 40px 40px #ae0017 inset, 0 0 0 0 #ae0017;
-        -webkit-transition: all 150ms ease-in-out;
-        transition: all 150ms ease-in-out;
-    }
 
-    .thirdd:hover {
-        box-shadow: 0 0 10px 0 #eb0221 inset, 0 0 10px 4px #ff0022;
-        color: #000000;
 
-    }
-</style>
+    <style>
+        .third {
+            border-color: #0069D9;
+            color: #ffffff;
+            box-shadow: 0 0 40px 40px #007bff inset, 0 0 0 0 #037bfc;
+            -webkit-transition: all 150ms ease-in-out;
+            transition: all 150ms ease-in-out;
+        }
+
+        .third:hover {
+            box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
+            color: #000000;
+
+        }
+
+        .thirdd {
+            border-color: #ae0017;
+            color: #ffffff;
+            box-shadow: 0 0 40px 40px #ae0017 inset, 0 0 0 0 #ae0017;
+            -webkit-transition: all 150ms ease-in-out;
+            transition: all 150ms ease-in-out;
+        }
+
+        .thirdd:hover {
+            box-shadow: 0 0 10px 0 #eb0221 inset, 0 0 10px 4px #ff0022;
+            color: #000000;
+
+        }
+    </style>
     <!-- ALL JS FILES -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>

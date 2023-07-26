@@ -56,7 +56,6 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Nueva Direccion</th>
                                 <th>Estado</th>
                                 <th>Fecha</th>
                                 <th>Dirección</th>
@@ -67,10 +66,19 @@
                         <tbody>
                             @foreach ($pedidos as $pedido)
                                 <tr>
-                                    <td>{{ $pedido->Nombre }}</td>
                                     <td>{{ $pedido->Estado }}</td>
                                     <td>{{ $pedido->Fecha }}</td>
-                                    <td>{{ $userDirecion }}</td>
+
+
+                                    <td>
+                                        @if( $pedido->Direcion)
+                                        {{  $pedido->Direcion }}
+                                        @else
+                                        {{ $pedido->users->direccion }}
+
+                                        @endif
+                                    </td>
+
                                     <td>{{ $pedido->Total }}</td>
                                     <td>
                                         <!-- Enlace para ver el detalle del pedido -->

@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/responsive.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/custom.css">
-    <title>Productos</title>z
+    <title>Productos</title>
 </head>
 
 <body>
@@ -258,12 +258,12 @@
 
         // Al cargar la página, verifica si hay datos guardados en el Local Storage y muestra los insumos seleccionados previamente
         var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
-        if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
-            productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
-                var listItem = $('<li>').text(`Nombre: ${productoPersonalizado.Nombre}, Subtotal: ${productoPersonalizado.Subtotal}`);
-                $('.insumos_selecionados').append(listItem);
-            });
-        }
+        // if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+        //     productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
+        //         var listItem = $('<li>').text(`Nombre: ${productoPersonalizado.Nombre}, Subtotal: ${productoPersonalizado.Subtotal}`);
+        //         $('.insumos_selecionados').append(listItem);
+        //     });
+        // }
     });
 
     </script>

@@ -30,19 +30,17 @@
     @include('cliente.nav')
 
     <div class="container">
-        <div class="row">
+        <div class="row" style="margin-top:1.5em ">
             <div class="col-lg-12">
                 <div class="title-all text-center">
-                    <h1>Tus pedidos</h1>
+                    <h1>pedido</h1>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <section class="section">
-                    <div class="section-header">
-                        <h3 class="page__heading">Pedidos</h3>
-                    </div>
+
                     <div class="section-body">
                         <div class="row">
                             <div class="col-lg-12">
@@ -59,8 +57,14 @@
                                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
                                                     <p><strong>Total:</strong> {{ $pedido->Total }}</p>
-
-                                                    <h2>Detalles del pedido</h2>
+                                                    @if ($pedido->Direcion)
+                                                        <p><strong>direccion:</strong>
+                                                            {{ $pedido->Direcion }}</p>
+                                                    @else
+                                                        <p><strong>direccion:</strong>
+                                                            {{ $pedido->users->direccion }}</p>
+                                                    @endif
+                                                    <h2>Productos</h2>
                                                     @if (!empty($pedido->Nombre))
                                                         <p><strong>Descripción:</strong> {{ $pedido->Nombre }}</p>
                                                     @endif
@@ -80,10 +84,21 @@
                                                                     <td>{{ $detalle->precio_unitario }}</td>
                                                                 </tr>
                                                             @endforeach
+                                                            <?php $per = ''; ?>
+                                                            @foreach ($personaliza as $personalizas)
+                                                                @if (!($personalizas->nombre == $per))
+                                                                    <?php $per = $personalizas->nombre; ?>
+                                                                    <tr>
+                                                                        <td>{{ $personalizas->nombre }}</td>
+                                                                        <td>{{ $personalizas->cantidad }}</td>
+                                                                        <td>{{ $personalizas->Subtotal }}</td>
+                
+                                                                    </tr>
+                                                                @endif
+                                                            @endforeach
                                                         </tbody>
                                                     </table>
-                                                    <a class="btn btn-dark"
-                                                        href="{{ route('Productos') }}">Regresar</a>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -101,16 +116,7 @@
 
     @include('cliente.footer')
 
-    {{-- <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-    </script> --}}
+
 
     <!-- ALL JS FILES -->
     <script src="/js/jquery-3.2.1.min.js"></script>
