@@ -84,15 +84,48 @@
                                 <div class="col-xs-12 col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <label for="password">Contraseña</label>
-                                        {!! Form::password('password', ['class' => 'form-control']) !!}
+                                        <div class="input-group">
+                                            {!! Form::password('password', ['class' => 'form-control', 'id' => 'password']) !!}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('password')">
+                                                    <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                
                                 <div class="col-xs-12 col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <label for="confirm-password">Confirmar Contraseña</label>
-                                        {!! Form::password('confirm-password', ['class' => 'form-control']) !!}
+                                        <div class="input-group">
+                                            {!! Form::password('confirm-password', ['class' => 'form-control', 'id' => 'confirm-password']) !!}
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('confirm-password')">
+                                                    <i class="fas fa-eye" id="toggleConfirmPasswordIcon"></i>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <script>
+                                    function togglePasswordVisibility(inputId) {
+                                        var passwordInput = document.getElementById(inputId);
+                                        var passwordIcon = document.getElementById('toggle' + inputId.charAt(0).toUpperCase() + inputId.slice(1) + 'Icon');
+                                
+                                        if (passwordInput.type === 'password') {
+                                            passwordInput.type = 'text';
+                                            passwordIcon.classList.remove('fa-eye');
+                                            passwordIcon.classList.add('fa-eye-slash');
+                                        } else {
+                                            passwordInput.type = 'password';
+                                            passwordIcon.classList.remove('fa-eye-slash');
+                                            passwordIcon.classList.add('fa-eye');
+                                        }
+                                    }
+                                </script>
+                                
                                 <div class="col-xs-12 col-sm-6 col-md-6" style="display: none;">
                                     <div class="form-group">
                                         <label for="">Roles</label>

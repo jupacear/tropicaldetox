@@ -38,8 +38,16 @@ class LoginController extends Controller
      * @param  mixed  $user
      * @return mixed
      */
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        return redirect()->back()->withErrors([
+            'login_error' => 'Correo o contraseña incorrectos. Por favor, inténtalo de nuevo.',
+        ]);
+    }
+    
     protected function authenticated(Request $request, $user)
     {
+        
         $data = $this->indexData();
         // Verificar si el usuario está inactivo
         if (!$user->estado) {
