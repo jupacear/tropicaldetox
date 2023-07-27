@@ -71,17 +71,17 @@ Insumo
 
                                         <td>
                                             <form action="{{ route('insumo.destroy', $insumo->id) }}" method="POST">
-                                                <a class="btn btn-sm btn-primary " href="{{ route('insumo.show', $insumo->id) }}"><i class="fa fa-fw fa-eye"></i> Mostrar</a>
-                                                <a class="btn btn-sm btn-success" href="{{ route('insumo.edit', $insumo->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
+                                                <a class="btn btn-sm btn-primary " href="{{ route('insumo.show', $insumo->id) }}"><i class="fa fa-fw fa-eye"></i> </a>
+                                                <a class="btn btn-sm btn-success" href="{{ route('insumo.edit', $insumo->id) }}"><i class="fa fa-fw fa-edit"></i></a>
                                                 @csrf
                                                 @method('DELETE')
                                                 @if ($insumo->activo)
                                                 <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fa fa-fw fa-toggle-off"></i> Desactivar
+                                                    <i class="fa fa-fw fa-toggle-off"></i> 
                                                 </button>
                                                 @else
                                                 <button type="submit" class="btn btn-success btn-sm">
-                                                    <i class="fa fa-fw fa-toggle-on"></i> Activar
+                                                    <i class="fa fa-fw fa-toggle-on"></i> 
                                                 </button>
                                                 @endif
                                             </form>

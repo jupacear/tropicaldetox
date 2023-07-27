@@ -196,76 +196,95 @@
             localStorage.setItem('carrito', JSON.stringify(carrito));
 
             // Mostrar un mensaje de éxito o redirigir al usuario si deseas
-            alert('Producto agregado al carrito exitosamente');
+            // alert('Producto agregado al carrito exitosamente');
         }
 
 
-
         $(document).ready(function() {
-        var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
-        var numeroPersonalizado = 1; // Variable para el número autoincrementable
+            var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
+            var numeroPersonalizado = 1; // Variable para el número autoincrementable
 
-        // Evento al hacer clic en el botón "Agregar" de un insumo
-        $('.agregar-insumo').click(function() {
-            if ($('.insumos_selecionados li').length < maxSeleccionados) {
-                var insumoId = $(this).closest('.insumo').data('id');
-                var insumoNombre = $(this).siblings('span').text();
-                var insumoPrecio = parseFloat($(this).siblings('span').text().match(/\d+/)[0]); // Extraer el precio del texto
+            Evento al hacer clic en el botón "Agregar" de un insumo
+            $('.agregar-insumo').click(function() {
+                if ($('.insumos_selecionados li').length < maxSeleccionados) {
+                    var insumoId = $(this).closest('.insumo').data('id');
+                    var insumoNombre = $(this).siblings('span').text();
+                    var insumoPrecio = parseFloat(insumoNombre.split('$')[1].trim()); // Extraer el precio del texto
+                    // alert(insumoPrecio);
+                    // Crea un elemento de lista con el nombre y precio del insumo seleccionado
+                    var listItem = $('<li>').text(`${insumoId} : ${insumoNombre} $: ${insumoPrecio}`);
+                    $('.insumos_selecionados').append(listItem);
+                } else {
+                    alert('Ya has seleccionado la cantidad máxima de productos.');
+                }
+            });
+            // $('.agregar-insumo').click(function() {
+            //     if ($('.insumos_selecionados li').length < maxSeleccionados) {
+            //         var insumoDetalles = $(this).siblings('span').text().trim();
+            //         var precioRegex = /\$\s*(\d+(\.\d+)?)\s*$/;
+            //         var match = insumoDetalles.match(precioRegex);
 
-                // Crea un elemento de lista con el nombre y precio del insumo seleccionado
-                var listItem = $('<li>').text(`${insumoId} : ${insumoNombre} $: ${insumoPrecio}`);
-                $('.insumos_selecionados').append(listItem);
-            } else {
-                alert('Ya has seleccionado la cantidad máxima de productos.');
-            }
-        });
+            //         if (true) {
+            //             var insumoNombre = insumoDetalles.split('$')[0].trim();
+            //             var insumoPrecio = parseFloat(match[1]);
 
-        // Evento al hacer clic en el botón "Crear" del modal
-        $('#crearPersonalizados').click(function() {
-            var personalizado = {
-                Nombre: `Personalizado ${numeroPersonalizado}`, // Nombre con número autoincrementable
-                Subtotal: 0,
-                insumos: []
-            };
+            //             // Crea un elemento de lista con el nombre y precio del insumo seleccionado
+            //             var listItem = $('<li>').text(`${insumoNombre} $: ${insumoPrecio}`);
+            //             $('.insumos_selecionados').append(listItem);
+            //         } else {
+            //             alert('No se pudo encontrar el precio del insumo.');
+            //         }
+            //     } else {
+            //         alert('Ya has seleccionado la cantidad máxima de productos.');
+            //     }
+            // });
 
-            // Obtener los detalles de cada insumo seleccionado
-            $('.insumos_selecionados li').each(function() {
-                var insumoDetalles = $(this).text();
-                personalizado.insumos.push(insumoDetalles);
+            // Evento al hacer clic en el botón "Crear" del modal
+            $('#crearPersonalizados').click(function() {
+                var personalizado = {
+                    Nombre: `Personalizado ${numeroPersonalizado}`, // Nombre con número autoincrementable
+                    Subtotal: 0,
+                    insumos: []
+                };
 
-                // Sumar el precio del insumo al subtotal
-                var insumoPrecio = parseFloat(insumoDetalles.match(/\d+/)[0]);
-                personalizado.Subtotal += insumoPrecio;
+                // Obtener los detalles de cada insumo seleccionado
+                $('.insumos_selecionados li').each(function() {
+                    var insumoDetalles = $(this).text();
+                    personalizado.insumos.push(insumoDetalles);
+
+                    // Sumar el precio del insumo al subtotal
+                    var insumoPrecio = parseFloat(insumoDetalles.match(/\d+/)[0]);
+                    personalizado.Subtotal += insumoPrecio;
+                });
+
+                // Incrementar el número para el siguiente producto personalizado
+                numeroPersonalizado++;
+
+                // Obtener el arreglo de productos personalizados almacenados en el Local Storage
+                var productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) ||
+                    [];
+
+                // Agregar el producto personalizado actual al arreglo
+                productosPersonalizados.push(personalizado);
+
+                // Guardar el arreglo actualizado en el Local Storage con la clave "productosPersonalizados"
+                localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizados));
+
+                // Elimina todos los insumos seleccionados de la lista
+                $('.insumos_selecionados').empty();
+
+                alert('Producto personalizado creado exitosamente.');
             });
 
-            // Incrementar el número para el siguiente producto personalizado
-            numeroPersonalizado++;
-
-            // Obtener el arreglo de productos personalizados almacenados en el Local Storage
-            var productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
-
-            // Agregar el producto personalizado actual al arreglo
-            productosPersonalizados.push(personalizado);
-
-            // Guardar el arreglo actualizado en el Local Storage con la clave "productosPersonalizados"
-            localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizados));
-
-            // Elimina todos los insumos seleccionados de la lista
-            $('.insumos_selecionados').empty();
-
-            alert('Producto personalizado creado exitosamente.');
+            // Al cargar la página, verifica si hay datos guardados en el Local Storage y muestra los insumos seleccionados previamente
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            // if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+            //     productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
+            //         var listItem = $('<li>').text(`Nombre: ${productoPersonalizado.Nombre}, Subtotal: ${productoPersonalizado.Subtotal}`);
+            //         $('.insumos_selecionados').append(listItem);
+            //     });
+            // }
         });
-
-        // Al cargar la página, verifica si hay datos guardados en el Local Storage y muestra los insumos seleccionados previamente
-        var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
-        // if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
-        //     productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
-        //         var listItem = $('<li>').text(`Nombre: ${productoPersonalizado.Nombre}, Subtotal: ${productoPersonalizado.Subtotal}`);
-        //         $('.insumos_selecionados').append(listItem);
-        //     });
-        // }
-    });
-
     </script>
 </body>
 
