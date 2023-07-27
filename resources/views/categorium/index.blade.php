@@ -62,17 +62,19 @@ Categoria
                                         <td>{{ $categorium->activo ? 'Activo' : 'Inactivo' }}</td>
                                         <td>
                                             <form action="{{ route('categoria.destroy', $categorium->id) }}" method="POST">
-                                                <a class="btn btn-sm btn-primary " href="{{ route('categoria.show', $categorium->id) }}"><i class="fa fa-fw fa-eye"></i>Mostrar</a>
-                                                <a class="btn btn-sm btn-success" href="{{ route('categoria.edit', $categorium->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
+                                                <a class="btn btn-sm btn-primary " href="{{ route('categoria.show', $categorium->id) }}"><i class="fa fa-fw fa-eye"></i></a>
+                                                <a class="btn btn-sm btn-success" href="{{ route('categoria.edit', $categorium->id) }}"><i class="fa fa-fw fa-edit"></i></a>
                                                 @csrf
                                                 @method('DELETE')
                                                 @if ($categorium->activo)
-                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmDesactivateCategoria(event)">
-                                                    <i class="fa fa-fw fa-toggle-on"></i> Desactivar
+
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fa fa-fw fa-toggle-on"></i> 
                                                 </button>
                                                 @else
-                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmActivateCategoria(event)">
-                                                    <i class="fa fa-fw fa-toggle-off"></i> Activar
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="fa fa-fw fa-toggle-off"></i> 
+
                                                 </button>
                                                 @endif
 
