@@ -115,23 +115,15 @@
             var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
             if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
                 productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
-                    productoPersonalizado.insumos.forEach(function(insumo) {
-                        let insumoData = insumo.split(':');
-                        totalPedido += parseFloat(insumoData[3].trim());
-                    });
+                    totalPedido += productoPersonalizado.Subtotal;
                 });
             }
-
-
 
             // Sumar los totales de los productos del carrito
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             carrito.forEach(function(producto) {
                 totalPedido += producto.subtotal;
-
             });
-
-
 
             return totalPedido; // Asegúrate de que el total tenga solo 2 decimales
         }
@@ -141,9 +133,9 @@
             let totalPedido = calcularTotalPedido();
             document.getElementById('totalPedido').textContent = totalPedido;
         }
-
         // ... (Código JavaScript existente) ...
         function mostrarProductosPersonalizados() {
+            // ... (Código JavaScript existente) ...
 
             // Mostrar el total en el carrito
             let filaTotal = document.createElement('tr');
@@ -172,23 +164,17 @@
                     // Crea una nueva fila en la tabla con los datos del producto personalizado
                     var row = $('<tr>');
                     row.append($('<td>').text(productoPersonalizado.Nombre));
-
-                    // Calcular el subtotal a partir del array "insumos"
-                    let subtotal = 0;
-                    productoPersonalizado.insumos.forEach(function(insumo) {
-                        let insumoData = insumo.split(':');
-                        subtotal += parseFloat(insumoData[3].trim());
-                    });
-                    row.append($('<td>').text(subtotal));
+                    row.append($('<td>').text(productoPersonalizado.Subtotal));
 
                     // La cantidad en productos personalizados siempre será 1, ya que es un producto único
                     row.append($('<td>').text('1'));
 
                     // El subtotal en productos personalizados será el mismo que el total, ya que solo hay un producto
-                    row.append($('<td>').text(subtotal));
+                    row.append($('<td>').text(productoPersonalizado.Subtotal));
 
                     // Agrega la fila a la tabla
                     carritoBody.append(row);
+
 
                     // Agregar botón de eliminar para productos personalizados
                     let columnaAcciones = document.createElement('td');
@@ -200,8 +186,13 @@
                     });
                     columnaAcciones.appendChild(botonEliminar);
                     row.append(columnaAcciones);
+
+
                 });
+
+
             }
+
         });
 
         // ... (Funciones existentes) ...
@@ -215,6 +206,11 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             let productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
+
+
+
+
+
 
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             let tablaCarrito = document.querySelector('.carrito-body');
@@ -281,7 +277,6 @@
             actualizarTotalEnDOM(); // Actualizar el total en el DOM
         }
 
-
         function actualizarSubtotalEnDOM(indice, subtotal) {
             let tablaCarrito = document.querySelector('.carrito-body');
             let fila = tablaCarrito.children[indice];
@@ -289,7 +284,7 @@
             columnaSubtotal.textContent = subtotal;
         }
 
-
+        
 
 
 
