@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<head>
+    <script src="{{ asset('js/translations/es.json') }}"></script>
+
+</head>
     <section class="section">
         <div class="section-header">
             <h3 class="page__heading">Usuarios</h3>
@@ -59,8 +63,8 @@
                                             </td>
 
                                             <td>
-                                                <a class="btn btn-sm btn-primary" href="{{ route('usuarios.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i>Mostrar</a>
-                                                <a class="btn btn-sm btn-success" href="{{ route('usuarios.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
+                                                <a class="btn btn-sm btn-primary" href="{{ route('usuarios.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i></a>
+                                                <a class="btn btn-sm btn-success" href="{{ route('usuarios.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i></a>
                                                 
                                               
                                                 {!! Form::open([
@@ -69,7 +73,7 @@
                                                     'style' => 'display:inline',
                                                     'class' => 'delete-form'
                                                 ]) !!}
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)"><i class="fa fa-fw fa-trash"></i>Eliminar</button>
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)"><i class="fa fa-fw fa-trash"></i></button>
                                                 {!! Form::close() !!}
                                               </td>
                                               
@@ -90,9 +94,12 @@
     <script>
         $(document).ready(function() {
             var table = $('#example').DataTable({
-                responsive: true
+                responsive: true,
+                language: {
+                    "url": "{{ asset('js/translations/es.json') }}"
+                }
             });
-
+    
             new $.fn.dataTable.FixedHeader(table);
         });
     </script>

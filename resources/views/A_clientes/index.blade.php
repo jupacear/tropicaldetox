@@ -23,10 +23,10 @@
                           <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
                                 <th style="color:#fff;">ID</th>
+                                <th style="color:#fff;">Documento</th>
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Apellidos</th>
                                 <th style="color:#fff;">Estado</th>
-                                <th style="color:#fff;">Documento</th>
                                 <th style="color:#fff;">Teléfono</th>
                                 <th style="color:#fff;">Dirección</th>
                                 <th style="color:#fff;">E-mail</th>
@@ -38,6 +38,7 @@
                                         @if ($rol->name === 'cliente')
                                             <tr>
                                                 <td>{{ $usuario->id }}</td>
+                                                <td>{{ $usuario->documento }}</td>
                                                 <td>{{ $usuario->name }}</td>
                                                 <td>{{ $usuario->apellidos }}</td>
                                                 <td>
@@ -47,13 +48,13 @@
                                                         Inactivo
                                                     @endif
                                                 </td>
-                                                <td>{{ $usuario->documento }}</td>
+                                                
                                                 <td>{{ $usuario->telefono }}</td>
                                                 <td>{{ $usuario->direccion }}</td>
                                                 <td>{{ $usuario->email }}</td>
                                                 <td>
-                                                    <a class="btn btn-sm btn-primary" href="{{ route('A_clientes.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i>Mostrar</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('A_clientes.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i>Editar</a>
+                                                    <a class="btn btn-sm btn-primary" href="{{ route('A_clientes.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i></a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('A_clientes.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i></a>
                                                     
                                                   
                                                     {!! Form::open([
@@ -62,7 +63,7 @@
                                                       'style' => 'display:inline',
                                                       'onsubmit' => 'confirmDelete(event, this)',
                                                     ]) !!}
-                                                      <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i>Eliminar</button>
+                                                      <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i></button>
                                                     {!! Form::close() !!}
                                                   </td>
                                             </tr>
@@ -80,15 +81,16 @@
           </div>
       </div>
     </section>
-    <script>
-        $(document).ready(function() {
-            var table = $('#example').DataTable({
-                responsive: true
-            });
-    
-            new $.fn.dataTable.FixedHeader(table);
+    <script src="{{ asset('js/es_datatables.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        var table = $('#example').DataTable({
+            responsive: true
         });
-    </script>
+
+        new $.fn.dataTable.FixedHeader(table);
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

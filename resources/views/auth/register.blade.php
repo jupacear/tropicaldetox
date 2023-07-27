@@ -79,12 +79,16 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="password" class="control-label">Contraseña
-                                :</label><span
-                                    class="text-danger">*</span>
-                            <input id="password" type="password"
-                                   class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}"
-                                    name="password" tabindex="2" required>
+                            <label for="password" class="control-label">Contraseña:</label><span class="text-danger">*</span>
+                            <div class="input-group">
+                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}"
+                                       name="password" tabindex="2" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text toggle-password" id="toggle-password">
+                                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="invalid-feedback">
                                 {{ $errors->first('password') }}
                             </div>
@@ -92,17 +96,32 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="password_confirmation"
-                                   class="control-label">Confirmar contraseña:</label><span
-                                    class="text-danger">*</span>
-                            <input id="password_confirmation" type="password" 
-                                   class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid': '' }}"
-                                   name="password_confirmation" tabindex="2">
+                            <label for="password_confirmation" class="control-label">Confirmar contraseña:</label><span
+                                class="text-danger">*</span>
+                            <div class="input-group">
+                                <input id="password_confirmation" type="password"
+                                       class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid': '' }}"
+                                       name="password_confirmation" tabindex="2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text toggle-password" id="toggle-password-confirmation">
+                                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="invalid-feedback">
                                 {{ $errors->first('password_confirmation') }}
                             </div>
                         </div>
                     </div>
+                    <script>
+                        $(document).ready(function () {
+                            $(".toggle-password").click(function () {
+                                $(this).toggleClass("active");
+                                var input = $(this).closest(".input-group").find("input");
+                                input.attr("type", input.attr("type") === "password" ? "text" : "password");
+                            });
+                        });
+                    </script>
                     <div class="col-md-12 mt-4">
                         <div class="form-group">
                             <button type="submit" id="miBoton" class="btn btn-primary btn-lg btn-block" tabindex="4">
