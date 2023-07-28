@@ -221,7 +221,14 @@
                                                 <input type="text" name="Nombre" id="Nombre"
                                                     class="form-control">
                                             </div>
+                                            <Script>
+                                                let nombreInput = document.getElementById('Nombre');
 
+                                                // Add event listener for 'blur' event to trim the input value
+                                                nombreInput.addEventListener('blur', function() {
+                                                    nombreInput.value = nombreInput.value.trim();
+                                                });
+                                            </Script>
                                             <div class="d-flex justify-content-between">
                                                 <button type="submit" class="btn btn-primary">Crear Pedido</button>
                                                 {{-- <a class="btn btn-dark" href="{{ route('pedidos.index') }}">Regresar</a> --}}

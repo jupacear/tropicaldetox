@@ -98,8 +98,8 @@ class pedidoController extends Controller
         $productos = $request->input('ProductoID');
         $cantidades = $request->input('Cantidad');
         $total = 0;
-
         $personalizadosArray = json_decode($request->input('personalizadosArray'), true);
+
         if (!empty($personalizadosArray)) {
             foreach ($personalizadosArray as $personalizado) {
                 // Guardar los datos del personalizado en la base de datos
@@ -471,7 +471,7 @@ class pedidoController extends Controller
             'Usuario' => 'required',
             'ProductoID' => 'required|array',
             'ProductoID.*' => 'integer',
-            'Total' => 'required|numeric',
+            'Total' => 'required',
         ]);
 
         $pedido = Pedido::find($id);
@@ -479,7 +479,7 @@ class pedidoController extends Controller
         $pedido->Nombre = $request->input('Nombre');
         $pedido->Estado = $request->input('Estado');
         $pedido->id_users = $request->input('Usuario');
-        $pedido->Total = $request->input('Total');
+        $pedido->Total = (int)$request->input('Total');
         $pedido->save();
 
 
@@ -499,9 +499,10 @@ class pedidoController extends Controller
                 $insumos = $personalizado['insumos'];
                 $Nombre = $personalizado['Nombre'];
                 $subtotal = $personalizado['Subtotal'];
-
+                $id = '';
                 foreach ($insumos as $insumo) {
-                    $id = $insumo['id'];
+                    $insumoData = explode(':', $insumo);  
+                    $id = trim($insumoData[0]); 
 
                     $personalizadoModel = new producPerz();
                     $personalizadoModel->nombre = $Nombre;
@@ -716,26 +717,31 @@ class pedidoController extends Controller
 
         // Guardar los productos personalizados en la tabla "producPerz"
         if (!empty($productosPersonalizados)) {
+            $totalL = 0;
+
             foreach ($productosPersonalizados as $personalizado) {
                 // Guardar los datos del personalizado en la base de datos
                 $insumos = $personalizado['insumos'];
                 $Nombre = $personalizado['Nombre'];
-                $subtotal = $personalizado['Subtotal'];
+                $subtotalData = explode(':', $insumos[2]);
+
+                // return response()->json($subtotal);
+
                 $id = '';
                 $Nombres = '';
-                $total += $subtotal;
                 foreach ($insumos as $insumo) {
+                    $subtotal = (int) trim($subtotalData[3]);
                     $insumoData = explode(':', $insumo);
                     $NombreData = explode(':', $Nombre);
-                    $subtotalData = explode(':', $subtotal);
                     $id = trim($insumoData[0]);
                     $Nombres = trim($NombreData[0]);
-                    $subtotal = trim($subtotalData[0]);
+                    $total += $subtotal;
+                    $totalL +=  $subtotal;
 
                     $personalizadoModel = new producPerz();
                     $personalizadoModel->nombre = $Nombres;
                     $personalizadoModel->cantidad = 1;
-                    $personalizadoModel->Subtotal = $subtotal;
+                    $personalizadoModel->Subtotal = $totalL;
                     $personalizadoModel->id_pedidos = $pedido->id;
                     $personalizadoModel->insumos = $id;
                     // ...
@@ -763,10 +769,10 @@ class pedidoController extends Controller
 
         // Borrar el carrito del Local Storage después de guardar el pedido
         echo '<script>localStorage.removeItem("carrito");</script>';
- // Borrar los productos personalizados del Local Storage después de guardar el pedido
+        // Borrar los productos personalizados del Local Storage después de guardar el pedido
 
- return redirect()->route('verpedido')->with('success', 'Pedido guardado correctamente.')->with('pedidoGuardado', true);
-}
+        return redirect()->route('verpedido')->with('success', 'Pedido guardado correctamente.')->with('pedidoGuardado', true);
+    }
 
 
 
