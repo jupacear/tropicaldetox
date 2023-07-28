@@ -86,16 +86,27 @@
                                                             @endforeach
                                                             <?php $per = ''; ?>
                                                             @foreach ($personaliza as $personalizas)
-                                                                @if (!($personalizas->nombre == $per))
-                                                                    <?php $per = $personalizas->nombre; ?>
-                                                                    <tr>
-                                                                        <td>{{ $personalizas->nombre }}</td>
-                                                                        <td>{{ $personalizas->cantidad }}</td>
-                                                                        <td>{{ $personalizas->Subtotal }}</td>
-                
-                                                                    </tr>
-                                                                @endif
-                                                            @endforeach
+                                                            @if (!($personalizas->nombre == $per))
+                                                                <?php $per = $personalizas->nombre; ?>
+                                                                <?php $lastSubtotal = null; ?> <!-- Add this line to initialize the variable -->
+                                                                @foreach ($personaliza as $personalizaInner) <!-- Loop through the personaliza array again to find the last Subtotal for the current $per -->
+                                                                    @if ($personalizaInner->nombre == $per)
+                                                                        <?php $lastSubtotal = $personalizaInner->Subtotal; ?>
+                                                                    @endif
+                                                                @endforeach
+                                                                <tr>
+                                                                    <td>{{ $personalizas->nombre }}</td>
+                                                                    <td>{{ $personalizas->cantidad }}</td>
+                                                                    <td>{{ $lastSubtotal }}</td> <!-- Print the last Subtotal for the current $per -->
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
                                                         </tbody>
                                                     </table>
 

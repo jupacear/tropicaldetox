@@ -244,20 +244,30 @@
                                                             <?php $per = ''; ?>
                                                             @foreach ($personaliza as $personalizas)
                                                                 @if (!($personalizas->nombre == $per))
-                                                                    <?php $per = $personalizas->nombre; ?>
+                                                                    <?php
+                                                                    $per = $personalizas->nombre;
+                                                                    $lastSubtotal = null; // Initialize the variable to store the last Subtotal for the current $per
+                                                                    ?>
+                                                                    @foreach ($personaliza as $personalizaInner)
+                                                                        <!-- Loop through the personaliza array again to find the last Subtotal for the current $per -->
+                                                                        @if ($personalizaInner->nombre == $per)
+                                                                            <?php $lastSubtotal = $personalizaInner->Subtotal; ?>
+                                                                        @endif
+                                                                    @endforeach
                                                                     <tr>
                                                                         <td>{{ $personalizas->nombre }}</td>
                                                                         <td>{{ $personalizas->cantidad }}</td>
-                                                                        <td>{{ $personalizas->Subtotal }}</td>
+                                                                        <td>{{ $lastSubtotal }}</td>
+                                                                        <!-- Print the last Subtotal for the current $per -->
                                                                         <td>
                                                                             <button type="button"
                                                                                 class="btn btn-danger btn-sm quitar-btn"
                                                                                 onclick="quitarProductoPersonalizados2(this)">Quitar</button>
-
                                                                         </td>
                                                                     </tr>
                                                                 @endif
                                                             @endforeach
+
 
 
 
@@ -284,7 +294,14 @@
                                                 <input type="text" value="{{ $pedido->Nombre }}" name="Nombre"
                                                     id="Nombre" class="form-control">
                                             </div>
+                                            <Script>
+                                                let nombreInput = document.getElementById('Nombre');
 
+                                                // Add event listener for 'blur' event to trim the input value
+                                                nombreInput.addEventListener('blur', function() {
+                                                    nombreInput.value = nombreInput.value.trim();
+                                                });
+                                            </Script>
 
                                             <div class="d-flex justify-content-between">
                                                 <button type="submit" class="btn btn-primary">Actualizar Pedido</button>
@@ -294,6 +311,37 @@
                                     </div>
                                 </form>
                             </div>
+                            <script>
+                                function calcularTotalInicial() {
+                                    var totalElement = document.getElementById('total');
+                                    var totalInput = document.getElementById('total-input');
+                                    var total = 0; // Restablecer el total a cero antes de recalcularlo
+
+                                    // Sumar los subtotales de los productos
+                                    var productos = document.querySelectorAll('#selected-products-list tr');
+                                    productos.forEach(function(producto) {
+                                        var subtotal = parseFloat(producto.getAttribute('data-subtotal'));
+                                        if (!isNaN(subtotal)) {
+                                            total += subtotal;
+                                        }
+                                    });
+
+                                    // Sumar los subtotales de los productos personalizados
+                                    var personalizados = document.querySelectorAll('#selected-products-list tr');
+                                    personalizados.forEach(function(personalizado) {
+                                        var subtotal = parseFloat(personalizado.cells[2].textContent);
+                                        if (!isNaN(subtotal)) {
+                                            total += subtotal;
+                                        }
+                                    });
+
+                                    totalElement.textContent = total.toFixed(2);
+                                    totalInput.value = total.toFixed(2);
+                                }
+
+                                // Llamamos a la función al cargar la página
+                                window.addEventListener('load', calcularTotalInicial);
+                            </script>
 
                             <script>
                                 var totalElement = document.getElementById('total');
@@ -348,13 +396,18 @@
                                 }
 
                                 function quitarProducto(id) {
+                                    total -= subtotal * cantidad;
                                     var producto = document.querySelector(`tr[data-producto-id="${id}"]`);
                                     var cantidad = parseInt(producto.getAttribute('data-cantidad'));
-                                    var subtotal = parseInt(producto.getAttribute('data-subtotal'));
+                                    var subtotal = parseFloat(producto.getAttribute('data-subtotal'));
 
                                     producto.remove();
 
-                                    total -= subtotal;
+                                    var totalElement = document.getElementById('total');
+                                    var totalInput = document.getElementById('total-input');
+                                    var total = parseFloat(totalElement.textContent);
+
+                                    total -= subtotal; // Restamos el subtotal multiplicado por la cantidad del producto
 
                                     totalElement.textContent = total.toFixed(2);
                                     totalInput.value = total.toFixed(2);
@@ -362,22 +415,14 @@
                                     var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
                                     var productosSeleccionados = Array.from(document.querySelectorAll('#selected-products-list tr')).map(function(
                                         tr) {
-                                        return tr.textContent.split('\t');
+                                        return {
+                                            id: tr.getAttribute('data-producto-id'),
+                                            cantidad: parseInt(tr.getAttribute('data-cantidad')),
+                                            subtotal: parseFloat(tr.getAttribute('data-subtotal'))
+                                        };
                                     });
 
                                     inputProductosSeleccionados.value = JSON.stringify(productosSeleccionados);
-
-                                    var inputCantidad = document.createElement('input');
-                                    inputCantidad.type = 'hidden';
-                                    inputCantidad.name = 'Cantidad[]';
-                                    inputCantidad.value = cantidad;
-                                    productosSeleccionados.appendChild(inputCantidad);
-
-                                    var inputProductoID = document.createElement('input');
-                                    inputProductoID.type = 'hidden';
-                                    inputProductoID.name = 'ProductoID[]';
-                                    inputProductoID.value = id;
-                                    productosSeleccionados.appendChild(inputProductoID);
                                 }
 
                                 const busquedaInput = document.getElementById('busqueda');
@@ -396,8 +441,6 @@
                                         }
                                     });
                                 });
-
-
                             </script>
 
                             <script>
