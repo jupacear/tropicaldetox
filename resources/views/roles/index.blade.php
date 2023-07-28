@@ -4,8 +4,7 @@
 
     <head>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <!-- ...otros elementos del head... -->
+        
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
     </head>
     <section class="section">
@@ -21,9 +20,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body" >
                             <a class="btn btn-warning" href="{{ route('roles.create') }}">Nuevo</a>
-                            <table class="table table-striped mt-2" id="example">
+                            <table class="table table-striped table-bordered" style="width:100%" id="example" >
                                 <thead style="background-color:#6777ef">
                                     <th style="color:#fff;">Rol</th>
                                     <th style="color:#fff;">Acciones</th>
@@ -37,7 +36,7 @@
 
                                                 <a class="btn btn-sm btn-primary"
                                                     href="{{ route('roles.show', $role->id) }}">
-                                                    <i class="fa fa-fw fa-eye"></i>Mostrar
+                                                    <i class="fa fa-fw fa-eye"></i>
                                                 </a>
 
                                                 @if (Session::has('sweet-alert'))
@@ -119,7 +118,7 @@
                                                 @if ($role->name !== 'administrador' && $role->name !== 'cliente')
                                                     <a class="btn btn-sm btn-success"
                                                         href="{{ route('roles.edit', $role->id) }}">
-                                                        <i class="fa fa-fw fa-edit"></i>Editar
+                                                        <i class="fa fa-fw fa-edit"></i>
                                                     </a>
                                                 @endif
                                                 @if ($role->name !== 'administrador' && $role->name !== 'cliente')
@@ -135,7 +134,7 @@
                                                     @else
                                                         <button type="button" class="btn btn-sm btn-danger"
                                                             onclick="confirmDelete(this)"><i
-                                                                class="fa fa-fw fa-trash"></i>Eliminar</button>
+                                                                class="fa fa-fw fa-trash"></i></button>
                                                     @endif
                                                     {!! Form::close() !!}
                                                 @endif
@@ -148,41 +147,13 @@
 
                             </table>
 
-                            <script></script>
-                            <!-- Centramos la paginacion a la derecha -->
-                            <div class="pagination justify-content-end">
-                                {!! $roles->links() !!}
-                            </div>
+                            
 
-                            <script>
-                                $(document).ready(function() {
-                                    var table = $('#example').DataTable({
-                                        responsive: true
-                                    });
+                           
 
-                                    new $.fn.dataTable.FixedHeader(table);
-                                });
-                            </script>
-
-                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                            <script>
-                                function confirmDelete(button) {
-                                    Swal.fire({
-                                        title: '¿Estás seguro?',
-                                        text: 'Esta acción eliminará el rol. No podrás deshacer esta acción.',
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#d33',
-                                        cancelButtonColor: '#3085d6',
-                                        confirmButtonText: 'Sí, eliminar',
-                                        cancelButtonText: 'Cancelar'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            button.closest('.delete-form').submit();
-                                        }
-                                    });
-                                }
-                            </script>
+                            
+                           
+                            
                         </div>
                     </div>
                 </div>
@@ -190,4 +161,31 @@
         </div>
 
     </section>
+    <script>
+        function confirmDelete(button) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción eliminará el rol. No podrás deshacer esta acción.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    button.closest('.delete-form').submit();
+                }
+            });
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            var table = $('#example').DataTable({
+                responsive: true
+            });
+
+            new $.fn.dataTable.FixedHeader(table);
+        });
+    </script>
 @endsection

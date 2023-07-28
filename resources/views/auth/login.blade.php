@@ -36,21 +36,51 @@
                 <div class="form-group">
                     <div class="d-block">
                         <label for="password" class="control-label">Contraseña</label>
-                        <div class="float-right">
-                            <a href="{{ route('password.request') }}" class="text-small">
-                                Olvidaste tu contraseña?
-                            </a>
+                        
+                    </div>
+                    <div class="input-group"> <!-- Agregamos una div con la clase "input-group" -->
+                        <input aria-describedby="passwordHelpBlock" id="password" type="password"
+                               value="{{ (Cookie::get('password') !== null) ? Cookie::get('password') : null }}"
+                               placeholder="ingrese su contraseña"
+                               class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}" name="password"
+                               tabindex="2" required>
+                        <div class="input-group-append"> <!-- Agregamos una div con la clase "input-group-append" -->
+                            <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility()">
+                                <i class="fas fa-eye" id="togglePasswordIcon"></i> <!-- Icono de ojo -->
+                            </span>
                         </div>
                     </div>
-                    <input aria-describedby="passwordHelpBlock" id="password" type="password"
-                           value="{{ (Cookie::get('password') !== null) ? Cookie::get('password') : null }}"
-                           placeholder="Enter Password"
-                           class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}" name="password"
-                           tabindex="2" required>
                     <div class="invalid-feedback">
                         {{ $errors->first('password') }}
                     </div>
+                    
                 </div>
+                <div class="d-block">
+                    
+                    <div class="float-right">
+                        <a href="{{ route('password.request') }}" class="text-small">
+                            Olvidaste tu contraseña?
+                        </a>
+                    </div>
+                </div>
+                
+
+                <script>
+                    function togglePasswordVisibility() {
+                        var passwordInput = document.getElementById('password');
+                        var passwordIcon = document.getElementById('togglePasswordIcon');
+                
+                        if (passwordInput.type === 'password') {
+                            passwordInput.type = 'text';
+                            passwordIcon.classList.remove('fa-eye');
+                            passwordIcon.classList.add('fa-eye-slash');
+                        } else {
+                            passwordInput.type = 'password';
+                            passwordIcon.classList.remove('fa-eye-slash');
+                            passwordIcon.classList.add('fa-eye');
+                        }
+                    }
+                </script>
 
 
                 <br>

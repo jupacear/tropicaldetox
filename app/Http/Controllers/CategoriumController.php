@@ -14,8 +14,8 @@ class CategoriumController extends Controller
 {
     function __construct()
     {
-         
-         $this->middleware('permission:categoria de productos', ['only' => ['create','store' , 'destroy' , 'edit','update' , 'index' ]]);
+
+        $this->middleware('permission:categoria de productos', ['only' => ['create', 'store', 'destroy', 'edit', 'update', 'index']]);
     }
     /**
      * Display a listing of the resource.
@@ -76,6 +76,7 @@ class CategoriumController extends Controller
         } else {
             // Si no se ha enviado una imagen, crear el registro sin el campo de imagen y establecer el estado 'activo'
             Categorium::create([
+                'imagen' => 'img/logo.png', // Ruta del logo predeterminado
                 'nombre' => $request->nombre,
                 'descripcion' => $request->descripcion,
                 'activo' => $activo,
@@ -85,6 +86,7 @@ class CategoriumController extends Controller
         return redirect()->route('categoria.index')
             ->with('success', 'Categoría creada exitosamente');
     }
+
     /**
      * Display the specified resource.
      *
@@ -141,8 +143,8 @@ class CategoriumController extends Controller
             // Mover la nueva imagen a la carpeta "CategoriasIMG" dentro del directorio público
             $image->move(public_path('img/CategoriasIMG'), $imageName);
 
-            // Eliminar la imagen anterior si existe
-            if ($categoria->imagen) {
+            // Eliminar la imagen anterior si existe y no proviene de public/img/logo.png
+            if ($categoria->imagen && $categoria->imagen !== 'img/logo.png') {
                 $oldImagePath = public_path($categoria->imagen);
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
@@ -166,9 +168,6 @@ class CategoriumController extends Controller
         // Mostrar mensaje de éxito al redireccionar
         return redirect()->route('categoria.index')->with('success', 'Categoría actualizada exitosamente');
     }
-
-
-
 
     /**
      * Elimina una categoría.
