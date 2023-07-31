@@ -68,11 +68,11 @@ Categoria
                                                 @method('DELETE')
                                                 @if ($categorium->activo)
 
-                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                <button type="submit" class="btn btn-sm btn-info">
                                                     <i class="fa fa-fw fa-toggle-on"></i> 
                                                 </button>
                                                 @else
-                                                <button type="submit" class="btn btn-success btn-sm">
+                                                <button type="submit" class="btn btn-sm btn-info">
                                                     <i class="fa fa-fw fa-toggle-off"></i> 
 
                                                 </button>

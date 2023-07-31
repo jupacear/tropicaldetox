@@ -1,3 +1,17 @@
+<style>
+    .custom-checkbox.form-check-input {
+        width: 2.25rem;
+        /* Aumenta el ancho */
+        height: 2.25rem;
+        /* Aumenta la altura */
+    }
+
+    .custom-checkbox.form-check-input:checked {
+        transform: scale(1.2);
+        /* Aumenta el tamaño cuando está marcado */
+    }
+</style>
+
 <div class="box box-info padding-1">
     <div class="box-body">
         <div class="form-row">
@@ -9,9 +23,9 @@
             <div class="form-group col-md-6">
                 {{ Form::label('imagen') }}
                 @if ($producto->imagen)
-                    <div>
-                        <img src="{{ asset($producto->imagen) }}" alt="Imagen actual" width="200">
-                    </div>
+                <div>
+                    <img src="{{ asset($producto->imagen) }}" alt="Imagen actual" width="200">
+                </div>
                 @endif
                 {{ Form::file('imagen', ['class' => 'form-control' . ($errors->has('imagen') ? ' is-invalid' : ''), 'placeholder' => 'Imagen']) }}
                 {!! $errors->first('imagen', '<div class="invalid-feedback">:message</div>') !!}
@@ -53,12 +67,16 @@
 
         </div>
         @if (Route::currentRouteName() !== 'productos.create')
-            <div class="form-group">
-                {{ Form::label('activo') }}
-                {{ Form::checkbox('activo', 1, $producto->activo ?? true, ['class' => 'form-control' . ($errors->has('activo') ? ' is-invalid' : '')]) }}
-                {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
+        <div class="form-group row">
+            {{ Form::label('estado:', 'Estado:', ['class' => 'col-1 col-form-label']) }}
+            <div class="col-md-4">
+                {{ Form::checkbox('activo', 1, $producto->activo ?? true, ['class' => 'custom-checkbox form-check-input' . ($errors->has('activo') ? ' is-invalid' : '')]) }}
             </div>
+            {!! $errors->first('activo', '<div class="invalid-feedback col-sm-9 offset-sm-2">:message</div>') !!}
+        </div>
         @endif
+
+
         <div id="additional-insumos"></div>
 
     </div>
