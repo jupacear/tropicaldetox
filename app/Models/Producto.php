@@ -61,15 +61,15 @@ class Producto extends Model
 
   public function insumos()
   {
-    return $this->belongsToMany('App\Models\Insumo');
+    return $this->belongsToMany(Insumo::class, 'insumo_producto', 'producto_id', 'insumo_id');
   }
+
   public function detallesPedidos()
-    {
-        return $this->hasMany('App\Models\detalle_pedidos', 'id_productos', 'id');
-    }
-    public function producto()
-    {
-        return $this->belongsTo(Productos::class, 'Prductos', 'id');
-    }
-    
+  {
+    return $this->hasMany('App\Models\detalle_pedidos', 'id_productos', 'id');
+  }
+  public function producto()
+  {
+    return $this->belongsTo(Productos::class, 'Prductos', 'id');
+  }
 }

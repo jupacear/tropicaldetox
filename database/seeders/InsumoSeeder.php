@@ -33,7 +33,7 @@ class InsumoSeeder extends Seeder
             ],
             [
                 'imagen' => 'img/logo.png',
-                'nombre' => 'Insumo 2',
+                'nombre' => 'Insumo 3',
                 'activo' => true,
                 'cantidad_disponible' => 0,
                 'unidad_medida' => 'Bolsa',

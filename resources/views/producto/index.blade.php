@@ -57,7 +57,7 @@ Productos
                                             @endif
                                         </td>
                                         <td>{{ $producto->nombre }}</td>
-                                        <td>{{ $producto->precio }}</td>
+                                        <td>{{ number_format($producto->precio, 0, '.','.') }}</td>
                                         <td>{{ $producto->descripcion }}</td>
                                         <td>{{ $producto->activo ? 'Activo' : 'Inactivo' }}</td>
                                         <td>{{ $producto->categorium->nombre }}</td>
