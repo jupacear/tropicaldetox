@@ -24,7 +24,7 @@
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
-                                    <p><strong>Total:</strong> {{ $pedido->Total }}</p>
+                                    <p><strong>Total:</strong> {{ number_format( $pedido->Total , 0, ',', '.') }}</p>
 
                                     <h2>Detalles del Productos</h2>
 
@@ -47,7 +47,10 @@
                                                 <td>{{ $detalle->cantidad }}</td>
 
                                                 <td>{{ $detalle->precio_unitario }}</td>
-                                                <td>{{ $detalle->cantidad * $detalle->precio_unitario }}</td>
+                                                <td>
+                                                  {{ number_format($detalle->cantidad * $detalle->precio_unitario , 0, ',', '.') }}
+                                                  
+                                                </td>
 
                                             </tr>
                                         @endforeach
@@ -66,7 +69,7 @@
                                                     <tr>
                                                         <td>{{ $personalizas->nombre }}</td>
                                                         <td>{{ $personalizas->cantidad }}</td>
-                                                        <td>{{ $lastSubtotal }}</td> <!-- Print the last Subtotal for the current $per -->
+                                                        <td>{{ number_format($lastSubtotal, 0, ',', '.') }}</td> <!-- Print the last Subtotal for the current $per -->
                                                     </tr>
                                                 @endif
                                             @endforeach

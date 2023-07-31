@@ -93,7 +93,7 @@
                                                                 <img src="{{ asset($Insumos->imagen) }}"
                                                                     alt="Imagen del producto" width="40em">
                                                                 <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
-                                                                    {{ $Insumos->precio_unitario }}</span>
+                                                                    {{ $Insumos->precio_unitario}}</span>
                                                                 <button type="button"
                                                                     class="btn btn-success agregar-insumo">Agregar</button>
                                                                 <br>
@@ -125,7 +125,7 @@
                                                 <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto"
                                                     width="40em">
                                                 <span>{{ $producto->id }}:{{ $producto->nombre }}
-                                                    <br>$:{{ $producto->precio }}</span>
+                                                    <br>$: {{ number_format($producto->precio, 0, ',', '.') }} </span>
                                                 <button class="btn btn-primary btn-sm float-right"
                                                     onclick="agregarProducto('{{ $producto->id }}', '{{ $producto->nombre }}','{{ $producto->precio }}')">Agregar</button>
                                                 <button class="btn btn-info btn-sm float-right" data-toggle="modal"
@@ -240,6 +240,7 @@
 
                             <script>
                                 var totalElement = document.getElementById('total');
+
                                 var totalSection = document.getElementById('total-section');
                                 var total = 0; // Inicializar el total en 0
 
@@ -260,7 +261,8 @@
                                         row.innerHTML = `
                                                 <td>${nombre}</td>
                                                 <td>${cantidad}</td>
-                                                <td>$${subtotal}</td>
+                                                <td>${subtotal.toLocaleString('en-US')}</td>
+
                                                 <td>
                                                     <button class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')">Quitar</button>
                                                 </td>
@@ -284,8 +286,12 @@
                                             return row.getAttribute('data-producto-id');
                                         });
                                         inputProductosSeleccionados.value = productosSeleccionadosArray.join(', ');
-
-                                        totalElement.textContent = total.toFixed(2);
+                                        // Formatear el total con el punto del millar
+                                        var totalFormateado = total.toLocaleString(undefined, {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        totalElement.textContent = totalFormateado;
                                         totalSection.style.display = 'block';
 
                                         var totalInput = document.getElementById('total-input');
@@ -411,7 +417,8 @@
                                     row.innerHTML = `
                                                 <td>${personalizado.Nombre}</td>
                                                 <td>${insumosSeleccionados.length}</td>
-                                                <td>$${subtotal.toFixed(2)}</td>
+                                                <td>${subtotal.toLocaleString('en-US')}</td>
+
                                                 <td>
                                                 <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
                                                 </td>
@@ -420,6 +427,9 @@
                                     tableBody.appendChild(row);
 
                                     total += subtotal; // Sumar el subtotal al total existente
+
+
+                                    
 
                                     totalElement.textContent = total.toFixed(2);
                                     totalSection.style.display = 'block';
