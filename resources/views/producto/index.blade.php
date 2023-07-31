@@ -75,7 +75,7 @@ Productos
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-form-id="deleteProductForm-{{ $producto->id }}"><i class="fa fa-fw fa-minus-circle"></i> </button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-form-id="deleteProductForm-{{ $producto->id }}"><i class="fa fa-fw fa-trash"></i> </button>
 
                                             </form>
                                         </td>
