@@ -189,21 +189,23 @@ class InsumoController extends Controller
             return redirect()->back()->with('error', 'El insumo no existe');
         }
 
-        // Verificar el estado actual del insumo
-        if ($insumo->activo) {
-            // Si está activo, desactivarlo
-            $insumo->activo = false;
-            $message = 'Insumo desactivado exitosamente';
-        } else {
-            // Si está inactivo, activarlo
-            $insumo->activo = true;
-            $message = 'Insumo activado exitosamente';
-        }
+        // Obtener el nuevo estado del insumo
+        $nuevoEstado = !$insumo->activo;
 
-        // Guardar los cambios en la base de datos
+        // Actualizar el estado del insumo
+        $insumo->activo = $nuevoEstado;
         $insumo->save();
 
+        // Obtener los productos relacionados con el insumo
+        $productosRelacionados = $insumo->productos;
+
+        // Actualizar el estado de los productos relacionados
+        foreach ($productosRelacionados as $producto) {
+            $producto->activo = $nuevoEstado;
+            $producto->save();
+        }
+
         // Redireccionar a la lista de insumos con mensaje de éxito
-        return redirect()->route('insumo.index')->with('success', $message);
+        return redirect()->route('insumo.index')->with('success', 'Insumo y productos relacionados actualizados exitosamente');
     }
 }
