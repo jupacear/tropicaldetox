@@ -17,27 +17,27 @@ class InsumoSeeder extends Seeder
         $insumos = [
             [
                 'imagen' => 'img/logo.png',
-                'nombre' => 'Insumo 1',
+                'nombre' => 'Maracuya',
                 'activo' => true,
-                'cantidad_disponible' => 0,
+                'cantidad_disponible' => 100,
                 'unidad_medida' => 'Bolsa',
-                'precio_unitario' => 9000,
+                'precio_unitario' => 1000,
             ],
             [
                 'imagen' => 'img/logo.png',
-                'nombre' => 'Insumo 2',
+                'nombre' => 'Fresa',
                 'activo' => true,
-                'cantidad_disponible' => 0,
+                'cantidad_disponible' => 100,
                 'unidad_medida' => 'Bolsa',
-                'precio_unitario' => 5000,
+                'precio_unitario' => 1000,
             ],
             [
                 'imagen' => 'img/logo.png',
-                'nombre' => 'Insumo 2',
+                'nombre' => 'Mango',
                 'activo' => true,
-                'cantidad_disponible' => 0,
+                'cantidad_disponible' => 100,
                 'unidad_medida' => 'Bolsa',
-                'precio_unitario' => 5000,
+                'precio_unitario' => 1000,
             ],
         ];
 

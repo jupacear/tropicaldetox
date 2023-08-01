@@ -19,7 +19,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/logo.png',
                 'nombre' => 'Piloncillo y Vainilla',
-                'precio' => 1099,
+                'precio' => 2999,
                 'descripcion' => 'Verdes',
                 'activo' => true,
                 'categorias_id' => 1,
@@ -27,7 +27,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/logo.png',
                 'nombre' => 'jugo de Manzana',
-                'precio' => 2099,
+                'precio' => 5000,
                 'descripcion' => 'Frutas',
                 'activo' => true,
                 'categorias_id' => 2,
@@ -35,7 +35,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/logo.png',
                 'nombre' => 'Guayaba con mango',
-                'precio' => 3099,
+                'precio' => 9000,
                 'descripcion' => 'Personalizado',
                 'activo' => true,
                 'categorias_id' => 3,

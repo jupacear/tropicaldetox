@@ -119,7 +119,7 @@
                                                 <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto"
                                                     width="40em">
                                                 <span>{{ $producto->id }}:{{ $producto->nombre }}
-                                                    <br>$:{{ $producto->precio }}</span>
+                                                    <br>$: {{ number_format($producto->precio, 0, ',', '.') }} </span>
                                                 <button class="btn btn-primary btn-sm float-right"
                                                     onclick="agregarProducto('{{ $producto->id }}', '{{ $producto->nombre }}','{{ $producto->precio }}')">Agregar</button>
                                                 <button class="btn btn-info btn-sm float-right" data-toggle="modal"
@@ -229,10 +229,11 @@
                                                                     data-subtotal="{{ $producto->precio * $producto->pivot->cantidad }}">
                                                                     <td>{{ $producto->nombre }}</td>
                                                                     <td>{{ $producto->pivot->cantidad }}</td>
-                                                                    <td>${{ $producto->precio * $producto->pivot->cantidad }}
+                                                                    <td>$
+                                                                        {{ number_format($producto->precio * $producto->pivot->cantidad, 0, ',', '.') }}
                                                                     </td>
                                                                     <td>
-                                                                        <button class="btn btn-danger btn-sm quitar-btn"
+                                                                        <button type="button" class="btn btn-danger btn-sm quitar-btn"
                                                                             onclick="quitarProducto('{{ $producto->id }}')">Quitar</button>
                                                                     </td>
                                                                     <input type="hidden" name="Cantidad[]"
@@ -241,23 +242,34 @@
                                                                         value="{{ $producto->id }}">
                                                                 </tr>
                                                             @endforeach
-                                                            <?php $per = ''; ?>
+                                                            <?php $per = 'Personalizado '; ?>
                                                             @foreach ($personaliza as $personalizas)
                                                                 @if (!($personalizas->nombre == $per))
-                                                                    <?php $per = $personalizas->nombre; ?>
+                                                                    <?php
+                                                                    $per = $personalizas->nombre;
+                                                                    $lastSubtotal = null; // Initialize the variable to store the last Subtotal for the current $per
+                                                                    ?>
+                                                                    @foreach ($personaliza as $personalizaInner)
+                                                                        <!-- Loop through the personaliza array again to find the last Subtotal for the current $per -->
+                                                                        @if ($personalizaInner->nombre == $per)
+                                                                            <?php $lastSubtotal = $personalizaInner->Subtotal; ?>
+                                                                        @endif
+                                                                    @endforeach
                                                                     <tr>
                                                                         <td>{{ $personalizas->nombre }}</td>
                                                                         <td>{{ $personalizas->cantidad }}</td>
-                                                                        <td>{{ $personalizas->Subtotal }}</td>
+                                                                        <td>{{ number_format($lastSubtotal, 0, ',', '.') }}
+                                                                        </td>
+                                                                        <!-- Print the last Subtotal for the current $per -->
                                                                         <td>
                                                                             <button type="button"
                                                                                 class="btn btn-danger btn-sm quitar-btn"
                                                                                 onclick="quitarProductoPersonalizados2(this)">Quitar</button>
-
                                                                         </td>
                                                                     </tr>
                                                                 @endif
                                                             @endforeach
+
 
 
 
@@ -284,7 +296,14 @@
                                                 <input type="text" value="{{ $pedido->Nombre }}" name="Nombre"
                                                     id="Nombre" class="form-control">
                                             </div>
+                                            <Script>
+                                                let nombreInput = document.getElementById('Nombre');
 
+                                                // Add event listener for 'blur' event to trim the input value
+                                                nombreInput.addEventListener('blur', function() {
+                                                    nombreInput.value = nombreInput.value.trim();
+                                                });
+                                            </Script>
 
                                             <div class="d-flex justify-content-between">
                                                 <button type="submit" class="btn btn-primary">Actualizar Pedido</button>
@@ -294,6 +313,40 @@
                                     </div>
                                 </form>
                             </div>
+                            <script>
+                                function calcularTotalInicial() {
+                                    var totalElement = document.getElementById('total');
+                                    var total = 0; // Restablecer el total a cero antes de recalcularlo
+                                    var totalInput = document.getElementById('total-input');
+
+                                    // Sumar los subtotales de los productos
+                                    var productos = document.querySelectorAll('#selected-products-list tr');
+                                    productos.forEach(function(producto) {
+                                        var subtotal = parseFloat(producto.getAttribute('data-subtotal'));
+                                        if (!isNaN(subtotal)) {
+                                            total += subtotal;
+                                        }
+                                    });
+
+                                    // Sumar los subtotales de los productos personalizados
+                                    var personalizados = document.querySelectorAll('#selected-products-list tr');
+                                    personalizados.forEach(function(personalizado) {
+                                        var subtotal = parseFloat(personalizado.cells[2].textContent.replace(/\./g, '').replace(',', '.'));
+                                        if (!isNaN(subtotal)) {
+                                            total += subtotal;
+                                        }
+                                    });
+
+                                    var totalFormateado = total.toLocaleString(undefined, {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                                    totalElement.textContent = totalFormateado;
+                                    totalInput.value = total.toFixed(2);
+                                }
+                                // Llamamos a la función al cargar la página
+                                window.addEventListener('load', calcularTotalInicial);
+                            </script>
 
                             <script>
                                 var totalElement = document.getElementById('total');
@@ -305,7 +358,6 @@
                                     if (cantidad !== null && cantidad !== '') {
                                         cantidad = parseInt(cantidad);
                                         var subtotal = cantidad * precio;
-                                        total += subtotal;
 
                                         var productosSeleccionados = document.getElementById('selected-products-list');
                                         var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
@@ -315,13 +367,13 @@
                                         tr.setAttribute('data-cantidad', cantidad);
                                         tr.setAttribute('data-subtotal', subtotal);
                                         tr.innerHTML = `
-                                      <td>${nombre}</td>
-                                      <td>${cantidad}</td>
-                                      <td>$${subtotal.toFixed(2)}</td>
-                                      <td>
-                                        <button class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')">Quitar</button>
-                                      </td>
-                                    `;
+                                            <td>${nombre}</td>
+                                            <td>${cantidad}</td>
+                                            <td>$${subtotal.toLocaleString('en-US')}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')">Quitar</button>
+                                            </td>
+                                        `;
                                         productosSeleccionados.appendChild(tr);
 
                                         var inputCantidad = document.createElement('input');
@@ -342,42 +394,60 @@
                                         });
                                         inputProductosSeleccionados.value = JSON.stringify(productosSeleccionadosArray);
 
-                                        totalElement.textContent = total.toFixed(2);
-                                        totalInput.value = total.toFixed(2);
+
+
+                                        var totalElement = document.getElementById('total');
+                                        var totalActual = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.'));
+                                        var totalNuevo = totalActual + subtotal; // Sumamos el subtotal al total actual para obtener el nuevo total
+
+                                         // Actualizar el elemento de visualización del total
+                                    var totalFormateado = totalNuevo.toLocaleString(undefined, {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        totalElement.textContent = totalFormateado;
+
+                                        var totalInput = document.getElementById('total-input');
+                                        totalInput.value = totalNuevo.toFixed(2);
                                     }
                                 }
+
+
 
                                 function quitarProducto(id) {
                                     var producto = document.querySelector(`tr[data-producto-id="${id}"]`);
                                     var cantidad = parseInt(producto.getAttribute('data-cantidad'));
-                                    var subtotal = parseInt(producto.getAttribute('data-subtotal'));
+                                    var subtotal = parseFloat(producto.getAttribute('data-subtotal'));
 
                                     producto.remove();
 
-                                    total -= subtotal;
+                                    var totalElement = document.getElementById('total');
+                                    var totalInput = document.getElementById('total-input');
+                                    var total = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.'));
 
-                                    totalElement.textContent = total.toFixed(2);
+                                    total -= subtotal; // Restamos el subtotal del producto eliminado al total
+
+                                    // Actualizar el elemento de visualización del total
+                                    var totalFormateado = total.toLocaleString(undefined, {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                    totalElement.textContent = totalFormateado;
+
+                                    // Actualizar el campo oculto con los datos actualizados
                                     totalInput.value = total.toFixed(2);
 
                                     var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
                                     var productosSeleccionados = Array.from(document.querySelectorAll('#selected-products-list tr')).map(function(
                                         tr) {
-                                        return tr.textContent.split('\t');
+                                        return {
+                                            id: tr.getAttribute('data-producto-id'),
+                                            cantidad: parseInt(tr.getAttribute('data-cantidad')),
+                                            subtotal: parseFloat(tr.getAttribute('data-subtotal'))
+                                        };
                                     });
 
                                     inputProductosSeleccionados.value = JSON.stringify(productosSeleccionados);
-
-                                    var inputCantidad = document.createElement('input');
-                                    inputCantidad.type = 'hidden';
-                                    inputCantidad.name = 'Cantidad[]';
-                                    inputCantidad.value = cantidad;
-                                    productosSeleccionados.appendChild(inputCantidad);
-
-                                    var inputProductoID = document.createElement('input');
-                                    inputProductoID.type = 'hidden';
-                                    inputProductoID.name = 'ProductoID[]';
-                                    inputProductoID.value = id;
-                                    productosSeleccionados.appendChild(inputProductoID);
                                 }
 
                                 const busquedaInput = document.getElementById('busqueda');
@@ -396,8 +466,6 @@
                                         }
                                     });
                                 });
-
-
                             </script>
 
                             <script>
@@ -454,6 +522,38 @@
                             <script>
                                 var personalizadosArray = [];
 
+                                function obtenerNumeroMayorPersonalizadosTabla() {
+                                    var maxNum = 0;
+                                    var filas = document.querySelectorAll('#selected-products-list tr');
+
+                                    filas.forEach(function(row) {
+                                        var nombre = row.cells[0].textContent.trim();
+                                        if (nombre.startsWith('Personalizado')) {
+                                            var numPart = nombre.substring(nombre.lastIndexOf(' ') + 1);
+                                            var num = parseInt(numPart);
+                                            if (!isNaN(num) && num > maxNum) {
+                                                maxNum = num;
+                                            }
+                                        }
+                                    });
+
+                                    return maxNum;
+                                }
+
+                                // Obtener el número máximo actual de los nombres de los personalizados en el array personalizadosArray
+                                function obtenerNumeroMayorPersonalizadosArray() {
+                                    var maxNum = 0;
+                                    personalizadosArray.forEach(function(personalizado) {
+                                        var nombre = personalizado['Nombre'];
+                                        var numPart = nombre.substring(nombre.lastIndexOf(' ') + 1);
+                                        var num = parseInt(numPart);
+                                        if (!isNaN(num) && num > maxNum) {
+                                            maxNum = num;
+                                        }
+                                    });
+
+                                    return maxNum;
+                                }
                                 document.getElementById('crearPersonalizados').addEventListener('click', function() {
                                     var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
                                         function(li) {
@@ -468,13 +568,15 @@
                                         var data = insumo.split(':');
                                         var precio = parseFloat(data[2].trim());
                                         var cantidad = 1;
-                                        subtotal += precio * cantidad;
+                                        subtotal += parseFloat(precio);
                                     });
 
                                     var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
+                                    var numMaxTabla = obtenerNumeroMayorPersonalizadosTabla();
+                                    var numMaxArray = obtenerNumeroMayorPersonalizadosArray();
+                                    var maxNum = Math.max(numMaxTabla, numMaxArray);
 
-                                    var num = personalizadosArray.length + 1;
-                                    personalizado['Nombre'] = "Personalizado " + num;
+                                    personalizado['Nombre'] = "Personalizado " + (maxNum + 1);
                                     personalizado['insumos'] = insumosSeleccionados;
                                     personalizado['Subtotal'] = subtotal;
 
@@ -485,7 +587,7 @@
                                     row.innerHTML = `
                                         <td>${personalizado.Nombre}</td>
                                         <td>${insumosSeleccionados.length}</td>
-                                        <td>$${subtotal.toFixed(2)}</td>
+                                        <td>$${subtotal.toLocaleString('es-ES')}</td>
                                         <td>
                                             <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
                                         </td>
@@ -494,8 +596,18 @@
                                     tableBody.appendChild(row);
 
                                     var totalElement = document.getElementById('total');
-                                    var total = parseFloat(totalElement.textContent) + subtotal;
-                                    totalElement.textContent = total.toFixed(2);
+                                    var total = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.')) + subtotal;
+
+                                    var totalFormateado = total.toLocaleString('es-ES', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                                    totalElement.textContent = totalFormateado;
+
+
+                                    var totalInput = document.getElementById('total-input');
+                                    totalInput.value = total.toFixed(2);
+
 
                                     var totalSection = document.getElementById('total-section');
                                     if (totalSection) {
@@ -513,11 +625,23 @@
                                     // Obtener el personalizado correspondiente al ID
                                     var personalizado = personalizadosArray[id];
 
-                                    // Restar el subtotal del producto eliminado al total
+                                    // Restar el subtotal del producto personalizado al total general
                                     var subtotalEliminado = personalizado.Subtotal;
                                     var totalElement = document.getElementById('total');
-                                    var total = parseFloat(totalElement.textContent) - subtotalEliminado;
-                                    totalElement.textContent = total.toFixed(2);
+                                   
+                                    var total = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.'));
+
+                                    total -= subtotalEliminado; // Restamos el subtotal del producto personalizado al total general
+
+                                    // Actualizar el elemento de visualización del total
+                                    var totalFormateado = total.toLocaleString('es-ES', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                                    totalElement.textContent = totalFormateado;
+
+                                    var totalInput = document.getElementById('total-input'); 
+                                    totalInput.value = total.toFixed(2);
 
                                     // Eliminar el personalizado del array
                                     personalizadosArray.splice(id, 1);
@@ -606,7 +730,14 @@
                                 var newTotal = totalValue;
 
                                 // Actualizar el contenido del elemento del total en el encabezado con el nuevo total calculado
-                                totalElement.textContent = newTotal.toFixed(2);
+
+                                var totalFormateado = total.toLocaleString(undefined, {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                                totalElement.textContent = totalFormateado;
+
+                                totalInput.value = totalNuevo.toFixed(2);
 
 
 
@@ -618,7 +749,7 @@
                                     // Obtener los datos de la fila
                                     var nombre = row.cells[0].textContent;
                                     var cantidad = row.cells[1].textContent;
-                                    var subtotal = row.cells[2].textContent;
+                                    var subtotal = row.cells[2].textContent.replace(/\./g, '').replace(',', '.');
 
                                     // Eliminar la fila de la tabla
                                     row.remove();
@@ -631,12 +762,22 @@
                                     var totalInput = document.getElementById('total-input');
                                     var total = parseFloat(totalInput.value) - parseFloat(subtotal);
                                     total = total < 0 ? 0 : total; // Verificar si el total es menor que cero y establecerlo en cero si es así
-                                    totalInput.value = total;
+                                    totalInput.value = total.toFixed(2);
 
                                     // Actualizar el elemento de visualización del total
                                     var totalElement = document.getElementById('total');
-                                    totalElement.textContent = total.toFixed(2);
+                                    var totalFormateado = total.toLocaleString(undefined, {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        totalElement.textContent = totalFormateado;
+
+
+                                    
+
+
                                 }
+
 
                                 function obtenerPersonalizadosArray2Actualizado() {
                                     var personalizadosArray2Actualizado = [];

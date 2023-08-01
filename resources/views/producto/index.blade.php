@@ -57,7 +57,7 @@ Productos
                                             @endif
                                         </td>
                                         <td>{{ $producto->nombre }}</td>
-                                        <td>{{ $producto->precio }}</td>
+                                        <td>{{ number_format($producto->precio, 0, '.','.') }}</td>
                                         <td>{{ $producto->descripcion }}</td>
                                         <td>{{ $producto->activo ? 'Activo' : 'Inactivo' }}</td>
                                         <td>{{ $producto->categorium->nombre }}</td>
@@ -70,11 +70,13 @@ Productos
                                         <td>
                                             <!-- Formulario de eliminación -->
                                             <form id="deleteProductForm-{{ $producto->id }}" action="{{ route('productos.destroy', $producto->id) }}" method="POST" style="display: inline;">
-                                                <a class="btn btn-sm btn-primary" href="{{ route('productos.show', $producto->id) }}"><i class="fa fa-fw fa-eye"></i> Mostrar</a>
-                                                <a class="btn btn-sm btn-success" href="{{ route('productos.edit', $producto->id) }}"><i class="fa fa-fw fa-edit"></i> Editar</a>
+                                                <a class="btn btn-sm btn-primary" href="{{ route('productos.show', $producto->id) }}"><i class="fa fa-fw fa-eye"></i> </a>
+                                                <a class="btn btn-sm btn-success" href="{{ route('productos.edit', $producto->id) }}"><i class="fa fa-fw fa-edit"></i> </a>
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-form-id="deleteProductForm-{{ $producto->id }}"><i class="fa fa-fw fa-trash"></i> Eliminar</button>
+
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-form-id="deleteProductForm-{{ $producto->id }}"><i class="fa fa-fw fa-trash"></i> </button>
+
                                             </form>
                                         </td>
                                     </tr>

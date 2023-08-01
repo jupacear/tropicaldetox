@@ -56,7 +56,7 @@
                                                     @endif
                                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
-                                                    <p><strong>Total:</strong> {{ $pedido->Total }}</p>
+                                                    <p><strong>Total:</strong> {{ number_format($pedido->Total, 0, ',', '.') }}</p>
                                                     @if ($pedido->Direcion)
                                                         <p><strong>direccion:</strong>
                                                             {{ $pedido->Direcion }}</p>
@@ -81,21 +81,32 @@
                                                                 <tr>
                                                                     <td>{{ $detalle->Nombre }}</td>
                                                                     <td>{{ $detalle->cantidad }}</td>
-                                                                    <td>{{ $detalle->precio_unitario }}</td>
+                                                                    <td>{{ number_format ($detalle->precio_unitario , 0, ',', '.')}}  </td>
                                                                 </tr>
                                                             @endforeach
                                                             <?php $per = ''; ?>
                                                             @foreach ($personaliza as $personalizas)
-                                                                @if (!($personalizas->nombre == $per))
-                                                                    <?php $per = $personalizas->nombre; ?>
-                                                                    <tr>
-                                                                        <td>{{ $personalizas->nombre }}</td>
-                                                                        <td>{{ $personalizas->cantidad }}</td>
-                                                                        <td>{{ $personalizas->Subtotal }}</td>
-                
-                                                                    </tr>
-                                                                @endif
-                                                            @endforeach
+                                                            @if (!($personalizas->nombre == $per))
+                                                                <?php $per = $personalizas->nombre; ?>
+                                                                <?php $lastSubtotal = null; ?> <!-- Add this line to initialize the variable -->
+                                                                @foreach ($personaliza as $personalizaInner) <!-- Loop through the personaliza array again to find the last Subtotal for the current $per -->
+                                                                    @if ($personalizaInner->nombre == $per)
+                                                                        <?php $lastSubtotal = $personalizaInner->Subtotal; ?>
+                                                                    @endif
+                                                                @endforeach
+                                                                <tr>
+                                                                    <td>{{ $personalizas->nombre }}</td>
+                                                                    <td>{{ $personalizas->cantidad }}</td>
+                                                                    <td> {{ number_format ($lastSubtotal , 0, ',', '.')}}</td> <!-- Print the last Subtotal for the current $per -->
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
                                                         </tbody>
                                                     </table>
 

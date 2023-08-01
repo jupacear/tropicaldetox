@@ -88,15 +88,23 @@
                     <label for="Nombre">si vas a utilizar otras dirección ponlo aqui:</label>
                     <input type="text" name="Direcion" id="Direcion" class="form-control">
                 </div>
+                <Script>
+                    let direccionInput = document.getElementById('Direcion');
+
+                    // Add event listener for 'blur' event to trim the input value
+                    direccionInput.addEventListener('blur', function() {
+                        direccionInput.value = direccionInput.value.trim();
+                    });
+                </Script>
                 <input type="hidden" name="carrito" id="carrito" value="">
                 <input type="hidden" name="productosPersonalizados" id="productosPersonalizados" value="">
                 <button type="submit" class="btn third">Guardar Pedido</button>
             </form>
         @endif
     </div>
-    @if(session('script'))
-    {!! session('script') !!}
-@endif
+    @if (session('script'))
+        {!! session('script') !!}
+    @endif
 
     <br>
     <br>
@@ -111,39 +119,137 @@
         function calcularTotalPedido() {
             let totalPedido = 0;
 
-            // Sumar los totales de los productos personalizados
+            // Cálculo del total de productos personalizados
             var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
             if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
                 productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
-                    totalPedido += productoPersonalizado.Subtotal;
+                    productoPersonalizado.insumos.forEach(function(insumo) {
+                        let insumoData = insumo.split(':');
+                        // Verificar que el valor sea numérico antes de sumarlo al totalPedido
+                        if (!isNaN(parseFloat(insumoData[3].trim()))) {
+                            totalPedido += parseFloat(insumoData[3].trim());
+                        }
+                    });
                 });
             }
 
-            // Sumar los totales de los productos del carrito
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            // Cálculo del total del carrito
+            let carrito =  JSON.parse(localStorage.getItem('carrito')) || [];
             carrito.forEach(function(producto) {
-                totalPedido += producto.subtotal;
+                // Verificar que el valor sea numérico antes de sumarlo al totalPedido
+                if (!isNaN(producto.subtotal)) {
+                    totalPedido +=parseInt(producto.subtotal);
+                }
             });
 
-            return totalPedido; // Asegúrate de que el total tenga solo 2 decimales
+            return totalPedido; // Asegurarse de que el total tenga solo 2 decimales
         }
-        // ... (Código JavaScript existente) ...
+
+
+        // alert(calcularTotalPedido()); 
+
+        // Función para actualizar el total en el DOM
+        function actualizarTotalEnDOM() {
+            let totalPedido = calcularTotalPedido();
+
+            // Formatear el total con puntos como separador de miles y dos decimales
+            let totalFormateado = totalPedido.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            document.getElementById('totalPedido').textContent = totalFormateado;
+        }
+
+        // Función para calcular y actualizar los subtotales en el carrito al cargar la página
+        function actualizarSubtotalesEnCarrito() {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.forEach(function(producto, index) {
+                let subtotal = producto.precio * producto.cantidad;
+                actualizarSubtotalEnDOM(index, subtotal);
+            });
+        }
+
+        // Evento DOMContentLoaded para cargar la página
+        document.addEventListener("DOMContentLoaded", function() {
+            // Mostrar los productos personalizados en la tabla
+            mostrarProductosPersonalizados();
+
+            // Calcular el total y actualizarlo en el DOM
+            actualizarTotalEnDOM();
+
+            // Calcular y actualizar los subtotales en el carrito
+            actualizarSubtotalesEnCarrito();
+        });
+
+        // // Resto del código (sin cambios)
+        // // Evento DOMContentLoaded para cargar la página
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     // Mostrar los productos personalizados en la tabla
+        //     mostrarProductosPersonalizados();
+
+        //     // Calcular el total y actualizarlo en el DOM
+        //     actualizarTotalEnDOM();
+        // });
+
+
+
+        // Función para mostrar los productos personalizados en la tabla
         function mostrarProductosPersonalizados() {
-            // ... (Código JavaScript existente) ...
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            var carritoBody = $('.carrito-body');
 
-            // Mostrar el total en el carrito
-            let filaTotal = document.createElement('tr');
-            let columnaTotalEtiqueta = document.createElement('td');
-            columnaTotalEtiqueta.textContent = 'Total:';
-            columnaTotalEtiqueta.setAttribute('colspan', 3);
-            filaTotal.appendChild(columnaTotalEtiqueta);
+            if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                productosPersonalizadosGuardados.forEach(function(productoPersonalizado, index) {
+                    // Crea una nueva fila en la tabla con los datos del producto personalizado
+                    var row = $('<tr>');
+                    row.append($('<td>').text(productoPersonalizado.Nombre));
 
-            let columnaTotal = document.createElement('td');
-            columnaTotal.textContent = total.toFixed(2); // Asegúrate de que el total tenga solo 2 decimales
-            filaTotal.appendChild(columnaTotal);
+                    // Calcular el subtotal a partir del array "insumos"
+                    let subtotal = 0;
+                    productoPersonalizado.insumos.forEach(function(insumo) {
+                        let insumoData = insumo.split(':');
+                        subtotal += parseFloat(insumoData[3].trim());
+                    });
+                    row.append($('<td>').text(subtotal));
 
-            tablaCarrito.appendChild(filaTotal);
+                    // La cantidad en productos personalizados siempre será 1, ya que es un producto único
+                    row.append($('<td>').text('1'));
+
+                    // El subtotal en productos personalizados será el mismo que el total, ya que solo hay un producto
+                    row.append($('<td>').text(subtotal));
+
+                    // Agrega la fila a la tabla
+                    carritoBody.append(row);
+
+                    // Agregar botón de eliminar para productos personalizados
+                    let columnaAcciones = document.createElement('td');
+                    let botonEliminar = document.createElement('button');
+                    botonEliminar.textContent = 'Eliminar';
+                    botonEliminar.className = 'btn thirdd';
+                    botonEliminar.addEventListener('click', function() {
+                        eliminarProductoPersonalizado(index);
+                    });
+                    columnaAcciones.appendChild(botonEliminar);
+                    row.append(columnaAcciones);
+                });
+            }
         }
+
+        // Función para actualizar el total en el DOM
+
+        // Resto de funciones existentes (sin cambios)
+
+        // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
+        $(document).ready(function() {
+            // Código existente para mostrar los productos no personalizados (sin cambios)
+
+            // Mostrar los productos personalizados en la tabla y calcular el total
+            mostrarProductosPersonalizados();
+
+            // Calcular el total y actualizarlo en el DOM
+            actualizarTotalEnDOM();
+        });
 
         // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
         // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
@@ -155,19 +261,6 @@
 
             if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
                 productosPersonalizadosGuardados.forEach(function(productoPersonalizado, index) {
-                    // Crea una nueva fila en la tabla con los datos del producto personalizado
-                    var row = $('<tr>');
-                    row.append($('<td>').text(productoPersonalizado.Nombre));
-                    row.append($('<td>').text(productoPersonalizado.Subtotal.toFixed(2)));
-
-                    // La cantidad en productos personalizados siempre será 1, ya que es un producto único
-                    row.append($('<td>').text('1'));
-
-                    // El subtotal en productos personalizados será el mismo que el total, ya que solo hay un producto
-                    row.append($('<td>').text(productoPersonalizado.Subtotal.toFixed(2)));
-
-                    // Agrega la fila a la tabla
-                    carritoBody.append(row);
 
 
                     // Agregar botón de eliminar para productos personalizados
@@ -189,7 +282,7 @@
 
         });
 
-        // ... (Funciones existentes) ...
+
 
         function eliminarProductoPersonalizado(index) {
             let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
@@ -198,14 +291,24 @@
             location.reload();
         }
 
+        function actualizarCantidadCarrito(indice, cantidad) {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito[indice].cantidad = cantidad;
+            carrito[indice].subtotal = carrito[indice].precio * cantidad; // Actualizar el subtotal
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            actualizarSubtotalEnDOM(indice, carrito[indice].subtotal); // Actualizar el subtotal en el DOM
+            actualizarTotalEnDOM(); // Actualizar el total en el DOM
+        }
+
+        function actualizarSubtotalEnDOM(indice, subtotal) {
+            let tablaCarrito = document.querySelector('.carrito-body');
+            let fila = tablaCarrito.children[indice];
+            let columnaSubtotal = fila.querySelector('td:nth-child(4)');
+            columnaSubtotal.textContent = subtotal;
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             let productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
-
-            // Actualizar el valor del campo oculto con los productos personalizados
-            document.getElementById('productosPersonalizados').value = JSON.stringify(productosPersonalizados);
-
-
-
 
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             let tablaCarrito = document.querySelector('.carrito-body');
@@ -228,9 +331,20 @@
                 inputCantidad.type = 'number';
                 inputCantidad.min = 1;
                 inputCantidad.value = producto.cantidad;
-                inputCantidad.addEventListener('change', function() {
-                    actualizarCantidadCarrito(carrito.indexOf(producto), parseInt(inputCantidad
-                        .value));
+
+                // Add event listener for 'input' event to validate the input
+                inputCantidad.addEventListener('input', function() {
+                    const inputValue = inputCantidad.value.trim();
+                    const validNumberRegex = /^\d+$/;
+
+                    if (!validNumberRegex.test(inputValue)) {
+                        // If the input doesn't match the regular expression (contains 'e' or non-numeric characters)
+                        // Set the value to the previous valid value (producto.cantidad)
+                        inputCantidad.value = producto.cantidad;
+                    } else {
+                        // If the input is valid, update the cantidad in the carrito
+                        actualizarCantidadCarrito(carrito.indexOf(producto), parseInt(inputValue));
+                    }
                 });
                 columnaCantidad.appendChild(inputCantidad);
                 fila.appendChild(columnaCantidad);
@@ -259,34 +373,14 @@
             document.getElementById('totalPedido').textContent = totalPedido;
 
 
-
+            // Actualizar el valor del campo oculto con los productos personalizados
+            document.getElementById('productosPersonalizados').value = JSON.stringify(productosPersonalizados);
         });
 
-        function actualizarCantidadCarrito(indice, cantidad) {
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            carrito[indice].cantidad = cantidad;
-            carrito[indice].subtotal = carrito[indice].precio * cantidad; // Actualizar el subtotal
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-            actualizarSubtotalEnDOM(indice, carrito[indice].subtotal); // Actualizar el subtotal en el DOM
-            actualizarTotalEnDOM(); // Actualizar el total en el DOM
-        }
 
-        function actualizarSubtotalEnDOM(indice, subtotal) {
-            let tablaCarrito = document.querySelector('.carrito-body');
-            let fila = tablaCarrito.children[indice];
-            let columnaSubtotal = fila.querySelector('td:nth-child(4)');
-            columnaSubtotal.textContent = subtotal;
-        }
 
-        function actualizarTotalEnDOM() {
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            let total = 0;
-            carrito.forEach(function(producto) {
-                total += producto.subtotal;
-            });
-            // let columnaTotal = document.querySelector('.carrito-body tr:last-child td:last-child');
-            columnaTotal.textContent = total;
-        }
+
+
 
 
 
@@ -336,6 +430,7 @@
                     var form = document.getElementById('formulario-guadar-pedido');
                     form.submit();
                     localStorage.removeItem('carrito'); // Borra el carrito del Local Storage
+                    localStorage.removeItem('productosPersonalizados'); // Borra el carrito del Local Storage
                 }
             });
         }

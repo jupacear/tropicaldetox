@@ -79,7 +79,9 @@
                                         @endif
                                     </td>
 
-                                    <td>{{ $pedido->Total }}</td>
+                                    <td> {{ number_format($pedido->Total, 0, ',', '.') }}
+                                    
+                                    </td>
                                     <td>
                                         <!-- Enlace para ver el detalle del pedido -->
                                         <a href="{{ route('Detalle', $pedido->id) }}" class="btn btn-info">Ver Detalle</a>

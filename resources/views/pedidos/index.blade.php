@@ -32,7 +32,6 @@
                         <a class="btn btn-warning" href="{{ url('pedidos/create') }}">Nuevo</a>
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
-                                <th style="color:#fff;">ID</th>
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Telefono</th>
                                 <th style="color:#fff;">Direcion</th>
@@ -45,7 +44,6 @@
                                 @foreach ($pedidos as $pedido)
                                     @if ($pedido->Estado == 'En_proceso')
                                         <tr>
-                                            <td>{{ $pedido->id }}</td>
                                             <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
                                             <td>{{ $pedido->users ? $pedido->users->telefono : 'Null' }}</td>
                                             <td>
@@ -74,19 +72,19 @@
                                                 </form>
                                             </td>
                                             <td>{{ $pedido->Fecha }}</td>
-                                            <td>{{ $pedido->Total }}</td>
+                                            <td> {{ number_format($pedido->Total, 0, ',', '.') }}</td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
-                                                    <i class="fa fa-fw fa-trash"></i>
-                                                </button>
                                                 <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
                                                     <a href="{{ route('pedidos.show', $pedido->id) }}"
                                                         class="btn btn-sm btn-primary"><i
-                                                            class="fa fa-fw fa-eye"></i></a></a>
-                                                    <a class="btn btn-sm btn-success"
+                                                        class="fa fa-fw fa-eye"></i></a></a>
+                                                        <a class="btn btn-sm btn-success"
                                                         href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
                                                         <i class="fa fa-fw fa-edit"></i>
                                                     </a>
+                                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
+                                                        <i class="fa fa-fw fa-trash"></i>
+                                                    </button>
                                                     {{-- @method('DELETE')
                                                     @csrf --}}
                                                     {{-- <button type="submit" class="btn btn-danger btn-sm">

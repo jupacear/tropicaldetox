@@ -4,16 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Site Metas -->
     <title>Tropical Detox</title>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
     <!-- Site Icons -->
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
@@ -28,18 +23,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/custom.css">
 
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 </head>
 
 @include('cliente.nav')
 
 <body>
     <!-- Start Slider -->
-    <div id="slides-shop" class="cover-slides">
+    <!-- <div id="slides-shop" class="cover-slides">
         <ul class="slides-container">
             @foreach ($productos as $producto)
                 @if ($producto->activo)
@@ -59,7 +49,7 @@
                 @endif
             @endforeach
         </ul>
-    </div>
+    </div> -->
     <!-- End Slider -->
 
 
@@ -78,18 +68,18 @@
                     </div>
                 </div>
                 @foreach ($categorias as $categoria)
-                    @if ($categoria->activo)
-                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                            <div class="shop-cat-box">
-                                @if ($categoria->imagen)
-                                    <img src="{{ asset($categoria->imagen) }}" alt="Imagen de la categoría" />
-                                @else
-                                    <img class="img-fluid" src="images/logo.png" alt="Imagen por defecto" />
-                                @endif
-                                <a class="btn hvr-hover" href="#">{{ $categoria->nombre }}</a>
-                            </div>
-                        </div>
-                    @endif
+                @if ($categoria->activo)
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="shop-cat-box">
+                        @if ($categoria->imagen)
+                        <img src="{{ asset($categoria->imagen) }}" alt="Imagen de la categoría" />
+                        @else
+                        <img class="img-fluid" src="images/logo.png" alt="Imagen por defecto" />
+                        @endif
+                        <a class="btn hvr-hover" href="#">{{ $categoria->nombre }}</a>
+                    </div>
+                </div>
+                @endif
                 @endforeach
             </div>
         </div>
@@ -110,33 +100,31 @@
 
             <div class="row justify-content-center">
                 @foreach ($productos as $producto)
-                    @if ($producto->activo)
-                        <div class="col-lg-3 col-md-6 col-sm-6 special-grid">
-                            <!-- Cartas -->
-                            <div class="products-single fix">
-                                <div class="box-img-hover">
-                                    <!-- Imagen del producto -->
-                                    <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
-                                    <div class="mask-icon">
-                                        <div class="mask-icon">
-                                            {{-- <a class="cart"
-                                                href="{{ route('agregarCarrito', ['productoId' => $producto->id, 'cantidad' => 1]) }}">Agregar
-                                                al carrito</a> --}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="why-text">
-                                    <!-- Nombre del producto -->
-                                    <h4>{{ $producto->nombre }}</h4>
-                                    <!-- Precio del producto -->
-                                    <h5>{{ $producto->precio }}</h5>
-                                    <!-- Descripción del producto -->
-                                    <p>{{ $producto->descripcion }}</p>
+                @if ($producto->activo)
+                <div class="col-lg-3 col-md-6 col-sm-6 special-grid">
+                    <!-- Cartas -->
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <!-- Imagen del producto -->
+                            <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
+                            <div class="mask-icon">
+                                <div class="mask-icon">
+                                    <a class="cart" href="{{ route('Productos') }}">Ir a productos</a>
                                 </div>
                             </div>
-                            <!-- End Cartas -->
                         </div>
-                    @endif
+                        <div class="why-text">
+                            <!-- Nombre del producto -->
+                            <h4>{{ $producto->nombre }}</h4>
+                            <!-- Precio del producto -->
+                            <h5>{{ $producto->precio }}</h5>
+                            <!-- Descripción del producto -->
+                            <p>{{ $producto->descripcion }}</p>
+                        </div>
+                    </div>
+                    <!-- End Cartas -->
+                </div>
+                @endif
                 @endforeach
             </div>
 
@@ -145,7 +133,7 @@
     <!-- End Products  -->
 
     <!-- Start Instagram Feed  -->
-    <div class="instagram-box">
+    <!-- <div class="instagram-box">
         <div class="main-instagram owl-carousel owl-theme">
             @foreach ($productos as $producto)
                 @if ($producto->activo)
@@ -160,11 +148,12 @@
                 @endif
             @endforeach
         </div>
-    </div>
+    </div> -->
     <!-- End Instagram Feed -->
 
     @include('cliente.footer')
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
 
     <!-- ALL JS FILES -->
     <script src="js/jquery-3.2.1.min.js"></script>
@@ -182,6 +171,5 @@
     <script src="js/form-validator.min.js"></script>
     <script src="js/contact-form-script.js"></script>
     <script src="js/custom.js"></script>
-</body>
 
 </html>

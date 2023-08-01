@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\detalle_pedidos;
 use App\Models\pedido;
+use App\Models\producPerz;
 use App\Models\Producto;
 use App\Models\productos;
 use App\Models\User;
@@ -113,9 +114,10 @@ class ventasController extends Controller
          $pedido = Pedido::with('users')->find($id);
 
          $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
+         $personaliza = producPerz::where('id_pedidos', $id)->get();
 
          // Pasar el pedido y sus detalles a la vista
-         return view('ventas.show', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos]);
+         return view('ventas.show', ['pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'personaliza' => $personaliza]);
         // return view('ventas.graficatop10', compact('topProductos'))->with('count', 1);
 
 
