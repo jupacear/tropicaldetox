@@ -288,12 +288,12 @@
                             cantidad = 1; // Asegurar que la cantidad sea al menos 1
                         }
                         productoPersonalizado.cantidad =
-                        cantidad; // Actualizar la cantidad en el objeto del producto
+                            cantidad; // Actualizar la cantidad en el objeto del producto
 
                         // Calcular el nuevo subtotal con la nueva cantidad y actualizarlo en la tabla
                         let subtotal = calcularSubtotalapersonalizado(productoPersonalizado, subtotalf);
                         row.find('.subtotal').text(subtotal.toFixed(
-                        2)); // Actualizar el valor del subtotal en la fila
+                            0)); // Actualizar el valor del subtotal en la fila
 
                         // Actualizar el objeto productosPersonalizadosGuardados con la nueva cantidad
                         productosPersonalizadosGuardados[index].cantidad = cantidad;
@@ -312,7 +312,7 @@
 
                     // Calcular y mostrar el subtotal inicialmente
                     let subtotal = calcularSubtotalapersonalizado(productoPersonalizado, subtotalf);
-                    row.append($('<td>').text(subtotal.toFixed(2)).addClass('subtotal'));
+                    row.append($('<td>').text(subtotal.toFixed(0)).addClass('subtotal'));
 
                     // Agrega la fila a la tabla
                     carritoBody.append(row);
@@ -353,12 +353,12 @@
             // Actualizar el total del pedido en el DOM
             actualizarTotalEnDOM();
         }
-// Función para actualizar el atributo value del input type="hidden" con los datos actualizados
-function actualizarHiddenInput() {
-    let productosPersonalizadosHidden = $('#productosPersonalizados');
-    let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
-    productosPersonalizadosHidden.val(JSON.stringify(productosPersonalizadosGuardados));
-}
+        // Función para actualizar el atributo value del input type="hidden" con los datos actualizados
+        function actualizarHiddenInput() {
+            let productosPersonalizadosHidden = $('#productosPersonalizados');
+            let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            productosPersonalizadosHidden.val(JSON.stringify(productosPersonalizadosGuardados));
+        }
 
         function calcularSubtotalapersonalizado(productoPersonalizado, subtotalf) {
             let cantidad = productoPersonalizado.cantidad || 1;
@@ -371,10 +371,6 @@ function actualizarHiddenInput() {
 
 
 
-        // Función para actualizar el total en el DOM
-
-        // Resto de funciones existentes (sin cambios)
-
         // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
         $(document).ready(function() {
             // Código existente para mostrar los productos no personalizados (sin cambios)
@@ -386,7 +382,6 @@ function actualizarHiddenInput() {
             actualizarTotalEnDOM();
         });
 
-        // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
         // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
         $(document).ready(function() {
             var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));

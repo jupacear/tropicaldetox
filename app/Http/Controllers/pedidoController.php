@@ -436,8 +436,8 @@ class pedidoController extends Controller
                 // Guardar los datos del personalizado en la base de datos
                 $insumos = $personalizado['insumos'];
                 $Nombre = $personalizado['Nombre'];
-                $cantidad = $personalizado['cantidad'];
-                // return response()->json($cantidad);
+                $cantidad = isset($personalizado['cantidad']) && !empty($personalizado['cantidad']) ? $personalizado['cantidad'] : 1;
+                // return response()->json($personalizado['cantidad']);
                 $subtotal=0;
                 for ($i = 0; $i < count($insumos); $i++) {
                     $subtotalData = explode(':', $insumos[$i]);
