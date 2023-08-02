@@ -64,6 +64,10 @@
                         <tbody class="carrito-body">
                             <!-- Filas de productos en el carrito -->
                         </tbody>
+
+                        <tbody class="carrito-body-personalizado">
+                            <!-- Filas de productos en el carrito -->
+                        </tbody>
                         <tr>
 
                             <th colspan="3">
@@ -125,7 +129,10 @@
                 productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
                     productoPersonalizado.insumos.forEach(function(insumo) {
                         let insumoData = insumo.split(':');
-                        totalPedido += parseFloat(insumoData[3].trim());
+                        // Verificar que el valor sea numérico antes de sumarlo al totalPedido
+                        if (!isNaN(parseFloat(insumoData[3].trim()))) {
+                            totalPedido += parseFloat(insumoData[3].trim());
+                        }
                     });
                 });
             }
@@ -133,16 +140,121 @@
             // Cálculo del total del carrito
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             carrito.forEach(function(producto) {
-                totalPedido += producto.subtotal;
+                // Verificar que el valor sea numérico antes de sumarlo al totalPedido
+                if (!isNaN(producto.subtotal)) {
+                    totalPedido += parseFloat(producto.subtotal);
+                }
             });
 
             return totalPedido; // Asegurarse de que el total tenga solo 2 decimales
         }
 
-        // Función para mostrar los productos personalizados en la tabla
+
+        // Evento DOMContentLoaded para cargar la página
+        document.addEventListener("DOMContentLoaded", function() {
+            // Mostrar los productos personalizados en la tabla
+            mostrarProductosPersonalizados();
+
+            // Calcular el total y actualizarlo en el DOM
+            actualizarTotalEnDOM();
+
+            // Calcular y actualizar los subtotales en el carrito
+            actualizarSubtotalesEnCarrito();
+        });
+
+        // alert(calcularTotalPedido()); 
+
+        // Función para actualizar el total en el DOM
+        function actualizarTotalEnDOM() {
+            let totalPedido = 0;
+
+            // Cálculo del total de productos personalizados
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
+                    let subtotalf = 0;
+                    productoPersonalizado.insumos.forEach(function(insumo) {
+                        let insumoData = insumo.split(':');
+                        subtotalf += parseFloat(insumoData[3].trim());
+                    });
+                    let subtotalPersonalizado = subtotalf * (productoPersonalizado.cantidad || 1);
+                    totalPedido += subtotalPersonalizado;
+                    productoPersonalizado.subtotal = subtotalPersonalizado;
+                });
+            }
+
+            // Cálculo del total del carrito
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.forEach(function(producto) {
+                // Verificar que el valor sea numérico antes de sumarlo al totalPedido
+                if (!isNaN(producto.subtotal)) {
+                    totalPedido += parseFloat(producto.subtotal);
+                }
+            });
+
+            // Actualizar el total en el DOM
+            let totalFormateado = totalPedido.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            document.getElementById('totalPedido').textContent = totalFormateado;
+        }
+
+
+
+
+        function actualizarSubtotalesEnCarrito() {
+            let totalPedido = 0;
+
+            // Cálculo del total de productos personalizados
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
+                    let subtotalf = 0;
+                    productoPersonalizado.insumos.forEach(function(insumo) {
+                        let insumoData = insumo.split(':');
+                        subtotalf += parseFloat(insumoData[3].trim());
+                    });
+                    let subtotalPersonalizado = subtotalf * (productoPersonalizado.cantidad || 1);
+                    totalPedido += subtotalPersonalizado;
+                    productoPersonalizado.subtotal = subtotalPersonalizado;
+                });
+            }
+
+            // Cálculo del total del carrito
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.forEach(function(producto) {
+                // Verificar que el valor sea numérico antes de sumarlo al totalPedido
+                if (!isNaN(producto.subtotal)) {
+                    totalPedido += parseFloat(producto.subtotal);
+                }
+            });
+
+            // Actualizar los subtotales en el DOM para los productos personalizados
+            let carritoPersonalizadoBody = $('.carrito-body-personalizado');
+            carritoPersonalizadoBody.find('.subtotal').each(function(index, element) {
+                let subtotalPersonalizado = productosPersonalizadosGuardados[index].subtotal || 0;
+                $(element).text(subtotalPersonalizado);
+            });
+
+            // Actualizar el total del carrito en el DOM
+            let carritoBody = $('.carrito-body');
+            carritoBody.find('.subtotal').each(function(index, element) {
+                let subtotalCarrito = parseFloat($(element).text());
+                carrito[index].subtotal =
+                    subtotalCarrito; // Actualizar el subtotal en el objeto del producto en el carrito
+            });
+
+            // Actualizar el total en el DOM
+            document.getElementById('totalPedido').textContent = totalPedido;
+        }
+
+
+
         function mostrarProductosPersonalizados() {
             var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
-            var carritoBody = $('.carrito-body');
+            var carritoBody = $('.carrito-body-personalizado');
+            carritoBody.empty();
 
             if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
                 productosPersonalizadosGuardados.forEach(function(productoPersonalizado, index) {
@@ -150,44 +262,114 @@
                     var row = $('<tr>');
                     row.append($('<td>').text(productoPersonalizado.Nombre));
 
-                    // Calcular el subtotal a partir del array "insumos"
-                    let subtotal = 0;
+                    // Muestra el precio del producto en la celda correspondiente
+                    let subtotalf = 0;
                     productoPersonalizado.insumos.forEach(function(insumo) {
                         let insumoData = insumo.split(':');
-                        subtotal += parseFloat(insumoData[3].trim());
+                        subtotalf += parseFloat(insumoData[3].trim());
                     });
-                    row.append($('<td>').text(subtotal));
+                    row.append($('<td>').text(subtotalf));
 
-                    // La cantidad en productos personalizados siempre será 1, ya que es un producto único
-                    row.append($('<td>').text('1'));
+                    // Crear el campo de entrada numérico para la cantidad
+                    let inputCantidad = $('<input>').attr({
+                        type: 'number',
+                        min: 1,
+                        value: productoPersonalizado.cantidad ||
+                            1 // Valor inicial de cantidad, puede ser cualquier valor predeterminado que desees
+                    });
 
-                    // El subtotal en productos personalizados será el mismo que el total, ya que solo hay un producto
-                    row.append($('<td>').text(subtotal));
+                    // Agregar un atributo data-index para identificar el producto personalizado correspondiente
+                    inputCantidad.attr('data-index', index);
+
+                    // Agregar un evento para actualizar el subtotal y la cantidad cuando cambie el valor del input
+                    inputCantidad.on('input', function() {
+                        let cantidad = parseFloat(inputCantidad.val());
+                        if (isNaN(cantidad) || cantidad < 1) {
+                            cantidad = 1; // Asegurar que la cantidad sea al menos 1
+                        }
+                        productoPersonalizado.cantidad =
+                            cantidad; // Actualizar la cantidad en el objeto del producto
+
+                        // Calcular el nuevo subtotal con la nueva cantidad y actualizarlo en la tabla
+                        let subtotal = calcularSubtotalapersonalizado(productoPersonalizado, subtotalf);
+                        row.find('.subtotal').text(subtotal.toFixed(
+                            0)); // Actualizar el valor del subtotal en la fila
+
+                        // Actualizar el objeto productosPersonalizadosGuardados con la nueva cantidad
+                        productosPersonalizadosGuardados[index].cantidad = cantidad;
+
+                        // Actualizar el Local Storage con la nueva cantidad
+                        actualizarCantidadEnLocalStorage(productosPersonalizadosGuardados);
+
+                        // Actualizar el atributo value del input type="hidden" con los datos actualizados
+                        actualizarHiddenInput();
+
+                        // Actualizar el total del pedido en el DOM
+                        actualizarTotalEnDOM();
+                    });
+
+                    row.append($('<td>').append(inputCantidad));
+
+                    // Calcular y mostrar el subtotal inicialmente
+                    let subtotal = calcularSubtotalapersonalizado(productoPersonalizado, subtotalf);
+                    row.append($('<td>').text(subtotal.toFixed(0)).addClass('subtotal'));
 
                     // Agrega la fila a la tabla
                     carritoBody.append(row);
 
                     // Agregar botón de eliminar para productos personalizados
-                    let columnaAcciones = document.createElement('td');
-                    let botonEliminar = document.createElement('button');
-                    botonEliminar.textContent = 'Eliminar';
-                    botonEliminar.className = 'btn thirdd';
-                    botonEliminar.addEventListener('click', function() {
+                    let columnaAcciones = $('<td>');
+                    let botonEliminar = $('<button>').text('Eliminar').addClass('btn thirdd');
+                    botonEliminar.on('click', function() {
                         eliminarProductoPersonalizado(index);
                     });
-                    columnaAcciones.appendChild(botonEliminar);
+                    columnaAcciones.append(botonEliminar);
                     row.append(columnaAcciones);
                 });
             }
+
+            // Actualizar el atributo value del input type="hidden" con los datos actuales al cargar la página
+            actualizarHiddenInput();
+
+            // Actualizar el total del pedido en el DOM
+            actualizarTotalEnDOM();
         }
 
-        // Función para actualizar el total en el DOM
-        function actualizarTotalEnDOM() {
-            let totalPedido = calcularTotalPedido();
-            document.getElementById('totalPedido').textContent = totalPedido;
+
+
+        function actualizarCantidadEnLocalStorage(productosPersonalizados) {
+            localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizados));
+
+            // Calcular y actualizar los subtotales de los productos personalizados en el Local Storage
+            productosPersonalizados.forEach(function(productoPersonalizado, index) {
+                let subtotalf = 0;
+                productoPersonalizado.insumos.forEach(function(insumo) {
+                    let insumoData = insumo.split(':');
+                    subtotalf += parseFloat(insumoData[3].trim());
+                });
+                productoPersonalizado.subtotal = calcularSubtotalapersonalizado(productoPersonalizado, subtotalf);
+            });
+
+            // Actualizar el total del pedido en el DOM
+            actualizarTotalEnDOM();
+        }
+        // Función para actualizar el atributo value del input type="hidden" con los datos actualizados
+        function actualizarHiddenInput() {
+            let productosPersonalizadosHidden = $('#productosPersonalizados');
+            let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            productosPersonalizadosHidden.val(JSON.stringify(productosPersonalizadosGuardados));
         }
 
-        // Resto de funciones existentes (sin cambios)
+        function calcularSubtotalapersonalizado(productoPersonalizado, subtotalf) {
+            let cantidad = productoPersonalizado.cantidad || 1;
+            let subtotal = cantidad * subtotalf;
+            return subtotal;
+        }
+
+
+
+
+
 
         // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
         $(document).ready(function() {
@@ -201,7 +383,6 @@
         });
 
         // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
-        // Al cargar la página, mostrar los productos personalizados en la tabla y calcular el total
         $(document).ready(function() {
             var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
             var carritoBody = $('.carrito-body');
@@ -210,19 +391,6 @@
 
             if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
                 productosPersonalizadosGuardados.forEach(function(productoPersonalizado, index) {
-                    // // Crea una nueva fila en la tabla con los datos del producto personalizado
-                    // var row = $('<tr>');
-                    // row.append($('<td>').text(productoPersonalizado.Nombre));
-                    // row.append($('<td>').text(productoPersonalizado.Subtotal));
-
-                    // // La cantidad en productos personalizados siempre será 1, ya que es un producto único
-                    // row.append($('<td>').text('1'));
-
-                    // // El subtotal en productos personalizados será el mismo que el total, ya que solo hay un producto
-                    // row.append($('<td>').text(productoPersonalizado.Subtotal));
-
-                    // // Agrega la fila a la tabla
-                    // carritoBody.append(row);
 
 
                     // Agregar botón de eliminar para productos personalizados
@@ -250,7 +418,10 @@
             let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
             productosPersonalizadosGuardados.splice(index, 1);
             localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizadosGuardados));
-            location.reload();
+            // Volver a cargar los productos personalizados en la tabla
+            mostrarProductosPersonalizados();
+            // Actualizar el total en el DOM
+            actualizarTotalEnDOM();
         }
 
         function actualizarCantidadCarrito(indice, cantidad) {
@@ -262,6 +433,13 @@
             actualizarTotalEnDOM(); // Actualizar el total en el DOM
         }
 
+        function actualizarSubtotalEnDOM(indice, subtotal) {
+            let tablaCarrito = document.querySelector('.carrito-body');
+            let fila = tablaCarrito.children[indice];
+            let columnaSubtotal = fila.querySelector('td:nth-child(4)');
+            columnaSubtotal.textContent = subtotal;
+        }
+        // card
         document.addEventListener("DOMContentLoaded", function() {
             let productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
 
@@ -282,6 +460,7 @@
                 fila.appendChild(columnaPrecio);
 
                 let columnaCantidad = document.createElement('td');
+
                 let inputCantidad = document.createElement('input');
                 inputCantidad.type = 'number';
                 inputCantidad.min = 1;
@@ -334,12 +513,6 @@
 
 
 
-        function actualizarSubtotalEnDOM(indice, subtotal) {
-            let tablaCarrito = document.querySelector('.carrito-body');
-            let fila = tablaCarrito.children[indice];
-            let columnaSubtotal = fila.querySelector('td:nth-child(4)');
-            columnaSubtotal.textContent = subtotal;
-        }
 
 
 
@@ -351,15 +524,18 @@
             document.getElementById('carrito').value = JSON.stringify(carrito);
         });
 
-
-
+        // eliminar de card|
         function eliminarProductoCarrito(indice) {
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             carrito.splice(indice, 1);
             localStorage.setItem('carrito', JSON.stringify(carrito));
-            location.reload();
-        }
 
+            // Después de eliminar el producto, actualiza los datos mostrados en la tabla
+            actualizarTablaCarrito();
+
+            // También actualiza el total del pedido
+            actualizarTotalEnDOM();
+        }
         document.getElementById('formulario-guadar-pedido').addEventListener('submit', function(event) {
             event.preventDefault(); // Evita que el formulario se envíe de inmediato
 
@@ -372,6 +548,37 @@
             // Mostrar el mensaje de confirmación para guardar el pedido
             confirmarGuardarPedido();
         });
+
+        function actualizarTablaCarrito() {
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            let tablaCarrito = document.querySelector('.carrito-body');
+            tablaCarrito.innerHTML = ''; // Limpiar la tabla antes de mostrar los productos actualizados
+
+            let totalPedido = 0;
+
+            carrito.forEach(function(producto) {
+                let fila = document.createElement('tr');
+
+                // Código para agregar las celdas de cada producto en la fila (nombre, precio, cantidad, subtotal)
+
+                tablaCarrito.appendChild(fila);
+
+                // Actualizar el total del pedido
+                totalPedido += producto.subtotal;
+            });
+
+            // Mostrar el total actualizado en el DOM
+            document.getElementById('totalPedido').textContent = totalPedido;
+        }
+
+
+
+
+
+
+
+
+
 
         function confirmarGuardarPedido() {
             Swal.fire({
@@ -403,9 +610,9 @@
                 text: 'Para tener acceso a este servicio debes iniciar sesión. ¿Desea iniciar sesión?',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                cancelButtonText: 'Ok',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
                 confirmButtonText: 'Iniciar sesión'
             }).then((result) => {
                 if (result.isConfirmed) {

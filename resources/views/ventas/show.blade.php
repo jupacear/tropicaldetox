@@ -34,7 +34,7 @@
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
-                                    <p><strong>Total:</strong> {{ $pedido->Total }}</p>
+                                    <p><strong>Total:</strong> {{ number_format( $pedido->Total , 0, ',', '.') }}</p>
 
                                     <h2>Detalles del Ventas</h2>
 
@@ -68,7 +68,10 @@
                                                 <td>{{ $detalle->cantidad }}</td>
 
                                                 <td>{{ $detalle->precio_unitario }}</td>
-                                                <td>{{ $detalle->cantidad * $detalle->precio_unitario }}</td>
+                                                <td>
+                                                    {{ number_format($detalle->cantidad * $detalle->precio_unitario , 0, ',', '.') }}
+
+                                                </td>
 
                                             </tr>
                                         @endforeach
@@ -87,7 +90,12 @@
                                                     <tr>
                                                         <td>{{ $personalizas->nombre }}</td>
                                                         <td>{{ $personalizas->cantidad }}</td>
-                                                        <td>{{ $lastSubtotal }}</td> <!-- Print the last Subtotal for the current $per -->
+                                                        <td>{{ number_format($lastSubtotal, 0, ',', '.') }}</td> <!-- Print the last Subtotal for the current $per -->
+                                                        <td>
+                                                            <button class="btn btn-info btn-sm float-right"
+                                                                data-toggle="modal"
+                                                                data-target="#productModal_{{ $personalizas->id }}">Detalles</button>
+                                                        </td>
                                                     </tr>
                                                 @endif
                                             @endforeach
@@ -95,7 +103,10 @@
                                         <thead>
                                             <tr>
                                                 <th>Total:</th>
-                                                <th> {{ $detalles_pedidos->id_pedidos = $pedido->Total }}</th>
+                                                <th>
+                                                    {{ number_format( $detalles_pedidos->id_pedidos = $pedido->Total , 0, ',', '.') }}
+
+                                                </th>
                                                 <th></th>
                                                 <th></th>
                                             </tr>
@@ -114,6 +125,42 @@
 </section>
 
 
+@foreach ($personaliza as $personalizas)
+    <div style="" class="modal fade my-modal"
+        id="productModal_{{ $personalizas->id }}" tabindex="-1" role="dialog"
+        aria-labelledby="productModalLabel_{{ $personalizas->id }}" aria-hidden="true"
+        style="position: absolute; z-index: 1050;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel_{{ $personalizas->id }}">
+                        Detalles del producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Nombre: {{ $personalizas->nombre }}</p>
+                    @foreach ($personalizas as $q)
+                        @if ($insumo = App\Models\Insumo::find($q))
+                            <ul>
+                                <li>
+                                    Insumo: ${{ $insumo->nombre }}
+                            </ul>
+                        @else
+                        @endif
+                    @endforeach
+
+                    <!-- Agrega aquí más detalles del producto si es necesario -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+@endforeach
 
 
 
