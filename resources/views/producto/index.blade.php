@@ -96,17 +96,8 @@ Productos
     </div>
     </div>
 </section>
-
-
+// Sweet alert
 <script>
-    $(document).ready(function() {
-        var table = $('#example').DataTable({
-            responsive: true
-        });
-
-        new $.fn.dataTable.FixedHeader(table);
-    });
-    // Sweet alert
     $(document).ready(function() {
         var deleteFormId;
 
@@ -128,6 +119,39 @@ Productos
                 }
             });
         });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var table = $('#example').DataTable({
+            "language": {
+                "decimal": "",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "info": "Mostrando _START_ al _END_ de un total de _TOTAL_ registros.",
+                "infoEmpty": "Mostrando 0 al 0 de 0 registros.",
+                "infoFiltered": "(Filtrado de _MAX_ registros en total.)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ registros.",
+                "loadingRecords": "Cargando...",
+                "processing": "",
+                "search": "Buscar:",
+                "zeroRecords": "No se encontraron registros coincidentes.",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": Activar para ordenar la columna de forma ascendente.",
+                    "sortDescending": ": Activar para ordenar la columna de forma descendente."
+                }
+            },
+            responsive: true
+        });
+
+        new $.fn.dataTable.FixedHeader(table);
     });
 </script>
 @endsection
