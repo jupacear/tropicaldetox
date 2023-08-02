@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use App\Models\Categorium;
 use App\Models\Insumo;
 use App\Models\Producto;
@@ -208,9 +209,21 @@ class ProductoController extends Controller
      */
     public function destroy($id)
     {
-        $producto = Producto::find($id)->delete();
+        try {
+            $producto = Producto::find($id);
 
-        return redirect()->route('productos.index')
-            ->with('success', 'Producto Eliminado correctamente');
+            if (!$producto) {
+                return redirect()->route('productos.index')
+                    ->with('error', 'El producto no existe');
+            }
+
+            $producto->delete();
+
+            return redirect()->route('productos.index')
+                ->with('success', 'Producto eliminado correctamente');
+        } catch (QueryException $e) {
+            return redirect()->route('productos.index')
+                ->withErrors(['error' => 'No se puede eliminar el producto porque tiene un pedido asociado']);
+        }
     }
 }

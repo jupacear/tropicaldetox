@@ -36,7 +36,6 @@ Categoria
                                 <thead style="background-color:#6777ef" class="thead">
                                     <tr>
                                         <th style="color:#fff;">No</th>
-
                                         <th style="color:#fff;">Imagen</th>
                                         <th style="color:#fff;">Nombre</th>
                                         <th style="color:#fff;">Descripcion</th>
@@ -69,11 +68,11 @@ Categoria
                                                 @if ($categorium->activo)
 
                                                 <button type="submit" class="btn btn-sm btn-info">
-                                                    <i class="fa fa-fw fa-toggle-on"></i> 
+                                                    <i class="fa fa-fw fa-toggle-on"></i>
                                                 </button>
                                                 @else
                                                 <button type="submit" class="btn btn-sm btn-info">
-                                                    <i class="fa fa-fw fa-toggle-off"></i> 
+                                                    <i class="fa fa-fw fa-toggle-off"></i>
 
                                                 </button>
                                                 @endif
@@ -131,6 +130,30 @@ Categoria
 <script>
     $(document).ready(function() {
         var table = $('#example').DataTable({
+            "language": {
+                "decimal": "",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "info": "Mostrando _START_ al _END_ de un total de _TOTAL_ registros.",
+                "infoEmpty": "Mostrando 0 al 0 de 0 registros.",
+                "infoFiltered": "(Filtrado de _MAX_ registros en total.)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ registros.",
+                "loadingRecords": "Cargando...",
+                "processing": "",
+                "search": "Buscar:",
+                "zeroRecords": "No se encontraron registros coincidentes.",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": Activar para ordenar la columna de forma ascendente.",
+                    "sortDescending": ": Activar para ordenar la columna de forma descendente."
+                }
+            },
             responsive: true
         });
 

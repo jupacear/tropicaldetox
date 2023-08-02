@@ -32,6 +32,9 @@
                         <a class="btn btn-warning" href="{{ url('pedidos/create') }}">Nuevo</a>
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
+
+                                <th style="color:#fff;">No</th>
+
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Telefono</th>
                                 <th style="color:#fff;">Direcion</th>
@@ -42,6 +45,47 @@
                             </thead>
                             <tbody>
                                 @foreach ($pedidos as $pedido)
+
+                                @if ($pedido->Estado == 'En_proceso')
+                                <tr>
+                                    <td>{{ $pedido->id }}</td>
+                                    <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
+                                    <td>{{ $pedido->users ? $pedido->users->telefono : 'Null' }}</td>
+                                    <td>
+                                        @if( $pedido->Direcion)
+                                        {{ $pedido->Direcion }}
+                                        @else
+                                        {{ $pedido->users->direccion }}
+
+                                        @endif
+                                    </td>
+
+
+
+                                    <td>
+                                        <form action="{{ route('pedidos.updateEstado', $pedido->id) }}" method="POST" id="form-estado-{{ $pedido->id }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
+                                            <button type="button" class="btn btn-sm btn-{{ $pedido->Estado == 'En_proceso' ? 'primary' : 'success' }}" onclick="cambiarEstado({{ $pedido->id }}) ">
+                                                {{ $pedido->Estado }}
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>{{ $pedido->Fecha }}</td>
+                                    <td>{{ $pedido->Total }}</td>
+                                    <td class="text-center">
+                                        <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
+                                            <a href="{{ route('pedidos.show', $pedido->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-fw fa-eye"></i></a></a>
+                                            <a class="btn btn-sm btn-success" href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
+                                                <i class="fa fa-fw fa-edit"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
+                                                <i class="fa fa-fw fa-trash"></i>
+                                            </button>
+                                            {{-- @method('DELETE')
+                                                    @csrf --}}
+                                            {{-- <button type="submit" class="btn btn-danger btn-sm">
                                     @if ($pedido->Estado == 'En_proceso')
                                         <tr>
                                             <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
@@ -83,8 +127,19 @@
                                                             <i class="fa fa-fw fa-edit"></i>
                                                         </a>
                                                         {{-- <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
+
                                                         <i class="fa fa-fw fa-trash"></i>
                                                     </button> --}}
+
+                                        </form>
+                                        <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
+                                            @method('DELETE')
+                                            @csrf
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endif
+
 
 
                                                     </form>
@@ -182,6 +237,7 @@
                                             </td>
                                         </tr>
                                     @endif
+
                                 @endforeach
                             </tbody>
                         </table>
@@ -275,6 +331,30 @@
 <script>
     $(document).ready(function() {
         var table = $('#example').DataTable({
+            "language": {
+                "decimal": "",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "info": "Mostrando _START_ al _END_ de un total de _TOTAL_ registros.",
+                "infoEmpty": "Mostrando 0 al 0 de 0 registros.",
+                "infoFiltered": "(Filtrado de _MAX_ registros en total.)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ registros.",
+                "loadingRecords": "Cargando...",
+                "processing": "",
+                "search": "Buscar:",
+                "zeroRecords": "No se encontraron registros coincidentes.",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": Activar para ordenar la columna de forma ascendente.",
+                    "sortDescending": ": Activar para ordenar la columna de forma descendente."
+                }
+            },
             responsive: true
         });
 
