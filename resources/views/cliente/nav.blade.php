@@ -67,14 +67,14 @@
 
                     @if (empty(session('carrito.productos')))
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
-                                    class="fa fa-shopping-bag nav-link">
-                                    {{-- <span class="badge">
-                                        0
-                                    </span> --}}
+                                    class="fa fa-shopping-cart nav-link">
+                                    <span class="badge" id="carritoBadge">
+                                        
+                                    </span>
                                 </i></a></li>
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
-                                    class="fa fa-shopping-bag nav-link">
+                                    class="fa fa-shopping-cart nav-link">
                                     <span class="badge">
                                         {{ count(session('carrito.productos', [])) }}
                                     </span>
@@ -147,6 +147,36 @@
     <!-- End Navigation -->
 
 </header>
+<script>
+    function actualizarTotalCarrito(bool) {
+        // Obtener el contenido del carrito almacenado en el Local Storage
+        var carritoContenido = localStorage.getItem('carrito');
+        var productosPersonalizados = localStorage.getItem('productosPersonalizados');
+        
+        // Convertir la cadena JSON en un objeto JavaScript
+        var carritoObjeto = JSON.parse(carritoContenido) || []; // Si el carrito está vacío, inicializar como array vacío
+        var productosPersonalizadosObjeto = JSON.parse(productosPersonalizados) || []; // Si los productos personalizados están vacíos, inicializar como array vacío
+
+        // Obtener la cantidad de elementos en el carrito
+        if (bool && carritoObjeto.length <= 1) {
+            var cantidadEnCarrito = carritoObjeto.length + 1;
+        }else{
+            var cantidadEnCarrito = carritoObjeto.length;
+
+        }
+        var cantidadEnproductosPersonalizados = productosPersonalizadosObjeto.length;
+
+        var cantida = cantidadEnCarrito + cantidadEnproductosPersonalizados;
+        // Mostrar la cantidad en el elemento con el ID 'carritoBadge'
+        document.getElementById('carritoBadge').textContent = cantida;
+    }
+
+    // Llamar a la función para actualizar el total al cargar la página y en cada cambio del Local Storage
+    actualizarTotalCarrito(false);
+
+   
+</script>
+
 
 
 <!-- End Main Top -->

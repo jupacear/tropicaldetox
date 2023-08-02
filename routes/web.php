@@ -119,6 +119,7 @@ Route::group(['middleware' => ['auth']], function () {
     // modulos de Johan
 
     Route::put('/pedidos/{id}/updateEstado', [pedidoController::class, 'updateEstado'])->name('pedidos.updateEstado');
+    Route::put('/pedidos/{id}/updateEstadoo', [pedidoController::class, 'updateEstadoo'])->name('pedidos.updateEstadoo');
     Route::resource('pedidos', pedidoController::class);
     Route::get('/admin/grafica', [ventasController::class, 'graficatop10'])->name('admin.grafica');
     // Route::get('/admin/dashboard', [ventasController::class, 'informe'])->name('admin.dashboard');

@@ -6,15 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\detalle_pedidos;
 use App\Models\pedido;
 use App\Models\producPerz;
-use App\Models\Producto;
-use Illuminate\Http\Request;
 
 class CarritoController extends Controller
 {
 
     public function carrito()
     {
-
         return view('cliente.carrito');
     }
 
@@ -28,9 +25,7 @@ class CarritoController extends Controller
         // Recuperar el pedido y sus detalles de la base de datos
         $pedido = Pedido::with('users')->find($id); // Cambiar 'users' por 'user'
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
-
         $personaliza = producPerz::where('id_pedidos', $id)->get();
-
         // Pasar el pedido y sus detalles a la vista
         return view('cliente.Detalles', compact('pedido', 'detalles_pedidos', 'personaliza'));
     }
