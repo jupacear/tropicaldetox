@@ -20,10 +20,11 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a class="btn btn-warning" href="{{ route('usuarios.create') }}">Nuevo</a>
 
 
-
+                        <div class="text-left m-2">
+                            <a class="btn btn-warning" href="{{ route('usuarios.create') }}">Nuevo</a>
+                        </div>
 
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">

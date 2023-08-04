@@ -29,8 +29,9 @@ Categoria
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a class="btn btn-warning" href="{{ route('categoria.create') }}">Nuevo</a>
-
+                        <div class="text-left m-2">
+                            <a class="btn btn-warning" href="{{ route('categoria.create') }}">Nuevo</a>
+                        </div>
                         <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
                                 <thead style="background-color:#6777ef" class="thead">
@@ -66,15 +67,9 @@ Categoria
                                                 @csrf
                                                 @method('DELETE')
                                                 @if ($categorium->activo)
-
-                                                <button type="submit" class="btn btn-sm btn-info">
-                                                    <i class="fa fa-fw fa-toggle-on"></i>
-                                                </button>
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmDesactivateCategoria(event)"> <i class="fa fa-fw fa-toggle-on"></i> </button>
                                                 @else
-                                                <button type="submit" class="btn btn-sm btn-info">
-                                                    <i class="fa fa-fw fa-toggle-off"></i>
-
-                                                </button>
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmActivateCategoria(event)"> <i class="fa fa-fw fa-toggle-off"></i> </button>
                                                 @endif
 
                                             </form>
