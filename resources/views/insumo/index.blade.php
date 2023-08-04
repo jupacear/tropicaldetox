@@ -29,7 +29,9 @@ Insumo
                     </div>
                     @endif
                     <div class="card-body">
-                        <a class="btn btn-warning" href="{{ route('insumo.create') }}">Nuevo</a>
+                        <div class="text-left m-2">
+                            <a class="btn btn-warning" href="{{ route('insumo.create') }}">Nuevo</a>
+                        </div>
                         <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
 
@@ -77,11 +79,11 @@ Insumo
                                                 @csrf
                                                 @method('DELETE')
                                                 @if ($insumo->activo)
-                                                <button type="submit" class="btn btn-sm btn-info">
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmDesactivateInsumo(event)">
                                                     <i class="fa fa-fw fa-toggle-off"></i>
                                                 </button>
                                                 @else
-                                                <button type="submit" class="btn btn-sm btn-info">
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmActivateInsumo(event)">
                                                     <i class="fa fa-fw fa-toggle-on"></i>
 
                                                 </button>
