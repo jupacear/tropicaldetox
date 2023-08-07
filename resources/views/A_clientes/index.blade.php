@@ -1,23 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="section">
-        <div class="section-header">
-            <h3 class="page__heading">Clientes</h3>
-        </div>
-        <div class="section-body">
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success">
-                    <p>{{ $message }}</p>
-                </div>
-            @endif
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <a class="btn btn-warning" href="{{ route('A_clientes.create') }}">Nuevo</a>
+
+<section class="section">
+  <div class="section-header">
+    <h3 class="page__heading">Clientes</h3>
+  </div>
+  <div class="section-body">
+    @if ($message = Session::get('success'))
+    <div class="alert alert-success">
+      <p>{{ $message }}</p>
+    </div>
+    @endif
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
 
 
+            <div class="text-left m-2">
+              <a class="btn btn-warning" href="{{ route('A_clientes.create') }}">Nuevo</a>
+            </div>
 
 
                             <table id="example" class="table table-striped table-bordered" style="width:100%">

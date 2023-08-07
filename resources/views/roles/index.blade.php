@@ -21,7 +21,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a class="btn btn-warning" href="{{ route('roles.create') }}">Nuevo</a>
+                        <div class="text-left m-2">
+                            <a class="btn btn-warning" href="{{ route('roles.create') }}">Nuevo</a>
+                        </div>
                         <table class="table table-striped table-bordered" style="width:100%" id="example">
                             <thead style="background-color:#6777ef">
                                 <th style="color:#fff;">Rol</th>

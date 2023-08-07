@@ -8,7 +8,7 @@
 
 
     <div class="section-header">
-        <h3 class="page__heading">venta</h3>
+        <h3 class="page__heading">Venta</h3>
     </div>
     <div class="section-body">
         @if ($errors->any())
@@ -39,6 +39,8 @@
                          --}}
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
+
+
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Telefono</th>
                                 <th style="color:#fff;">Direcion</th>
@@ -49,6 +51,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($ventas as $venta)
+
                                     @if ($venta->Estado == 'Finalizado')
                                         <tr>
                                             <td>{{ $venta->users->name }}</td>
@@ -72,6 +75,7 @@
                                             </td>
                                         </tr>
                                     @endif
+
                                 @endforeach
 
                             </tbody>
