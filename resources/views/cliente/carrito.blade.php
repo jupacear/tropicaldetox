@@ -18,7 +18,14 @@
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="css/responsive.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/custom.css">+
+
+
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
     <title>Carrito</title>
 </head>
 
@@ -51,7 +58,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table id="carritoTabla" class="table table-bordered table-striped">
+
                         <thead>
                             <tr>
                                 <th>Producto</th>
@@ -109,6 +117,59 @@
     @if (session('script'))
         {!! session('script') !!}
     @endif
+    <!-- Modal -->
+    <div class="modal fade" id="detallesModal" tabindex="-1" role="dialog" aria-labelledby="detallesModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detallesModalLabel">Detalles del Producto Personalizado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nombre:</strong> <span id="modalNombre"></span></p>
+                    <p><strong>Insumo:</strong> <span id="modalInsumo"></span></p>
+                    <p><strong>Cantidad:</strong> <span id="modalCantidad"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on('click', '.btn-ver-detalles', function() {
+            var index = $(this).closest('tr').find('input[type="number"]').data('index');
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            var productoPersonalizado = productosPersonalizadosGuardados[index];
+            mostrarDetallesModal(productoPersonalizado);
+        });
+
+        function mostrarDetallesModal(productoPersonalizado) {
+            $('#detallesModalLabel').text('Detalles del Producto Personalizado');
+
+            // Llenar los detalles en el modal
+            $('#modalNombre').text(productoPersonalizado.Nombre);
+            $('#modalCantidad').text(productoPersonalizado.Cantidad);
+
+            // Limpiar el contenido anterior de #modalInsumo
+            $('#modalInsumo').empty();
+
+            // Iterar a través de los insumos y agregarlos al modal
+            for (let index = 0; index < productoPersonalizado.insumos.length; index++) {
+                let insumo = productoPersonalizado.insumos[index];
+                let insumoElement = $('<p>').text(insumo);
+                $('#modalInsumo').append(insumoElement);
+            }
+
+            // Mostrar el modal
+            $('#detallesModal').modal('show');
+        }
+    </script>
 
     <br>
     <br>
@@ -141,10 +202,11 @@
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             carrito.forEach(function(producto) {
                 // Verificar que el valor sea numérico antes de sumarlo al totalPedido
-                if (!isNaN(producto.subtotal)) {
-                    totalPedido += parseFloat(producto.subtotal);
+                if (!isNaN(producto.precio)) {
+                    totalPedido += parseFloat(producto.precio);
                 }
             });
+
 
             return totalPedido; // Asegurarse de que el total tenga solo 2 decimales
         }
@@ -187,8 +249,8 @@
             let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
             carrito.forEach(function(producto) {
                 // Verificar que el valor sea numérico antes de sumarlo al totalPedido
-                if (!isNaN(producto.subtotal)) {
-                    totalPedido += parseFloat(producto.subtotal);
+                if (!isNaN(producto.precio)) {
+                    totalPedido += parseFloat(producto.precio) * producto.cantidad;
                 }
             });
 
@@ -197,6 +259,7 @@
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
+            // alert(totalFormateado);
             document.getElementById('totalPedido').textContent = totalFormateado;
         }
 
@@ -244,7 +307,6 @@
                 carrito[index].subtotal =
                     subtotalCarrito; // Actualizar el subtotal en el objeto del producto en el carrito
             });
-
             // Actualizar el total en el DOM
             document.getElementById('totalPedido').textContent = totalPedido;
         }
@@ -319,11 +381,30 @@
 
                     // Agregar botón de eliminar para productos personalizados
                     let columnaAcciones = $('<td>');
-                    let botonEliminar = $('<button>').text('Eliminar').addClass('btn thirdd');
+                    let botonEliminar = $('<button>').html('<i class="fas fa-trash"></i>').addClass('btn thirdd');
+
                     botonEliminar.on('click', function() {
                         eliminarProductoPersonalizado(index);
                     });
+
+
+                    let botonVerDetalles = $('<button>').html('<i class="fas fa-eye"></i>').addClass(
+                        'btn third btn-ver-detalles').css({
+                        margin: '8px',
+
+                    });
+                    // Agregar el icono al botón utilizando la clase de icono de Bootstrap (por ejemplo, el ícono "eye")
+
+
+
+
+                    botonVerDetalles.attr('data-toggle', 'modal');
+                    botonVerDetalles.attr('data-target', '#detallesModal');
+
+
+                    columnaAcciones.append(botonVerDetalles);
                     columnaAcciones.append(botonEliminar);
+                    // Agregar la columna de acciones a la fila
                     row.append(columnaAcciones);
                 });
             }
@@ -447,7 +528,41 @@
             let tablaCarrito = document.querySelector('.carrito-body');
             tablaCarrito.innerHTML = '';
             let total = 0; // Variable para almacenar el total del pedido
+            function actualizarTablaCarrito() {
+                tablaCarrito.innerHTML = ''; // Limpiar la tabla antes de mostrar los productos actualizados
+                totalPedido = 0;
 
+                carrito.forEach(function(producto, indice) {
+                    let fila = document.createElement('tr');
+
+                    // Código para agregar las celdas de cada producto en la fila (nombre, precio, cantidad, subtotal)
+
+                    tablaCarrito.appendChild(fila);
+
+                    // Actualizar el total del pedido
+                    totalPedido += producto.subtotal;
+                });
+
+                // Mostrar el total actualizado en el DOM
+                document.getElementById('totalPedido').textContent = totalPedido;
+            }
+
+            function eliminarProductoCarrito(indice) {
+                carrito.splice(indice, 1);
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+
+                // Eliminar la fila correspondiente al producto eliminado
+                tablaCarrito.removeChild(tablaCarrito.children[indice]);
+
+                // Actualizar los índices de los botones de eliminar restantes en la tabla
+                let botonesEliminar = tablaCarrito.querySelectorAll('.btn.thirdd');
+                botonesEliminar.forEach(function(boton, nuevoIndice) {
+                    boton.setAttribute('data-indice', nuevoIndice);
+                });
+
+                // Actualizar el total del pedido después de eliminar el producto
+                actualizarTotalEnDOM();
+            }
             carrito.forEach(function(producto) {
                 let fila = document.createElement('tr');
 
@@ -489,12 +604,15 @@
                 fila.appendChild(columnaSubtotal);
 
                 let columnaAcciones = document.createElement('td');
+
                 let botonEliminar = document.createElement('button');
-                botonEliminar.textContent = 'Eliminar';
+                botonEliminar.innerHTML = '<i class="fas fa-trash"></i>';
                 botonEliminar.className = 'btn thirdd';
                 botonEliminar.addEventListener('click', function() {
                     eliminarProductoCarrito(carrito.indexOf(producto));
                 });
+
+
                 columnaAcciones.appendChild(botonEliminar);
                 fila.appendChild(columnaAcciones);
 
@@ -505,6 +623,7 @@
 
             let totalPedido = calcularTotalPedido();
             document.getElementById('totalPedido').textContent = totalPedido;
+
 
 
             // Actualizar el valor del campo oculto con los productos personalizados
@@ -525,17 +644,7 @@
         });
 
         // eliminar de card|
-        function eliminarProductoCarrito(indice) {
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            carrito.splice(indice, 1);
-            localStorage.setItem('carrito', JSON.stringify(carrito));
 
-            // Después de eliminar el producto, actualiza los datos mostrados en la tabla
-            actualizarTablaCarrito();
-
-            // También actualiza el total del pedido
-            actualizarTotalEnDOM();
-        }
         document.getElementById('formulario-guadar-pedido').addEventListener('submit', function(event) {
             event.preventDefault(); // Evita que el formulario se envíe de inmediato
 
@@ -548,35 +657,6 @@
             // Mostrar el mensaje de confirmación para guardar el pedido
             confirmarGuardarPedido();
         });
-
-        function actualizarTablaCarrito() {
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            let tablaCarrito = document.querySelector('.carrito-body');
-            tablaCarrito.innerHTML = ''; // Limpiar la tabla antes de mostrar los productos actualizados
-
-            let totalPedido = 0;
-
-            carrito.forEach(function(producto) {
-                let fila = document.createElement('tr');
-
-                // Código para agregar las celdas de cada producto en la fila (nombre, precio, cantidad, subtotal)
-
-                tablaCarrito.appendChild(fila);
-
-                // Actualizar el total del pedido
-                totalPedido += producto.subtotal;
-            });
-
-            // Mostrar el total actualizado en el DOM
-            document.getElementById('totalPedido').textContent = totalPedido;
-        }
-
-
-
-
-
-
-
 
 
 
@@ -620,6 +700,23 @@
                 }
             });
         }
+
+
+
+
+
+
+
+
+
+        $(document).ready(function() {
+            // Inicializar DataTable en la tabla
+            $('#carritoTabla').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json' // Cargar el archivo de traducción en español
+                }
+            });
+        });
     </script>
 
 
