@@ -22,36 +22,53 @@
     <link rel="stylesheet" href="css/responsive.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/custom.css">
+    <style>
+        .carousel-inner .item {
+            display: none;
+        }
 
+        .carousel-inner .item img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .carousel-inner .item .d-flex {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Centrar verticalmente */
+            height: 100%;
+            /* Asegura que el contenedor ocupe todo el espacio verticalmente */
+        }
+
+        .datos {
+            display: flex;
+
+        }
+    </style>
 </head>
 
 @include('cliente.nav')
 
 <body>
-    <!-- Start Slider -->
-    <!-- <div id="slides-shop" class="cover-slides">
-        <ul class="slides-container">
-            @foreach ($productos as $producto)
+    <!-- Slider -->
+    <div id="mi_carousel" class="carousel slide" data-ride="carousel">
+        <div id="myCarouselCustom" class="carousel slide" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                @foreach ($productos as $producto)
                 @if ($producto->activo)
-                    <li class="text-center">
-                        <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h1 class="m-b-20"><strong>Bienvenido a <br> Tropical Detox</strong></h1>
-                                    <p class="m-b-40">¡Disfrute de una pagina de jugos <br> de todo tipo de sabores
-                                        junto con personalizados!</p>
-                                    <p><a class="btn hvr-hover" href="{{ route('Productos') }}">Productos</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                <div class="item @if ($loop->first) active @endif">
+                    <div class="d-flex">
+                        <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }} " class="text-center img-fluid w-50">
+                    </div>
+                </div>
                 @endif
-            @endforeach
-        </ul>
-    </div> -->
+                @endforeach
+            </div>
+        </div>
+    </div>
     <!-- End Slider -->
-
 
     <!-- Start Categories  -->
     <div class="categories-shop">
@@ -132,29 +149,55 @@
     </div>
     <!-- End Products  -->
 
-    <!-- Start Instagram Feed  -->
-    <!-- <div class="instagram-box">
-        <div class="main-instagram owl-carousel owl-theme">
-            @foreach ($productos as $producto)
-                @if ($producto->activo)
-                    <div class="item">
-                        <div class="ins-inner-box">
-                            <img src="{{ asset($producto->imagen) }}" alt="No hay imagen disponible" width="100" />
-                            <div class="hov-in">
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            @endforeach
+    <!-- Mapas -->
+    <section class="row m-9">
+        <div class="col-lg-12">
+            <div class="title-all text-center">
+                <h1>Nuestra ubicación</h1>
+                <p class="text-center">Estamos ubicados en el corazón de la ciudad, </p>
+                <p>Nuestra tienda ofrece una amplia gama de productos y servicios para satisfacer todas tus necesidades. Ven a visitarnos y descubre todo lo que tenemos para ofrecerte.</p>
+            </div>
         </div>
-    </div> -->
-    <!-- End Instagram Feed -->
-
+        <div class="col-md-9 offset-md-3">
+            <div class="datos">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63458.87684076734!2d-75.62018190544242!3d6.240018059759329!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e4428dfb80fad05%3A0x42137cfcc7b53b56!2sMedell%C3%ADn%2C%20Antioquia!5e0!3m2!1ses!2sco!4v1667887272639!5m2!1ses!2sco" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+    <!-- End mapas -->
     @include('cliente.footer')
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
 
+    <script>
+        // Cuando el documento esté listo
+        $(document).ready(function() {
+            // Obtener todos los elementos con la clase .item dentro de .carousel-inner
+            var items = $('.carousel-inner .item');
+            // Mostrar el primer elemento
+            items.first().addClass('active').show();
+
+            // Función para manejar el cambio de las imágenes del carousel
+            function nextSlide() {
+                // Encontrar el elemento activo
+                var activeItem = $('.carousel-inner .item.active');
+                // Obtener el siguiente elemento
+                var nextItem = activeItem.next();
+
+                // Si no hay siguiente elemento, volver al inicio
+                if (nextItem.length === 0) {
+                    nextItem = items.first();
+                }
+
+                // Mostrar el siguiente elemento y ocultar el actual
+                activeItem.removeClass('active').fadeOut('slow');
+                nextItem.addClass('active').fadeIn('slow');
+            }
+
+            // Llamar a la función nextSlide cada cierto tiempo (por ejemplo, cada 3 segundos)
+            setInterval(nextSlide, 3000);
+        });
+    </script>
     <!-- ALL JS FILES -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>
