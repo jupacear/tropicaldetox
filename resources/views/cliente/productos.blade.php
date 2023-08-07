@@ -86,14 +86,15 @@
                                                 placeholder="Ingresa el nombre del insumo">
                                         </div>
                                         @foreach ($Insumo as $Insumos)
-                                            <div class="insumo" data-id="{{ $Insumos->id }}">
+                                            <div style="margin: 1em" class="insumo" data-id="{{ $Insumos->id }}">
                                                 <img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto"
                                                     width="40em">
                                                 <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
                                                     {{ $Insumos->precio_unitario }}</span>
                                                 <button type="button" class="btn btn-success agregar-insumo"
-                                                    style="max-width: 2em; max-height: 2em;">
-                                                    <i class="fas fa-plus fa-xs"></i>
+                                                    style="max-width: 1em; max-height: 1.5em;">
+                                                    <i class="fas fa-plus fa-xs"
+                                                        style="position: relative; bottom: 8.5px;right: 5px"></i>
                                                     <!-- Icono de Font Awesome para el botón -->
                                                 </button>
                                                 <br>
@@ -318,8 +319,19 @@
 
                     // Crea un elemento de lista con el nombre y precio del insumo seleccionado
                     var listItem = $('<li>').text(`${insumoId} : ${insumoNombre} $: ${insumoPrecio}`);
-                    var removeButton = $('<button>').text('Quitar').addClass(
-                        'btn btn-danger quitar-insumo');
+                    // var removeButton = $('<button>').text('Quitar').addClass(
+                    //     'btn btn-danger quitar-insumo');
+                    // var removeButton = $('<button>').html('<i class="fas fa-trash"></i>').addClass(
+                    //     'btn btn-danger quitar-insumo');
+
+                    var removeButton = $('<button>').html('<i class="fas fa-trash"></i>').addClass(
+                        'btn btn-danger quitar-insumo').css({
+                        margin: '8px',
+                        
+                        
+
+                    });
+
 
                     // Agrega el botón de "Quitar" junto al insumo seleccionado
                     listItem.append(removeButton);
@@ -392,30 +404,6 @@
             //     });
             // }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
     </script>
 
 </body>

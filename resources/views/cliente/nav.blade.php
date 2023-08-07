@@ -69,7 +69,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
                                     class="fa fa-shopping-cart nav-link">
                                     <span class="badge" id="carritoBadge">
-                                        
+
                                     </span>
                                 </i></a></li>
                     @else
@@ -152,13 +152,13 @@
         // Obtener el contenido del carrito almacenado en el Local Storage
         var carritoContenido = localStorage.getItem('carrito');
         var productosPersonalizados = localStorage.getItem('productosPersonalizados');
-        
+
         // Convertir la cadena JSON en un objeto JavaScript
         var carritoObjeto = JSON.parse(carritoContenido) || []; // Si el carrito está vacío, inicializar como array vacío
         var productosPersonalizadosObjeto = JSON.parse(productosPersonalizados) || []; // Si los productos personalizados están vacíos, inicializar como array vacío
 
         // Obtener la cantidad de elementos en el carrito
-        if (bool && carritoObjeto.length <= 1) {
+        if (bool && carritoObjeto.length <= 0) {
             var cantidadEnCarrito = carritoObjeto.length + 1;
         }else{
             var cantidadEnCarrito = carritoObjeto.length;
@@ -174,7 +174,7 @@
     // Llamar a la función para actualizar el total al cargar la página y en cada cambio del Local Storage
     actualizarTotalCarrito(false);
 
-   
+
 </script>
 
 

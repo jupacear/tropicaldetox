@@ -99,6 +99,8 @@ class pedidoController extends Controller
                 $insumos = $personalizado['insumos'];
                 $Nombre = $personalizado['Nombre'];
                 $subtotal = $personalizado['Subtotal'];
+                $Cantidad = $personalizado['Cantidad'];
+
                 $id = '';
                 $Nombres = '';
                 $total += $subtotal;
@@ -111,7 +113,7 @@ class pedidoController extends Controller
                     $subtotal = trim($subtotalData[0]);
                     $personalizadoModel = new producPerz();
                     $personalizadoModel->nombre = $Nombres;
-                    $personalizadoModel->cantidad = 1;
+                    $personalizadoModel->cantidad = $Cantidad;
                     $personalizadoModel->Subtotal = $subtotal;
                     $personalizadoModel->id_pedidos = $pedido->id;
                     $personalizadoModel->insumos = $id;
@@ -244,6 +246,8 @@ class pedidoController extends Controller
         return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');;
     }
 
+
+    // fataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
     public function update(Request $request, $id)
     {
         $productos = $request->input('ProductoID');
@@ -279,7 +283,6 @@ class pedidoController extends Controller
         $pedido->Estado = $request->input('Estado');
         $pedido->id_users = $request->input('Usuario');
         $pedido->Total = $request->input('Total');
-        // return response()->json ( $pedido->Total = $request->input('Total'));
         $pedido->save();
         $pedido->detalle_pedidos()->delete();
         $total = 0;
@@ -291,6 +294,7 @@ class pedidoController extends Controller
                 $subtotal = $personalizado['Subtotal'];
                 $insumos = $personalizado['insumos'];
                 $Nombre = $personalizado['Nombre'];
+                $Cantidad = $personalizado['Cantidad'];
                 // $total = +$subtotal;
                 $id = '';
                 foreach ($insumos as $insumo) {
@@ -298,7 +302,7 @@ class pedidoController extends Controller
                     $id = trim($insumoData[0]);
                     $personalizadoModel = new producPerz();
                     $personalizadoModel->nombre = $Nombre;
-                    $personalizadoModel->cantidad = 1;
+                    $personalizadoModel->cantidad = $Cantidad;
                     $personalizadoModel->id_pedidos = $pedido->id;
                     $personalizadoModel->insumos = $id;
                     $personalizadoModel->Subtotal = $subtotal;
@@ -306,19 +310,22 @@ class pedidoController extends Controller
                 }
             }
         }
-        // return response()->json($personalizadoModel);
+        // return response()->json($personalizadosArray2);
         if (!empty($personalizadosArray2)) {
             foreach ($personalizadosArray2 as $personalizado) {
                 // Guardar los datos del personalizado en la base de datos
                 $insumos = $personalizado['Insumos'];
+                $Cantidad = $insumos[0]['cantidad'];
                 $Nombre = $personalizado['Nombre'];
                 $subtotal = (int)$personalizado['Subtotal'];
+        // return response()->json($Cantidad);
+                
                 $total = $subtotal;
                 foreach ($insumos as $insumo) {
                     $id = $insumo['id'];
                     $personalizadoModel = new producPerz();
                     $personalizadoModel->nombre = $Nombre;
-                    $personalizadoModel->cantidad = 1;
+                    $personalizadoModel->cantidad = $Cantidad;
                     $personalizadoModel->id_pedidos = $pedido->id;
                     $personalizadoModel->insumos = $id;
                     $personalizadoModel->Subtotal = $subtotal;
@@ -362,6 +369,7 @@ class pedidoController extends Controller
             $pedidos = Pedido::all();
             return view('pedidos.index', compact('pedidos'));
     }
+    // fataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
 
     /**
      * Remove the specified resource from storage.
@@ -382,13 +390,15 @@ class pedidoController extends Controller
     }
 
 
+    // fataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
+
     public function guardarPedido(Request $request)
     {
         $carrito = json_decode($request->input('carrito', '[]'), true);
         // Verificar si el carrito está vacío
-        if (empty($carrito)) {
-            return redirect()->back()->with('success', 'El carrito está vacío. Agrega productos antes de guardar el pedido.');
-        }
+        // if (empty($carrito)) {
+        //     return redirect()->back()->with('success', 'El carrito está vacío. Agrega productos antes de guardar el pedido.');
+        // }
         // Validar disponibilidad de insumos
         foreach ($carrito as $producto) {
             $insumo_productos = InsumoProducto::where('producto_id', $producto['id'])->get();
@@ -443,21 +453,21 @@ class pedidoController extends Controller
                     $subtotalData = explode(':', $insumos[$i]);
                     $subtotal += (int) trim($subtotalData[3]);
                 }
-               
+
                 $id = '';
                 $Nombres = '';
+                $total += $subtotal;
+                $totalL +=  $subtotal;
                 foreach ($insumos as $insumo) {
                     // return response()->json($subtotal);
                     $insumoData = explode(':', $insumo);
                     $NombreData = explode(':', $Nombre);
                     $id = trim($insumoData[0]);
                     $Nombres = trim($NombreData[0]);
-                    $total += $subtotal;
-                    $totalL +=  $subtotal;
                     $personalizadoModel = new producPerz();
                     $personalizadoModel->nombre = $Nombres;
                     $personalizadoModel->cantidad = $cantidad;
-                    $personalizadoModel->Subtotal = $totalL;
+                    $personalizadoModel->Subtotal = $subtotal;
                     $personalizadoModel->id_pedidos = $pedido->id;
                     $personalizadoModel->insumos = $id;
                     $personalizadoModel->save();
@@ -483,6 +493,7 @@ class pedidoController extends Controller
         // Borrar los productos personalizados del Local Storage después de guardar el pedido
         return redirect()->route('verpedido')->with('success', 'Pedido guardado correctamente.')->with('pedidoGuardado', true);
     }
+    // fataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
 
 
 
@@ -496,13 +507,5 @@ class pedidoController extends Controller
         return view('cliente.pedidos', compact('pedidos', 'userDirecion'));
     }
 
-    public function show1($id)
-    {
-        // Recuperar el pedido y sus detalles de la base de datos
-        $pedido = Pedido::with('users')->find($id); // Cambiar 'users' por 'user'
-        $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
-        $personaliza = producPerz::where('id_pedidos', $id)->get();
-        // Pasar el pedido y sus detalles a la vista
-        return view('cliente.Detalles', compact('pedido', 'detalles_pedidos', 'personaliza'));
-    }
+  
 }

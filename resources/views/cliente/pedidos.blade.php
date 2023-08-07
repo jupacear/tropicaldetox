@@ -58,6 +58,7 @@
                             <tr>
                                 <th>Estado</th>
                                 <th>Fecha</th>
+                                <th>Hora</th>
                                 <th>Dirección</th>
                                 <th>Total</th>
                                 <th>Acciones</th>
@@ -68,7 +69,8 @@
                                 <tr>
                                     <td>{{ $pedido->Estado }}</td>
                                     <td>{{ $pedido->Fecha }}</td>
-
+                                    <td> {{ substr($pedido->created_at, 11, 5) }}</td>
+                                   
 
                                     <td>
                                         @if( $pedido->Direcion)
