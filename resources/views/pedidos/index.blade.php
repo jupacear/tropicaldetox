@@ -11,31 +11,27 @@
     </div>
     <div class="section-body">
         @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         @endif
 
         @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
+            <div class="alert alert-success">
+                <p>{{ $message }}</p>
+            </div>
         @endif
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="text-left m-2">
-                            <a class="btn btn-warning" href="{{ url('pedidos/create') }}">Nuevo</a>
-                        </div>
+                        <a class="btn btn-warning" href="{{ url('pedidos/create') }}">Nuevo</a>
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
-
-
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Telefono</th>
                                 <th style="color:#fff;">Direcion</th>
@@ -46,7 +42,6 @@
                             </thead>
                             <tbody>
                                 @foreach ($pedidos as $pedido)
-
                                     @if ($pedido->Estado == 'En_proceso')
                                         <tr>
                                             <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
@@ -91,11 +86,8 @@
                                                             <i class="fa fa-fw fa-edit"></i>
                                                         </a>
                                                         {{-- <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
-
                                                         <i class="fa fa-fw fa-trash"></i>
-                                                        Eliminar
                                                     </button> --}}
-
 
 
                                                     </form>
@@ -198,7 +190,6 @@
                                             </td>
                                         </tr>
                                     @endif
-
                                 @endforeach
                             </tbody>
                         </table>
@@ -238,6 +229,35 @@
         // Cambiar el estado
         if (estado === 'En_proceso') {
             estado = 'Finalizado';
+        } else {
+            estado = 'En_proceso';
+        }
+        estadoInput.value = estado;
+
+        // Cambiar el color del botón y mostrar el mensaje
+        var button = form.querySelector('button');
+        if (estado === 'En_proceso') {
+            button.classList.remove('btn-success');
+            button.classList.add('btn-primary');
+            button.innerText = 'En proceso';
+        } else {
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-success');
+            button.innerText = 'Finalizado';
+        }
+
+        // Enviar el formulario
+        form.submit();
+    }
+
+    function cambiarEstadoq(pedidoId) {
+        var form = document.getElementById('form-estado-' + pedidoId);
+        var estadoInput = form.querySelector('input[name="Estado"]');
+        var estado = estadoInput.value;
+
+        // Cambiar el estado
+        if (estado === 'En_proceso') {
+            estado = 'Cancelado';
         } else {
             estado = 'En_proceso';
         }
