@@ -50,9 +50,11 @@ Productos
                                 </tr>
                             </thead>
                             <tbody>
+                                @php $contador = 1 @endphp
                                 @foreach ($productos as $producto)
+                                @if ($producto->activo)
                                 <tr>
-                                    <td>{{ ++$i }}</td>
+                                    <td>{{ $contador }}</td>
                                     <td>
                                         @if ($producto->imagen)
                                         <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto" width="25">
@@ -84,9 +86,52 @@ Productos
                                         </form>
                                     </td>
                                 </tr>
+                                @php $contador++ @endphp
+                                @endif
                                 @endforeach
+                                <!-- Mostrar productos inactivos -->
+                                @foreach ($productos as $producto)
+                                @if (!$producto->activo)
+                                <tr>
+                                    <td>{{ $contador }}</td>
+                                    <td>
+                                        @if ($producto->imagen)
+                                        <img src="{{ asset($producto->imagen) }}" alt="Imagen del producto" width="25">
+                                        @else
+                                        Sin imagen
+                                        @endif
+                                    </td>
+                                    <td>{{ $producto->nombre }}</td>
+                                    <td>{{ number_format($producto->precio, 0, '.','.') }}</td>
+                                    <td>{{ $producto->descripcion }}</td>
+                                    <td>{{ $producto->activo ? 'Activo' : 'Inactivo' }}</td>
+                                    <td>{{ $producto->categorium->nombre }}</td>
+                                    <td>
+                                        @foreach ($producto->insumos as $insumo)
+                                        {{ $insumo->nombre }}
+                                        <br>
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        <!-- Formulario de eliminación -->
+                                        <form id="deleteProductForm-{{ $producto->id }}" action="{{ route('productos.destroy', $producto->id) }}" method="POST" style="display: inline;">
+                                            <a class="btn btn-sm btn-primary" href="{{ route('productos.show', $producto->id) }}"><i class="fa fa-fw fa-eye"></i> </a>
+                                            <a class="btn btn-sm btn-success" href="{{ route('productos.edit', $producto->id) }}"><i class="fa fa-fw fa-edit"></i> </a>
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal" data-form-id="deleteProductForm-{{ $producto->id }}"><i class="fa fa-fw fa-trash"></i> </button>
+
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endif
+                                @endforeach
+                                <!-- Mostrar productos inactivos -->
+
                             </tbody>
                         </table>
+
                     </div>
                     <!-- Centramos la paginacion a la derecha -->
                     <div class="pagination justify-content-end">
