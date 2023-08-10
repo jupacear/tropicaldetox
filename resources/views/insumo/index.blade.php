@@ -34,7 +34,6 @@ Insumo
                         </div>
                         <div class="table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
-
                                 <thead style="background-color:#6777ef" class="thead">
                                     <tr>
                                         <th style="color:#fff;">No</th>
@@ -45,13 +44,15 @@ Insumo
                                         <th style="color:#fff;">Unidad Medida</th>
                                         <th style="color:#fff;">Precio Unitario</th>
                                         <th style="color:#fff;">Opciones</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php $contador = 1 @endphp
+                                    <!-- Mostrar insumos activos -->
                                     @foreach ($insumos as $insumo)
+                                    @if ($insumo->activo)
                                     <tr>
-                                        <td>{{ ++$i }}</td>
+                                        <td>{{ $contador }}</td>
                                         <td>
                                             @if ($insumo->imagen)
                                             <img src="{{ asset($insumo->imagen) }}" alt="Imagen del insumo" width="25">
@@ -91,6 +92,56 @@ Insumo
                                             </form>
                                         </td>
                                     </tr>
+                                    @php $contador++ @endphp
+                                    @endif
+                                    @endforeach
+                                    <!-- Mostrar insumos inactivos -->
+                                    @foreach ($insumos as $insumo)
+                                    @if (!$insumo->activo)
+                                    <tr>
+                                        <td>{{ $contador }}</td>
+                                        <td>
+                                            @if ($insumo->imagen)
+                                            <img src="{{ asset($insumo->imagen) }}" alt="Imagen del insumo" width="25">
+                                            @else
+                                            Sin imagen
+                                            @endif
+                                        </td>
+                                        <td>{{ $insumo->nombre }}</td>
+                                        <td>
+                                            @if ($insumo->activo == 1)
+                                            Activo
+                                            @else
+                                            Inactivo
+                                            @endif
+                                        </td>
+                                        <td>{{ $insumo->cantidad_disponible }}</td>
+                                        <td>{{ $insumo->unidad_medida }}</td>
+                                        <td>{{ number_format($insumo->precio_unitario, 0, '.','.') }}</td>
+
+
+                                        <td>
+                                            <form action="{{ route('insumo.destroy', $insumo->id) }}" method="POST">
+                                                <a class="btn btn-sm btn-primary " href="{{ route('insumo.show', $insumo->id) }}"><i class="fa fa-fw fa-eye"></i> </a>
+                                                <a class="btn btn-sm btn-success" href="{{ route('insumo.edit', $insumo->id) }}"><i class="fa fa-fw fa-edit"></i></a>
+                                                @csrf
+                                                @method('DELETE')
+                                                @if ($insumo->activo)
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmDesactivateInsumo(event)">
+                                                    <i class="fa fa-fw fa-toggle-off"></i>
+                                                </button>
+                                                @else
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmActivateInsumo(event)">
+                                                    <i class="fa fa-fw fa-toggle-on"></i>
+
+                                                </button>
+                                                @endif
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @php $contador++ @endphp
+
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
