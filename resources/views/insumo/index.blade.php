@@ -140,7 +140,6 @@ Insumo
                                         </td>
                                     </tr>
                                     @php $contador++ @endphp
-
                                     @endif
                                     @endforeach
                                 </tbody>
