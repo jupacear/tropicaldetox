@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
+use RealRashid\SweetAlert\Facades\Alert;
 
 
 class UsuarioController extends Controller
@@ -55,7 +56,9 @@ class UsuarioController extends Controller
     public function index(Request $request)
     {      
         
-         $usuarios = User::all();
+        $usuarios = User::with('pedidos')->get();
+         
+         
         return view('usuarios.index',compact('usuarios')); 
 
         
@@ -69,7 +72,7 @@ class UsuarioController extends Controller
     public function indexc(Request $request)
     {      
         
-         $usuarios = User::all();
+        $usuarios = User::with('pedidos')->get();
         return view('A_clientes.index',compact('usuarios')); 
 
         //Con paginación
@@ -181,8 +184,8 @@ class UsuarioController extends Controller
     public function storec(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|regex:/^[A-Za-z ]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z ]+$/|max:30',
+            'apellidos' => 'required|regex:/^[A-Za-z ]+$/|max:30',
             'estado' => 'boolean',
             'documento' => [
                 'required',
@@ -200,10 +203,10 @@ class UsuarioController extends Controller
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
             'name.regex' => 'El campo nombre solo debe contener letras.',
-            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'name.max' => 'El campo nombre no debe tener más de 30 caracteres.',
             'apellidos.required' => 'El campo apellidos es obligatorio.',
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
-            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 30 caracteres.',
             'estado.required' => 'El campo estado es requerido.',
             'documento.min' => 'El campo documento debe tener al menos 8 dígitos.',
             'documento.required' => 'El campo documento es obligatorio.',
@@ -260,8 +263,8 @@ class UsuarioController extends Controller
     private function storeAdmin(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
             'estado' => 'boolean',
             'documento' => [
                 'nullable',
@@ -279,10 +282,10 @@ class UsuarioController extends Controller
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
             'name.regex' => 'El campo nombre solo debe contener letras.',
-            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'name.max' => 'El campo nombre no debe tener más de 30 caracteres.',
             'apellidos.required' => 'El campo apellidos es obligatorio.',
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
-            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 30 caracteres.',
             'documento.min' => 'El documento debe ser valido.',
             'documento.unique' => 'El documento ingresado ya está en uso.',
             'documento.regex' => 'El campo documento solo puede contener números.',
@@ -321,8 +324,8 @@ class UsuarioController extends Controller
     private function storeCliente(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
             'estado' => 'boolean',
             'documento' => [
                 'required',
@@ -340,10 +343,10 @@ class UsuarioController extends Controller
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
             'name.regex' => 'El campo nombre solo debe contener letras.',
-            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'name.max' => 'El campo nombre no debe tener más de 30 caracteres.',
             'apellidos.required' => 'El campo apellidos es obligatorio.',
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
-            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 30 caracteres.',
             'estado.required' => 'El campo estado es requerido.',
             'documento.min' => 'El campo documento debe tener al menos 6 dígitos.',
             'documento.required' => 'El campo documento es obligatorio.',
@@ -454,8 +457,8 @@ public function showc($id)
     {
 
         $this->validate($request, [
-            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
             'estado' => 'boolean',
             'documento' => [
                 'nullable',
@@ -472,10 +475,10 @@ public function showc($id)
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
             'name.regex' => 'El campo nombre solo debe contener letras.',
-            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'name.max' => 'El campo nombre no debe tener más de 30 caracteres.',
             'apellidos.required' => 'El campo apellidos es obligatorio.',
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
-            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 30 caracteres.',
             'telefono.numeric' => 'El campo teléfono no válido.',
             'telefono.digits' => 'El campo teléfono no válido.',
             'email.required' => 'El campo email es obligatorio.',
@@ -518,8 +521,8 @@ public function showc($id)
     public function updatec(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
             'estado' => 'boolean',
             'documento' => [
                 'required',
@@ -543,10 +546,10 @@ public function showc($id)
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
             'name.regex' => 'El campo nombre solo debe contener letras.',
-            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'name.max' => 'El campo nombre no debe tener más de 30 caracteres.',
             'apellidos.required' => 'El campo apellidos es obligatorio.',
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
-            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 30 caracteres.',
             'documento.required' => 'El campo documento es obligatorio.',
             'documento.regex' => 'El campo documento no válido.',
             'documento.max' => 'El campo documento no debe tener más de 15 caracteres.',
@@ -597,7 +600,15 @@ public function showc($id)
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
+        $usuario = User::find($id);
+    
+        if ($usuario->pedidos->isEmpty()) {
+            $usuario->delete();
+            Alert::success('Usuario eliminado', 'El usuario ha sido eliminado exitosamente.');
+        } else {
+            Alert::error('No se puede eliminar', 'El usuario tiene pedidos asociados y no puede ser eliminado.');
+        }
+    
         return redirect()->route('usuarios.index');
     }
 
@@ -605,7 +616,15 @@ public function showc($id)
 
     public function destroyc($id)
     {
-        User::find($id)->delete();
+        $usuario = User::find($id);
+    
+        if ($usuario->pedidos->isEmpty()) {
+            $usuario->delete();
+            Alert::success('Usuario eliminado', 'El usuario ha sido eliminado exitosamente.');
+        } else {
+            Alert::error('No se puede eliminar', 'El usuario tiene pedidos asociados y no puede ser eliminado.');
+        }
+    
         return redirect()->route('A_clientes.index');
     }
 

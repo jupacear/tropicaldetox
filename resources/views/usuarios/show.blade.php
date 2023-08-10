@@ -12,24 +12,26 @@
                 </div>
             </div>
         </div>
-        <div class="section-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4>Nombre: {{ $user->name }}</h4>
-                            <h4>Apellidos: {{ $user->apellidos }}</h4>
-                            <h4>Estado: {{ $user->estado ? 'Activo' : 'Inactivo' }}</h4>
-                            <h4>Email: {{ $user->email }}</h4>
-                            <h4>Rol: 
-                                @if (!empty($user->getRoleNames()))
-                                    @foreach ($user->getRoleNames() as $rolNombre)
-                                        <span class="badge badge-dark">{{ $rolNombre }}</span>
-                                    @endforeach
-                                @endif
-                            </h4>
-                        </div>
-                    </div>
+        <div class="container mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title font-weight-bold">Detalles del Usuario</h4>
+                    <h5>Documento: {{ $user->documento }}</h5>
+                    <h5>Nombre: {{ $user->name }}</h5>
+                    <h5>Apellidos: {{ $user->apellidos }}</h5>
+                    <h5>Estado: {{ $user->estado ? 'Activo' : 'Inactivo' }}</h5>
+                    <h5>Email: {{ $user->email }}</h5>
+                    <h5>Dirección: {{ $user->direccion }}</h5>
+                    <h5>Teléfono: {{ $user->telefono }}</h5>
+                    <h5>Rol: 
+                        @if (!empty($user->getRoleNames()))
+                            @foreach ($user->getRoleNames() as $rolNombre)
+                                <span class="badge badge-dark">{{ $rolNombre }}</span>
+                            @endforeach
+                        @else
+                            <span>No asignado</span>
+                        @endif
+                    </h5>
                 </div>
             </div>
         </div>

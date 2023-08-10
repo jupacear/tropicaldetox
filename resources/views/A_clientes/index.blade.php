@@ -2,85 +2,123 @@
 
 @section('content')
 <section class="section">
+  <head>
+    @include('sweetalert::alert')
+  </head>
   <div class="section-header">
-    <h3 class="page__heading">Clientes</h3>
+      <h3 class="page__heading">Clientes</h3>
   </div>
-  <div class="section-body">
-    @if ($message = Session::get('success'))
-    <div class="alert alert-success">
-      <p>{{ $message }}</p>
-    </div>
-    @endif
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-body">
-
-            <div class="text-left m-2">
-              <a class="btn btn-warning" href="{{ route('A_clientes.create') }}">Nuevo</a>
-            </div>
-
-
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-              <thead style="background-color:#6777ef">
-                <th style="color:#fff;">No</th>
-                <th style="color:#fff;">Documento</th>
-                <th style="color:#fff;">Nombre</th>
-                <th style="color:#fff;">Apellidos</th>
-                <th style="color:#fff;">Estado</th>
-                <th style="color:#fff;">Teléfono</th>
-                <th style="color:#fff;">Dirección</th>
-                <th style="color:#fff;">E-mail</th>
-                <th style="color:#fff;">Acciones</th>
-              </thead>
-              <tbody>
-                @foreach ($usuarios as $usuario)
-                @foreach ($usuario->roles as $rol)
-                @if ($rol->name === 'cliente')
-                <tr>
-                  <td>{{ $usuario->documento }}</td>
-                  <td>{{ $usuario->name }}</td>
-                  <td>{{ $usuario->apellidos }}</td>
-                  <td>
-                    @if ($usuario->estado)
-                    Activo
-                    @else
-                    Inactivo
-                    @endif
-                  </td>
-
-                  <td>{{ $usuario->telefono }}</td>
-                  <td>{{ $usuario->direccion }}</td>
-                  <td>{{ $usuario->email }}</td>
-                  <td>
-                    <a class="btn btn-sm btn-primary" href="{{ route('A_clientes.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i></a>
-                    <a class="btn btn-sm btn-success" href="{{ route('A_clientes.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i></a>
-
-
-                    {!! Form::open([
-                    'method' => 'DELETE',
-                    'route' => ['A_clientes.destroy', $usuario->id],
-                    'style' => 'display:inline',
-                    'onsubmit' => 'confirmDelete(event, this)',
-                    ]) !!}
-                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i></button>
-                    {!! Form::close() !!}
-                  </td>
-                </tr>
-                @endif
-                @endforeach
-                @endforeach
-              </tbody>
-            </table>
-            <!-- Centramos la paginacion a la derecha -->
-
-
-          </div>
+      <div class="section-body">
+        @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
         </div>
+        @endif
+          <div class="row">
+              <div class="col-lg-12">
+                  <div class="card">
+                      <div class="card-body">                           
+                          <a class="btn btn-warning" href="{{ route('A_clientes.create') }}">Nuevo</a>        
+
+                          
+
+                        
+                          <table id="example" class="table table-striped table-bordered" style="width:100%">
+                            <thead style="background-color:#6777ef">
+                                <th style="color:#fff;">No</th>
+                                <th style="color:#fff;">Documento</th>
+                                <th style="color:#fff;">Nombre</th>
+                                <th style="color:#fff;">Apellidos</th>
+                                <th style="color:#fff;">Estado</th>
+                                <th style="color:#fff;">Teléfono</th>
+                                <th style="color:#fff;">Dirección</th>
+                                <th style="color:#fff;">E-mail</th>
+                                <th style="color:#fff;">Acciones</th>
+                            </thead>
+                            <tbody>
+                                {{-- Muestra primero los usuarios activos --}}
+                                @php $contador = 1 @endphp
+                                @foreach ($usuarios as $usuario)
+                                    @foreach ($usuario->roles as $rol)
+                                        @if ($rol->name === 'cliente' && $usuario->estado)
+                                            <tr>
+                                                <td>{{ $contador }}</td>
+                                                <td>{{ $usuario->documento }}</td>
+                                                <td>{{ $usuario->name }}</td>
+                                                <td>{{ $usuario->apellidos }}</td>
+                                                <td>
+                                                    <span class="badge badge-success">Activo</span>
+                                                </td>
+                                                <td>{{ $usuario->telefono }}</td>
+                                                <td>{{ $usuario->direccion }}</td>
+                                                <td>{{ $usuario->email }}</td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-primary" href="{{ route('A_clientes.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i></a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('A_clientes.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i></a>
+                                                    
+                                                    {!! Form::open([
+                                                        'method' => 'DELETE',
+                                                        'route' => ['A_clientes.destroy', $usuario->id],
+                                                        'style' => 'display:inline',
+                                                        'onsubmit' => 'confirmDelete(event, this)',
+                                                    ]) !!}
+                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i></button>
+                                                    {!! Form::close() !!}
+                                                </td>
+                                            </tr>
+                                            @php $contador++ @endphp
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                        
+                                {{-- Luego muestra los usuarios inactivos --}}
+                                @foreach ($usuarios as $usuario)
+                               
+                                    @foreach ($usuario->roles as $rol)
+                                        @if ($rol->name === 'cliente' && !$usuario->estado)
+                                            <tr>
+                                              <td>{{ $contador }}</td>
+                                                <td>{{ $usuario->documento }}</td>
+                                                <td>{{ $usuario->name }}</td>
+                                                <td>{{ $usuario->apellidos }}</td>
+                                                <td>
+                                                    <span class="badge badge-danger">Inactivo</span>
+                                                </td>
+                                                <td>{{ $usuario->telefono }}</td>
+                                                <td>{{ $usuario->direccion }}</td>
+                                                <td>{{ $usuario->email }}</td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-primary" href="{{ route('A_clientes.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i></a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('A_clientes.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i></a>
+                                                    
+                                                    @if ($usuario->pedidos->isEmpty())
+                                                    {!! Form::open([
+                                                        'method' => 'DELETE',
+                                                        'route' => ['A_clientes.destroy', $usuario->id],
+                                                        'style' => 'display:inline',
+                                                        'onsubmit' => 'confirmDelete(event, this)',
+                                                    ]) !!}
+                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i></button>
+                                                    {!! Form::close() !!}
+                                                @endif
+                                                </td>
+                                            </tr>
+                                            @php $contador++ @endphp
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        </table>
+                        
+                            <!-- Centramos la paginacion a la derecha -->
+                             
+                            
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 <script src="{{ asset('js/es_datatables.js') }}"></script>
 <script>
   $(document).ready(function() {
