@@ -50,25 +50,22 @@
                     <div class="special-menu text-center">
                         <div class="button-group filter-button-group">
                             <button class="active" data-filter="*">Todos</button>
-                            <button class="active" data-toggle="modal"
-                                data-target="#Personalizados">Personalizado</button>
+                            <button class="active" data-toggle="modal" data-target="#Personalizados">Personalizado</button>
                             @foreach ($categorias as $categoria)
-                                @if ($categoria->nombre != 'Personalizados')
-                                    <button data-filter=".{{ $categoria->id }}">{{ $categoria->nombre }}</button>
-                                @endif
+                            @if ($categoria->nombre != 'Personalizados')
+                            <button data-filter=".{{ $categoria->id }}">{{ $categoria->nombre }}</button>
+                            @endif
                             @endforeach
                         </div>
                     </div>
                 </div>
 
                 <!-- Modal Personalizados-->
-                <div class="modal fade my-modal" id="Personalizados" tabindex="-1" role="dialog"
-                    aria-labelledby="Personalizados" aria-hidden="true" style="position: absolute; z-index: 1050;">
+                <div class="modal fade my-modal" id="Personalizados" tabindex="-1" role="dialog" aria-labelledby="Personalizados" aria-hidden="true" style="position: absolute; z-index: 1050;">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h2 style="" class="modal-title" id="Personalizados">Producto Personalizados</h2>
-
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -79,13 +76,21 @@
                                     <h4>Selecciona 3 insumos para crear un producto personalizado.</h4>
                                 </div>
                                 <div style="display: flex">
-                                    <div class="insumos"
-                                        style="flex: 1; margin-right: 20px; overflow-y: scroll; max-height: 200px;">
+                                    <div class="insumos" style="flex: 1; margin-right: 20px; overflow-y: scroll; max-height: 200px;">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" id="buscarInsumo"
-                                                placeholder="Ingresa el nombre del insumo">
+                                            <input style="border-top: none; border-right: none; border-left: none;" type="text" class="form-control" id="buscarInsumo" placeholder="Ingresa el nombre del insumo">
                                         </div>
                                         @foreach ($Insumo as $Insumos)
+                                        <div class="insumo" data-id="{{ $Insumos->id }}">
+                                            <img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto" width="40em">
+                                            <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
+                                                {{ $Insumos->precio_unitario }}</span>
+                                            <button type="button" class="btn btn-success agregar-insumo" style="max-width: 2em; max-height: 2em;">
+                                                <i class="fas fa-plus fa-xs"></i>
+                                                <!-- Icono de Font Awesome para el botón -->
+                                            </button>
+                                            <br>
+                                        </div>
                                             <div style="margin: 1em" class="insumo" data-id="{{ $Insumos->id }}">
                                                 <img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto"
                                                     width="40em">
@@ -101,10 +106,7 @@
                                             </div>
                                         @endforeach
                                     </div>
-
-
-                                    <div class="insumos_selecionados"
-                                        style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 200px;">
+                                    <div class="insumos_selecionados" style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 200px;">
                                         <h3>Insumo seleccionados</h3>
                                         <ul class="lista-insumos-seleccionados"></ul>
                                         <!-- Usaremos una lista para mostrar los insumos seleccionados -->
@@ -114,9 +116,7 @@
 
                             <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" id="crearPersonalizados"
-                                    data-dismiss="modal"
-                                    onclick="actualizarTotalCarrito(true); mostrarAlertaExitosa('Producto agregado al carrito exitosamente');">Crear</button>
+                                <button type="button" class="btn btn-primary" id="crearPersonalizados" data-dismiss="modal" onclick="actualizarTotalCarrito(true); mostrarAlertaExitosa('Producto agregado al carrito exitosamente');">Crear</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             </div>
                         </div>
@@ -147,50 +147,34 @@
                     });
                 </script>
                 <!-- Modal Personalizados-->
-
             </div>
             <div class="row justify-content-center special-list">
                 @foreach ($productos as $producto)
-                    @if ($producto->activo)
-                        <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
-                            <!-- Cartas -->
-                            <div class="products-single fix">
-                                <div class="box-img-hover">
-                                    <!-- Imagen del producto -->
-                                    <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
-
-
-                                    <div class="mask-icon">
-                                        <a class="cart" href="#" data-producto-id="{{ $producto->id }}"
-                                            data-producto-nombre="{{ $producto->nombre }}"
-                                            data-producto-precio="{{ $producto->precio }}"
-                                            onclick="agregarAlCarrito(event);actualizarTotalCarrito(true)">
-                                            Agregar al carrito
-
-                                        </a>
-
-                                        {{-- <a class="cart" href="#" data-producto-id="{{ $producto->id }}"
-                                                data-producto-nombre="{{ $producto->nombre }}"
-                                                data-producto-precio="{{ $producto->precio }}"
-                                                onclick="agregarAlCarrito(event); actualizarTotalCarrito();">
-                                                Agregar al carrito
-                                             </a> --}}
-
-                                    </div>
-
-                                </div>
-                                <div class="why-text">
-                                    <!-- Nombre del producto -->
-                                    <h4>{{ $producto->nombre }}</h4>
-                                    <!-- Precio del producto -->
-                                    <h5>{{ $producto->precio }}</h5>
-                                    <!-- Descripción del producto -->
-                                    <p>{{ $producto->descripcion }}</p>
-                                </div>
+                @if ($producto->activo)
+                <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
+                    <!-- Cartas -->
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <!-- Imagen del producto -->
+                            <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
+                            <div class="mask-icon">
+                                <a class="cart" href="#" data-producto-id="{{ $producto->id }}" data-producto-nombre="{{ $producto->nombre }}" data-producto-precio="{{ $producto->precio }}" onclick="agregarAlCarrito(event);actualizarTotalCarrito(true)">
+                                    Agregar al carrito
+                                </a>
                             </div>
-                            <!-- End Cartas -->
                         </div>
-                    @endif
+                        <div class="why-text">
+                            <!-- Nombre del producto -->
+                            <h4>{{ $producto->nombre }}</h4>
+                            <!-- Precio del producto -->
+                            <h5>{{ $producto->precio }}</h5>
+                            <!-- Descripción del producto -->
+                            <p>{{ $producto->descripcion }}</p>
+                        </div>
+                    </div>
+                    <!-- End Cartas -->
+                </div>
+                @endif
                 @endforeach
             </div>
         </div>
@@ -298,6 +282,13 @@
             var insumosSeleccionadosSet = new Set(); // Conjunto para almacenar los IDs de los insumos seleccionados
             var numeroPersonalizado = 1; // Variable para el número autoincrementable
 
+            // Al cargar la página, busca el último número personalizado guardado en el Local Storage
+            var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+            if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                var ultimoNumeroPersonalizado = productosPersonalizadosGuardados[productosPersonalizadosGuardados.length - 1].NumeroPersonalizado;
+                numeroPersonalizado = ultimoNumeroPersonalizado + 1;
+            }
+
             // Evento al hacer clic en el botón "Agregar" de un insumo
             $('.agregar-insumo').click(function() {
                 if ($('.insumos_selecionados li').length < maxSeleccionados) {
@@ -305,20 +296,19 @@
 
                     // Verificar si el insumo ya está en la lista de seleccionados
                     if (insumosSeleccionadosSet.has(insumoId)) {
-                        // Ejemplo de uso:
                         nosepuedeAgregar('El insumo ya ha sido seleccionado anteriormente.');
                         return; // Salir del evento para evitar agregar el insumo repetido
                     }
 
                     var insumoNombre = $(this).siblings('span').text();
-                    var insumoPrecio = parseFloat($(this).siblings('span').text().match(/\d+/)[
-                        0]); // Extraer el precio del texto
+                    var insumoPrecio = parseFloat($(this).siblings('span').text().match(/\d+/)[0]); // Extraer el precio del texto
 
                     // Agregar el insumo al conjunto de insumos seleccionados
                     insumosSeleccionadosSet.add(insumoId);
 
                     // Crea un elemento de lista con el nombre y precio del insumo seleccionado
                     var listItem = $('<li>').text(`${insumoId} : ${insumoNombre} $: ${insumoPrecio}`);
+                    var removeButton = $('<button>').text('Quitar').addClass('btn btn-danger quitar-insumo');
                     // var removeButton = $('<button>').text('Quitar').addClass(
                     //     'btn btn-danger quitar-insumo');
                     // var removeButton = $('<button>').html('<i class="fas fa-trash"></i>').addClass(
@@ -328,10 +318,7 @@
                         'btn btn-danger quitar-insumo').css({
                         margin: '8px',
                         
-                        
-
                     });
-
 
                     // Agrega el botón de "Quitar" junto al insumo seleccionado
                     listItem.append(removeButton);
@@ -359,6 +346,7 @@
             // Evento al hacer clic en el botón "Crear" del modal
             $('#crearPersonalizados').click(function() {
                 var personalizado = {
+                    NumeroPersonalizado: numeroPersonalizado, // Agregar el número personalizado al objeto
                     Nombre: `Personalizado ${numeroPersonalizado}`, // Nombre con número autoincrementable
                     Subtotal: 0,
                     Cantidad: 1, // Agregar la propiedad Cantidad y establecerla en 1
@@ -379,8 +367,7 @@
                 numeroPersonalizado++;
 
                 // Obtener el arreglo de productos personalizados almacenados en el Local Storage
-                var productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) ||
-                    [];
+                var productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
                 // Agregar el producto personalizado actual al arreglo
                 productosPersonalizados.push(personalizado);
 
@@ -394,15 +381,7 @@
                 $('.insumos_selecionados').empty();
             });
 
-
-            // Al cargar la página, verifica si hay datos guardados en el Local Storage y muestra los insumos seleccionados previamente
             var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
-            // if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
-            //     productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
-            //         var listItem = $('<li>').text(`Nombre: ${productoPersonalizado.Nombre}, Subtotal: ${productoPersonalizado.Subtotal}`);
-            //         $('.insumos_selecionados').append(listItem);
-            //     });
-            // }
         });
     </script>
 
