@@ -26,12 +26,15 @@
                         </div>
                         <table class="table table-striped table-bordered" style="width:100%" id="example">
                             <thead style="background-color:#6777ef">
+                                <th style="color:#fff;">#</th>
                                 <th style="color:#fff;">Rol</th>
                                 <th style="color:#fff;">Acciones</th>
                             </thead>
                             <tbody>
+                                @php $contador = 1 @endphp
                                 @foreach ($roles as $role)
                                 <tr>
+                                    <td>{{ $contador }}</td>
                                     <td>{{ $role->name }}</td>
                                     <td>
 
@@ -52,7 +55,7 @@
                                         </script>
                                         @endif
 
-                                        @if ($role->name !== 'administrador')
+                                        @if ($role->name !== 'administrador' && $role->name !== 'cliente')
                                         @if ($role->estado)
                                         {!! Form::open([
                                         'method' => 'PUT',
@@ -61,7 +64,7 @@
                                         'onsubmit' => 'return confirmDeactivateRole(event)'
                                         ]) !!}
                                         <button type="submit" class="btn btn-sm btn-info">
-                                            <i class="fa fa-fw fa-toggle-on"></i> Desactivar
+                                            <i class="fa fa-fw fa-toggle-on"></i>
                                         </button>
                                         {!! Form::close() !!}
 
@@ -129,8 +132,8 @@
                                         'class' => 'delete-form',
                                         ]) !!}
                                         @if ($role->users->isNotEmpty() && $role->name !== 'administrador' && $role->name !== 'cliente')
-                                        <span class="text-danger">Alerta: Hay usuarios asociados, por lo
-                                            tanto, no se puede eliminar.</span>
+                                        
+                    
                                         @else
                                         <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(this)"><i class="fa fa-fw fa-trash"></i></button>
                                         @endif
@@ -140,6 +143,7 @@
 
                                     </td>
                                 </tr>
+                                @php $contador++ @endphp
                                 @endforeach
                             </tbody>
 

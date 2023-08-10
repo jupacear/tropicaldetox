@@ -1,3 +1,3 @@
 <div class="footer-left">
-    All rights reserved &copy; {{ date('Y') }}
+    Todos los derechos reservados equipo de desarrollo Tropical Detox &copy; {{ date('Y') }}
 </div>

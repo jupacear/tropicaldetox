@@ -4,6 +4,10 @@
 
 <head>
     <script src="{{ asset('js/translations/es.json') }}"></script>
+    
+        
+        @include('sweetalert::alert')
+    
 
 </head>
 <section class="section">
@@ -20,6 +24,9 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        @if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 
 
                         <div class="text-left m-2">
@@ -31,31 +38,23 @@
                                 <th style="color:#fff;">No</th>
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Apellidos</th>
-                                <th style="color:#fff;">estado</th>
+                                <th style="color:#fff;">Estado</th>
                                 <th style="color:#fff;">E-mail</th>
                                 <th style="color:#fff;">Rol</th>
                                 <th style="color:#fff;">Acciones</th>
                             </thead>
                             <tbody>
+                                @php $contador = 1 @endphp
                                 @foreach ($usuarios as $usuario)
+                                @if ($usuario->estado)
                                 <tr>
-                                    <td>{{ $usuario->id }}</td>
+                                    <td>{{ $contador }}</td>
                                     <td>{{ $usuario->name }}</td>
                                     <td>{{ $usuario->apellidos }}</td>
-
                                     <td>
-                                        @if ($usuario->estado)
-                                        Activo
-                                        @else
-                                        Inactivo
-                                        @endif
+                                        <span class="badge badge-success">Activo</span>
                                     </td>
-
                                     <td>{{ $usuario->email }}</td>
-
-
-
-
                                     <td>
                                         @if (!empty($usuario->getRoleNames()))
                                         @foreach ($usuario->getRoleNames() as $rolNombre)
@@ -63,23 +62,56 @@
                                         @endforeach
                                         @endif
                                     </td>
-
                                     <td>
                                         <a class="btn btn-sm btn-primary" href="{{ route('usuarios.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i></a>
                                         <a class="btn btn-sm btn-success" href="{{ route('usuarios.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i></a>
-
-
                                         {!! Form::open([
-                                        'method' => 'DELETE',
-                                        'route' => ['usuarios.destroy', $usuario->id],
-                                        'style' => 'display:inline',
-                                        'class' => 'delete-form'
+                                            'method' => 'DELETE',
+                                            'route' => ['usuarios.destroy', $usuario->id],
+                                            'style' => 'display:inline',
+                                            'class' => 'delete-form'
                                         ]) !!}
                                         <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)"><i class="fa fa-fw fa-trash"></i></button>
                                         {!! Form::close() !!}
                                     </td>
-
                                 </tr>
+                                @php $contador++ @endphp
+                                @endif
+                                @endforeach
+                        
+                                <!-- Luego, listar usuarios inactivos -->
+                                @foreach ($usuarios as $usuario)
+                                @if (!$usuario->estado)
+                                <tr>
+                                    <td>{{ $contador }}</td>
+                                    <td>{{ $usuario->name }}</td>
+                                    <td>{{ $usuario->apellidos }}</td>
+                                    <td>
+                                        <span class="badge badge-danger">Inactivo</span>
+                                    </td>
+                                    <td>{{ $usuario->email }}</td>
+                                    <td>
+                                        @if (!empty($usuario->getRoleNames()))
+                                        @foreach ($usuario->getRoleNames() as $rolNombre)
+                                        <h5><span class="badge badge-dark">{{ $rolNombre }}</span></h5>
+                                        @endforeach
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-primary" href="{{ route('usuarios.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i></a>
+                                        <a class="btn btn-sm btn-success" href="{{ route('usuarios.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i></a>
+                                        {!! Form::open([
+                                            'method' => 'DELETE',
+                                            'route' => ['usuarios.destroy', $usuario->id],
+                                            'style' => 'display:inline',
+                                            'class' => 'delete-form'
+                                        ]) !!}
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)"><i class="fa fa-fw fa-trash"></i></button>
+                                        {!! Form::close() !!}
+                                    </td>
+                                </tr>
+                                @php $contador++ @endphp
+                                @endif
                                 @endforeach
                             </tbody>
                         </table>

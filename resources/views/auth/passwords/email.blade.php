@@ -90,7 +90,7 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                        Enviar Enlace de Restablecimiento
+                        Enviar
                     </button>
                 </div>
             </form>

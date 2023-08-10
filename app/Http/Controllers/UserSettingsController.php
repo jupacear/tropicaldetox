@@ -25,12 +25,32 @@ class UserSettingsController extends Controller
         $userId = $user->id;
 
         $request->validate([
-            'name' => 'required|max:50',
-            'apellidos' => 'nullable|max:50',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
             'documento' => 'nullable|string|max:10|unique:users,documento,' . $userId,
-            'telefono' => 'nullable|max:10',
-            'direccion' => 'nullable',
+            'telefono' => 'nullable|numeric|digits:10',
+            'direccion' => 'nullable|max:50',
             'email' => 'required|email|unique:users,email,' . $userId,
+        ], [
+            'name.required' => 'El campo nombre es obligatorio.',
+            'name.regex' => 'El campo nombre solo debe contener letras.',
+            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'apellidos.required' => 'El campo apellidos es obligatorio.',
+            'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'documento.min' => 'El documento debe ser valido.',
+            'documento.unique' => 'El documento ingresado ya está en uso.',
+            'documento.regex' => 'El campo documento solo puede contener números.',
+            'telefono.numeric' => 'El campo teléfono debe contener solo números.',
+            'telefono.digits' => 'El campo teléfono debe tener exactamente 10 dígitos.',
+            'email.required' => 'El campo email es obligatorio.',
+            'email.email' => 'El campo email debe ser una dirección de correo válida.',
+            'email.max' => 'El campo email no debe tener más de 60 caracteres.',
+            'email.unique' => 'El email ingresado ya está en uso.',
+            'password.required' => 'El campo contraseña es obligatorio.',
+            'password.same' => 'El campo contraseña y confirmación de contraseña deben ser iguales.',
+            'password.max' => 'El campo contraseña no debe tener más de 15 caracteres.',
+            'roles.required' => 'Debe seleccionar un rol.'
         ]);
 
         $user->name = $request->name;
@@ -64,9 +84,9 @@ class UserSettingsController extends Controller
         $request->validate([
             'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
             'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
-            'documento' => 'nullable|string|max:10|unique:users,documento,' . $userId,
-            'telefono' => 'nullable|numeric|digits:10',
-            'direccion' => 'nullable|max:50',
+            'documento' => 'required|string|max:10|unique:users,documento,' . $userId,
+            'telefono' => 'required|numeric|digits:10',
+            'direccion' => 'required|max:50',
             'email' => 'required|email|unique:users,email,' . $userId,
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
