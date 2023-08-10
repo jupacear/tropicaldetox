@@ -87,13 +87,15 @@
                                     ?>
                                     <div class="">
                                         <p>Nombre: {{ $personalizas->nombre }}</p>
-                                        @foreach ($personalizas as $q)
-                                            @if ($insumo = App\Models\Insumo::find($q))
+                                        @foreach ($personaliza as $q)
+                                            @if ($q->insumos)
                                                 <ul>
                                                     <li>
-                                                        Insumo: ${{ $insumo->nombre }}
+
+                                                        Insumo: $
+                                                        {{ $Nombre = optional(App\Models\Insumo::find($q->insumos))->nombre ?? "No se encontró el nombre para el ID: $q" }}
+                                                    </li>
                                                 </ul>
-                                            @else
                                             @endif
                                         @endforeach
 
