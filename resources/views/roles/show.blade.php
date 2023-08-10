@@ -23,9 +23,19 @@
 
                             <h4>Permisos para este Rol:</h4>
                             @if ($role->name === 'administrador')
-                                <p class="text-success">Tiene todos los permisos del aplicativo</p>
+                            <li class="list-group-item">Dashboard</li>
+                            <li class="list-group-item">Roles</li>
+                            <li class="list-group-item">Usuarios</li>
+                            <li class="list-group-item">Clientes</li>
+                            <li class="list-group-item">Categoria de productos</li>
+                            <li class="list-group-item">Productos</li>
+                            <li class="list-group-item">Insumos</li>
+                            <li class="list-group-item">Pedidos</li>
+                            <li class="list-group-item">Ventas</li>
+                            <li class="list-group-item">Pedidos Cliente</li>
+                            
                             @elseif ($role->name === 'cliente')
-                                <p class="text-success">Tiene Acceso a todas las funcionalidades de cliente del aplicativo</p>
+                            <li class="list-group-item">Pedidos Cliente</li>
                             @else
                                 <ul class="list-group">
                                     @foreach($permissions as $permission)
