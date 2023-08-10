@@ -8,7 +8,10 @@
 
 
     <div class="section-header">
-        <h3 class="page__heading">Ventas</h3>
+        <a href="{{ route('ventas.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+        <h3 style="margin-left: .5em" class="page__heading">  Ventas</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -34,7 +37,9 @@
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
-                                    <p><strong>Total:</strong> {{ number_format( $pedido->Total , 0, ',', '.') }}</p>
+                                    <p><strong>Hora:</strong> {{ substr($pedido->created_at, 11, 5) }}</p>
+
+                                    <p><strong>Total:</strong> {{ number_format($pedido->Total, 0, ',', '.') }}</p>
 
                                     <h2>Detalles del Ventas</h2>
 
@@ -60,29 +65,30 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($detalles_pedidos as $detalle)
-                                            <tr>
-                                                <td>{{ $detalle->Nombre }}</td>
+                                                <tr>
+                                                    <td>{{ $detalle->Nombre }}</td>
 
-                                                {{-- <td>{{ $detalle->Prductos->nombre }}</td> --}}
+                                                    {{-- <td>{{ $detalle->Prductos->nombre }}</td> --}}
 
-                                                <td>{{ $detalle->cantidad }}</td>
+                                                    <td>{{ $detalle->cantidad }}</td>
 
-                                                <td>{{ $detalle->precio_unitario }}</td>
-                                                <td>
-                                                    {{ number_format($detalle->cantidad * $detalle->precio_unitario , 0, ',', '.') }}
+                                                    <td>{{ $detalle->precio_unitario }}</td>
+                                                    <td>
+                                                        {{ number_format($detalle->cantidad * $detalle->precio_unitario, 0, ',', '.') }}
 
-                                                </td>
+                                                    </td>
 
-                                            </tr>
-                                        @endforeach
-                                        <?php $per = ''; ?>
+                                                </tr>
+                                            @endforeach
+                                            <?php $per = ''; ?>
                                             @foreach ($personaliza as $personalizas)
                                                 @if (!($personalizas->nombre == $per))
                                                     <?php
                                                     $per = $personalizas->nombre;
                                                     $lastSubtotal = null; // Initialize the variable to store the last Subtotal for the current $per
                                                     ?>
-                                                    @foreach ($personaliza as $personalizaInner) <!-- Loop through the personaliza array again to find the last Subtotal for the current $per -->
+                                                    @foreach ($personaliza as $personalizaInner)
+                                                        <!-- Loop through the personaliza array again to find the last Subtotal for the current $per -->
                                                         @if ($personalizaInner->nombre == $per)
                                                             <?php $lastSubtotal = $personalizaInner->Subtotal; ?>
                                                         @endif
@@ -90,11 +96,15 @@
                                                     <tr>
                                                         <td>{{ $personalizas->nombre }}</td>
                                                         <td>{{ $personalizas->cantidad }}</td>
-                                                        <td>{{ number_format($lastSubtotal, 0, ',', '.') }}</td> <!-- Print the last Subtotal for the current $per -->
+                                                        <td>{{ number_format($lastSubtotal, 0, ',', '.') }}</td>
+                                                        <!-- Print the last Subtotal for the current $per -->
                                                         <td>
-                                                            <button class="btn btn-info btn-sm float-right"
-                                                                data-toggle="modal"
-                                                                data-target="#productModal_{{ $personalizas->id }}">Detalles</button>
+                                                            <button
+                                                            class="btn btn-info btn-sm float-right"
+                                                            data-toggle="modal"
+                                                            data-target="#productModal_{{ $personalizas->insumos }}"
+                                                            data-details="{{ json_encode($personalizas) }}">Detalles
+                                                        </button>
                                                         </td>
                                                     </tr>
                                                 @endif
@@ -104,7 +114,7 @@
                                             <tr>
                                                 <th>Total:</th>
                                                 <th>
-                                                    {{ number_format( $detalles_pedidos->id_pedidos = $pedido->Total , 0, ',', '.') }}
+                                                    {{ number_format($detalles_pedidos->id_pedidos = $pedido->Total, 0, ',', '.') }}
 
                                                 </th>
                                                 <th></th>
@@ -112,7 +122,6 @@
                                             </tr>
                                         </thead>
                                     </table>
-                                    <a class="btn btn-dark" href="{{ route('ventas.index') }} ">Regresar</a>
                                 </div>
                             </div>
                         </div>
@@ -126,32 +135,23 @@
 
 
 @foreach ($personaliza as $personalizas)
-    <div style="" class="modal fade my-modal"
-        id="productModal_{{ $personalizas->id }}" tabindex="-1" role="dialog"
-        aria-labelledby="productModalLabel_{{ $personalizas->id }}" aria-hidden="true"
-        style="position: absolute; z-index: 1050;">
+    <div class="modal fade my-modal" id="productModal_{{ $personalizas->insumos }}" tabindex="-1" role="dialog"
+        aria-labelledby="productModalLabel_{{ $personalizas->insumos }}" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel_{{ $personalizas->id }}">
+                    <h5 class="modal-title" id="productModalLabel_{{ $personalizas->insumos }}">
                         Detalles del producto</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Nombre: {{ $personalizas->nombre }}</p>
-                    @foreach ($personalizas as $q)
-                        @if ($insumo = App\Models\Insumo::find($q))
-                            <ul>
-                                <li>
-                                    Insumo: ${{ $insumo->nombre }}
-                            </ul>
-                        @else
-                        @endif
-                    @endforeach
-
-                    <!-- Agrega aquí más detalles del producto si es necesario -->
+                    <h6 class="Nombre">Nombre:
+                    </h6>
+                    <div id="productModalIngredients_{{ $personalizas->insumos }}">
+                        <!-- Ingredientes se agregarán aquí -->
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -159,8 +159,33 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
+
+    <!-- JS para cargar los ingredientes en el modal -->
+    <script>
+        $(document).ready(function() {
+            $('#productModal_{{ $personalizas->insumos }}').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var details = button.data('details');
+                var modal = $(this);
+
+                modal.find('.modal-title').text('Detalles del producto: ' + details.nombre);
+                modal.find('.Nombre').text('Nombre: ' + details.nombre);
+
+                var ingredientList = '<ul>';
+                @foreach ($personaliza as $q)
+                    if ("{{ $q->nombre }}" == details.nombre) {
+                        ingredientList +=
+                            '<li>Insumo: {{ $q->insumos }} - {{ optional(App\Models\Insumo::find($q->insumos))->nombre ?? 'Nombre no encontrado' }}</li>';
+                    }
+                @endforeach
+                ingredientList += '</ul>';
+                modal.find('#productModalIngredients_{{ $personalizas->insumos }}').html(ingredientList);
+            });
+        });
+    </script>
 @endforeach
+
+
 
 
 

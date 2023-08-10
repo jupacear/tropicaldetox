@@ -31,6 +31,8 @@
                                     @endif
                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
+                                    <p><strong>Hora:</strong> {{ substr($pedido->created_at, 11, 5) }}</p>
+
                                     <p><strong>Total:</strong> {{ number_format($pedido->Total, 0, ',', '.') }}</p>
 
 
@@ -100,10 +102,15 @@
                                                         <td>{{ number_format($lastSubtotal, 0, ',', '.') }}</td>
                                                         <!-- Print the last Subtotal for the current $per -->
                                                         <td>
-                                                            <button class="btn btn-info btn-sm float-right"
-                                                                data-toggle="modal"
-                                                                data-target="#productModal_{{ $personalizas->id }}">Detalles</button>
+                                                            <button
+                                                            class="btn btn-info btn-sm float-right"
+                                                            data-toggle="modal"
+                                                            data-target="#productModal_{{ $personalizas->insumos }}"
+                                                            data-details="{{ json_encode($personalizas) }}">Detalles
+                                                        </button>
                                                         </td>
+
+                                                        
                                                     </tr>
                                                 @endif
                                             @endforeach
@@ -138,42 +145,69 @@
     </div>
 </section>
 
+       
 @foreach ($personaliza as $personalizas)
-    <div style="" class="modal fade my-modal"
-        id="productModal_{{ $personalizas->id }}" tabindex="-1" role="dialog"
-        aria-labelledby="productModalLabel_{{ $personalizas->id }}" aria-hidden="true"
-        style="position: absolute; z-index: 1050;">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel_{{ $personalizas->id }}">
-                        Detalles del producto</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+<div class="modal fade my-modal"
+    id="productModal_{{ $personalizas->insumos }}"
+    tabindex="-1" role="dialog"
+    aria-labelledby="productModalLabel_{{ $personalizas->insumos }}"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"
+                    id="productModalLabel_{{ $personalizas->insumos }}">
+                    Detalles del producto</h5>
+                <button type="button" class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                    <span
+                        aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h6 class="Nombre">Nombre:
+                </h6>
+                <div
+                    id="productModalIngredients_{{ $personalizas->insumos }}">
+                    <!-- Ingredientes se agregarán aquí -->
                 </div>
-                <div class="modal-body">
-                    <p>Nombre: {{ $personalizas->nombre }}</p>
-                    @foreach ($personalizas as $q)
-                        @if ($insumo = App\Models\Insumo::find($q))
-                            <ul>
-                                <li>
-                                    Insumo: ${{ $insumo->nombre }}
-                            </ul>
-                        @else
-                        @endif
-                    @endforeach
-
-                    <!-- Agrega aquí más detalles del producto si es necesario -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
-    <!-- Modal -->
+</div>
+
+<!-- JS para cargar los ingredientes en el modal -->
+<script>
+    $(document).ready(function() {
+        $('#productModal_{{ $personalizas->insumos }}').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var details = button.data('details');
+            var modal = $(this);
+
+            modal.find('.modal-title').text('Detalles del producto: ' + details.nombre);
+            modal.find('.Nombre').text('Nombre: ' + details.nombre);
+
+            var ingredientList = '<ul>';
+            @foreach ($personaliza as $q)
+                if ("{{ $q->nombre }}" == details.nombre) {
+                    ingredientList +=
+                        '<li>Insumo: {{ $q->insumos }} - {{ optional(App\Models\Insumo::find($q->insumos))->nombre ?? 'Nombre no encontrado' }}</li>';
+                }
+            @endforeach
+            ingredientList += '</ul>';
+            modal.find('#productModalIngredients_{{ $personalizas->insumos }}').html(ingredientList);
+        });
+    });
+</script>
 @endforeach
+
+
 
 
 

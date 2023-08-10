@@ -88,15 +88,17 @@
                                                                     placeholder="Ingresa el nombre del insumo">
                                                             </div>
                                                             @foreach ($Insumo as $Insumos)
-                                                                <div class="insumo" data-id="{{ $Insumos->id }}">
+                                                                <div style="margin: 1em" class="insumo"
+                                                                    data-id="{{ $Insumos->id }}">
                                                                     <img src="{{ asset($Insumos->imagen) }}"
                                                                         alt="Imagen del producto" width="40em">
                                                                     <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
                                                                         {{ $Insumos->precio_unitario }}</span>
                                                                     <button type="button"
                                                                         class="btn btn-success agregar-insumo"
-                                                                        style="max-width: 2em; max-height: 2em;">
-                                                                        <i class="fas fa-plus fa-xs"></i>
+                                                                        style="max-width: 1em; max-height: 1.5em;">
+                                                                        <i class="fas fa-plus fa-xs"
+                                                                            style="position: relative; bottom: 8.5px;right: 5px"></i>
                                                                         <!-- Icono de Font Awesome para el botón -->
                                                                     </button>
                                                                     <br>
@@ -248,9 +250,10 @@
                                                 <h2>Productos Seleccionados:</h2>
                                                 <input type="hidden" name="Productos[]"
                                                     id="productos-seleccionados-input">
-                                                <div class="table">
+                                                <div class="table" style="width: 48em">
 
-                                                    <table id="selected-products-table" class="table table-bordered">
+                                                    <table style="width: 48em" id="selected-products-table"
+                                                        class="table table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>Producto</th>
@@ -273,7 +276,7 @@
                                                                     <td>
                                                                         <button type="button"
                                                                             class="btn btn-danger btn-sm quitar-btn"
-                                                                            onclick="quitarProducto('{{ $producto->id }}')">Quitar</button>
+                                                                            onclick="quitarProducto('{{ $producto->id }}')"> <li class="fas fa-trash"></li>  </button>
                                                                     </td>
                                                                     <input type="hidden" name="Cantidad[]"
                                                                         value="{{ $producto->pivot->cantidad }}">
@@ -303,7 +306,14 @@
                                                                         <td>
                                                                             <button type="button"
                                                                                 class="btn btn-danger btn-sm quitar-btn"
-                                                                                onclick="quitarProductoPersonalizados2(this)">Quitar</button>
+                                                                                onclick="quitarProductoPersonalizados2(this)"> <li class="fas fa-trash"></li> </button>
+
+                                                                            <button type="button"
+                                                                                class="btn btn-info btn-sm float-right"
+                                                                                data-toggle="modal"
+                                                                                data-target="#productModalper_{{ $personalizas->insumos }}"
+                                                                                data-details="{{ json_encode($personalizas) }}"><i class="fas fa-eye"></i>
+                                                                            </button>
                                                                         </td>
                                                                     </tr>
                                                                 @endif
@@ -352,6 +362,122 @@
                                     </div>
                                 </form>
                             </div>
+
+                            @foreach ($personaliza as $personalizas)
+                                <div class="modal fade my-modal" id="productModalper_{{ $personalizas->insumos }}"
+                                    tabindex="-1" role="dialog"
+                                    aria-labelledby="productModalLabel_{{ $personalizas->insumos }}" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title"
+                                                    id="productModalLabelper_{{ $personalizas->insumos }}">
+                                                    Detalles del producto</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h6 class="Nombre">Nombre:
+                                                </h6>
+                                                <div id="productModalIngredients_{{ $personalizas->insumos }}"
+                                                    class="list-group" style="width: 100%; position: relative;right: 2em">
+                                                    <!-- Ingredientes se agregarán aquí -->
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- JS para cargar los ingredientes en el modal -->
+                                <script>
+                                    $(document).ready(function() {
+                                        $('#productModalper_{{ $personalizas->insumos }}').on('show.bs.modal', function(event) {
+                                            var button = $(event.relatedTarget);
+                                            var details = button.data('details');
+                                            var modal = $(this);
+
+                                            modal.find('.modal-title').text('Detalles del producto: ' + details.nombre);
+                                            modal.find('.Nombre').text('Nombre: ' + details.nombre);
+
+                                            var ingredientList = '<ul>';
+                                            @foreach ($personaliza as $q)
+                                                if ("{{ $q->nombre }}" == details.nombre) {
+                                                    ingredientList +=
+                                                        '<li class="list-group-item">Insumo: {{ $q->insumos }} - {{ optional(App\Models\Insumo::find($q->insumos))->nombre ?? 'Nombre no encontrado' }}</li>';
+                                                }
+                                            @endforeach
+                                            ingredientList += '</ul>';
+                                            modal.find('#productModalIngredients_{{ $personalizas->insumos }}').html(ingredientList);
+                                        });
+                                    });
+                                </script>
+                            @endforeach
+
+                            <!-- Modal para mostrar detalles del producto personalizado -->
+                            <div class="modal fade my-modal" id="personalizadoDetallesModal" tabindex="-1"
+                                role="dialog" aria-labelledby="personalizadoDetallesModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="personalizadoDetallesModalLabel">Detalles del
+                                                Producto Personalizado</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h6 class="modal-nombre">Nombre:</h6>
+                                            <ul id="modalPersonalizadoInsumos" class="list-group">
+                                                <!-- Insumos se agregarán aquí -->
+                                            </ul>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                $(document).ready(function() {
+                                    $('#personalizadoDetallesModal').on('show.bs.modal', function(event) {
+                                        var button = $(event.relatedTarget);
+                                        var index = button.data('index'); // Índice del producto personalizado
+                                        var productoPersonalizado = personalizadosArray[index]; // Obtener el producto personalizado
+
+                                        var modal = $(this);
+                                        modal.find('.modal-title').text('Detalles del Producto Personalizado');
+                                        modal.find('.modal-nombre').text('Nombre: ' + productoPersonalizado.Nombre);
+
+                                        var insumosList = modal.find('#modalPersonalizadoInsumos');
+                                        insumosList.empty();
+
+                                        productoPersonalizado.insumos.forEach(function(insumo) {
+                                            var insumoItem = $('<li>').addClass('list-group-item').text(insumo);
+                                            insumosList.append(insumoItem);
+                                        });
+                                    });
+                                });
+                            </script>
+
+
+
+
+
+
+
+
+
+
+
                             <script>
                                 function calcularTotalInicial() {
                                     var totalElement = document.getElementById('total');
@@ -410,7 +536,7 @@
                                             <td>${cantidad}</td>
                                             <td>$${subtotal.toLocaleString('en-US')}</td>
                                             <td>
-                                                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')">Quitar</button>
+                                                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')"><li class="fas fa-trash"></li></button>
                                             </td>
                                         `;
                                         productosSeleccionados.appendChild(tr);
@@ -546,9 +672,15 @@
                                                 var listItem = $('<li>').text(insumoNombre);
 
                                                 // Agrega un botón para eliminar el insumo seleccionado
-                                                var removeButton = $('<button>').text('Quitar').addClass(
-                                                    'btn btn-danger quitar-insumo');
+                                                // var removeButton = $('<button>').text('Quitar').addClass(
+                                                //     'btn btn-danger quitar-insumo');
+                                                var removeButton = $('<button>').html('<i class="fas fa-trash"></i>').addClass(
+                                                    'btn btn-danger quitar-insumo').css({
+                                                    margin: '8px',
 
+
+
+                                                });
                                                 // Agrega el insumo seleccionado a la lista de insumos seleccionados
                                                 $('.lista-insumos-seleccionados').append(listItem.append(removeButton));
                                             } else {
@@ -579,18 +711,26 @@
 
                             <script>
                                 var personalizadosArray = [];
-
-                                function obtenerNumeroMayorPersonalizadosTabla() {
+                                // personalizadosArray2
+                                function obtenerNumeroMayorPersonalizadosArray() {
                                     var maxNum = 0;
-                                    var filas = document.querySelectorAll('#selected-products-list tr');
 
-                                    filas.forEach(function(row) {
-                                        var nombre = row.cells[0].textContent.trim();
-                                        if (nombre.startsWith('Personalizado')) {
-                                            var numPart = nombre.substring(nombre.lastIndexOf(' ') + 1);
-                                            var num = parseInt(numPart);
-                                            if (!isNaN(num) && num > maxNum) {
-                                                maxNum = num;
+                                    personalizadosArray.forEach(function(personalizado) {
+                                        var numStr = personalizado.Nombre.match(/\d+/); // Extraer el número del nombre
+                                        if (numStr) {
+                                            var num = parseInt(numStr[0]);
+                                            if (num > maxNum) {
+                                                maxNum += num;
+                                            }
+                                        }
+                                    });
+
+                                    personalizadosArray2.forEach(function(personalizado) {
+                                        var numStr = personalizado.Nombre.match(/\d+/); // Extraer el número del nombre
+                                        if (numStr) {
+                                            var num = parseInt(numStr[0]);
+                                            if (num > maxNum) {
+                                                maxNum += num;
                                             }
                                         }
                                     });
@@ -598,20 +738,26 @@
                                     return maxNum;
                                 }
 
-                                // Obtener el número máximo actual de los nombres de los personalizados en el array personalizadosArray
-                                function obtenerNumeroMayorPersonalizadosArray() {
+                                function obtenerNumeroMayorPersonalizadosTabla() {
                                     var maxNum = 0;
-                                    personalizadosArray.forEach(function(personalizado) {
-                                        var nombre = personalizado['Nombre'];
-                                        var numPart = nombre.substring(nombre.lastIndexOf(' ') + 1);
-                                        var num = parseInt(numPart);
-                                        if (!isNaN(num) && num > maxNum) {
-                                            maxNum = num;
+
+                                    var rows = document.querySelectorAll('#selected-products-list tr');
+                                    rows.forEach(function(row) {
+                                        var nombreCell = row.querySelector('td:nth-child(1)');
+                                        if (nombreCell) {
+                                            var numStr = nombreCell.textContent.match(/\d+/); // Extraer el número del nombre
+                                            if (numStr) {
+                                                var num = parseInt(numStr[0]);
+                                                if (num > maxNum) {
+                                                    maxNum = num;
+                                                }
+                                            }
                                         }
                                     });
 
                                     return maxNum;
                                 }
+
                                 document.getElementById('crearPersonalizados').addEventListener('click', function() {
                                     var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
                                         function(li) {
@@ -619,14 +765,20 @@
                                         }
                                     );
 
+                                    var cantidad = prompt('Ingrese la cantidad para el producto personalizado:', '1');
+                                    if (cantidad === null || cantidad === '') {
+                                        return; // Si el usuario cancela o no ingresa un valor, no se agrega el producto
+                                    }
+
+                                    cantidad = parseInt(cantidad);
+
                                     var tableBody = document.getElementById('selected-products-list');
                                     var subtotal = 0;
 
                                     insumosSeleccionados.forEach(function(insumo) {
                                         var data = insumo.split(':');
                                         var precio = parseFloat(data[2].trim());
-                                        var cantidad = 1;
-                                        subtotal += parseFloat(precio);
+                                        subtotal += parseFloat(precio) * cantidad;
                                     });
 
                                     var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
@@ -637,36 +789,36 @@
                                     personalizado['Nombre'] = "Personalizado " + (maxNum + 1);
                                     personalizado['insumos'] = insumosSeleccionados;
                                     personalizado['Subtotal'] = subtotal;
+                                    personalizado['Cantidad'] = cantidad; // Agregar la cantidad al objeto personalizado
 
                                     personalizadosArray.push(personalizado);
 
                                     var row = document.createElement('tr');
                                     var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
                                     row.innerHTML = `
-                                        <td>${personalizado.Nombre}</td>
-                                        <td>${insumosSeleccionados.length}</td>
-                                        <td>$${subtotal.toLocaleString('es-ES')}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">Quitar</button>
-                                        </td>
-                                    `;
+            <td>${personalizado.Nombre}</td>
+            <td>${cantidad}</td>
+            <td>${subtotal.toLocaleString('en-US')}</td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})"> <i class="fas fa-trash"></i> </button>
+                <button type="button" class="btn btn-info btn-sm float-right"  data-index="${uniqueId}" data-toggle="modal" data-target="#personalizadoDetallesModal"><i class="fas fa-eye"></i></button>
+            </td>
+        `;
                                     row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
                                     tableBody.appendChild(row);
 
                                     var totalElement = document.getElementById('total');
-                                    var total = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.')) + subtotal;
+                                    var total = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.')) + parseFloat(
+                                        subtotal);
 
                                     var totalFormateado = total.toLocaleString('es-ES', {
                                         minimumFractionDigits: 2,
                                         maximumFractionDigits: 2
                                     });
-                                    totalElement.textContent = total.toFixed(2);
-                                    // alert(totalFormateado);
-
+                                    totalElement.textContent = totalFormateado; // Actualizar el contenido con el total formateado
 
                                     var totalInput = document.getElementById('total-input');
                                     totalInput.value = total.toFixed(2);
-
 
                                     var totalSection = document.getElementById('total-section');
                                     if (totalSection) {
@@ -715,8 +867,6 @@
                                     var personalizadosArrayInput = document.getElementById('personalizadosArray');
                                     personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 }
-
-
 
 
 
