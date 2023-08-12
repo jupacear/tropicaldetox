@@ -20,31 +20,27 @@
 </head>
 
 <body>
-    
-    
+
+
     <footer>
         <div class="footer-main">
             <div class="container">
-				
-				<hr>
+
+                <hr>
                 <div class="row">
                     <div class="col-lg-4 col-md-12 col-sm-12">
                         <div class="footer-widget">
-                            <h4>About Freshshop</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> 
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p> 							
+                            <h4>Sobre Tropical Detox</h4>
+                            <p>Somos apasionados por ofrecer jugos frescos y saludables para revitalizar tu día. Nuestros jugos están hechos con ingredientes naturales y llenos de sabor.</p>
+                            <p>Explora nuestra variedad de jugos y personaliza tus combinaciones para obtener la experiencia perfecta para tu paladar.</p>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12 col-sm-12">
                         <div class="footer-link">
-                            <h4>Information</h4>
+                            <h4>Información</h4>
                             <ul>
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Customer Service</a></li>
-                                <li><a href="#">Our Sitemap</a></li>
-                                <li><a href="#">Terms &amp; Conditions</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Delivery Information</a></li>
+                                <li><a href="{{ route('Productos') }}">Nuestros productos</a></li>
+                                <li><a href="#">Politica y privacidad</a></li>
                             </ul>
                         </div>
                     </div>
@@ -73,14 +69,15 @@
     <!-- Start copyright  -->
     <div class="footer-copyright">
         <p class="footer-company">Todos los derechos reservados. &copy; 2023 <a href="#">Tropical Detox</a> Diseñado por :
-            <a href="https://html.design/">Equipo de desarollo</a></p>
+            <a href="#">Equipo de desarollo</a>
+        </p>
     </div>
     <!-- End copyright  -->
 
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
     <!-- ALL JS FILES -->
-    
+
 </body>
 
 </html>

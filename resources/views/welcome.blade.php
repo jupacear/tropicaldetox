@@ -21,55 +21,60 @@
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="css/responsive.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/custom.css">
     <style>
-        .carousel-inner .item {
-            display: none;
+        body {
+            overflow-x: hidden;
         }
 
-        .carousel-inner .item img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .carousel-inner .item .d-flex {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Centrar verticalmente */
-            height: 100%;
-            /* Asegura que el contenedor ocupe todo el espacio verticalmente */
+        .no-horizontal-scroll {
+            overflow-x: hidden;
         }
 
         .datos {
             display: flex;
+        }
 
+        .map-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .map-container iframe {
+            top: 0;
+            left: 1;
+            width: 100%;
+            height: 450px;
+            /* Ajusta la altura según tus preferencias */
         }
     </style>
 </head>
 
 @include('cliente.nav')
 
-<body>
-    <!-- Slider -->
-    <div id="mi_carousel" class="carousel slide" data-ride="carousel">
-        <div id="myCarouselCustom" class="carousel slide" data-ride="carousel">
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-                @foreach ($productos as $producto)
-                @if ($producto->activo)
-                <div class="item @if ($loop->first) active @endif">
-                    <div class="d-flex">
-                        <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }} " class="text-center img-fluid w-50">
+<body class="no-horizontal-scroll">
+    <!-- Start Slider -->
+    <div id="slides-shop" class="cover-slides">
+        <ul class="slides-container">
+            @foreach ($productos as $producto)
+            @if ($producto->activo)
+            <li class="text-center">
+                <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="m-b-20"><strong>Bienvenido a <br> Tropical Detox</strong></h1>
+                            <p class="m-b-40">¡Disfrute de una pagina de jugos <br> de todo tipo de sabores junto con personalizados!</p>
+                            <p><a class="btn hvr-hover" href="{{ route('Productos') }}">Productos</a></p>
+                        </div>
                     </div>
                 </div>
-                @endif
-                @endforeach
-            </div>
-        </div>
+            </li>
+            @endif
+            @endforeach
+        </ul>
     </div>
     <!-- End Slider -->
-
     <!-- Start Categories  -->
     <div class="categories-shop">
         <div class="container">
@@ -114,10 +119,27 @@
                     </div>
                 </div>
             </div>
-
+            <div class="col-lg-12">
+                <div class="special-menu text-center">
+                    <div class="button-group filter-button-group">
+                        <button class="active" data-filter="*">Todos</button>
+                        @foreach ($categorias as $categoria)
+                        @if ($categoria->nombre != 'Personalizados')
+                        <button data-filter=".{{ $categoria->id }}">{{ $categoria->nombre }}</button>
+                        @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
             <div class="row justify-content-center">
+                @php
+                $contadorProductos = 0; // Inicializa el contador de productos
+                @endphp
                 @foreach ($productos as $producto)
-                @if ($producto->activo)
+                @if ($producto->activo && $producto->Categorium->nombre !== 'Personalizado')
+                @php
+                $contadorProductos++; // Incrementa el contador de productos
+                @endphp
                 <div class="col-lg-3 col-md-6 col-sm-6 special-grid">
                     <!-- Cartas -->
                     <div class="products-single fix">
@@ -126,7 +148,9 @@
                             <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
                             <div class="mask-icon">
                                 <div class="mask-icon">
-                                    <a class="cart" href="{{ route('Productos') }}">Ir a productos</a>
+                                    <a class="cart" href="#" data-producto-id="{{ $producto->id }}" data-producto-nombre="{{ $producto->nombre }}" data-producto-precio="{{ $producto->precio }}" onclick="agregarAlCarrito(event);actualizarTotalCarrito(true)">
+                                        Agregar al carrito
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -142,6 +166,9 @@
                     <!-- End Cartas -->
                 </div>
                 @endif
+                @if ($contadorProductos >= 3)
+                @break; // Detén el bucle después de mostrar 3 productos
+                @endif
                 @endforeach
             </div>
 
@@ -151,53 +178,120 @@
 
     <!-- Mapas -->
     <section class="row m-9">
-        <div class="col-lg-12">
+        <div class="col-lg">
             <div class="title-all text-center">
                 <h1>Nuestra ubicación</h1>
                 <p class="text-center">Estamos ubicados en el corazón de la ciudad, </p>
                 <p>Nuestra tienda ofrece una amplia gama de productos y servicios para satisfacer todas tus necesidades. Ven a visitarnos y descubre todo lo que tenemos para ofrecerte.</p>
             </div>
         </div>
-        <div class="col-md-9 offset-md-3">
+        <div class="col-md-10 offset-md-1">
             <div class="datos">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63458.87684076734!2d-75.62018190544242!3d6.240018059759329!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e4428dfb80fad05%3A0x42137cfcc7b53b56!2sMedell%C3%ADn%2C%20Antioquia!5e0!3m2!1ses!2sco!4v1667887272639!5m2!1ses!2sco" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63458.87684076734!2d-75.62018190544242!3d6.240018059759329!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e4428dfb80fad05%3A0x42137cfcc7b53b56!2sMedell%C3%ADn%2C%20Antioquia!5e0!3m2!1ses!2sco!4v1667887272639!5m2!1ses!2sco" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
             </div>
         </div>
     </section>
     <!-- End mapas -->
+
+    <!-- Start Instagram Feed  -->
+    <div class="instagram-box">
+        <div class="main-instagram owl-carousel owl-theme">
+            @foreach ($productos as $producto)
+            @if ($producto->activo)
+            <div class="item">
+                <div class="ins-inner-box">
+                    <img src="{{ asset($producto->imagen) }}" alt="No hay imagen disponible" width="100" />
+                    <div class="hov-in">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @endforeach
+        </div>
+    </div>
+    <!-- End Instagram Feed -->
+
     @include('cliente.footer')
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
-
     <script>
-        // Cuando el documento esté listo
-        $(document).ready(function() {
-            // Obtener todos los elementos con la clase .item dentro de .carousel-inner
-            var items = $('.carousel-inner .item');
-            // Mostrar el primer elemento
-            items.first().addClass('active').show();
+        function agregarAlCarrito(event) {
+            event.preventDefault();
 
-            // Función para manejar el cambio de las imágenes del carousel
-            function nextSlide() {
-                // Encontrar el elemento activo
-                var activeItem = $('.carousel-inner .item.active');
-                // Obtener el siguiente elemento
-                var nextItem = activeItem.next();
+            // Obtener el carrito del Local Storage
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-                // Si no hay siguiente elemento, volver al inicio
-                if (nextItem.length === 0) {
-                    nextItem = items.first();
-                }
+            // Obtener los datos del producto del enlace
+            let productoId = event.target.dataset.productoId;
+            let nombreS = event.target.dataset.productoNombre;
+            let precioS = event.target.dataset.productoPrecio;
 
-                // Mostrar el siguiente elemento y ocultar el actual
-                activeItem.removeClass('active').fadeOut('slow');
-                nextItem.addClass('active').fadeIn('slow');
+            // Buscar el producto en el carrito
+            let productoEnCarrito = carrito.find(item => item.id === productoId);
+
+            if (productoEnCarrito) {
+                // Si el producto ya existe en el carrito, actualizar la cantidad
+                productoEnCarrito.cantidad += 1;
+            } else {
+                // Si el producto no existe en el carrito, agregarlo
+                let producto = {
+                    id: productoId,
+                    nombre: nombreS,
+                    precio: precioS,
+                    cantidad: 1
+                };
+
+                carrito.push(producto);
             }
 
-            // Llamar a la función nextSlide cada cierto tiempo (por ejemplo, cada 3 segundos)
-            setInterval(nextSlide, 3000);
-        });
+            // Guardar el carrito actualizado en el Local Storage
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+
+
+            // Ejemplo de uso:
+            mostrarAlertaExitosa('Producto agregado al carrito exitosamente');
+        }
+        // Mostrar un mensaje de éxito o redirigir al usuario si deseas
+        function mostrarAlertaExitosa(mensaje) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: mensaje,
+                timer: 3000, // Tiempo en milisegundos (3 segundos en este caso)
+                timerProgressBar: true,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: {
+                    popup: 'swal2-show-custom', // Clase personalizada para el estilo
+                }
+            });
+        }
+
+        function nosepuedeAgregar(mensaje) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: mensaje,
+                timer: 3000, // Tiempo en milisegundos (3 segundos en este caso)
+                timerProgressBar: true,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                showCloseButton: true,
+                background: '#f2dede', // Color de fondo de la alerta (estilo de error)
+                color: '#a94442',
+                customClass: {
+                    icon: 'swal2-error-icon-custom', // Clase personalizada para el estilo
+                }
+            });
+        }
     </script>
+    
     <!-- ALL JS FILES -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>
@@ -206,7 +300,7 @@
     <script src="js/jquery.superslides.min.js"></script>
     <script src="js/bootstrap-select.js"></script>
     <script src="js/inewsticker.js"></script>
-    <script src="js/bootsnav.js."></script>
+    <script src="js/bootsnav.js"></script>
     <script src="js/images-loded.min.js"></script>
     <script src="js/isotope.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>

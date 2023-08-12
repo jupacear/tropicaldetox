@@ -46,9 +46,12 @@ Categoria
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php $contador = 1 @endphp
+                                    <!-- Mostrar categorías activas -->
                                     @foreach ($categoria as $categorium)
+                                    @if ($categorium->activo)
                                     <tr>
-                                        <td>{{ ++$i }}</td>
+                                        <td>{{ $contador }}</td>
                                         <td>
                                             @if ($categorium->imagen)
                                             <img src="{{ asset($categorium->imagen) }}" alt="Imagen del categoria" width="25">
@@ -75,6 +78,44 @@ Categoria
                                             </form>
                                         </td>
                                     </tr>
+                                    @php $contador++ @endphp
+                                    @endif
+                                    @endforeach
+
+                                    <!-- Mostrar categorías inactivas -->
+                                    @foreach ($categoria as $categorium)
+                                    @if (!$categorium->activo)
+                                    <tr>
+                                        <td>{{ $contador }}</td>
+                                        <td>
+                                            @if ($categorium->imagen)
+                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del categoria" width="25">
+                                            @else
+                                            Sin imagen
+                                            @endif
+                                        </td>
+
+                                        <td class="">{{ $categorium->nombre }}</td>
+                                        <td>{{ $categorium->descripcion }}</td>
+                                        <td>{{ $categorium->activo ? 'Activo' : 'Inactivo' }}</td>
+                                        <td>
+                                            <form action="{{ route('categoria.destroy', $categorium->id) }}" method="POST">
+                                                <a class="btn btn-sm btn-primary " href="{{ route('categoria.show', $categorium->id) }}"><i class="fa fa-fw fa-eye"></i></a>
+                                                <a class="btn btn-sm btn-success" href="{{ route('categoria.edit', $categorium->id) }}"><i class="fa fa-fw fa-edit"></i></a>
+                                                @csrf
+                                                @method('DELETE')
+                                                @if ($categorium->activo)
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmDesactivateCategoria(event)"> <i class="fa fa-fw fa-toggle-on"></i> </button>
+                                                @else
+                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmActivateCategoria(event)"> <i class="fa fa-fw fa-toggle-off"></i> </button>
+                                                @endif
+
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @php $contador++ @endphp
+
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
