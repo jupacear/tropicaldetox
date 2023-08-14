@@ -38,10 +38,10 @@
                         class="form-control{{ $errors->has('unidad_medida') ? ' is-invalid' : '' }}">
                         <option value="Bolsas" {{ $insumo->unidad_medida == 'Bolsas' ? 'selected' : '' }}>Bolsas
                         </option>
-                        <option value="Kilogramos" {{ $insumo->unidad_medida == 'Kilogramos' ? 'selected' : '' }}>
+                        <!-- <option value="Kilogramos" {{ $insumo->unidad_medida == 'Kilogramos' ? 'selected' : '' }}>
                             Kilogramos</option>
                         <option value="Libras" {{ $insumo->unidad_medida == 'Libras' ? 'selected' : '' }}>Libras
-                        </option>
+                        </option> -->
                     </select>
                     {!! $errors->first('unidad_medida', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
@@ -65,7 +65,7 @@
     </div>
 </div>
 <div class="box-footer mt20">
-    <button type="submit" class="btn btn-primary">Enviar</button>
+    <button type="submit" class="btn btn-primary">Guardar</button>
 </div>
 </div>
 <script>
