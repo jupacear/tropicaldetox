@@ -12,14 +12,9 @@ Categoria
     <div class="section-body">
         @if ($errors->any())
         <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+            <strong>¡Revise los campos¡</strong>
         </div>
         @endif
-
         @if ($message = Session::get('success'))
         <div class="alert alert-success">
             <p>{{ $message }}</p>
@@ -29,7 +24,7 @@ Categoria
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="text-left m-2">
+                        <div style="margin-bottom: 20px;">
                             <a class="btn btn-warning" href="{{ route('categoria.create') }}">Nuevo</a>
                         </div>
                         <div class="table-responsive">

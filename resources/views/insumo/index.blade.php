@@ -15,11 +15,9 @@ Insumo
                 <div class="card">
                     @if ($errors->any())
                     <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                        <div class="alert alert-danger">
+                            <strong>¡Revise los campos¡</strong>
+                        </div>
                     </div>
                     @endif
 
@@ -29,7 +27,7 @@ Insumo
                     </div>
                     @endif
                     <div class="card-body">
-                        <div class="text-left m-2">
+                        <div style="margin-bottom: 20px;">
                             <a class="btn btn-warning" href="{{ route('insumo.create') }}">Nuevo</a>
                         </div>
                         <div class="table-responsive">
