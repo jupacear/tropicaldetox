@@ -15,11 +15,10 @@
         <div class="container mt-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Detalles del Usuario</h4>
                     <h5>Documento: {{ $user->documento }}</h5>
                     <h5>Nombre: {{ $user->name }}</h5>
                     <h5>Apellidos: {{ $user->apellidos }}</h5>
-                    <h5>Estado: {{ $user->estado ? 'Activo' : 'Inactivo' }}</h5>
+                    <h5><strong>Estado:</strong> <span class="{{ $user->estado ? 'badge badge-success' : 'badge badge-danger' }}">{{ $user->estado ? 'Activo' : 'Inactivo' }}</span></h5>
                     <h5>Email: {{ $user->email }}</h5>
                     <h5>Dirección: {{ $user->direccion }}</h5>
                     <h5>Teléfono: {{ $user->telefono }}</h5>

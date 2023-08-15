@@ -25,7 +25,7 @@
                     <label for="email">Email</label>
                     <input aria-describedby="emailHelpBlock" id="email" type="email"
                            class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
-                           placeholder="ingrese su Email" tabindex="1"
+                           placeholder="" tabindex="1"
                            value="{{ (Cookie::get('email') !== null) ? Cookie::get('email') : old('email') }}" autofocus
                            required>
                     <div class="invalid-feedback">
@@ -41,7 +41,7 @@
                     <div class="input-group"> <!-- Agregamos una div con la clase "input-group" -->
                         <input aria-describedby="passwordHelpBlock" id="password" type="password"
                                value="{{ (Cookie::get('password') !== null) ? Cookie::get('password') : null }}"
-                               placeholder="ingrese su contraseña"
+                               placeholder=""
                                class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}" name="password"
                                tabindex="2" required>
                         <div class="input-group-append"> <!-- Agregamos una div con la clase "input-group-append" -->

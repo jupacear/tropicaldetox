@@ -19,11 +19,13 @@
                 <div class="dropdown-title">
                     Bienvenido, {{\Illuminate\Support\Facades\Auth::user()->name}}</div>
                     <a class="dropdown-item" href="{{ route('NewPassword') }}">
-                        {{ __('Perfil') }}
+                        <i class="fas fa-user"></i>  <span>{{ __('Perfil') }}</span>
                     </a>
+
+                    
                     
                     <a class="dropdown-item" href="{{ route('NewPassword2') }}">
-                        {{ __('Cambio de contraseña') }}
+                        <i class="fas fa-lock"></i> <span>{{ __('Cambio de contraseña') }}</span> 
                     </a>
                 <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"
                    onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">

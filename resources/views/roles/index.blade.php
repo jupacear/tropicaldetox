@@ -9,7 +9,7 @@
 </head>
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Roles</h3>
+        <h3 class="page__heading">Roles y Permisos</h3>
     </div>
     <div class="section-body">
         @if ($message = Session::get('success'))
@@ -21,13 +21,18 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="text-left m-2">
+
+                        <div style="margin-bottom: 20px;">
                             <a class="btn btn-warning" href="{{ route('roles.create') }}">Nuevo</a>
                         </div>
+
+
+
                         <table class="table table-striped table-bordered" style="width:100%" id="example">
                             <thead style="background-color:#6777ef">
-                                <th style="color:#fff;">#</th>
+                                <th style="color:#fff;">No</th>
                                 <th style="color:#fff;">Rol</th>
+                                <th style="color:#fff;">Estado</th>
                                 <th style="color:#fff;">Acciones</th>
                             </thead>
                             <tbody>
@@ -36,6 +41,13 @@
                                 <tr>
                                     <td>{{ $contador }}</td>
                                     <td>{{ $role->name }}</td>
+                                    <td>
+                                        @if ($role->estado)
+                                            <span class="badge badge-success">Activo</span>
+                                        @else
+                                            <span class="badge badge-danger">Inactivo</span>
+                                        @endif
+                                    </td>
                                     <td>
 
 
@@ -93,7 +105,7 @@
                                         'onsubmit' => 'return confirmActivateRole(event)'
                                         ]) !!}
                                         <button type="submit" class="btn btn-sm btn-info">
-                                            <i class="fa fa-fw fa-toggle-off"></i> Activar
+                                            <i class="fa fa-fw fa-toggle-off"></i> 
                                         </button>
                                         {!! Form::close() !!}
 

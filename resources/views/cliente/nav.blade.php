@@ -112,10 +112,10 @@
                                         @endcan
 
                                         <a class="dropdown-item" href="{{ route('newperfil') }}">
-                                            {{ __('Perfil') }}
+                                            <i class="fas fa-user"></i>  <span>{{ __('Perfil') }}</span>
                                         </a>
                                         <a class="dropdown-item" href="{{ route('newcontrasena') }}">
-                                            {{ __('Cambio de contraseña') }}
+                                            <i class="fas fa-lock"></i> <span>{{ __('Cambio de contraseña') }}</span> 
                                         </a>
                                         <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger"
                                             onclick="event.preventDefault(); localStorage.clear();  document.getElementById('logout-form').submit();">

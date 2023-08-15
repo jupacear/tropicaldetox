@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
     <section class="section">
         <div class="section-header">
@@ -8,18 +9,17 @@
                     <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Volver
                     </a>
-                    <h3 class="page__heading ml-3 mb-0" style="margin-top: 5px;">Informacion de Usuario</h3>
+                    <h3 class="page__heading ml-3 mb-0" style="margin-top: 5px;">Informacion del cliente</h3>
                 </div>
             </div>
         </div>
         <div class="container mt-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title font-weight-bold">Detalles del Usuario</h4>
                     <h5>Documento: {{ $user->documento }}</h5>
                     <h5>Nombre: {{ $user->name }}</h5>
                     <h5>Apellidos: {{ $user->apellidos }}</h5>
-                    <h5>Estado: {{ $user->estado ? 'Activo' : 'Inactivo' }}</h5>
+                    <h5><strong>Estado:</strong> <span class="{{ $user->estado ? 'badge badge-success' : 'badge badge-danger' }}">{{ $user->estado ? 'Activo' : 'Inactivo' }}</span></h5>
                     <h5>Email: {{ $user->email }}</h5>
                     <h5>Dirección: {{ $user->direccion }}</h5>
                     <h5>Teléfono: {{ $user->telefono }}</h5>
@@ -37,3 +37,4 @@
         </div>
     </section>
 @endsection
+
