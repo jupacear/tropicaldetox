@@ -65,16 +65,16 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('Productos') }}">Productos</a></li>
 
 
+                    {{-- nav-link --}}
                     @if (empty(session('carrito.productos')))
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
-                                    class="fa fa-shopping-cart nav-link">
+                                    class="fa fa-shopping-cart ">
                                     <span class="badge" id="carritoBadge">
-
                                     </span>
                                 </i></a></li>
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
-                                    class="fa fa-shopping-cart nav-link">
+                                    class="fa fa-shopping-cart ">
                                     <span class="badge">
                                         {{ count(session('carrito.productos', [])) }}
                                     </span>

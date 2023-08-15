@@ -276,7 +276,9 @@
                                                                     <td>
                                                                         <button type="button"
                                                                             class="btn btn-danger btn-sm quitar-btn"
-                                                                            onclick="quitarProducto('{{ $producto->id }}')"> <li class="fas fa-trash"></li>  </button>
+                                                                            onclick="quitarProducto('{{ $producto->id }}')">
+                                                                            <li class="fas fa-trash"></li>
+                                                                        </button>
                                                                     </td>
                                                                     <input type="hidden" name="Cantidad[]"
                                                                         value="{{ $producto->pivot->cantidad }}">
@@ -306,13 +308,16 @@
                                                                         <td>
                                                                             <button type="button"
                                                                                 class="btn btn-danger btn-sm quitar-btn"
-                                                                                onclick="quitarProductoPersonalizados2(this)"> <li class="fas fa-trash"></li> </button>
+                                                                                onclick="quitarProductoPersonalizados2(this)">
+                                                                                <li class="fas fa-trash"></li>
+                                                                            </button>
 
                                                                             <button type="button"
                                                                                 class="btn btn-info btn-sm float-right"
                                                                                 data-toggle="modal"
                                                                                 data-target="#productModalper_{{ $personalizas->insumos }}"
-                                                                                data-details="{{ json_encode($personalizas) }}"><i class="fas fa-eye"></i>
+                                                                                data-details="{{ json_encode($personalizas) }}"><i
+                                                                                    class="fas fa-eye"></i>
                                                                             </button>
                                                                         </td>
                                                                     </tr>
@@ -658,12 +663,10 @@
                                 $(document).ready(function() {
                                     var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
                                     var insumosSeleccionadosSet = new Set();
-
                                     $('.agregar-insumo').click(function() {
                                         if ($('.insumos_selecionados li').length < maxSeleccionados) {
                                             var insumoId = $(this).closest('.insumo').data('id');
                                             var insumoNombre = $(this).siblings('span').text();
-
                                             if (!insumosSeleccionadosSet.has(insumoId)) {
                                                 // Agrega el insumo al conjunto de IDs de insumos seleccionados
                                                 insumosSeleccionadosSet.add(insumoId);
@@ -684,10 +687,10 @@
                                                 // Agrega el insumo seleccionado a la lista de insumos seleccionados
                                                 $('.lista-insumos-seleccionados').append(listItem.append(removeButton));
                                             } else {
-                                                alert('El insumo ya ha sido seleccionado anteriormente.');
+                                                nosepuedeAgregar('El insumo ya ha sido seleccionado anteriormente.');
                                             }
                                         } else {
-                                            alert('Ya has seleccionado la cantidad máxima de productos.');
+                                            nosepuedeAgregar('Ya has seleccionado la cantidad máxima de productos.');
                                         }
                                     });
 
@@ -707,6 +710,26 @@
                                         insumosSeleccionadosSet.clear();
                                     });
                                 });
+
+
+                                function nosepuedeAgregar(mensaje) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: mensaje,
+                                        timer: 3000, // Tiempo en milisegundos (3 segundos en este caso)
+                                        timerProgressBar: true,
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        showCloseButton: true,
+                                        background: '#f2dede', // Color de fondo de la alerta (estilo de error)
+                                        color: '#a94442',
+                                        customClass: {
+                                            icon: 'swal2-error-icon-custom', // Clase personalizada para el estilo
+                                        }
+                                    });
+                                }
                             </script>
 
                             <script>

@@ -32,6 +32,8 @@
                         <a class="btn btn-warning" href="{{ url('pedidos/create') }}">Nuevo</a>
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
+                                <th style="color:#fff;">No</th>
+
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Telefono</th>
                                 <th style="color:#fff;">Direcion</th>
@@ -40,10 +42,14 @@
                                 <th style="color:#fff;">Total</th>
                                 <th style="color:#fff;">Opciones</th>
                             </thead>
+                            @php $Numero = 1 @endphp
+
                             <tbody>
                                 @foreach ($pedidos as $pedido)
                                     @if ($pedido->Estado == 'En_proceso')
                                         <tr>
+                                            <td>{{ $Numero }}</td>
+
                                             <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
                                             <td>{{ $pedido->users ? $pedido->users->telefono : 'Null' }}</td>
                                             <td>
@@ -115,6 +121,8 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php $Numero++ @endphp
+
                                     @endif
                                 @endforeach
 
@@ -123,6 +131,8 @@
                                 @foreach ($pedidos as $pedido)
                                     @if ($pedido->Estado == 'Cancelado')
                                         <tr>
+                                            <td>{{ $Numero }}</td>
+
                                             <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
                                             <td>{{ $pedido->users ? $pedido->users->telefono : 'Null' }}</td>
                                             <td>
@@ -189,6 +199,8 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        @php $Numero++ @endphp
+
                                     @endif
                                 @endforeach
                             </tbody>

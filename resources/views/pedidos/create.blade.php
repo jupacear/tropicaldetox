@@ -459,7 +459,6 @@
                                         if ($('.insumos_selecionados li').length < maxSeleccionados) {
                                             var insumoId = $(this).closest('.insumo').data('id');
                                             var insumoNombre = $(this).siblings('span').text();
-
                                             if (!insumosSeleccionadosSet.has(insumoId)) {
                                                 // Agrega el insumo al conjunto de IDs de insumos seleccionados
                                                 insumosSeleccionadosSet.add(insumoId);
@@ -470,7 +469,7 @@
                                                 // Agrega un botón para eliminar el insumo seleccionado
                                                 // var removeButton = $('<button>').text('Quitar').addClass(
                                                 //     'btn btn-danger quitar-insumo');
-                                                var removeButton = $('<button>').html('<i class="fas fa-trash"></i>').addClass(
+                                                var removeButton = $('<button >').html('<i class="fas fa-trash"></i>').addClass(
                                                     'btn btn-danger quitar-insumo').css({
                                                     margin: '8px',
 
@@ -480,10 +479,10 @@
                                                 // Agrega el insumo seleccionado a la lista de insumos seleccionados
                                                 $('.lista-insumos-seleccionados').append(listItem.append(removeButton));
                                             } else {
-                                                alert('El insumo ya ha sido seleccionado anteriormente.');
+                                                nosepuedeAgregar('El insumo ya ha sido seleccionado anteriormente.');
                                             }
                                         } else {
-                                            alert('Ya has seleccionado la cantidad máxima de productos.');
+                                            nosepuedeAgregar('Ya has seleccionado la cantidad máxima de productos.');
                                         }
                                     });
 
@@ -494,6 +493,7 @@
                                         // Elimina el insumo del conjunto de IDs de insumos seleccionados
                                         insumosSeleccionadosSet.delete(insumoId);
 
+
                                         $(this).closest('li').remove();
                                     });
 
@@ -503,6 +503,26 @@
                                         insumosSeleccionadosSet.clear();
                                     });
                                 });
+
+
+                                function nosepuedeAgregar(mensaje) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: mensaje,
+                                        timer: 3000, // Tiempo en milisegundos (3 segundos en este caso)
+                                        timerProgressBar: true,
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        showCloseButton: true,
+                                        background: '#f2dede', // Color de fondo de la alerta (estilo de error)
+                                        color: '#a94442',
+                                        customClass: {
+                                            icon: 'swal2-error-icon-custom', // Clase personalizada para el estilo
+                                        }
+                                    });
+                                }
                             </script>
 
                             <script>
@@ -514,56 +534,82 @@
                                             return li.textContent.trim();
                                         });
 
-                                    var cantidad = prompt('Ingrese la cantidad para el producto personalizado:', '1');
-                                    if (cantidad === null || cantidad === '') {
-                                        return; // Si el usuario cancela o no ingresa un valor, no se agrega el producto
-                                    }
 
-                                    cantidad = parseInt(cantidad);
 
-                                    var tableBody = document.getElementById('selected-products-list');
-                                    var subtotal = 0;
+                                    // Importa SweetAlert si estás usando npm o yarn
+                                    // import Swal from 'sweetalert2';
 
-                                    insumosSeleccionados.forEach(function(insumo) {
-                                        var data = insumo.split(':');
-                                        var precio = parseFloat(data[2].trim());
-                                        subtotal += parseFloat(precio) * cantidad;
+                                    // Utiliza SweetAlert para mostrar una ventana emergente de entrada
+                                    Swal.fire({
+                                        title: 'Ingrese la cantidad para el producto personalizado:',
+                                        input: 'number',
+                                        inputValue: 1, // Valor por defecto
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Aceptar',
+                                        cancelButtonText: 'Cancelar',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            var cantidad = result.value;
+                                            console.log('Cantidad ingresada:', cantidad);
+
+                                            // Ahora puedes usar la variable "cantidad" en tu lógica de código
+
+
+                                            if (cantidad === null || cantidad === '') {
+                                                return; // Si el usuario cancela o no ingresa un valor, no se agrega el producto
+                                            }
+
+                                            cantidad = parseInt(cantidad);
+
+                                            var tableBody = document.getElementById('selected-products-list');
+                                            var subtotal = 0;
+
+                                            insumosSeleccionados.forEach(function(insumo) {
+                                                var data = insumo.split(':');
+                                                var precio = parseFloat(data[2].trim());
+                                                subtotal += parseFloat(precio) * cantidad;
+                                            });
+
+                                            var
+                                                personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
+
+                                            var num = personalizadosArray.length + 1;
+                                            personalizado['Nombre'] = 'Personalizado ' + num;
+                                            personalizado['insumos'] = insumosSeleccionados;
+                                            personalizado['Subtotal'] = subtotal;
+                                            personalizado['Cantidad'] = cantidad; // Agregar la cantidad al objeto personalizado
+
+                                            personalizadosArray.push(personalizado);
+
+                                            var row = document.createElement('tr');
+                                            var uniqueId = personalizadosArray.length -
+                                                1; // Obtener el índice único del personalizado
+                                            row.innerHTML = `
+                                                                        <td>${personalizado.Nombre}</td>
+                                                                        <td>${cantidad}</td>
+                                                                        <td>${subtotal.toLocaleString('en-US')}</td>
+                                                                        <td>
+                                                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})"> <i class="fas fa-trash"></i>  </button>
+                                                                            <button type="button" class="btn btn-info btn-sm detalles-btn" data-index="${uniqueId}" data-toggle="modal" data-target="#personalizadoDetallesModal">  <i class="fas fa-eye"></i> </button>
+                                                                        </td>
+                                                                    `;
+                                            row.setAttribute('data-id',
+                                                uniqueId); // Asignar el índice único como el atributo data-id
+                                            tableBody.appendChild(row);
+
+                                            total += subtotal; // Sumar el subtotal al total existente
+
+                                            totalElement.textContent = total.toFixed(2);
+                                            totalSection.style.display = 'block';
+
+                                            var totalInput = document.getElementById('total-input');
+                                            totalInput.value = total.toFixed(2);
+
+                                            var personalizadosArrayInput = document.getElementById('personalizadosArray');
+                                            personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
+
+                                        }
                                     });
-
-                                    var personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
-
-                                    var num = personalizadosArray.length + 1;
-                                    personalizado['Nombre'] = 'Personalizado ' + num;
-                                    personalizado['insumos'] = insumosSeleccionados;
-                                    personalizado['Subtotal'] = subtotal;
-                                    personalizado['Cantidad'] = cantidad; // Agregar la cantidad al objeto personalizado
-
-                                    personalizadosArray.push(personalizado);
-
-                                    var row = document.createElement('tr');
-                                    var uniqueId = personalizadosArray.length - 1; // Obtener el índice único del personalizado
-                                    row.innerHTML = `
-                                        <td>${personalizado.Nombre}</td>
-                                        <td>${cantidad}</td>
-                                        <td>${subtotal.toLocaleString('en-US')}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})"> <i class="fas fa-trash"></i>  </button>
-                                            <button type="button" class="btn btn-info btn-sm detalles-btn" data-index="${uniqueId}" data-toggle="modal" data-target="#personalizadoDetallesModal">  <i class="fas fa-eye"></i> </button>
-                                        </td>
-                                    `;
-                                    row.setAttribute('data-id', uniqueId); // Asignar el índice único como el atributo data-id
-                                    tableBody.appendChild(row);
-
-                                    total += subtotal; // Sumar el subtotal al total existente
-
-                                    totalElement.textContent = total.toFixed(2);
-                                    totalSection.style.display = 'block';
-
-                                    var totalInput = document.getElementById('total-input');
-                                    totalInput.value = total.toFixed(2);
-
-                                    var personalizadosArrayInput = document.getElementById('personalizadosArray');
-                                    personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
                                 });
 
 

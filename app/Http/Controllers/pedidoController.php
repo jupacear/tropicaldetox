@@ -395,10 +395,12 @@ class pedidoController extends Controller
     public function guardarPedido(Request $request)
     {
         $carrito = json_decode($request->input('carrito', '[]'), true);
+        $productosPersonalizados = json_decode($request->input('productosPersonalizados', '[]'), true);
+
         // Verificar si el carrito está vacío
-        // if (empty($carrito)) {
-        //     return redirect()->back()->with('success', 'El carrito está vacío. Agrega productos antes de guardar el pedido.');
-        // }
+        if (empty($carrito) && empty($productosPersonalizados)) {
+            return redirect()->back()->with('success', 'El carrito está vacío. Agrega productos antes de guardar el pedido.');
+        }
         // Validar disponibilidad de insumos
         foreach ($carrito as $producto) {
             $insumo_productos = InsumoProducto::where('producto_id', $producto['id'])->get();
@@ -438,7 +440,6 @@ class pedidoController extends Controller
                 }
             }
         }
-        $productosPersonalizados = json_decode($request->input('productosPersonalizados', '[]'), true);
         // Guardar los productos personalizados en la tabla "producPerz"
         if (!empty($productosPersonalizados)) {
             $totalL = 0;

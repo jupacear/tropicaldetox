@@ -40,6 +40,7 @@
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
 
+                                <th style="color:#fff;">No</th>
 
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Telefono</th>
@@ -49,11 +50,15 @@
                                 <th style="color:#fff;">Total</th>
                                 <th style="color:#fff;">Opciones</th>
                             </thead>
+                            @php $Numero = 1 @endphp
+
                             <tbody>
                                 @foreach ($ventas as $venta)
 
                                     @if ($venta->Estado == 'Finalizado')
                                         <tr>
+                                            <td>{{ $Numero }}</td>
+
                                             <td>{{ $venta->users->name }}</td>
                                             <td>{{ $venta->users->telefono }}</td>
                                             <td>
@@ -74,6 +79,7 @@
                                                         class="fa fa-fw fa-eye"></i></a>
                                             </td>
                                         </tr>
+                                        @php $Numero++ @endphp
                                     @endif
 
                                 @endforeach

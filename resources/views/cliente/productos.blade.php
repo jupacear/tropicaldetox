@@ -85,13 +85,13 @@
                                             <img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto" width="40em">
                                             <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
                                                 {{ $Insumos->precio_unitario }}</span>
-                                            <button type="button" class="btn btn-success agregar-insumo" style="max-width: 2em; max-height: 2em;">
-                                                <i class="fas fa-plus fa-xs"></i>
+                                            <button type="button" class="btn btn-success agregar-insumo" style="max-width: 1em; max-height: 1.5em;">
+                                                <i class="fas fa-plus fa-xs"  style="position: relative; bottom: 8.5px;right: 5px"></i>
                                                 <!-- Icono de Font Awesome para el botón -->
                                             </button>
                                             <br>
                                         </div>
-                                            <div style="margin: 1em" class="insumo" data-id="{{ $Insumos->id }}">
+                                            {{-- <div style="margin: 1em" class="insumo" data-id="{{ $Insumos->id }}">
                                                 <img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto"
                                                     width="40em">
                                                 <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
@@ -103,7 +103,7 @@
                                                     <!-- Icono de Font Awesome para el botón -->
                                                 </button>
                                                 <br>
-                                            </div>
+                                            </div> --}}
                                         @endforeach
                                     </div>
                                     <div class="insumos_selecionados" style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 200px;">
