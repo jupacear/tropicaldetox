@@ -31,7 +31,7 @@ Productos
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="text-left m-2">
+                    <div style="margin-bottom: 20px;">
                         <a class="btn btn-warning" href="{{ route('productos.create') }}">Nuevo</a>
                     </div>
                     <div class="table-responsive">
