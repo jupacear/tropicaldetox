@@ -17,9 +17,11 @@
           <div class="row">
               <div class="col-lg-12">
                   <div class="card">
-                      <div class="card-body">                           
-                          <a class="btn btn-warning" href="{{ route('A_clientes.create') }}">Nuevo</a>        
+                      <div class="card-body">    
 
+                        <div style="margin-bottom: 20px;">
+                          <a class="btn btn-warning" href="{{ route('A_clientes.create') }}">Nuevo</a>        
+                        </div>
                           
 
                         
@@ -91,7 +93,7 @@
                                                     <a class="btn btn-sm btn-primary" href="{{ route('A_clientes.show', $usuario->id) }}"><i class="fa fa-fw fa-eye"></i></a>
                                                     <a class="btn btn-sm btn-success" href="{{ route('A_clientes.edit', $usuario->id) }}"><i class="fa fa-fw fa-edit"></i></a>
                                                     
-                                                    @if ($usuario->pedidos->isEmpty())
+                                                    
                                                     {!! Form::open([
                                                         'method' => 'DELETE',
                                                         'route' => ['A_clientes.destroy', $usuario->id],
@@ -100,7 +102,7 @@
                                                     ]) !!}
                                                         <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i></button>
                                                     {!! Form::close() !!}
-                                                @endif
+                                                
                                                 </td>
                                             </tr>
                                             @php $contador++ @endphp

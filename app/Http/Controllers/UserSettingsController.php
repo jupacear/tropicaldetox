@@ -25,8 +25,8 @@ class UserSettingsController extends Controller
         $userId = $user->id;
 
         $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
             'documento' => 'nullable|string|max:10|unique:users,documento,' . $userId,
             'telefono' => 'nullable|numeric|digits:10',
             'direccion' => 'nullable|max:50',
@@ -34,10 +34,10 @@ class UserSettingsController extends Controller
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
             'name.regex' => 'El campo nombre solo debe contener letras.',
-            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'name.max' => 'El campo nombre no debe tener más de 30 caracteres.',
             'apellidos.required' => 'El campo apellidos es obligatorio.',
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
-            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 30 caracteres.',
             'documento.min' => 'El documento debe ser valido.',
             'documento.unique' => 'El documento ingresado ya está en uso.',
             'documento.regex' => 'El campo documento solo puede contener números.',
@@ -82,8 +82,8 @@ class UserSettingsController extends Controller
         $userId = $user->id;
     
         $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
-            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:20',
+            'name' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
+            'apellidos' => 'required|regex:/^[A-Za-z\s]+$/|max:30',
             'documento' => 'required|string|max:10|unique:users,documento,' . $userId,
             'telefono' => 'required|numeric|digits:10',
             'direccion' => 'required|max:50',
@@ -91,10 +91,10 @@ class UserSettingsController extends Controller
         ], [
             'name.required' => 'El campo nombre es obligatorio.',
             'name.regex' => 'El campo nombre solo debe contener letras.',
-            'name.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+            'name.max' => 'El campo nombre no debe tener más de 30 caracteres.',
             'apellidos.required' => 'El campo apellidos es obligatorio.',
             'apellidos.regex' => 'El campo apellidos solo debe contener letras.',
-            'apellidos.max' => 'El campo apellidos no debe tener más de 20 caracteres.',
+            'apellidos.max' => 'El campo apellidos no debe tener más de 30 caracteres.',
             'documento.min' => 'El documento debe ser valido.',
             'documento.unique' => 'El documento ingresado ya está en uso.',
             'documento.regex' => 'El campo documento solo puede contener números.',

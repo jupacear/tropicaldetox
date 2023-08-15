@@ -14,19 +14,20 @@
         });
     </script>
 @endif
-<div class="container mb-5 mt-3" style="background-color: #fff;">
+<div class="container mb-5" style="padding-top: 60px;">
     <!-- Mensajes -->
     <h2 class="text-center">Actualizar mis datos</h2>
     <hr>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <form action="{{ route('changeperfil') }}" method="POST" class="needs-validation" novalidate>
+            
                 @csrf
     
                 <div class="row mb-3">
                     <div class="form-group mt-3 col-md-6">
-                        <label for="name">Nombre de Usuario</label>
-                        <input type="text" name="name" value="{{ Auth::user()->name }}" class="form-control @error('name') is-invalid @enderror" required>
+                        <label for="name">Nombre</label>
+                        <input type="text" name="name" value="{{ Auth::user()->name }}" class="form-control @error('name') is-invalid @enderror" >
                         @error('name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -74,7 +75,7 @@
                     </div>
                     <div class="form-group mt-3 col-md-6">
                         <label for="email">Correo Electrónico</label>
-                        <input type="email" name="email" value="{{ Auth::user()->email }}" class="form-control @error('email') is-invalid @enderror" required>
+                        <input type="email" name="email" value="{{ Auth::user()->email }}" class="form-control @error('email') is-invalid @enderror" >
                         @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -85,7 +86,8 @@
     
                 <div class="row text-center mb-4 mt-5">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary" id="formSubmit">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-success" id="formSubmit">Guardar Cambios</button>
+
                         <a href="/home" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </div>
@@ -95,8 +97,10 @@
 </div>
 
 @include('cliente.footer')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 <style>
     .content-container {

@@ -33,35 +33,30 @@ class contrasenaController extends Controller
         $userPassword = $user->password;
 
         if (Hash::check($request->password_actual, $userPassword)) {
-            $NuewPass = $request->password;
-            $confirPass = $request->confirm_password;
+            $newPass = $request->password;
+            $confirmPass = $request->confirm_password;
 
-            if ($NuewPass == $confirPass) {
-                if (strlen($NuewPass) >= 6) {
+            if ($newPass == $confirmPass) {
+                if (strlen($newPass) >= 6) {
                     $user->password = Hash::make($request->password);
                     $user->save();
-                    
-                    Session::flash('sweet-alert', [
-                        'type' => 'success',
-                        'title' => 'Clave cambiada',
-                        'text' => 'La clave fue cambiada correctamente.'
-                    ]);
 
+                    Alert::success('Clave cambiada', 'La clave fue cambiada correctamente.');
                     return redirect()->back();
                 } else {
-                    dd('clave incorrecta papa pero 2');
-                    Alert::error('Clave incorrecta', 'Recuerde que la clave debe tener al menos 6 caracteres .');
+                    Alert::error('Clave incorrecta', 'Recuerda que la clave debe tener al menos 6 caracteres.');
                     return redirect()->back();
                 }
             } else {
-                
-                Alert::error('Clave incorrecta', 'Por favor, verifique que las claves coincidan.');
+                Alert::error('Clave incorrecta', 'Por favor, verifica que las claves coincidan.');
                 return redirect()->back();
             }
         } else {
+            Alert::error('Clave actual incorrecta', 'La clave actual ingresada no coincide con la contraseña actual.');
             return back()->withErrors(['password_actual' => 'La clave actual no coincide.']);
         }
     }
+    
 
     public function newcontrasena()
     {
@@ -80,34 +75,27 @@ class contrasenaController extends Controller
         $userPassword = $user->password;
 
         if (Hash::check($request->password_actual, $userPassword)) {
-            $NuewPass = $request->password;
-            $confirPass = $request->confirm_password;
+            $newPass = $request->password;
+            $confirmPass = $request->confirm_password;
 
-            if ($NuewPass == $confirPass) {
-                if (strlen($NuewPass) >= 6) {
+            if ($newPass == $confirmPass) {
+                if (strlen($newPass) >= 6) {
                     $user->password = Hash::make($request->password);
                     $user->save();
 
-                    Session::flash('sweet-alert', [
-                        'type' => 'success',
-                        'title' => 'Clave cambiada',
-                        'text' => 'La clave fue cambiada correctamente.'
-                    ]);
-
-                    
-                    return redirect()->back()->with('success', 'La clave fue cambiada correctamente.');
+                    Alert::success('Clave cambiada', 'La clave fue cambiada correctamente.');
+                    return redirect()->back();
                 } else {
-                    Alert::error('Clave incorrecta', 'Recuerde que la clave debe tener al menos 6 caracteres.');
+                    Alert::error('Clave incorrecta', 'Recuerda que la clave debe tener al menos 6 caracteres.');
                     return redirect()->back();
                 }
             } else {
-                
-                Alert::error('Clave incorrecta', 'Por favor, verifique que las claves coincidan.');
+                Alert::error('Clave incorrecta', 'Por favor, verifica que las claves coincidan.');
                 return redirect()->back();
             }
         } else {
+            Alert::error('Clave actual incorrecta', 'La clave actual ingresada no coincide con la contraseña actual.');
             return back()->withErrors(['password_actual' => 'La clave actual no coincide.']);
-            
         }
     }
 }

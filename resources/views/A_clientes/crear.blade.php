@@ -13,43 +13,54 @@
             </div>
         </div>
         <div class="section-body">
+            @if ($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>¡Revise los campos!</strong>
+                                </div>
+                            @endif
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
 
-                            @if ($errors->any())
-                                <div class="alert alert-danger" role="alert">
-                                    <strong>¡Revise los campos!</strong>
-                                    @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                    @endforeach
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endif
+                            
 
                             {!! Form::open(['route' => 'A_clientes.store', 'method' => 'POST']) !!}
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('documento') ? 'is-invalid' : '' }}">
                                         <label for="documento">Documento</label>
-                                        {!! Form::text('documento', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('documento', null, ['class' => 'form-control ' . ($errors->has('documento') ? 'is-invalid' : '')]) !!}
+                                        @if ($errors->has('documento'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('documento') }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('name') ? 'is-invalid' : '' }}">
                                         <label for="name">Nombre</label>
-                                        {!! Form::text('name', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('name', null, ['class' => 'form-control ' . ($errors->has('name') ? 'is-invalid' : '')]) !!}
+                                        @if ($errors->has('name'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('name') }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('apellidos') ? 'is-invalid' : '' }}">
                                         <label for="apellidos">Apellidos</label>
-                                        {!! Form::text('apellidos', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('apellidos', null, ['class' => 'form-control ' . ($errors->has('apellidos') ? 'is-invalid' : '')]) !!}
+                                        @if ($errors->has('apellidos'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('apellidos') }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
+
                                 <div class="col-xs-12 col-sm-6 col-md-6" style="display: none;">
                                     <div class="form-group">
                                         <label for="estado">Estado</label>
@@ -64,55 +75,90 @@
                                 </div>
                                 
                                 <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('telefono') ? 'is-invalid' : '' }}">
                                         <label for="telefono">Teléfono</label>
-                                        {!! Form::text('telefono', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('telefono', null, ['class' => 'form-control ' . ($errors->has('telefono') ? 'is-invalid' : '')]) !!}
+                                        @if ($errors->has('telefono'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('telefono') }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('direccion') ? 'is-invalid' : '' }}">
                                         <label for="direccion">Dirección</label>
-                                        {!! Form::text('direccion', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('direccion', null, ['class' => 'form-control ' . ($errors->has('direccion') ? 'is-invalid' : '')]) !!}
+                                        @if ($errors->has('direccion'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('direccion') }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('email') ? 'is-invalid' : '' }}">
                                         <label for="email">E-mail</label>
-                                        {!! Form::text('email', null, ['class' => 'form-control']) !!}
+                                        {!! Form::text('email', null, ['class' => 'form-control ' . ($errors->has('email') ? 'is-invalid' : '')]) !!}
+                                        @if ($errors->has('email'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('email') }}
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('password') ? 'is-invalid' : '' }}">
                                         <label for="password">Contraseña</label>
                                         <div class="input-group">
-                                            {!! Form::password('password', ['class' => 'form-control', 'id' => 'password']) !!}
+                                            {!! Form::password('password', [
+                                                'class' => 'form-control ' . ($errors->has('password') ? 'is-invalid' : ''),
+                                                'id' => 'password',
+                                            ]) !!}
                                             <div class="input-group-append">
-                                                <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('password')">
+                                                <span class="input-group-text" style="cursor: pointer;"
+                                                    onclick="togglePasswordVisibility('password', 'togglePasswordIcon')">
                                                     <i class="fas fa-eye" id="togglePasswordIcon"></i>
                                                 </span>
                                             </div>
+                                            @if ($errors->has('password'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('password') }}
+                                            </div>
+                                        @endif
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 
                                 <div class="col-xs-12 col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group {{ $errors->has('confirm-password') ? 'is-invalid' : '' }}">
                                         <label for="confirm-password">Confirmar Contraseña</label>
                                         <div class="input-group">
-                                            {!! Form::password('confirm-password', ['class' => 'form-control', 'id' => 'confirm-password']) !!}
+                                            {!! Form::password('confirm-password', [
+                                                'class' => 'form-control ' . ($errors->has('confirm-password') ? 'is-invalid' : ''),
+                                                'id' => 'confirm-password',
+                                            ]) !!}
                                             <div class="input-group-append">
-                                                <span class="input-group-text" style="cursor: pointer;" onclick="togglePasswordVisibility('confirm-password')">
+                                                <span class="input-group-text" style="cursor: pointer;"
+                                                    onclick="togglePasswordVisibility('confirm-password', 'toggleConfirmPasswordIcon')">
                                                     <i class="fas fa-eye" id="toggleConfirmPasswordIcon"></i>
                                                 </span>
                                             </div>
+                                            @if ($errors->has('confirm-password'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('confirm-password') }}
+                                            </div>
+                                        @endif
                                         </div>
+                                       
                                     </div>
                                 </div>
 
                                 <script>
-                                    function togglePasswordVisibility(inputId) {
+                                    function togglePasswordVisibility(inputId, iconId) {
                                         var passwordInput = document.getElementById(inputId);
-                                        var passwordIcon = document.getElementById('toggle' + inputId.charAt(0).toUpperCase() + inputId.slice(1) + 'Icon');
+                                        var passwordIcon = document.getElementById(iconId);
                                 
                                         if (passwordInput.type === 'password') {
                                             passwordInput.type = 'text';
@@ -125,6 +171,7 @@
                                         }
                                     }
                                 </script>
+                                
                                 
                                 <div class="col-xs-12 col-sm-6 col-md-6" style="display: none;">
                                     <div class="form-group">

@@ -84,8 +84,8 @@
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid': '' }}"
                                        name="password" tabindex="2" required>
                                 <div class="input-group-append">
-                                    <span class="input-group-text toggle-password" id="toggle-password">
-                                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                    <span class="input-group-text toggle-password" id="toggle-password-actual">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
                                     </span>
                                 </div>
                             </div>
@@ -103,8 +103,8 @@
                                        class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid': '' }}"
                                        name="password_confirmation" tabindex="2">
                                 <div class="input-group-append">
-                                    <span class="input-group-text toggle-password" id="toggle-password-confirmation">
-                                        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                    <span class="input-group-text toggle-password" id="toggle-password-actual">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
                                     </span>
                                 </div>
                             </div>
@@ -118,7 +118,15 @@
                             $(".toggle-password").click(function () {
                                 $(this).toggleClass("active");
                                 var input = $(this).closest(".input-group").find("input");
-                                input.attr("type", input.attr("type") === "password" ? "text" : "password");
+                                var icon = $(this).find("i");
+                    
+                                if (input.attr("type") === "password") {
+                                    input.attr("type", "text");
+                                    icon.removeClass("fa-eye").addClass("fa-eye-slash");
+                                } else {
+                                    input.attr("type", "password");
+                                    icon.removeClass("fa-eye-slash").addClass("fa-eye");
+                                }
                             });
                         });
                     </script>
