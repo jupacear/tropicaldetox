@@ -25,7 +25,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <!-- Agrega Font Awesome en el head de tu documento HTML -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
+    <style>
+        .fixed-size-image {
+            width: 200px;
+            /* Establece el ancho deseado */
+            height: 200px;
+            /* Establece la altura deseada */
+            object-fit: cover;
+            /* Ajusta la imagen para que cubra completamente el área designada */
+        }
+    </style>
 </head>
 
 <body>
@@ -85,6 +94,7 @@
                                                 type="text" class="form-control" id="buscarInsumo"
                                                 placeholder="Ingresa el nombre del insumo">
                                         </div>
+
                                         <table class="table">
                                             <tbody>
                                                 @foreach ($Insumo as $Insumos)
@@ -106,6 +116,7 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
+
                                     </div>
                                     <div class="insumos_selecionados"
                                         style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 200px;">
@@ -160,6 +171,7 @@
             </div>
             <div class="row justify-content-center special-list">
                 @foreach ($productos as $producto)
+
                     @if ($producto->activo)
                         <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
                             <!-- Cartas -->
@@ -184,6 +196,7 @@
                                     <!-- Descripción del producto -->
                                     <p>{{ $producto->descripcion }}</p>
                                 </div>
+
                             </div>
                             <!-- End Cartas -->
                         </div>
@@ -295,12 +308,14 @@
     var insumosSeleccionadosSet = new Set(); // Conjunto para almacenar los IDs de los insumos seleccionados
     var numeroPersonalizado = 1; // Variable para el número autoincrementable
 
+
     // Al cargar la página, busca el último número personalizado guardado en el Local Storage
     var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
     if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
         var ultimoNumeroPersonalizado = productosPersonalizadosGuardados[productosPersonalizadosGuardados.length - 1].NumeroPersonalizado;
         numeroPersonalizado = ultimoNumeroPersonalizado + 1;
     }
+
 
     // Evento al hacer clic en el botón "Agregar" de un insumo
     $(document).on('click', '.agregar-insumo', function() {

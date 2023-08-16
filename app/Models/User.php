@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\UserResetPassword;
 
 //spatie
 
@@ -54,5 +55,10 @@ class User extends Authenticatable
     public function pedidos()
     {
         return $this->hasMany(Pedido::class, 'id_users');
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new UserResetPassword($token));
     }
 }

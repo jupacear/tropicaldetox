@@ -14,7 +14,7 @@
         Swal.fire({
             icon: 'error',
             title: 'Error de validación',
-            text: 'La contraseña no conincide, La contraseña debe tener minimo 6 digitos.',
+            text: 'Verifica los errores, La contraseña debe tener minimo 6 digitos.',
         });
     </script>
 @endif
