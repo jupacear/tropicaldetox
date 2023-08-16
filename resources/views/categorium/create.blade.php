@@ -14,18 +14,11 @@ Crear Categoria
     </div>
     <div class="section-body">
         @if ($errors->any())
-        <div class="alert alert-danger">
-            <div class="alert alert-danger">
-                <strong>¡Revise los campos¡</strong>
-            </div>
+        <div class="alert alert-danger" role="alert">
+            <strong>¡Revise los campos!</strong>
         </div>
         @endif
 
-        @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
-        @endif
         <div class="row">
             <div class="col-lg-12">
 

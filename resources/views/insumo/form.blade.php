@@ -54,14 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group row">
-            @if (Route::currentRouteName() !== 'insumo.create')
-                <label for="activo"class="col-sm-1">Estado:</label>
-                <input type="checkbox" name="activo" value="1" {{ $insumo->activo ? 'checked' : '' }}
-                    class="col-md-2 form-control{{ $errors->has('activo') ? ' is-invalid' : '' }}">
-            @endif
-            {!! $errors->first('activo', '<div class="invalid-feedback">:message</div>') !!}
-        </div>
+
     </div>
 </div>
 <div class="box-footer mt20">
