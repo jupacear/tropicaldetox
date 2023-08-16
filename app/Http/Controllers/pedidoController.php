@@ -452,7 +452,7 @@ class pedidoController extends Controller
                 $subtotal=0;
                 for ($i = 0; $i < count($insumos); $i++) {
                     $subtotalData = explode(':', $insumos[$i]);
-                    $subtotal += (int) trim($subtotalData[3]);
+                    $subtotal += (int) trim($subtotalData[2]);
                 }
 
                 $id = '';

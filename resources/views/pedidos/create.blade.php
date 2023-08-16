@@ -115,6 +115,9 @@
                                                         <div class="insumos_selecionados"
                                                             style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 200px;">
                                                             <h3>Insumo seleccionados</h3>
+                                                            <div id="totalInsumosSeleccionados">
+                                                                Total: $0.00
+                                                            </div>
                                                             <ul class="lista-insumos-seleccionados"></ul>
                                                             <!-- Usaremos una lista para mostrar los insumos seleccionados -->
                                                         </div>
@@ -458,6 +461,7 @@
                                     $('.agregar-insumo').click(function() {
                                         if ($('.insumos_selecionados li').length < maxSeleccionados) {
                                             var insumoId = $(this).closest('.insumo').data('id');
+
                                             var insumoNombre = $(this).siblings('span').text();
                                             if (!insumosSeleccionadosSet.has(insumoId)) {
                                                 // Agrega el insumo al conjunto de IDs de insumos seleccionados
@@ -469,7 +473,7 @@
                                                 // Agrega un botón para eliminar el insumo seleccionado
                                                 // var removeButton = $('<button>').text('Quitar').addClass(
                                                 //     'btn btn-danger quitar-insumo');
-                                                var removeButton = $('<button >').html('<i class="fas fa-trash"></i>').addClass(
+                                                var removeButton = $('<button>').html('<i class="fas fa-trash"></i>').addClass(
                                                     'btn btn-danger quitar-insumo').css({
                                                     margin: '8px',
 
@@ -481,6 +485,8 @@
                                             } else {
                                                 nosepuedeAgregar('El insumo ya ha sido seleccionado anteriormente.');
                                             }
+                                            recalcularTotalInsumosSeleccionados();
+
                                         } else {
                                             nosepuedeAgregar('Ya has seleccionado la cantidad máxima de productos.');
                                         }
@@ -489,12 +495,13 @@
                                     // Función para quitar un insumo seleccionado
                                     $(document).on('click', '.quitar-insumo', function() {
                                         var insumoId = $(this).closest('.insumo').data('id');
-
                                         // Elimina el insumo del conjunto de IDs de insumos seleccionados
-                                        insumosSeleccionadosSet.delete(insumoId);
-
-
+                                        insumosSeleccionadosSet.clear(insumoId);
                                         $(this).closest('li').remove();
+                                        // $('.lista-insumos-seleccionados').empty();
+                                        // insumosSeleccionadosSet.clear();
+                                        recalcularTotalInsumosSeleccionados();
+
                                     });
 
                                     $('#Personalizados').on('hidden.bs.modal', function() {
@@ -503,7 +510,18 @@
                                         insumosSeleccionadosSet.clear();
                                     });
                                 });
+                                // Función para recalcular el total de insumos seleccionados
+                                function recalcularTotalInsumosSeleccionados() {
+                                    var total = 0;
+                                    $('.insumos_selecionados li').each(function() {
+                                        var insumoPrecioSeleccionado = parseFloat($(this).text().match(
+                                            /\$:\s*(\d+)/)[1]);
+                                        total += insumoPrecioSeleccionado;
+                                    });
 
+                                    // Actualizar el contenido del elemento HTML del total
+                                    $('#totalInsumosSeleccionados').text(`Total: $${total.toFixed(2)}`);
+                                }
 
                                 function nosepuedeAgregar(mensaje) {
                                     Swal.fire({

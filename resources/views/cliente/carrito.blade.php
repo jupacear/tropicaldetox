@@ -191,8 +191,8 @@
                     productoPersonalizado.insumos.forEach(function(insumo) {
                         let insumoData = insumo.split(':');
                         // Verificar que el valor sea numérico antes de sumarlo al totalPedido
-                        if (!isNaN(parseFloat(insumoData[3].trim()))) {
-                            totalPedido += parseFloat(insumoData[3].trim());
+                        if (!isNaN(parseFloat(insumoData[2].trim()))) {
+                            totalPedido += parseFloat(insumoData[2].trim());
                         }
                     });
                 });
@@ -237,7 +237,7 @@
                     let subtotalf = 0;
                     productoPersonalizado.insumos.forEach(function(insumo) {
                         let insumoData = insumo.split(':');
-                        subtotalf += parseFloat(insumoData[3].trim());
+                        subtotalf += parseFloat(insumoData[2].trim());
                     });
                     let subtotalPersonalizado = subtotalf * (productoPersonalizado.cantidad || 1);
                     totalPedido += subtotalPersonalizado;
@@ -276,7 +276,7 @@
                     let subtotalf = 0;
                     productoPersonalizado.insumos.forEach(function(insumo) {
                         let insumoData = insumo.split(':');
-                        subtotalf += parseFloat(insumoData[3].trim());
+                        subtotalf += parseFloat(insumoData[2].trim());
                     });
                     let subtotalPersonalizado = subtotalf * (productoPersonalizado.cantidad || 1);
                     totalPedido += subtotalPersonalizado;
@@ -328,7 +328,7 @@
                     let subtotalf = 0;
                     productoPersonalizado.insumos.forEach(function(insumo) {
                         let insumoData = insumo.split(':');
-                        subtotalf += parseFloat(insumoData[3].trim());
+                        subtotalf += parseFloat(insumoData[2].trim());
                     });
                     row.append($('<td>').text(subtotalf));
 
@@ -426,7 +426,7 @@
                 let subtotalf = 0;
                 productoPersonalizado.insumos.forEach(function(insumo) {
                     let insumoData = insumo.split(':');
-                    subtotalf += parseFloat(insumoData[3].trim());
+                    subtotalf += parseFloat(insumoData[2].trim());
                 });
                 productoPersonalizado.subtotal = calcularSubtotalapersonalizado(productoPersonalizado, subtotalf);
             });
