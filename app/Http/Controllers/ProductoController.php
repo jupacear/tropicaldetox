@@ -61,7 +61,7 @@ class ProductoController extends Controller
     {
         $request->validate([
             'imagen' => 'image|mimes:jpg,png|max:2048',
-            'nombre' => 'required',
+            'nombre' => 'required|unique:productos,nombre',
             'precio' => 'required',
             'descripcion' => 'required',
             'categorias_id' => 'required',

@@ -25,7 +25,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
     <!-- Agrega Font Awesome en el head de tu documento HTML -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
+    <style>
+        .fixed-size-image {
+            width: 200px;
+            /* Establece el ancho deseado */
+            height: 200px;
+            /* Establece la altura deseada */
+            object-fit: cover;
+            /* Ajusta la imagen para que cubra completamente el área designada */
+        }
+    </style>
 </head>
 
 <body>
@@ -91,19 +100,16 @@
                                             </button>
                                             <br>
                                         </div>
-                                            <div style="margin: 1em" class="insumo" data-id="{{ $Insumos->id }}">
-                                                <img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto"
-                                                    width="40em">
-                                                <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
-                                                    {{ $Insumos->precio_unitario }}</span>
-                                                <button type="button" class="btn btn-success agregar-insumo"
-                                                    style="max-width: 1em; max-height: 1.5em;">
-                                                    <i class="fas fa-plus fa-xs"
-                                                        style="position: relative; bottom: 8.5px;right: 5px"></i>
-                                                    <!-- Icono de Font Awesome para el botón -->
-                                                </button>
-                                                <br>
-                                            </div>
+                                        <div style="margin: 1em" class="insumo" data-id="{{ $Insumos->id }}">
+                                            <img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto" width="40em">
+                                            <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
+                                                {{ $Insumos->precio_unitario }}</span>
+                                            <button type="button" class="btn btn-success agregar-insumo" style="max-width: 1em; max-height: 1.5em;">
+                                                <i class="fas fa-plus fa-xs" style="position: relative; bottom: 8.5px;right: 5px"></i>
+                                                <!-- Icono de Font Awesome para el botón -->
+                                            </button>
+                                            <br>
+                                        </div>
                                         @endforeach
                                     </div>
                                     <div class="insumos_selecionados" style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 200px;">
@@ -150,13 +156,13 @@
             </div>
             <div class="row justify-content-center special-list">
                 @foreach ($productos as $producto)
-                @if ($producto->activo)
+                @if ($producto->activo && $producto->categorias_id !== 3)
                 <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
                     <!-- Cartas -->
                     <div class="products-single fix">
                         <div class="box-img-hover">
                             <!-- Imagen del producto -->
-                            <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
+                            <img src="{{ asset($producto->imagen) }}" class="img-fluid fixed-size-image" alt="Image">
                             <div class="mask-icon">
                                 <a class="cart" href="#" data-producto-id="{{ $producto->id }}" data-producto-nombre="{{ $producto->nombre }}" data-producto-precio="{{ $producto->precio }}" onclick="agregarAlCarrito(event);actualizarTotalCarrito(true)">
                                     Agregar al carrito
@@ -317,7 +323,7 @@
                     var removeButton = $('<button>').html('<i class="fas fa-trash"></i>').addClass(
                         'btn btn-danger quitar-insumo').css({
                         margin: '8px',
-                        
+
                     });
 
                     // Agrega el botón de "Quitar" junto al insumo seleccionado
