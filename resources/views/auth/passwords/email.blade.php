@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Reset</title>
+        <title>Restablecer Contraseña</title>
         {{--
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
             integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
@@ -55,6 +55,12 @@
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
             }
+
+            .custom-btn {
+    background-color: rgb(116, 204, 58);
+    /* Otros estilos que desees aplicar */
+}
+
         </style>
     </head>
 
@@ -68,30 +74,32 @@
     
 <br>
 
-<div class="container">
+<div class="container" style="padding-top: 60px;">
     <div class="card card-primary mx-auto" style="max-width: 400px;">
         <div class="card-header"><h4>Restablecer Contraseña</h4></div>
 
         <div class="card-body">
             @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
+    <div class="alert alert-success">
+        {{ trans('auth.sent') }}
+        
+    </div>
+@endif
             <form method="POST" action="{{ route('password.email') }}">
                 @csrf
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
                     <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
                            name="email" tabindex="1" value="{{ old('email') }}" autofocus required>
+                           @error('email')
+
                     <div class="invalid-feedback">
-                        {{ $errors->first('email') }}
+                        {{ trans('auth.email') }}
                     </div>
+                    @enderror
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                        Enviar
-                    </button>
+                    <button type="submit" class="btn btn-success btn-lg btn-block" tabindex="4" style="background-color: rgb(95, 180, 78);">Enviar</button>
                 </div>
             </form>
         </div>

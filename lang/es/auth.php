@@ -16,5 +16,9 @@ return [
     'failed' => 'Estas credenciales no coinciden con nuestros registros.',
     'password' => 'La contraseña proporcionada es incorrecta.',
     'throttle' => 'Demasiados intentos de conexión. Por favor, inténtelo de nuevo en :segundos segundos.',
+    'password_reset_link_sent' => '¡Hemos enviado el enlace para restablecer tu contraseña por correo electrónico!',
+    'sent' => '¡Hemos enviado un enlace para restablecer tu contraseña por correo electrónico!',
+    'email' => 'El correo electrónico proporcionado no existe en nuestros registros.',
+
 
 ];
