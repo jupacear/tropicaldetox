@@ -57,7 +57,9 @@ Categoria
 
                                         <td class="">{{ $categorium->nombre }}</td>
                                         <td>{{ $categorium->descripcion }}</td>
-                                        <td>{{ $categorium->activo ? 'Activo' : 'Inactivo' }}</td>
+                                        <td> <span class="badge badge-success">Activo</span>
+                                        </td>
+
                                         <td>
                                             <form action="{{ route('categoria.destroy', $categorium->id) }}" method="POST">
                                                 <a class="btn btn-sm btn-primary " href="{{ route('categoria.show', $categorium->id) }}"><i class="fa fa-fw fa-eye"></i></a>
@@ -92,7 +94,7 @@ Categoria
 
                                         <td class="">{{ $categorium->nombre }}</td>
                                         <td>{{ $categorium->descripcion }}</td>
-                                        <td>{{ $categorium->activo ? 'Activo' : 'Inactivo' }}</td>
+                                        <td> <span class="badge badge-danger">Inactivo</span> </td>
                                         <td>
                                             <form action="{{ route('categoria.destroy', $categorium->id) }}" method="POST">
                                                 <a class="btn btn-sm btn-primary " href="{{ route('categoria.show', $categorium->id) }}"><i class="fa fa-fw fa-eye"></i></a>

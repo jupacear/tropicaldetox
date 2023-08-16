@@ -60,11 +60,7 @@ Insumo
                                         </td>
                                         <td>{{ $insumo->nombre }}</td>
                                         <td>
-                                            @if ($insumo->activo == 1)
-                                            Activo
-                                            @else
-                                            Inactivo
-                                            @endif
+                                            <span class="badge badge-success">Activo</span>
                                         </td>
                                         <td>{{ $insumo->cantidad_disponible }}</td>
                                         <td>{{ $insumo->unidad_medida }}</td>
@@ -77,14 +73,9 @@ Insumo
                                                 <a class="btn btn-sm btn-success" href="{{ route('insumo.edit', $insumo->id) }}"><i class="fa fa-fw fa-edit"></i></a>
                                                 @csrf
                                                 @method('DELETE')
-                                                @if ($insumo->activo)
+                                                @if ($insumo['activo'] == 1)
                                                 <button type="submit" class="btn btn-sm btn-info" onclick="confirmDesactivateInsumo(event)">
-                                                    <i class="fa fa-fw fa-toggle-off"></i>
-                                                </button>
-                                                @else
-                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmActivateInsumo(event)">
                                                     <i class="fa fa-fw fa-toggle-on"></i>
-
                                                 </button>
                                                 @endif
                                             </form>
@@ -107,11 +98,7 @@ Insumo
                                         </td>
                                         <td>{{ $insumo->nombre }}</td>
                                         <td>
-                                            @if ($insumo->activo == 1)
-                                            Activo
-                                            @else
-                                            Inactivo
-                                            @endif
+                                            <span class="badge badge-danger">Inactivo</span>
                                         </td>
                                         <td>{{ $insumo->cantidad_disponible }}</td>
                                         <td>{{ $insumo->unidad_medida }}</td>
@@ -124,14 +111,9 @@ Insumo
                                                 <a class="btn btn-sm btn-success" href="{{ route('insumo.edit', $insumo->id) }}"><i class="fa fa-fw fa-edit"></i></a>
                                                 @csrf
                                                 @method('DELETE')
-                                                @if ($insumo->activo)
+                                                @if ($insumo->activo == 0)
                                                 <button type="submit" class="btn btn-sm btn-info" onclick="confirmDesactivateInsumo(event)">
                                                     <i class="fa fa-fw fa-toggle-off"></i>
-                                                </button>
-                                                @else
-                                                <button type="submit" class="btn btn-sm btn-info" onclick="confirmActivateInsumo(event)">
-                                                    <i class="fa fa-fw fa-toggle-on"></i>
-
                                                 </button>
                                                 @endif
                                             </form>

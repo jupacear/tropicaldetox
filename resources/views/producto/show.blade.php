@@ -38,7 +38,11 @@ Mostrar Producto
                         </div>
                         <div class="form-group">
                             <strong>Estado:</strong>
-                            {{ $producto->activo }}
+                            @if ($producto['activo'] == 1)
+                            Activo
+                            @else
+                            Desactivado
+                            @endif
                         </div>
                         <div class="form-group">
                             <strong>Categorias Id:</strong>

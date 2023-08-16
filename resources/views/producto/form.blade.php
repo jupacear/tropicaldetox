@@ -19,13 +19,15 @@
                 {{ Form::label('categorias_id', 'Categoria') }}
                 {{ Form::select('categorias_id', $categorias, $producto->categorias_id, ['class' => 'form-control' . ($errors->has('categorias_id') ? ' is-invalid' : ''), 'placeholder' => 'Selecciona una categoría']) }}
                 {!! $errors->first('categorias_id', '<div class="invalid-feedback">:message</div>') !!}
+                @if (!Route::is('productos.create'))
                 <div class="pt-5">
                     {{ Form::label('estado', 'Estado:') }}
                     {{ Form::select('activo', ['1' => 'Activo', '0' => 'Inactivo'], $producto->activo ?? '1', ['class' => 'form-control' . ($errors->has('estado') ? ' is-invalid' : '')]) }}
                     {!! $errors->first('estado', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
+                @endif
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-6 p-3 ">
                 {{ Form::label('imagen', 'Imagen') }}
                 @if ($producto->imagen)
                 <div>
@@ -37,26 +39,26 @@
             </div>
         </div>
         <div class="form-row d-flex flex-colum">
-            <div class="form-group col-md-6 ">
+            <div class="form-group col-md-6 p-3 ">
                 {{ Form::label('nombre') }}
                 {{ Form::text('nombre', $producto->nombre, ['class' => 'form-control' . ($errors->has('nombre') ? ' is-invalid' : ''), 'placeholder' => 'Nombre', 'onkeyup' => 'validateNombre(this)', 'onblur' => 'removeSpaces(this)']) }}
                 {!! $errors->first('nombre', '<div class="invalid-feedback">:message</div>') !!}
             </div>
-            <div class="form-group col-md-6 ">
+            <div class="form-group col-md-6 p-3">
                 {{ Form::label('precio') }}
                 {{ Form::text('precio', $producto->precio, ['class' => 'form-control' . ($errors->has('precio') ? ' is-invalid' : ''), 'placeholder' => 'Precio', 'oninput' => 'validatePrecio(this)']) }}
                 {!! $errors->first('precio', '<div class="invalid-feedback">:message</div>') !!}
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6 ">
+            <div class="form-group col-md-6 p-3 ">
                 {{ Form::label('descripcion') }}
                 {{ Form::text('descripcion', $producto->descripcion, ['class' => 'form-control' . ($errors->has('descripcion') ? ' is-invalid' : ''), 'placeholder' => 'Descripcion']) }}
                 {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
                 <div id="additional-insumos"></div>
             </div>
             <div class="form-group col-md-6 ">
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center p-3 ">
                     {{ Form::label('insumos', 'Insumos', ['class' => 'mr-2']) }}
                     {{ Form::select('insumos[]', $insumos, $producto->insumos->pluck('id')->toArray(), ['class' => 'form-control' . ($errors->has('insumos') ? ' is-invalid' : ''), 'id' => 'insumos-select']) }}
                     <button type="button" class="btn btn-primary btn-sm ml-2" id="add-insumo">Agregar insumo</button>

@@ -16,16 +16,8 @@ Actualizar Insumo
 
     <div class="section-body">
         @if ($errors->any())
-        <div class="alert alert-danger">
-            <div class="alert alert-danger">
-                <strong>¡Revise los campos¡</strong>
-            </div>
-        </div>
-        @endif
-
-        @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
+        <div class="alert alert-danger" role="alert">
+            <strong>¡Revise los campos!</strong>
         </div>
         @endif
         <div class="row">
