@@ -72,15 +72,7 @@
         <div class="card-body">
             <form method="POST" action="{{ url('/password/reset') }}">
                 @csrf
-                @if ($errors->any())
-                    <div class="alert alert-danger p-0">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+
                 <input type="hidden" name="token" value="{{ $token }}">
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
@@ -109,9 +101,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                        Establecer una Nueva Contraseña
-                    </button>
+                    <button type="submit" class="btn btn-success btn-lg btn-block" tabindex="4" style="background-color: rgb(95, 180, 78);">Guardar</button>
                 </div>
             </form>
         </div>

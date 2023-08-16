@@ -11,7 +11,7 @@
         Swal.fire({
             icon: 'error',
             title: 'Error de validación',
-            text: 'La contraseña no conincide, La contraseña debe tener minimo 6 digitos.',
+            text: 'Verifica los errores, La contraseña debe tener minimo 6 digitos.',
         });
     </script>
 @endif
@@ -36,13 +36,13 @@
 
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form action="{{ route('changePassword2') }}" method="POST" class="needs-validation" novalidate>
+            <form action="{{ route('changePassword2') }}" method="POST">
                 @csrf 
     
                 <div class="form-group mt-3 text-center">
                     <label for="password_actual">Clave Actual</label>
                     <div class="input-group">
-                        <input type="password" name="password_actual" class="form-control @error('password_actual') is-invalid @enderror" required>
+                        <input type="password" name="password_actual" class="form-control @error('password_actual') is-invalid @enderror" >
                         <div class="input-group-append">
                             <span class="input-group-text toggle-password" id="toggle-password-actual">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
@@ -59,7 +59,7 @@
                 <div class="form-group mt-3 text-center">
                     <label for="new_password">Nueva Clave</label>
                     <div class="input-group">
-                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" >
                         <div class="input-group-append">
                             <span class="input-group-text toggle-password" id="toggle-password-actual">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
@@ -76,7 +76,7 @@
                 <div class="form-group mt-3 text-center">
                     <label for="confirm_password">Confirmar nueva Clave</label>
                     <div class="input-group">
-                        <input type="password" name="confirm_password" class="form-control @error('confirm_password') is-invalid @enderror" required>
+                        <input type="password" name="confirm_password" class="form-control @error('confirm_password') is-invalid @enderror" >
                         <div class="input-group-append">
                             <span class="input-group-text toggle-password" id="toggle-password-actual">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
