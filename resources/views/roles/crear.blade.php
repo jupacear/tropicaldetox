@@ -15,8 +15,9 @@
         <div class="section-body">
             @if ($errors->any())
                 <div class="alert alert-danger" role="alert">
+
                     <strong>¡Revise los campos!</strong>
-                    
+
                 </div>
             @endif
             <div class="row">
@@ -45,6 +46,12 @@
                                                 {{ $value->name }}</label>
                                             <br />
                                         @endforeach
+                                        <div class="">
+                                            @foreach ($errors->get('permission') as $error)
+                                                <div style="color: red;">{{ $error }}</div>
+                                            @endforeach
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
