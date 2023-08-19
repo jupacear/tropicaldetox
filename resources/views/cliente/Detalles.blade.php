@@ -1,33 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Detalle</title>
-    {{--
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
-
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <!-- Site CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="/css/responsive.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/custom.css">
-</head>
+@extends('layouts.auth_app')
+@section('title')
+    Detalles
+@endsection
+@section('content')
 
 <body>
-    @include('cliente.nav')
+    
 
     <div class="container">
         <div class="row" style="margin-top:1.5em ">
@@ -157,7 +135,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
+                                                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                                                 <!-- JS para cargar los ingredientes en el modal -->
                                                                 <script>
                                                                     $(document).ready(function() {
@@ -209,28 +187,9 @@
 
 
 
-    <!-- JS -->
+    
 
-    @include('cliente.footer')
-
-
-
-    <!-- ALL JS FILES -->
-    <script src="/js/jquery-3.2.1.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <!-- ALL PLUGINS -->
-    <script src="/js/jquery.superslides.min.js"></script>
-    <script src="/js/bootstrap-select.js"></script>
-    <script src="/js/inewsticker.js"></script>
-    <script src="/js/bootsnav.js."></script>
-    <script src="/js/images-loded.min.js"></script>
-    <script src="/js/isotope.min.js"></script>
-    <script src="/js/owl.carousel.min.js"></script>
-    <script src="/js/baguetteBox.min.js"></script>
-    <script src="/js/form-validator.min.js"></script>
-    <script src="/js/contact-form-script.js"></script>
-    <script src="/js/custom.js"></script>
+   
 </body>
 
-</html>
+@endsection

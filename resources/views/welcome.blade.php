@@ -1,26 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<!-- Basic -->
+@extends('layouts.auth_app')
+@section('title')
+    Inicio
+@endsection
+@section('content')
 
 <head>
-    <meta charset="utf-8">
-
-    <!-- Mobile Metas -->
-
-    <!-- Site Metas -->
-    <title>Tropical Detox</title>
-
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- Site CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="css/responsive.css">
-    <!-- Custom CSS -->
     <style>
         body {
             overflow-x: hidden;
@@ -59,7 +43,6 @@
     </style>
 </head>
 
-@include('cliente.nav')
 
 <body class="no-horizontal-scroll">
     <!-- Start Slider -->
@@ -356,7 +339,6 @@
     </div>
     <!-- End Instagram Feed -->
 
-    @include('cliente.footer')
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
     <script>
@@ -540,23 +522,6 @@
             var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 
-    <!-- ALL JS FILES -->
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- ALL PLUGINS -->
-    <script src="js/jquery.superslides.min.js"></script>
-    <script src="js/bootstrap-select.js"></script>
-    <script src="js/inewsticker.js"></script>
-    <script src="js/bootsnav.js"></script>
-    <script src="js/images-loded.min.js"></script>
-    <script src="js/isotope.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/baguetteBox.min.js"></script>
-    <script src="js/form-validator.min.js"></script>
-    <script src="js/contact-form-script.js"></script>
-    <script src="js/custom.js"></script>
-
-</html>
+   
+@endsection

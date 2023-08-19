@@ -1,44 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Site Icons -->
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- Site CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="css/responsive.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/custom.css">
-    <title>Productos</title>
-
-    <!-- Agregar SweetAlert (versión 2.x) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
-    <!-- Agrega Font Awesome en el head de tu documento HTML -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <style>
-        .fixed-size-image {
-            width: 200px;
-            /* Establece el ancho deseado */
-            height: 200px;
-            /* Establece la altura deseada */
-            object-fit: cover;
-            /* Ajusta la imagen para que cubra completamente el área designada */
-        }
-    </style>
-</head>
+@extends('layouts.auth_app')
+@section('title')
+    Perfil
+@endsection
+@section('content')
 
 <body>
-    @include('cliente.nav')
+    
 
     <!-- Start Products  -->
     <div class="products-box">
@@ -168,6 +135,8 @@
                 </script>
                 <!-- Modal Personalizados-->
 
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
             </div>
             <div class="row justify-content-center special-list">
                 @foreach ($productos as $producto)
@@ -207,27 +176,10 @@
     </div>
     <!-- End Products  -->
 
-    @include('cliente.footer')
+    
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
-    <!-- ALL JS FILES -->
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- ALL PLUGINS -->
-    <script src="js/jquery.superslides.min.js"></script>
-    <script src="js/bootstrap-select.js"></script>
-    <script src="js/inewsticker.js"></script>
-    <script src="js/bootsnav.js."></script>
-    <script src="js/images-loded.min.js"></script>
-    <script src="js/isotope.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/baguetteBox.min.js"></script>
-    <script src="js/form-validator.min.js"></script>
-    <script src="js/contact-form-script.js"></script>
-    <script src="js/custom.js"></script>
-    <!-- Agregar SweetAlert (versión 2.x) -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
 
     <script>
         function agregarAlCarrito(event) {
@@ -416,4 +368,5 @@
 
 </body>
 
-</html>
+
+@endsection

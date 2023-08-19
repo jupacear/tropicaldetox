@@ -82,12 +82,12 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:roles,name|max:20',
+            'name' => 'required|unique:roles,name|max:30',
             'permission' => 'required',
         ], [
             'name.required' => 'El nombre del rol es requerido.',
             'name.unique' => 'El nombre del rol ya está en uso.',
-            'name.max' => 'El nombre del rol debe tener máximo 20 caracteres.',
+            'name.max' => 'El nombre del rol debe tener máximo 30 caracteres.',
             'permission.required' => 'Debe seleccionar al menos un permiso para el rol.',
         ]);
         

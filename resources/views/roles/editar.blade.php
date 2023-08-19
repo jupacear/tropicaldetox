@@ -17,9 +17,7 @@
                             <div class="alert alert-danger" role="alert">
                                 
                             <strong>¡Revise los campos!</strong>                      
-                                @foreach ($errors->all() as $error)                                    
-                                <li>{{ $error }}</li>
-                                @endforeach                        
+                                                       
                             
                             </div>
                         @endif
@@ -52,6 +50,11 @@
                                         {{ $value->name }}</label>
                                     <br/>
                                     @endforeach
+                                    <div class="">
+                                        @foreach ($errors->get('permission') as $error)
+                                            <div style="color: red;">{{ $error }}</div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                                             
