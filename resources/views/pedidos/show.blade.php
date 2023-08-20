@@ -38,17 +38,19 @@
 
 
                                     <h2>Detalles del pedido</h2>
-                                    @if (!empty($pedido->Nombre))
-                                        <p style="font-size: 1.5em"><strong>descripción:</strong> {{ $pedido->Nombre }}
+                                    @if (!empty($pedido->Descripcion))
+                                        <p style="font-size: 1.5em"><strong>descripción:</strong>
+                                            {{ $pedido->Descripcion }}
                                         </p>
                                     @endif
 
                                     @if ($pedido->Direcion)
-                                        <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:
-                                                {{ $pedido->Direcion }}</strong></p>
+                                        <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:</strong>
+                                            {{ $pedido->Direcion }}</p>
+                                    @elseif ($pedido->users->direccion)
+                                        <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:</strong>
+                                            {{ $pedido->users->direccion }}</p>
                                     @else
-                                        <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:
-                                                {{ $pedido->users->direccion }}</strong></p>
                                     @endif
 
                                     <table class="table">
@@ -102,15 +104,15 @@
                                                         <td>{{ number_format($lastSubtotal, 0, ',', '.') }}</td>
                                                         <!-- Print the last Subtotal for the current $per -->
                                                         <td>
-                                                            <button
-                                                            class="btn btn-info btn-sm float-right"
-                                                            data-toggle="modal"
-                                                            data-target="#productModal_{{ $personalizas->insumos }}"
-                                                            data-details="{{ json_encode($personalizas) }}">Detalles
-                                                        </button>
+                                                            <button class="btn btn-info btn-sm float-right"
+                                                                data-toggle="modal"
+                                                                data-target="#productModal_{{ $personalizas->insumos }}"
+                                                                data-details="{{ json_encode($personalizas) }}"
+                                                                data-descripcion="{{ $personalizas->Descripción }}">Detalles
+                                                            </button>
                                                         </td>
 
-                                                        
+
                                                     </tr>
                                                 @endif
                                             @endforeach
@@ -145,54 +147,55 @@
     </div>
 </section>
 
-       
+
+    <!-- Aquí se encuentran los modales -->
 @foreach ($personaliza as $personalizas)
-<div class="modal fade my-modal"
-    id="productModal_{{ $personalizas->insumos }}"
-    tabindex="-1" role="dialog"
-    aria-labelledby="productModalLabel_{{ $personalizas->insumos }}"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"
-                    id="productModalLabel_{{ $personalizas->insumos }}">
-                    Detalles del producto</h5>
-                <button type="button" class="close"
-                    data-dismiss="modal"
-                    aria-label="Close">
-                    <span
-                        aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <h6 class="Nombre">Nombre:
-                </h6>
-                <div
-                    id="productModalIngredients_{{ $personalizas->insumos }}">
-                    <!-- Ingredientes se agregarán aquí -->
+    <div class="modal fade my-modal" id="productModal_{{ $personalizas->insumos }}" tabindex="-1" role="dialog"
+        aria-labelledby="productModalLabel_{{ $personalizas->insumos }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel_{{ $personalizas->insumos }}">
+                        Detalles del producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button"
-                    class="btn btn-secondary"
-                    data-dismiss="modal">Cerrar</button>
+                <div class="modal-body">
+                    <h6 class="Nombre">
+                        <strong>Nombre:</strong>
+                    </h6>
+                    <div id="productModalIngredients_{{ $personalizas->insumos }}">
+                        <!-- Ingredientes se agregarán aquí -->
+                    </div>
+
+                    <p><strong>Descripción:</strong> <span class="modal-descripcion"></span></p>
+                    <!-- Agrega un span para la descripción -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endforeach
 
-<!-- JS para cargar los ingredientes en el modal -->
+<!-- Bloque de JavaScript para cargar los ingredientes en el modal -->
 <script>
     $(document).ready(function() {
-        $('#productModal_{{ $personalizas->insumos }}').on('show.bs.modal', function(event) {
+        $('.modal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var details = button.data('details');
+            var descripcion = button.data('descripcion'); // Obtiene la descripción
+
             var modal = $(this);
 
             modal.find('.modal-title').text('Detalles del producto: ' + details.nombre);
-            modal.find('.Nombre').text('Nombre: ' + details.nombre);
+            modal.find('.modal-body .modal-descripcion').text('Descripción: ' +
+                descripcion); // Agrega la descripción al modal
 
+            // Descripción
             var ingredientList = '<ul>';
             @foreach ($personaliza as $q)
                 if ("{{ $q->nombre }}" == details.nombre) {
@@ -201,11 +204,10 @@
                 }
             @endforeach
             ingredientList += '</ul>';
-            modal.find('#productModalIngredients_{{ $personalizas->insumos }}').html(ingredientList);
+            modal.find('.modal-body #productModalIngredients_' + details.insumos).html(ingredientList);
         });
     });
 </script>
-@endforeach
 
 
 

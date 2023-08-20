@@ -26,22 +26,23 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="title-all text-center">
-                    <h1>Carrito de Compras</h1>
+                    <h1 style="margin-top: 1em; text-align: center;">Mis Pedidos</h1>
+
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <h1>Lista de Pedidos</h1>
+                {{-- <h1>Lista de Pedidos</h1> --}}
 
                 @if (count($pedidos) > 0)
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Estado</th>
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Dirección</th>
+                                <th>Estado</th>
                                 <th>Total</th>
                                 <th>Acciones</th>
                             </tr>
@@ -49,10 +50,10 @@
                         <tbody>
                             @foreach ($pedidos as $pedido)
                                 <tr>
-                                    <td>{{ $pedido->Estado }}</td>
+
                                     <td>{{ $pedido->Fecha }}</td>
                                     <td> {{ substr($pedido->created_at, 11, 5) }}</td>
-                                   
+
 
                                     <td>
                                         @if( $pedido->Direcion)
@@ -62,9 +63,19 @@
 
                                         @endif
                                     </td>
+                                    <td style="color:#000;">
+                                        <div style="background: rgba(52, 120, 187, 0.753);border-radius:1em ; display:flex;
+                                        align-content: center;justify-content: center;font-size: 1.1em;width: 6em;">
+                                            @if ($pedido->Estado=="En_proceso")
+                                                En proceso
+                                            @else
+                                           {{ $pedido->Estado}}
+                                            @endif
 
+                                        </div>
+                                    </td>
                                     <td> {{ number_format($pedido->Total, 0, ',', '.') }}
-                                    
+
                                     </td>
                                     <td>
                                         <!-- Enlace para ver el detalle del pedido -->
@@ -78,13 +89,16 @@
                         </tbody>
                     </table>
                 @else
-                    <p>No hay pedidos disponibles.</p>
+                <p style=" font-size: 16px; font-weight: bold;">No hay pedidos disponibles.</p>
+
                 @endif
             </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+    <div style="padding-top: 25%">
+
+    </div>
     <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
    

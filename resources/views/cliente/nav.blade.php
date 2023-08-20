@@ -25,7 +25,7 @@
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
 
-                    <li class="nav-item active"><a class="nav-link" href="{{ route('Bienvenido') }}">Inicio</a></li>
+                    <li class="nav-item "><a class="nav-link" href="{{ route('Bienvenido') }}">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('Productos') }}">Productos</a></li>
 
 
@@ -33,14 +33,14 @@
                     @if (empty(session('carrito.productos')))
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
                                     class="fa fa-shopping-cart ">
-                                    <span class="badge" id="carritoBadge">
+                                    <span class="badge" id="carritoBadge"  style="font-size: 20px;padding: 0em;margin: 0em">
                                     </span>
                                 </i></a></li>
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
                                     class="fa fa-shopping-cart ">
-                                    <span class="badge">
-                                        {{ count(session('carrito.productos', [])) }}
+                                    <span class="badge"  style="font-size: 20px;padding: 0em;margin: 0em">
+                                            {{ count(session('carrito.productos', [])) }}
                                     </span>
                                 </i></a></li>
                     @endif
@@ -70,8 +70,8 @@
                                 </a>
                                 <div class="dropdown-menu">
                                     @can('administrador')
-                                            <a href="{{ url('/home') }}" class="nav-link">Panel</a>
-                                        @endcan
+                                        <a href="{{ url('/home') }}" class="nav-link">Panel</a>
+                                    @endcan
                                     <!-- Contenido del menú desplegable -->
                                     <a class="dropdown-item" href="{{ route('newperfil') }}">
                                         <i class="fas fa-user"></i> <span>{{ __('Perfil') }}</span>

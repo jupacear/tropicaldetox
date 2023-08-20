@@ -11,16 +11,14 @@
                             <div class="col-md-12">
                                 <h1>Detalles del Ventas</h1>
 
-                                @if (!empty($pedido->Nombre))
-                                    <p><strong>Nombre:</strong> {{ $pedido->Nombre }}</p>
-                                @endif
 
-                                @if (!empty($pedido->Telefono))
-                                    <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
-                                @endif
+
 
 
                                 <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
+                                @if (!empty($pedido->Telefono))
+                                    <p><strong>Teléfono:</strong> {{ $pedido->Telefono }}</p>
+                                @endif
                                 <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                 <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
                                 <p><strong>Total:</strong> {{ number_format($pedido->Total, 0, ',', '.') }}</p>
@@ -28,6 +26,17 @@
                                 <h2>Detalles del Productos</h2>
 
                                 <table class="table">
+                                    @if (!empty($pedido->Descripcion))
+                                        <p style="font-size: 1.5em"><strong>descripción:</strong>
+                                            {{ $pedido->Descripcion }}</p>
+                                    @endif
+                                    @if ($pedido->Direcion)
+                                        <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:</strong>
+                                            {{ $pedido->Direcion }}</p>
+                                    @elseif ($pedido->users->direccion)
+                                        <p style="font-size: 1.5em"><strong style="font-size: 1em">direccion:</strong>
+                                            {{ $pedido->users->direccion }}</p>
+                                    @endif
                                     <thead>
                                         <tr>
                                             <th>Producto</th>
@@ -78,33 +87,36 @@
                                 </table>
                             </div>
 
-                            <?php $per = 'Personalizado '; ?>
+                            <?php $per = null; ?>
                             @foreach ($personaliza as $personalizas)
-                                @if (!($personalizas->nombre == $per))
+                                @if ($personalizas->nombre !== $per)
                                     <?php
                                     $per = $personalizas->nombre;
-                                    $lastSubtotal = null; // Initialize the variable to store the last Subtotal for the current $per
+                                    $i = null; // Inicializar $i para cada nuevo grupo de nombre
                                     ?>
                                     <div class="">
                                         <p>Nombre: {{ $personalizas->nombre }}</p>
-                                        @foreach ($personaliza as $q)
-                                            @if ($q->insumos)
-                                                <ul>
+                                        <ul>
+                                            @foreach ($personaliza as $q)
+                                                @if ($q->nombre === $per)
                                                     <li>
-
-                                                        Insumo: $
-                                                        {{ $Nombre = optional(App\Models\Insumo::find($q->insumos))->nombre ?? "No se encontró el nombre para el ID: $q" }}
+                                                        Insumo: {{ optional(App\Models\Insumo::find($q->insumos))->nombre ?? "No se encontró el nombre para el ID: $q" }}
                                                     </li>
-                                                </ul>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                        @foreach ($personaliza as $q)
+                                            @if ($q->nombre === $per && $q->Descripción !== $i)
+                                                <?php $i = $q->Descripción; ?>
+                                                <p><strong>Descripción:</strong> <span class="modal-descripcion">{{ $q->Descripción }}</span></p>
                                             @endif
                                         @endforeach
-
+                            
                                         <!-- Agrega aquí más detalles del producto si es necesario -->
                                     </div>
-
-                                    <!-- Modal -->
                                 @endif
                             @endforeach
+                            
 
 
                         </div>

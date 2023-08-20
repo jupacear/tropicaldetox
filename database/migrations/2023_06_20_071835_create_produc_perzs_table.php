@@ -23,8 +23,8 @@ return new class extends Migration
 
             $table->integer('cantidad');
             $table->timestamps();
-            
             $table->string("nombre");
+            $table->string("Descripción");
             $table->float('Subtotal');
         });
     }

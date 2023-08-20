@@ -29,18 +29,17 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a class="btn btn-warning" href="{{ url('pedidos/create') }}">Nuevo</a>
+                        <a class="btn btn-warning" style="margin-bottom: 20px" href="{{ url('pedidos/create') }}">Nuevo</a>
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
                                 <th style="color:#fff;">No</th>
-
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Telefono</th>
                                 <th style="color:#fff;">Direcion</th>
                                 <th style="color:#fff;">Estado</th>
                                 <th style="color:#fff;">Fecha</th>
                                 <th style="color:#fff;">Total</th>
-                                <th style="color:#fff;">Opciones</th>
+                                <th style="color:#fff;">Acciones</th>
                             </thead>
                             @php $Numero = 1 @endphp
 
@@ -152,8 +151,8 @@
                                                     @method('PUT')
                                                     <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
                                                     <button type="button"
-                                                        class="btn btn-sm btn-{{ $pedido->Estado == 'En_proceso' ? 'primary' : 'success' }}"
-                                                        onclick="cambiarEstado({{ $pedido->id }}) ">
+                                                        class="btn btn-sm btn-danger"
+                                                        onclick=" ">
                                                         {{ $pedido->Estado }}
                                                     </button>
                                                 </form>
@@ -161,21 +160,21 @@
                                             <td>{{ $pedido->Fecha }}</td>
                                             <td> {{ number_format($pedido->Total, 0, ',', '.') }}</td>
                                             <td style="display: flex">
-                                                <div class="text-center" style="display: flex">
+                                                <div class="text-center " >
                                                     <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
                                                         <a href="{{ route('pedidos.show', $pedido->id) }}"
-                                                            class="btn btn-sm btn-primary"><i
+                                                            class="btn btn-sm btn-primary "><i
                                                                 class="fa fa-fw fa-eye"></i></a></a>
-                                                        <a class="btn btn-sm btn-success"
+                                                        {{-- <a class="btn btn-sm btn-success"
                                                             href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
                                                             <i class="fa fa-fw fa-edit"></i>
-                                                        </a>
+                                                        </a> --}}
                                                         {{-- <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
                                                             <i class="fa fa-fw fa-trash"></i>
                                                         </button> --}}
 
                                                     </form>
-                                                    <form action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
+                                                    {{-- <form action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
                                                         method="POST" id="form-estadoo-{{ $pedido->id }}">
                                                         @csrf
                                                         @method('PUT')
@@ -189,7 +188,7 @@
                                                             onclick="cambiarEstadoq({{ $pedido->id }})">
                                                             <i class="fa fa-fw fa-toggle-off"></i>
                                                         </button>
-                                                    </form>
+                                                    </form> --}}
 
 
                                                     {{-- <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
@@ -241,8 +240,6 @@
         // Cambiar el estado
         if (estado === 'En_proceso') {
             estado = 'Finalizado';
-        } else {
-            estado = 'En_proceso';
         }
         estadoInput.value = estado;
 
@@ -252,7 +249,7 @@
             button.classList.remove('btn-success');
             button.classList.add('btn-primary');
             button.innerText = 'En proceso';
-        } else {
+        } else if (estado === 'En_proceso') {
             button.classList.remove('btn-primary');
             button.classList.add('btn-success');
             button.innerText = 'Finalizado';
@@ -270,8 +267,6 @@
         // Cambiar el estado
         if (estado === 'En_proceso') {
             estado = 'Cancelado';
-        } else {
-            estado = 'En_proceso';
         }
         estadoInput.value = estado;
 

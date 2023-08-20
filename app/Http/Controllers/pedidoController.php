@@ -413,6 +413,8 @@ class pedidoController extends Controller
         }
         $pedido = new Pedido();
         $pedido->Direcion = $request->input('Direcion');
+        $pedido->Descripcion = $request->input('Descripcion');
+
         $pedido->Estado = 'En_proceso';
         $pedido->Fecha = now();
         $pedido->id_users = Auth::user()->id;
@@ -447,6 +449,7 @@ class pedidoController extends Controller
                 // Guardar los datos del personalizado en la base de datos
                 $insumos = $personalizado['insumos'];
                 $Nombre = $personalizado['Nombre'];
+                $Descripcion = $personalizado['Descripcion'];
                 $cantidad = isset($personalizado['cantidad']) && !empty($personalizado['cantidad']) ? $personalizado['cantidad'] : 1;
                 // return response()->json($personalizado['cantidad']);
                 $subtotal=0;
@@ -467,6 +470,7 @@ class pedidoController extends Controller
                     $Nombres = trim($NombreData[0]);
                     $personalizadoModel = new producPerz();
                     $personalizadoModel->nombre = $Nombres;
+                    $personalizadoModel->Descripción = $Descripcion;
                     $personalizadoModel->cantidad = $cantidad;
                     $personalizadoModel->Subtotal = $subtotal;
                     $personalizadoModel->id_pedidos = $pedido->id;
@@ -510,3 +514,18 @@ class pedidoController extends Controller
 
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
