@@ -77,8 +77,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Descripcion">Descripción:</label>
-                        <input type="text" name="Descripcion" id="Descripcion"
-                            class="form-control">
+                        <input type="text" name="Descripcion" id="Descripcion" class="form-control">
                     </div>
                     <Script>
                         let direccionInput = document.getElementById('Direcion');
@@ -189,9 +188,12 @@
                     productosPersonalizadosGuardados.forEach(function(productoPersonalizado) {
                         productoPersonalizado.insumos.forEach(function(insumo) {
                             let insumoData = insumo.split(':');
+                            // let insumoSubtotal = parseFloat(insumoData[ insumoData.length - 1]);
+                            // alert(cantidad);
                             // Verificar que el valor sea numérico antes de sumarlo al totalPedido
                             if (!isNaN(parseFloat(insumoData[2].trim()))) {
-                                totalPedido += parseFloat(insumoData[2].trim());
+                                let cantidad = parseFloat(insumoData[insumoData.length - 1]);
+                                totalPedido += parseFloat(insumoData[2].trim())*cantidad;
                             }
                         });
                     });
@@ -236,7 +238,9 @@
                         let subtotalf = 0;
                         productoPersonalizado.insumos.forEach(function(insumo) {
                             let insumoData = insumo.split(':');
-                            subtotalf += parseFloat(insumoData[2].trim());
+                            let cantidad = parseFloat(insumoData[insumoData.length - 1]);
+
+                            subtotalf += parseFloat(insumoData[2].trim())*cantidad;
                         });
                         let subtotalPersonalizado = subtotalf * (productoPersonalizado.cantidad || 1);
                         totalPedido += subtotalPersonalizado;
@@ -324,13 +328,17 @@
                         var row = $('<tr>');
                         row.append($('<td>').text(productoPersonalizado.Nombre));
 
-                        // Muestra el precio del producto en la celda correspondiente
                         let subtotalf = 0;
+
                         productoPersonalizado.insumos.forEach(function(insumo) {
                             let insumoData = insumo.split(':');
-                            subtotalf += parseFloat(insumoData[2].trim());
+                            let insumoSubtotal = parseFloat(insumoData[2].trim()) * parseFloat(insumoData[
+                                insumoData.length - 1]);
+                            subtotalf += insumoSubtotal;
                         });
+
                         row.append($('<td>').text(subtotalf));
+
 
                         // Crear el campo de entrada numérico para la cantidad
                         let inputCantidad = $('<input>').attr({
@@ -354,6 +362,7 @@
 
                             // Calcular el nuevo subtotal con la nueva cantidad y actualizarlo en la tabla
                             let subtotal = calcularSubtotalapersonalizado(productoPersonalizado, subtotalf);
+                            
                             row.find('.subtotal').text(subtotal.toFixed(
                                 0)); // Actualizar el valor del subtotal en la fila
 

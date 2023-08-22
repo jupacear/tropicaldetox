@@ -117,7 +117,8 @@
                                                                                 data-toggle="modal"
                                                                                 data-target="#productModal_{{ $personalizas->insumos }}"
                                                                                 data-details="{{ json_encode($personalizas) }}"
-                                                                                data-descripcion="{{ $personalizas->Descripción }}">Detalles
+                                                                                data-descripcion="{{ $personalizas->Descripción }}"
+                                                                                data-datos="{{ $personalizas->datos }}">Detalles
                                                                             </button>
                                                                         </td>
 
@@ -146,17 +147,19 @@
                                                                                     <span
                                                                                         aria-hidden="true">&times;</span>
                                                                                 </button>
-
                                                                             </div>
                                                                             <div class="modal-body">
                                                                                 <h6 class="Nombre">
-                                                                                    <strong>Nombre:</strong></h6>
+                                                                                    <strong>Nombre:</strong>
+                                                                                    {{ $personalizas->nombre }}
+                                                                                </h6>
                                                                                 <div
                                                                                     id="productModalIngredients_{{ $personalizas->insumos }}">
-                                                                                    <!-- Ingredientes se agregarán aquí -->
+                                                                                    <!-- Ingredientes se agregarán aquí utilizando jQuery -->
                                                                                 </div>
-
-                                                                                <p><strong>Descripción:</strong> <span class="modal-descripcion"></span></p> <!-- Agrega un span para la descripción -->
+                                                                                <p><strong>Descripción:</strong> <span
+                                                                                        class="modal-descripcion"></span>
+                                                                                </p>
                                                                             </div>
                                                                             <div class="modal-footer">
                                                                                 <button type="button"
@@ -168,26 +171,28 @@
                                                                 </div>
                                                             @endforeach
 
+
                                                             <!-- Bloque de JavaScript para cargar los ingredientes en el modal -->
                                                             <script>
                                                                 $(document).ready(function() {
                                                                     $('.modal').on('show.bs.modal', function(event) {
                                                                         var button = $(event.relatedTarget);
+                                                                        var datos = button.data('datos');
                                                                         var details = button.data('details');
                                                                         var descripcion = button.data('descripcion'); // Obtiene la descripción
-
                                                                         var modal = $(this);
 
                                                                         modal.find('.modal-title').text('Detalles del producto: ' + details.nombre);
-                                                                        modal.find('.modal-body .modal-descripcion').text('Descripción: ' +
-                                                                        descripcion); // Agrega la descripción al modal
+                                                                        modal.find('.modal-body .modal-descripcion').text('Descripción: ' + descripcion);
 
-                                                                        // Descripción
                                                                         var ingredientList = '<ul>';
                                                                         @foreach ($personaliza as $q)
                                                                             if ("{{ $q->nombre }}" == details.nombre) {
-                                                                                ingredientList +=
-                                                                                    '<li>Insumo: {{ $q->insumos }} - {{ optional(App\Models\Insumo::find($q->insumos))->nombre ?? 'Nombre no encontrado' }}</li>';
+                                                                                var datosArray = "{{ $q->datos }}".split(',');
+                                                                                $.each(datosArray, function(index, value) {
+                                                                                    ingredientList += '<li><span class="highlight">' + value +
+                                                                                        '</span></li>';
+                                                                                });
                                                                             }
                                                                         @endforeach
                                                                         ingredientList += '</ul>';

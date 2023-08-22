@@ -10,33 +10,35 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h1>Top 3 Producto Más Vendidos</h1>
-
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Ranking</th>
-                                        <th>Producto</th>
-                                        <th>Cantidad Vendida</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($topProductos as $index => $producto)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $producto->nombre }}</td>
-                                        <td>{{ $producto->total_vendido }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            
-                            <div>
+                            <h2 class="card-title mb-4">Top 3 Productos Más Vendidos</h2>
+                    
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Ranking</th>
+                                            <th>Producto</th>
+                                            <th>Cantidad Vendida</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($topProductos as $index => $producto)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $producto->nombre }}</td>
+                                            <td>{{ $producto->total_vendido }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                    
+                            <div class="chart-container mt-4">
                                 <canvas id="graficaTopProductos"></canvas>
                             </div>
                         </div>
                     </div>
+                    
 
 
 

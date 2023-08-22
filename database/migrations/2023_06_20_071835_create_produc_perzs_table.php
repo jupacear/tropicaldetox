@@ -24,7 +24,8 @@ return new class extends Migration
             $table->integer('cantidad');
             $table->timestamps();
             $table->string("nombre");
-            $table->string("Descripción");
+            $table->string("Descripción")->nullable();
+            $table->string("datos")->nullable();
             $table->float('Subtotal');
         });
     }

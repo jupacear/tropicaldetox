@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreign('id_users')->references('id')->on('users');
 
             $table->string('Descripcion','200')->nullable();
+
             $table->string('Direcion','500')->nullable();
             $table->string('Telefono','15')->nullable();
             $table->string('Estado')->nullable();

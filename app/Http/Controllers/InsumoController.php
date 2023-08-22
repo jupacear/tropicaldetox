@@ -66,8 +66,9 @@ class InsumoController extends Controller
                 'nombre' => $request->input('nombre'),
                 'descripcion' => $request->input('descripcion'),
                 'activo' => true, // Establecer el valor "activo" en true
-                'cantidad_disponible' => $request->input('cantidad_disponible'),
-                'unidad_medida' => $request->input('unidad_medida'),
+                'cantidad_disponible' => $request->input('cantidad_disponible') * 3,
+                // 'unidad_medida' => $request->input('unidad_medida') Version que recibe el selector de unidad de medida del insumo
+                'unidad_medida' => 'Bolsas',
                 'precio_unitario' => $request->input('precio_unitario'),
             ]);
         } else {
@@ -77,8 +78,9 @@ class InsumoController extends Controller
                 'nombre' => $request->input('nombre'),
                 'descripcion' => $request->input('descripcion'),
                 'activo' => true, // Establecer el valor "activo" en true
-                'cantidad_disponible' => $request->input('cantidad_disponible'),
-                'unidad_medida' => $request->input('unidad_medida'),
+                'cantidad_disponible' => $request->input('cantidad_disponible') * 3,
+                // 'unidad_medida' => $request->input('unidad_medida') Version que recibe el selector de unidad de medida del insumo
+                'unidad_medida' => 'Bolsas',
                 'precio_unitario' => $request->input('precio_unitario'),
             ]);
         }

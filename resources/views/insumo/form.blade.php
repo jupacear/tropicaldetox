@@ -14,44 +14,45 @@
 
         <div class="form-group">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="nombre">Nombre</label>
                     <input type="text" name="nombre" value="{{ $insumo->nombre }}"
                         class="form-control{{ $errors->has('nombre') ? ' is-invalid' : '' }}" placeholder="Nombre"
                         onkeyup="validateNombre(this)" onchange="removeSpaces(this)">
                     {!! $errors->first('nombre', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="cantidad_disponible">Cantidad Disponible</label>
                     <input type="text" name="cantidad_disponible" value="{{ $insumo->cantidad_disponible }}"
                         class="form-control{{ $errors->has('cantidad_disponible') ? ' is-invalid' : '' }}"
                         placeholder="Cantidad Disponible" onkeyup="validatePrecio(this)" onchange="removeSpaces(this)">
                     {!! $errors->first('cantidad_disponible', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="unidad_medida">Unidad de Medida</label>
-                    <select name="unidad_medida"
-                        class="form-control{{ $errors->has('unidad_medida') ? ' is-invalid' : '' }}">
-                        <option value="Bolsas" {{ $insumo->unidad_medida == 'Bolsas' ? 'selected' : '' }}>Bolsas
-                        </option>
-                        <!-- <option value="Kilogramos" {{ $insumo->unidad_medida == 'Kilogramos' ? 'selected' : '' }}>
-                            Kilogramos</option>
-                        <option value="Libras" {{ $insumo->unidad_medida == 'Libras' ? 'selected' : '' }}>Libras
-                        </option> -->
-                    </select>
-                    {!! $errors->first('unidad_medida', '<div class="invalid-feedback">:message</div>') !!}
-                </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="precio_unitario">Precio Unitario</label>
                     <input type="text" name="precio_unitario" value="{{ $insumo->precio_unitario }}"
                         class="form-control{{ $errors->has('precio_unitario') ? ' is-invalid' : '' }}"
                         placeholder="Precio Unitario" onkeyup="validatePrecio(this)" onchange="removeSpaces(this)">
                     {!! $errors->first('precio_unitario', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <!-- <div class="col-md-6">
+                    <label for="unidad_medida">Unidad de Medida</label>
+                    <select name="unidad_medida"
+                        class="form-control{{ $errors->has('unidad_medida') ? ' is-invalid' : '' }}">
+                        <option value="Bolsas" {{ $insumo->unidad_medida == 'Bolsas' ? 'selected' : '' }}>Bolsas
+                        </option>
+                        <option value="Kilogramos" {{ $insumo->unidad_medida == 'Kilogramos' ? 'selected' : '' }}>
+                            Kilogramos</option>
+                        <option value="Libras" {{ $insumo->unidad_medida == 'Libras' ? 'selected' : '' }}>Libras
+                        </option>
+                    </select>
+                    {!! $errors->first('unidad_medida', '<div class="invalid-feedback">:message</div>') !!}
+                </div> -->
+
             </div>
         </div>
 
@@ -111,7 +112,16 @@
     // Funcion para evitar el escribir cualquier otro dato que no sea numerico
     function validatePrecio(input) {
         const inputValue = input.value.trim(); // Eliminar espacios al inicio y al final
-
+        // Validar longitud total del valor ingresado (incluyendo dígitos y puntos)
+        if (inputValue.length > 6) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El precio no puede tener más de 6 caracteres',
+            });
+            input.value = inputValue.substring(0, 6); // Truncar el valor a 8 caracteres
+            return;
+        }
         // Validar si el valor ingresado contiene caracteres diferentes a números y el punto
         for (let i = 0; i < inputValue.length; i++) {
             const charCode = inputValue.charCodeAt(i);

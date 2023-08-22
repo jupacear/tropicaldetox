@@ -87,36 +87,39 @@
                                 </table>
                             </div>
 
-                            <?php $per = null; ?>
-                            @foreach ($personaliza as $personalizas)
-                                @if ($personalizas->nombre !== $per)
-                                    <?php
-                                    $per = $personalizas->nombre;
-                                    $i = null; // Inicializar $i para cada nuevo grupo de nombre
-                                    ?>
-                                    <div class="">
-                                        <p>Nombre: {{ $personalizas->nombre }}</p>
-                                        <ul>
-                                            @foreach ($personaliza as $q)
-                                                @if ($q->nombre === $per)
-                                                    <li>
-                                                        Insumo: {{ optional(App\Models\Insumo::find($q->insumos))->nombre ?? "No se encontró el nombre para el ID: $q" }}
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                        @foreach ($personaliza as $q)
-                                            @if ($q->nombre === $per && $q->Descripción !== $i)
-                                                <?php $i = $q->Descripción; ?>
-                                                <p><strong>Descripción:</strong> <span class="modal-descripcion">{{ $q->Descripción }}</span></p>
-                                            @endif
-                                        @endforeach
-                            
-                                        <!-- Agrega aquí más detalles del producto si es necesario -->
-                                    </div>
-                                @endif
-                            @endforeach
-                            
+                           <?php $per = null; ?>
+@foreach ($personaliza as $personalizas)
+    @if ($personalizas->nombre !== $per)
+        <?php
+        $per = $personalizas->nombre;
+        $i = null; // Inicializar $i para cada nuevo grupo de nombre
+        ?>
+        <div class="">
+            <p>Nombre: {{ $personalizas->nombre }}</p>
+            <ul>
+               
+
+                @foreach ($personaliza as $q)
+                @if ($q->nombre === $per)
+                <li>
+                    Insumo: {{ $q->datos }}
+                </li>
+                @endif
+
+        @endforeach
+            </ul>
+            @foreach ($personaliza as $q)
+                @if ($q->nombre === $per && $q->Descripción !== $i)
+                    <?php $i = $q->Descripción; ?>
+                    <p><strong>Descripción:</strong> <span class="modal-descripcion">{{ $q->Descripción }}</span></p>
+                @endif
+            @endforeach
+
+            <!-- Agrega aquí más detalles del producto si es necesario -->
+        </div>
+    @endif
+@endforeach
+
 
 
                         </div>

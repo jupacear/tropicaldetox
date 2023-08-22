@@ -40,6 +40,83 @@
                 object-fit: cover;
                 /* Ajusta la imagen para que cubra completamente el área designada */
             }
+
+            .gallery {
+                max-width: 83%;
+                margin: 5% auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                overflow: hidden;
+                box-sizing: border-box;
+                box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+            }
+
+            .text-center {
+                text-align: center;
+                margin-bottom: 1em;
+            }
+
+            .lightbox-gallery {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .lightbox-gallery div>img {
+                max-width: 100%;
+                display: block;
+            }
+
+            .lightbox-gallery div {
+                margin: 10px;
+                flex-basis: 180px;
+            }
+
+            @media only screen and (max-width: 480px) {
+                .lightbox-gallery {
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .lightbox>div {
+                    margin-bottom: 10px;
+                }
+            }
+
+            /*Lighbox CSS*/
+
+            .lightbox {
+                display: none;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                position: fixed;
+                top: 6em;
+                left: 0;
+                z-index: 20;
+                padding-top: 30px;
+                box-sizing: border-box;
+            }
+
+            .lightbox img {
+
+                max-width: 70%;
+                height: 70%;
+                display: block;
+                margin: auto;
+            }
+
+            .lightbox .caption {
+                margin: 15px auto;
+                width: 50%;
+                text-align: center;
+                font-size: 1em;
+                line-height: 1.5;
+                font-weight: 700;
+                color: #eee;
+            }
         </style>
     </head>
 
@@ -68,10 +145,11 @@
             </ul>
         </div>
         <!-- End Slider -->
+
         <!-- Start Categories  -->
         <div class="categories-shop">
-            <div class="container">
-                <div class="row">
+            <div class="container " >
+                <div class="row" style="display: flex; justify-content: center !important;align-content: center !important">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="title-all text-center">
@@ -83,15 +161,15 @@
                         </div>
                     </div>
                     @foreach ($categorias as $categoria)
-                        @if ($categoria->activo)
-                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        @if ($categoria->activo && $categoria->nombre != 'Personalizados')
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" >
                                 <div class="shop-cat-box">
                                     @if ($categoria->imagen)
-                                        <img src="{{ asset($categoria->imagen) }}" alt="Imagen de la categoría" />
+                                        <img src="{{ asset($categoria->imagen) }}" style="width:25em !important;height:20em !important" alt="Imagen de la categoría" />
                                     @else
-                                        <img class="img-fluid" src="images/logo.png" alt="Imagen por defecto" />
+                                        <img class="img-fluid" style="width:25em !important;height:20em !important"  src="images/logo.png" alt="Imagen por defecto" />
                                     @endif
-                                    <a class="btn hvr-hover" href="#">{{ $categoria->nombre }}</a>
+                                    <a class="btn hvr-hover" href="{{ route('Productos') }}">{{ $categoria->nombre }}</a>
                                 </div>
                             </div>
                         @endif
@@ -116,7 +194,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" >
                     <div class="col-lg-12">
                         <div class="special-menu text-center">
                             <div class="button-group filter-button-group">
@@ -132,38 +210,38 @@
                         </div>
                     </div>
                 </div>
-                <div class="row justify-content-center special-list">
+                <div class="row justify-content-center special-list" > 
                     @foreach ($productos as $producto)
-                    @if ($producto->activo)
-                        <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
-                            <!-- Cartas -->
-                            <div class="products-single fix">
-                                <div class="box-img-hover">
-                                    <!-- Imagen del producto -->
-                                    <img src="{{ asset($producto->imagen) }}" class="img-fluid" alt="Image">
-                                    <div class="mask-icon">
-                                        <a class="cart" href="#" data-producto-id="{{ $producto->id }}"
-                                            data-producto-nombre="{{ $producto->nombre }}"
-                                            data-producto-precio="{{ $producto->precio }}"
-                                            onclick="agregarAlCarrito(event);actualizarTotalCarrito(true)">
-                                            Agregar al carrito
-                                        </a>
+                        @if ($producto->activo && $producto->categorias_id !== 3)
+                            <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
+                                <!-- Cartas -->
+                                <div class="products-single fix ">
+                                    <div class="box-img-hover">
+                                        <!-- Imagen del producto -->
+                                        <img src="{{ asset($producto->imagen) }}" style="width:25em !important;height:15em !important" class="img-fluid" alt="Image">
+                                        <div class="mask-icon">
+                                            <a class="cart" href="#" data-producto-id="{{ $producto->id }}"
+                                                data-producto-nombre="{{ $producto->nombre }}"
+                                                data-producto-precio="{{ $producto->precio }}"
+                                                onclick="agregarAlCarrito(event);actualizarTotalCarrito(true)">
+                                                Agregar al carrito
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="why-text">
-                                    <!-- Nombre del producto -->
-                                    <h4>{{ $producto->nombre }}</h4>
-                                    <!-- Precio del producto -->
-                                    <h5>{{ $producto->precio }}</h5>
-                                    <!-- Descripción del producto -->
-                                    <p>{{ $producto->descripcion }}</p>
-                                </div>
+                                    <div class="why-text">
+                                        <!-- Nombre del producto -->
+                                        <h4>{{ $producto->nombre }}</h4>
+                                        <!-- Precio del producto -->
+                                        <h5>{{ $producto->precio }}</h5>
+                                        <!-- Descripción del producto -->
+                                        <p>{{ $producto->descripcion }}</p>
+                                    </div>
 
+                                </div>
+                                <!-- End Cartas -->
                             </div>
-                            <!-- End Cartas -->
-                        </div>
-                    @endif
-                @endforeach
+                        @endif
+                    @endforeach
                 </div>
 
             </div>
@@ -326,13 +404,13 @@
                     </script>
                     <!-- Modal Personalizados-->
                 </div>
-           
+
             </div>
         </div>
         <!-- End Products Personalizados -->
 
         <!-- Mapas -->
-        <section class="row m-9">
+        <section class="">
             {{-- <div class="col-lg">
                 <div class="title-all text-center">
                     <h1>Nuestra ubicación</h1>
@@ -357,38 +435,89 @@
                             referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
-                <div style="margin: 1.5em">
+                <div style="margin-bottom: 2em; " >
                     <p class="text-center">Estamos ubicados en el corazón de la ciudad, </p>
                     <p >Nuestra tienda ofrece una amplia gama de productos y servicios para satisfacer todas tus
                         necesidades. Ven a visitarnos y descubre todo lo que tenemos para ofrecerte.</p>
-                    </div>
+                </div>
             </div>
         </section>
         <!-- End mapas -->
 
-        <!-- Start Instagram Feed  -->
-        <div class="instagram-box">
-            <div class="main-instagram owl-carousel owl-theme">
-                @foreach ($productos as $producto)
-                    @if ($producto->activo)
-                        <div class="item">
-                            <div class="ins-inner-box">
-                                <img src="{{ asset($producto->imagen) }}" alt="No hay imagen disponible"
-                                    width="100" />
-                                <div class="hov-in">
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-            </div>
+        <div class="gallery">
+            <h2 class="text-center">Galeria</h2>
+            <div class="lightbox-gallery">
+                <div><img src="img/IMGWelcome/JugoDurazno.png" data-image-hd="img/IMGWelcome/JugoDurazno.png"
+                        alt="El jugo de durazno es una deliciosa opción que combina la dulzura natural de los duraznos con un toque refrescante.">
+                </div>
+                <div><img src="img/IMGWelcome/JugoKiwi.png" data-image-hd="img/IMGWelcome/JugoKiwi.png"
+                        alt="El jugo de kiwi es conocido por su vibrante color verde y su sabor ligeramente ácido y refrescante.">
+                </div>
+                <div><img src="img/IMGWelcome/JugoManzana.png" data-image-hd="img/IMGWelcome/JugoManzana.png"
+                        alt="El jugo de manzana es un clásico reconfortante, con su dulzura natural en cada sorbo.">
+                </div>
+                <div><img src="img/IMGWelcome/JugoMaracuya.png" data-image-hd="img/IMGWelcome/JugoMaracuya.png"
+                        alt="El jugo de maracuyá ofrece un sabor tropical y exótico con una deliciosa mezcla de dulzura y acidez.">
+                </div>
+                <div><img src="img/IMGWelcome/JugoPapaya.png" data-image-hd="img/IMGWelcome/JugoPapaya.png"
+                        alt="El jugo de papaya es suave y cremoso, lleno de nutrientes y frescura.">
+                </div>
+                <div><img src="img/IMGWelcome/JugoPera.png" data-image-hd="img/IMGWelcome/JugoPera.png"
+                        alt="El jugo de pera captura la dulzura y el aroma delicado de esta fruta en un refrescante sorbo.">
+                </div>
+                <div><img src="img/IMGWelcome/JugoPiña.png" data-image-hd="img/IMGWelcome/JugoPiña.png"
+                        alt="El jugo de piña es una explosión tropical, combinando dulzura y acidez en una bebida revitalizante.">
+                </div>
+                <div><img src="img/IMGWelcome/JugoUva.png" data-image-hd="img/IMGWelcome/JugoUva.png"
+                        alt="El jugo de uva es energizante y lleno de sabor, con su dulzura natural lista para disfrutar.">
+                </div>
+            </div>   
         </div>
-        <!-- End Instagram Feed -->
 
+
+        </div>
         @include('cliente.footer')
         <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+        {{-- Scrip de la galeria --}}
+        <script>
+            // Create a lightbox
+            (function() {
+                var $lightbox = $("<div class='lightbox'></div>");
+                var $img = $("<img>");
+                var $caption = $("<p class='caption'></p>");
 
+                // Add image and caption to lightbox
+
+                $lightbox
+                    .append($img)
+                    .append($caption);
+
+                // Add lighbox to document
+                $('body').append($lightbox);
+
+                $('.lightbox-gallery img').click(function(e) {
+                    e.preventDefault();
+
+                    // Get image link and description
+                    var src = $(this).attr("data-image-hd");
+                    var cap = $(this).attr("alt");
+
+                    // Add data to lighbox
+
+                    $img.attr('src', src);
+                    $caption.text(cap);
+
+                    // Show lightbox
+
+                    $lightbox.fadeIn('fast');
+
+                    $lightbox.click(function() {
+                        $lightbox.fadeOut('fast');
+                    });
+                });
+
+            }());
+        </script>
         <script>
             function agregarAlCarrito(event) {
                 event.preventDefault();
