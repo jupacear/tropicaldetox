@@ -148,8 +148,9 @@
 
         <!-- Start Categories  -->
         <div class="categories-shop">
-            <div class="container " >
-                <div class="row" style="display: flex; justify-content: center !important;align-content: center !important">
+            <div class="container ">
+                <div class="row"
+                    style="display: flex; justify-content: center !important;align-content: center !important">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="title-all text-center">
@@ -162,12 +163,15 @@
                     </div>
                     @foreach ($categorias as $categoria)
                         @if ($categoria->activo && $categoria->nombre != 'Personalizados')
-                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" >
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                 <div class="shop-cat-box">
                                     @if ($categoria->imagen)
-                                        <img src="{{ asset($categoria->imagen) }}" style="width:25em !important;height:20em !important" alt="Imagen de la categoría" />
+                                        <img src="{{ asset($categoria->imagen) }}"
+                                            style="width:25em !important;height:20em !important"
+                                            alt="Imagen de la categoría" />
                                     @else
-                                        <img class="img-fluid" style="width:25em !important;height:20em !important"  src="images/logo.png" alt="Imagen por defecto" />
+                                        <img class="img-fluid" style="width:25em !important;height:20em !important"
+                                            src="images/logo.png" alt="Imagen por defecto" />
                                     @endif
                                     <a class="btn hvr-hover" href="{{ route('Productos') }}">{{ $categoria->nombre }}</a>
                                 </div>
@@ -194,7 +198,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" >
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="special-menu text-center">
                             <div class="button-group filter-button-group">
@@ -210,7 +214,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row justify-content-center special-list" > 
+                <div class="row justify-content-center special-list">
                     @foreach ($productos as $producto)
                         @if ($producto->activo && $producto->categorias_id !== 3)
                             <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
@@ -218,7 +222,9 @@
                                 <div class="products-single fix ">
                                     <div class="box-img-hover">
                                         <!-- Imagen del producto -->
-                                        <img src="{{ asset($producto->imagen) }}" style="width:25em !important;height:15em !important" class="img-fluid" alt="Image">
+                                        <img src="{{ asset($producto->imagen) }}"
+                                            style="width:25em !important;height:15em !important" class="img-fluid"
+                                            alt="Image">
                                         <div class="mask-icon">
                                             <a class="cart" href="#" data-producto-id="{{ $producto->id }}"
                                                 data-producto-nombre="{{ $producto->nombre }}"
@@ -315,6 +321,13 @@
                                                                     <i class="fas fa-plus fa-xs"
                                                                         style="position: relative; bottom: 8.5px;right: 5px"></i>
                                                                 </button>
+                                                                {{-- <button type="button"
+                                                                    class="btn btn-primary agregar-insumox2"
+                                                                    style="max-width: 2.2em; max-height: 1.5em;">
+                                                                    <i class="fas fa-times"
+                                                                        style="position: relative; bottom: 8.5px;right: 5px">
+                                                                        2</i>
+                                                                </button> --}}
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -337,6 +350,7 @@
                                                         <tr>
                                                             <th>ID</th>
                                                             <th>Nombre</th>
+                                                            <th>Cantida</th>
                                                             <th>Precio</th>
                                                             <th></th>
                                                         </tr>
@@ -367,7 +381,7 @@
                                     <div class="modal-footer" style="margin: 0em;padding: 0em;">
                                         <button type="button" class="btn btn-primary" id="crearPersonalizados"
                                             data-dismiss="modal"
-                                            onclick=" mostrarAlertaExitosa('Producto agregado al carrito exitosamente');">
+                                            onclick=" mostrarAlertaExitosa('Producto agregado al carrito exitosamente');actualizarTotalCarrito()">
                                             Crear
                                         </button>
                                         <button type="button" class="btn btn-secondary"
@@ -435,9 +449,9 @@
                             referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
-                <div style="margin-bottom: 2em; " >
+                <div style="margin-bottom: 2em; ">
                     <p class="text-center">Estamos ubicados en el corazón de la ciudad, </p>
-                    <p >Nuestra tienda ofrece una amplia gama de productos y servicios para satisfacer todas tus
+                    <p>Nuestra tienda ofrece una amplia gama de productos y servicios para satisfacer todas tus
                         necesidades. Ven a visitarnos y descubre todo lo que tenemos para ofrecerte.</p>
                 </div>
             </div>
@@ -471,7 +485,7 @@
                 <div><img src="img/IMGWelcome/JugoUva.png" data-image-hd="img/IMGWelcome/JugoUva.png"
                         alt="El jugo de uva es energizante y lleno de sabor, con su dulzura natural lista para disfrutar.">
                 </div>
-            </div>   
+            </div>
         </div>
 
 
@@ -594,17 +608,15 @@
 
             $(document).ready(function() {
                 $('#Personalizados').on('hidden.bs.modal', function() {
-                    $('#descripcion').val(''); // Borrar el contenido del textarea al cerrar el modal
+                    $('#descripcion').val('');
                 });
 
-                $('#crearPersonalizados').click(function() {
-                    // ... (resto de tu código para crear el producto personalizado)
-
-                    $('#descripcion').val(''); // Borrar el contenido del textarea después de crear
-                });
                 var maxSeleccionados = 3;
                 var insumosSeleccionadosSet = new Set();
                 var numeroPersonalizado = 1;
+                var insumosCantidad = {}; // Objeto para almacenar la cantidad de insumos iguales
+
+
 
                 var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
                 if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
@@ -612,22 +624,34 @@
                         .length - 1].NumeroPersonalizado;
                     numeroPersonalizado = ultimoNumeroPersonalizado + 1;
                 }
-
+                // nosepuedeAgregar
                 $(document).on('click', '.agregar-insumo', function() {
                     let insumoNombre = $(this).closest('tr').find('td:nth-child(3)').text();
-                    let arrayDeNombres = insumoNombre.split(' ');
+                    let insumoId = $(this).closest('tr').data('id');
+                    let insumoPrecio = parseFloat($(this).closest('tr').find('td:nth-child(4)').text().match(
+                        /\d+/)[0]);
 
-                    if ($('.tabla-insumos-seleccionados tbody tr').length < maxSeleccionados) {
-                        var insumoId = $(this).closest('tr').data('id');
+                    let cantidadTotal = Object.values(insumosCantidad).reduce((total, cantidad) => total +
+                        cantidad, 0);
 
-                        var insumoPrecio = parseFloat($(this).closest('tr').find('td:nth-child(4)').text()
-                            .match(/\d+/)[0]);
+                    if ($('.tabla-insumos-seleccionados tbody tr').length >= maxSeleccionados ||
+                        cantidadTotal >= maxSeleccionados) {
+                        nosepuedeAgregar('No puedes agregar más insumos o la cantidad total ya es 3.');
+                        return;
+                    }
 
+                    if (insumosSeleccionadosSet.has(insumoId)) {
+                        insumosCantidad[insumoId]++;
+                        let insumoFila = $(`.tabla-insumos-seleccionados tbody tr[data-id="${insumoId}"]`);
+                        insumoFila.find('td:nth-child(3)').text(insumosCantidad[insumoId]);
+                    } else {
                         insumosSeleccionadosSet.add(insumoId);
+                        insumosCantidad[insumoId] = 1;
 
                         var newRow = $('<tr>').attr('data-id', insumoId);
                         newRow.append($('<td>').text(insumoId));
                         newRow.append($('<td>').text(insumoNombre));
+                        newRow.append($('<td>').text(insumosCantidad[insumoId]));
                         newRow.append($('<td>').text(`$${insumoPrecio}`));
 
                         var removeButton = $('<button>').addClass('btn btn-danger quitar-insumo');
@@ -635,31 +659,89 @@
                         removeButton.append(removeIcon);
                         newRow.append($('<td>').append(removeButton));
 
+
                         $('.tabla-insumos-seleccionados tbody').append(newRow);
-
-                        recalcularTotalInsumosSeleccionados();
-                    } else {
-                        nosepuedeAgregar('Ya has seleccionado la cantidad máxima de productos.');
                     }
-                });
-
-                $(document).on('click', '.quitar-insumo', function() {
-                    var insumoId = $(this).closest('tr').data('id');
-
-                    insumosSeleccionadosSet.delete(insumoId);
-                    $(this).closest('tr').remove();
 
                     recalcularTotalInsumosSeleccionados();
                 });
+                $(document).on('click', '.agregar-insumox2', function() {
+                    let insumoNombre = $(this).closest('tr').find('td:nth-child(3)').text();
+                    let insumoId = $(this).closest('tr').data('id');
+                    let insumoPrecio = parseFloat($(this).closest('tr').find('td:nth-child(4)').text().match(
+                        /\d+/)[0]);
 
+                    let cantidadTotal = Object.values(insumosCantidad).reduce((total, cantidad) => total +
+                        cantidad, 0);
+
+                    let cantidadInsumo = insumosCantidad[insumoId] || 0;
+
+                    let existeInsumoConCantidadDosOMas = Object.values(insumosCantidad).some(cantidad =>
+                        cantidad >= 2);
+
+                    if (cantidadTotal >= maxSeleccionados || cantidadInsumo >= 2 ||
+                        existeInsumoConCantidadDosOMas) {
+                        nosepuedeAgregar(
+                            'No puedes agregar más insumos o ya has agregado un insumo con cantidad x2.');
+                        return;
+                    }
+
+                    if (insumosSeleccionadosSet.has(insumoId)) {
+                        insumosCantidad[insumoId]++;
+                        let insumoFila = $(`.tabla-insumos-seleccionados tbody tr[data-id="${insumoId}"]`);
+                        insumoFila.find('td:nth-child(3)').text(insumosCantidad[insumoId]);
+                    } else {
+                        insumosSeleccionadosSet.add(insumoId);
+                        insumosCantidad[insumoId] = 1;
+
+                        var newRow = $('<tr>').attr('data-id', insumoId);
+                        newRow.append($('<td>').text(insumoId));
+                        newRow.append($('<td>').text(insumoNombre));
+                        newRow.append($('<td>').text(insumosCantidad[insumoId] * 2));
+                        newRow.append($('<td>').text(`$${insumoPrecio}`));
+
+                        var removeButton = $('<button>').addClass('btn btn-danger quitar-insumo');
+                        var removeIcon = $('<i>').addClass('fas fa-trash');
+                        removeButton.append(removeIcon);
+                        newRow.append($('<td>').append(removeButton));
+
+
+                        $('.tabla-insumos-seleccionados tbody').append(newRow);
+                    }
+
+                    recalcularTotalInsumosSeleccionados();
+                });
+                $(document).on('click', '.quitar-insumo', function() {
+                    var insumoId = $(this).closest('tr').data('id');
+
+                    if (insumosSeleccionadosSet.has(insumoId)) {
+                        var insumoFila = $(`.tabla-insumos-seleccionados tbody tr[data-id="${insumoId}"]`);
+                        var cantidadActual = parseInt(insumoFila.find('td:nth-child(3)').text());
+
+                        if (cantidadActual > 1) {
+                            insumosCantidad[insumoId]--;
+                            insumoFila.find('td:nth-child(3)').text(cantidadActual - 1);
+                        } else {
+                            insumosSeleccionadosSet.delete(insumoId);
+                            delete insumosCantidad[insumoId];
+                            insumoFila.remove();
+                        }
+
+                        recalcularTotalInsumosSeleccionados();
+                    }
+                });
                 $('#crearPersonalizados').click(function() {
                     var insumosSeleccionados = $('.tabla-insumos-seleccionados tbody tr');
 
-                    if (insumosSeleccionados.length < 3) {
+                    var cantidadTotalInsumos = Object.values(insumosCantidad).reduce((total, cantidad) =>
+                        total + cantidad, 0);
+
+                    if (insumosSeleccionados.length < 3 && cantidadTotalInsumos < 3) {
                         nosepuedeAgregar(
                             'Debes seleccionar al menos un insumo para crear un producto personalizado.');
                         return; // Salir de la función si no hay insumos seleccionados
                     }
+
                     actualizarTotalCarrito(true);
                     // Obtener la descripción del campo de entrada de texto
                     var descripcion = $('#descripcion').val();
@@ -676,12 +758,13 @@
                     insumosSeleccionados.each(function() {
                         var insumoId = $(this).data('id');
                         var insumoNombre = $(this).find('td:nth-child(2)').text();
-                        var insumoPrecio = parseFloat($(this).find('td:nth-child(3)').text().match(
+                        var insumoPrecio = parseFloat($(this).find('td:nth-child(4)').text().match(
                             /\$(\d+(\.\d{1,2})?)/)[1]);
 
-                        var insumoDetalles = `${insumoId} : ${insumoNombre} $: ${insumoPrecio}`;
+                        var insumoDetalles =
+                            `${insumoId} : ${insumoNombre} $: ${insumoPrecio} (cantidad: ${insumosCantidad[insumoId]})`;
                         personalizado.insumos.push(insumoDetalles);
-                        personalizado.Subtotal += insumoPrecio;
+                        personalizado.Subtotal += insumoPrecio * insumosCantidad[insumoId];
                     });
 
                     numeroPersonalizado++;
@@ -692,20 +775,47 @@
                     localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizados));
 
                     insumosSeleccionadosSet.clear();
+                    insumosCantidad = {}; // Limpiar el objeto de cantidad de insumos iguales
                     $('.tabla-insumos-seleccionados tbody').empty();
+                    $('#descripcion').val(''); // Borrar el contenido del textarea después de crear
                 });
 
                 // Función para recalcular el total de insumos seleccionados
                 function recalcularTotalInsumosSeleccionados() {
                     var total = 0;
                     $('.tabla-insumos-seleccionados tbody tr').each(function() {
-                        var insumoPrecioSeleccionado = parseFloat($(this).find('td:nth-child(3)').text().match(
-                            /\$(\d+(\.\d{1,2})?)/)[1]);
-                        total += insumoPrecioSeleccionado;
+                        var insumoPrecioSeleccionado = parseFloat($(this).find('td:nth-child(4)').text().match(
+                            /\d+(\.\d{1,2})?/)[0]);
+                        var cantidad = insumosCantidad[$(this).data('id')];
+
+                        // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
+                        // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
+                            total += insumoPrecioSeleccionado * cantidad;
                     });
 
-                    // Actualizar el contenido del elemento HTML del total
-                    $('#totalInsumosSeleccionados').text(`Total: $${total.toFixed(2)}`);
+                    let formattedTotal = total.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    $('#totalInsumosSeleccionados').text(`Total: ${formattedTotal}`);
+                }
+                function recalcularTotalInsumosSeleccionados1() {
+                    var total = 0;
+                    $('.tabla-insumos-seleccionados tbody tr').each(function() {
+                        var insumoPrecioSeleccionado = parseFloat($(this).find('td:nth-child(4)').text().match(
+                            /\d+(\.\d{1,2})?/)[0]);
+                        var cantidad = insumosCantidad[$(this).data('id')];
+
+                        // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
+                        // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
+                            total += insumoPrecioSeleccionado * cantidad * 2;
+                    });
+
+                    let formattedTotal = total.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    $('#totalInsumosSeleccionados').text(`Total: ${formattedTotal}`);
                 }
             });
         </script>

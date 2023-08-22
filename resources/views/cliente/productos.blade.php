@@ -140,7 +140,7 @@
                                     <div class="modal-footer" style="margin: 0em;padding: 0em;">
                                         <button type="button" class="btn btn-primary" id="crearPersonalizados"
                                             data-dismiss="modal"
-                                            onclick=" mostrarAlertaExitosa('Producto agregado al carrito exitosamente');">
+                                            onclick=" mostrarAlertaExitosa('Producto agregado al carrito exitosamente');actualizarTotalCarrito()">
                                             Crear
                                         </button>
                                         <button type="button" class="btn btn-secondary"

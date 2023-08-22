@@ -596,6 +596,18 @@
                                     totalElement.textContent = totalFormateado;
                                     totalInput.value = total.toFixed(2);
                                 }
+                                 // var selectedProductsList = document.getElementById('selected-products-list');
+                                // if (selectedProductsList) {
+                                //     var observer = new MutationObserver(function(mutationsList, observer) {
+                                //         calcularTotalInicial(); // Ejecutar la función de cálculo en respuesta a cambios en la tabla
+                                //     });
+
+                                //     observer.observe(selectedProductsList, {
+                                //         childList: true,
+                                //         subtree: true
+                                //     });
+                                // }
+                                // Llamamos a la función al cargar la página
                                 // Llamamos a la función al cargar la página
                                 window.addEventListener('load', calcularTotalInicial);
                             </script>
@@ -603,7 +615,7 @@
                             <script>
                                 var totalElement = document.getElementById('total');
                                 var totalInput = document.getElementById('total-input');
-                                var total = parseFloat(totalElement.textContent);
+                                let total = parseFloat(totalElement.textContent);
 
                                 function agregarProducto(id, nombre, precio) {
                                     Swal.fire({
@@ -639,7 +651,7 @@
                                                                 <td>${subtotal.toLocaleString('en-US')}</td>
 
                                                                 <td>
-                                                                    <button class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')"> <li class="fas fa-trash"></li></button>
+                                                                    <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')"> <li class="fas fa-trash"></li></button>
                                                                 </td>
                                                             `;
                                                 productosSeleccionados.appendChild(row);
@@ -689,7 +701,7 @@
 
                                     var totalElement = document.getElementById('total');
                                     var totalInput = document.getElementById('total-input');
-                                    var total = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.'));
+                                    let total = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.'));
 
                                     total -= subtotal; // Restamos el subtotal del producto eliminado al total
 
@@ -701,6 +713,7 @@
                                     totalElement.textContent = totalFormateado;
 
                                     // Actualizar el campo oculto con los datos actualizados
+                                    // alert(totalInput.value = total.toFixed(2));
                                     totalInput.value = total.toFixed(2);
 
                                     var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');

@@ -55,7 +55,7 @@
                                 <th colspan="3">
                                     Total del Pedido:
                                 </th>
-                                <th>
+                                <th style="padding: 0em;padding-left: 0.5em;width: 100px">
                                     <span id="totalPedido">0.00</span>
                                 </th>
                             </tr>
@@ -193,7 +193,7 @@
                             // Verificar que el valor sea numérico antes de sumarlo al totalPedido
                             if (!isNaN(parseFloat(insumoData[2].trim()))) {
                                 let cantidad = parseFloat(insumoData[insumoData.length - 1]);
-                                totalPedido += parseFloat(insumoData[2].trim())*cantidad;
+                                totalPedido += parseFloat(insumoData[2].trim()) * cantidad;
                             }
                         });
                     });
@@ -240,7 +240,7 @@
                             let insumoData = insumo.split(':');
                             let cantidad = parseFloat(insumoData[insumoData.length - 1]);
 
-                            subtotalf += parseFloat(insumoData[2].trim())*cantidad;
+                            subtotalf += parseFloat(insumoData[2].trim()) * cantidad;
                         });
                         let subtotalPersonalizado = subtotalf * (productoPersonalizado.cantidad || 1);
                         totalPedido += subtotalPersonalizado;
@@ -362,7 +362,7 @@
 
                             // Calcular el nuevo subtotal con la nueva cantidad y actualizarlo en la tabla
                             let subtotal = calcularSubtotalapersonalizado(productoPersonalizado, subtotalf);
-                            
+
                             row.find('.subtotal').text(subtotal.toFixed(
                                 0)); // Actualizar el valor del subtotal en la fila
 
@@ -392,8 +392,11 @@
                         let columnaAcciones = $('<td>');
                         let botonEliminar = $('<button>').html('<i class="fas fa-trash"></i>').addClass('btn thirdd');
 
+                            
+                            // actualizarTotalCarrito()
                         botonEliminar.on('click', function() {
                             eliminarProductoPersonalizado(index);
+                            actualizarTotalCarrito();
                         });
 
 
@@ -622,6 +625,8 @@
                     botonEliminar.className = 'btn thirdd';
                     botonEliminar.addEventListener('click', function() {
                         eliminarProductoCarrito(carrito.indexOf(producto));
+                        actualizarTotalCarrito();
+
                     });
 
 
