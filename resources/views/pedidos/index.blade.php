@@ -29,7 +29,8 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a class="btn btn-warning" style="margin-bottom: 20px" href="{{ url('pedidos/create') }}">Nuevo</a>
+                        <a class="btn btn-warning" style="margin-bottom: 20px"
+                            href="{{ url('pedidos/create') }}">Nuevo</a>
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
                                 <th style="color:#fff;">No</th>
@@ -121,7 +122,6 @@
                                             </td>
                                         </tr>
                                         @php $Numero++ @endphp
-
                                     @endif
                                 @endforeach
 
@@ -150,9 +150,7 @@
                                                     @csrf
                                                     @method('PUT')
                                                     <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-danger"
-                                                        onclick=" ">
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick=" ">
                                                         {{ $pedido->Estado }}
                                                     </button>
                                                 </form>
@@ -160,7 +158,7 @@
                                             <td>{{ $pedido->Fecha }}</td>
                                             <td> {{ number_format($pedido->Total, 0, ',', '.') }}</td>
                                             <td style="display: flex">
-                                                <div class="text-center " >
+                                                <div class="text-center ">
                                                     <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
                                                         <a href="{{ route('pedidos.show', $pedido->id) }}"
                                                             class="btn btn-sm btn-primary "><i
@@ -199,7 +197,6 @@
                                             </td>
                                         </tr>
                                         @php $Numero++ @endphp
-
                                     @endif
                                 @endforeach
                             </tbody>
@@ -260,30 +257,41 @@
     }
 
     function cambiarEstadoq(pedidoId) {
-        var form = document.getElementById('form-estado-' + pedidoId);
-        var estadoInput = form.querySelector('input[name="Estado"]');
-        var estado = estadoInput.value;
+        Swal.fire({
+            title: 'Confirmar cambio de estado',
+            text: '¿Estás seguro de que deseas cambiar el estado?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cambiar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('form-estado-' + pedidoId);
+                var estadoInput = form.querySelector('input[name="Estado"]');
+                var estado = estadoInput.value;
 
-        // Cambiar el estado
-        if (estado === 'En_proceso') {
-            estado = 'Cancelado';
-        }
-        estadoInput.value = estado;
+                // Cambiar el estado
+                if (estado === 'En_proceso') {
+                    estado = 'Cancelado';
+                }
+                estadoInput.value = estado;
 
-        // Cambiar el color del botón y mostrar el mensaje
-        var button = form.querySelector('button');
-        if (estado === 'En_proceso') {
-            button.classList.remove('btn-success');
-            button.classList.add('btn-primary');
-            button.innerText = 'En proceso';
-        } else {
-            button.classList.remove('btn-primary');
-            button.classList.add('btn-success');
-            button.innerText = 'Finalizado';
-        }
+                // Cambiar el color del botón y mostrar el mensaje
+                var button = form.querySelector('button');
+                if (estado === 'En_proceso') {
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-primary');
+                    button.innerText = 'En proceso';
+                } else {
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-success');
+                    button.innerText = 'Finalizado';
+                }
 
-        // Enviar el formulario
-        form.submit();
+                // Enviar el formulario
+                form.submit();
+            }
+        });
     }
 </script>
 

@@ -19,7 +19,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/IMGWelcome/JugoKiwi.png',
                 'nombre' => 'Jugo de Durazno',
-                'precio' => 2999,
+                'precio' => 2000,
                 'descripcion' => 'Verdes',
                 'activo' => true,
                 'categorias_id' => 1,
@@ -44,7 +44,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/IMGWelcome/JugoMaracuya.png',
                 'nombre' => 'Jugo de Maracuya',
-                'precio' => 2999,
+                'precio' => 2000,
                 'descripcion' => 'Frutas',
                 'activo' => true,
                 'categorias_id' => 1,

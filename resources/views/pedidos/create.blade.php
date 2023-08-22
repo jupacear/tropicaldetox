@@ -383,60 +383,90 @@
                                 var totalSection = document.getElementById('total-section');
                                 var total = 0; // Inicializar el total en 0
 
+                               
+
                                 function agregarProducto(id, nombre, precio) {
-                                    var cantidad = prompt('Ingrese la cantidad del producto "' + nombre + '":');
-                                    if (cantidad !== null && cantidad !== '') {
-                                        cantidad = parseInt(cantidad);
-                                        var subtotal = cantidad * precio;
-                                        total += subtotal;
+                                    Swal.fire({
+                                        title: 'Ingrese la cantidad para el producto personalizado:',
+                                        input: 'number',
+                                        inputValue: 1,
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Aceptar',
+                                        cancelButtonText: 'Cancelar',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            var cantidad = parseInt(result.value);
 
-                                        var productosSeleccionados = document.getElementById('selected-products-list');
-                                        var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
+                                            if (!isNaN(cantidad) && cantidad > 0) {
+                                                var subtotal = cantidad * precio;
 
-                                        var row = document.createElement('tr');
-                                        row.setAttribute('data-producto-id', id);
-                                        row.setAttribute('data-cantidad', cantidad);
-                                        row.setAttribute('data-subtotal', subtotal);
-                                        row.innerHTML = `
-                                                <td>${nombre}</td>
-                                                <td>${cantidad}</td>
-                                                <td>${subtotal.toLocaleString('en-US')}</td>
+                                                var productosSeleccionados = document.getElementById('selected-products-list');
+                                                var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
+                                                var existingRow = productosSeleccionados.querySelector(`tr[data-producto-id="${id}"]`);
 
-                                                <td>
-                                                    <button class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')"> <li class="fas fa-trash"></li></button>
-                                                </td>
-                                            `;
-                                        productosSeleccionados.appendChild(row);
+                                                if (existingRow) {
+                                                    var existingCantidad = parseInt(existingRow.getAttribute('data-cantidad'));
+                                                    var newCantidad = existingCantidad + cantidad;
+                                                    var newSubtotal = newCantidad * precio;
 
-                                        var inputCantidad = document.createElement('input');
-                                        inputCantidad.type = 'hidden';
-                                        inputCantidad.name = 'Cantidad[]';
-                                        inputCantidad.value = cantidad;
-                                        row.appendChild(inputCantidad);
+                                                    existingRow.setAttribute('data-cantidad', newCantidad);
+                                                    existingRow.setAttribute('data-subtotal', newSubtotal);
+                                                    existingRow.querySelector('td:nth-child(2)').textContent = newCantidad;
+                                                    existingRow.querySelector('td:nth-child(3)').textContent = newSubtotal.toLocaleString(
+                                                        'en-US');
+                                                } else {
+                                                    var row = document.createElement('tr');
+                                                    row.setAttribute('data-producto-id', id);
+                                                    row.setAttribute('data-cantidad', cantidad);
+                                                    row.setAttribute('data-subtotal', subtotal);
+                                                    row.innerHTML = `
+                                                        <td>${nombre}</td>
+                                                        <td>${cantidad}</td>
+                                                        <td>${subtotal.toLocaleString('en-US')}</td>
+                                                        <td>
+                                                            <button class="btn btn-danger btn-sm quitar-btn" onclick="quitarProducto('${id}')">
+                                                                <li class="fas fa-trash"></li>
+                                                            </button>
+                                                        </td>
+                                                    `;
+                                                    productosSeleccionados.appendChild(row);
+                                                }
 
-                                        var inputProductoID = document.createElement('input');
-                                        inputProductoID.type = 'hidden';
-                                        inputProductoID.name = 'ProductoID[]';
-                                        inputProductoID.value = id;
-                                        row.appendChild(inputProductoID);
+                                                // Actualizar el total después de todas las operaciones
+                                                total += subtotal;
 
-                                        var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('tr')).map(function(
-                                            row) {
-                                            return row.getAttribute('data-producto-id');
-                                        });
-                                        inputProductosSeleccionados.value = productosSeleccionadosArray.join(', ');
-                                        // Formatear el total con el punto del millar
-                                        var totalFormateado = total.toLocaleString(undefined, {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2
-                                        });
-                                        totalElement.textContent = totalFormateado;
-                                        totalSection.style.display = 'block';
+                                                var totalFormateado = total.toLocaleString(undefined, {
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                });
+                                                totalElement.textContent = totalFormateado;
+                                                totalSection.style.display = 'block';
 
-                                        var totalInput = document.getElementById('total-input');
-                                        totalInput.value = total.toFixed(2);
-                                    }
+                                                var totalInput = document.getElementById('total-input');
+                                                totalInput.value = total.toFixed(2);
 
+                                                 // Resto del código para actualizar inputs y totales...
+                                                 var inputCantidad = document.createElement('input');
+                                                inputCantidad.type = 'hidden';
+                                                inputCantidad.name = 'Cantidad[]';
+                                                inputCantidad.value = cantidad;
+                                                row.appendChild(inputCantidad);
+
+                                                var inputProductoID = document.createElement('input');
+                                                inputProductoID.type = 'hidden';
+                                                inputProductoID.name = 'ProductoID[]';
+                                                inputProductoID.value = id;
+                                                row.appendChild(inputProductoID);
+
+                                                var productosSeleccionadosArray = Array.from(productosSeleccionados.querySelectorAll('tr'))
+                                                    .map(function(
+                                                        row) {
+                                                        return row.getAttribute('data-producto-id');
+                                                    });
+                                                inputProductosSeleccionados.value = productosSeleccionadosArray.join(', ');
+                                            }
+                                        }
+                                    });
                                 }
 
                                 function quitarProducto(id) {

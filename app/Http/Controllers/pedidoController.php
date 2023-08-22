@@ -130,10 +130,20 @@ class pedidoController extends Controller
                     $personalizadoModel->datos = $insumo;
 
                     $personalizadoModel->save();
-                    // Realizar el descuento del insumo asociado al producto personalizado
+
+
+                    
+                    $coleccionPersonalizados[] = $personalizadoModel;
+                    $ultimoModelo = end($coleccionPersonalizados);
+                    $ultimoDato = $ultimoModelo->datos;
+                    $ultimoDatoss = explode(':', $ultimoDato);
+                    $ultimaParte = end($ultimoDatoss);
+                    $soloNumeros = preg_replace('/[^0-9]/', '', $ultimaParte);
                     $insumo = Insumo::find($id);
                     if ($insumo) {
-                        $insumo->cantidad_disponible -= 1;
+                        // return response()->json($soloNumeros);
+
+                        $insumo->cantidad_disponible -= 1 + $soloNumeros;
                         if ($insumo->cantidad_disponible < 3) {
                             $pedidos = Pedido::all();
                             return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
@@ -160,6 +170,7 @@ class pedidoController extends Controller
                     if ($insumo_producto) {
                         $insumo = Insumo::find($insumo_producto->insumo_id);
                         if ($insumo) {
+
                             $insumo->cantidad_disponible -= 3;
                             if ($insumo->cantidad_disponible < 3) {
                                 $pedidos = Pedido::all();
@@ -336,6 +347,25 @@ class pedidoController extends Controller
                     $personalizadoModel->datos = $insumo;
 
                     $personalizadoModel->save();
+
+                    $coleccionPersonalizados[] = $personalizadoModel;
+                    $ultimoModelo = end($coleccionPersonalizados);
+                    $ultimoDato = $ultimoModelo->datos;
+                    $ultimoDatoss = explode(':', $ultimoDato);
+                    $ultimaParte = end($ultimoDatoss);
+                    $soloNumeros = preg_replace('/[^0-9]/', '', $ultimaParte);
+                    $insumo = Insumo::find($id);
+                    if ($insumo) {
+                        // return response()->json($soloNumeros);
+
+                        $insumo->cantidad_disponible -= 1 + $soloNumeros;
+                        if ($insumo->cantidad_disponible < 3) {
+                            $pedidos = Pedido::all();
+                            return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
+                            // return view('pedidos.index', compact('pedidos'))->with('error', 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre);
+                        }
+                        $insumo->save();
+                    } 
                 }
             }
         }
@@ -352,7 +382,7 @@ class pedidoController extends Controller
                 }
                 $Nombre = $personalizado['Nombre'];
                 $subtotal = (int) $personalizado['Subtotal'];
-                
+
                 $total = $subtotal;
                 $datos = $personalizado['datos'];
 
@@ -365,17 +395,12 @@ class pedidoController extends Controller
                     $personalizadoModel->id_pedidos = $pedido->id;
                     $personalizadoModel->insumos = $id;
                     $personalizadoModel->Subtotal = $subtotal;
-                    $formattedData = "id: " . $id .  $Nombre .  " (cantidad:" . $Cantidad.")";
+                    $formattedData = "id: " . $id . $Nombre . " (cantidad:" . $Cantidad . ")";
                     $personalizadoModel->datos = $datos;
 
 
                     $personalizadoModel->save();
-                    // Realizar el descuento del insumo asociado al producto personalizado
-                    $insumo = Insumo::find($id);
-                    if ($insumo) {
-                        $insumo->cantidad_disponible -= 1;
-                        $insumo->save();
-                    }
+                   
                 }
             }
         }
@@ -528,9 +553,17 @@ class pedidoController extends Controller
 
                     $personalizadoModel->save();
                     // Realizar el descuento del insumo asociado al producto personalizado
+                    $coleccionPersonalizados[] = $personalizadoModel;
+                    $ultimoModelo = end($coleccionPersonalizados);
+                    $ultimoDato = $ultimoModelo->datos;
+                    $ultimoDatoss = explode(':', $ultimoDato);
+                    $ultimaParte = end($ultimoDatoss);
+                    $soloNumeros = preg_replace('/[^0-9]/', '', $ultimaParte);
                     $insumo = Insumo::find($id);
                     if ($insumo) {
-                        $insumo->cantidad_disponible -= 1;
+                        // return response()->json($soloNumeros);
+
+                        $insumo->cantidad_disponible -= 1 + $soloNumeros;
                         if ($insumo->cantidad_disponible < 3) {
                             $pedidos = Pedido::all();
                             return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
