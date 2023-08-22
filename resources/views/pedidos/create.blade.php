@@ -12,7 +12,7 @@
         margin-bottom: 20px;
         height: 5em;
         position: relative;
-        width: 180%;
+        width: 106%;
         right: 2.3em;
         bottom: 1em;
         ">
@@ -29,24 +29,15 @@
         </div>
 
         <div class="section-body">
+            @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <strong>¡Revise los campos!</strong>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-
-
-                            @if ($errors->any())
-                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endif
 
 
 
@@ -67,14 +58,13 @@
 
                                     <!-- Modal Personalizados-->
                                     <div class="modal fade my-modal" id="Personalizados" tabindex="-1" role="dialog"
-                                        aria-labelledby="Personalizados" aria-hidden="true"
-                                        style="position: absolute; z-index: 1050;">
-                                        <div class="modal-dialog modal-lg" role="document">
+                                        aria-labelledby="Personalizados" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl" role="document">
                                             <div class="modal-content">
+
                                                 <div class="modal-header">
                                                     <h2 style="" class="modal-title" id="Personalizados">Producto
                                                         Personalizados</h2>
-
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -87,50 +77,97 @@
                                                     </div>
                                                     <div style="display: flex">
                                                         <div class="insumos"
-                                                            style="flex: 1; margin-right: 20px; overflow-y: scroll; max-height: 200px;">
+                                                            style="flex: 1; margin-right: 20px; overflow-y: scroll; max-height: 20em;">
                                                             <div class="form-group">
-                                                                <input type="text" class="form-control" id="buscarInsumo"
+                                                                <input
+                                                                    style="border-top: none; border-right: none; border-left: none;"
+                                                                    type="text" class="form-control" id="buscarInsumo"
                                                                     placeholder="Ingresa el nombre del insumo">
                                                             </div>
-                                                            @foreach ($Insumo as $Insumos)
-                                                                <div style="margin: 1em" class="insumo"
-                                                                    data-id="{{ $Insumos->id }}">
-                                                                    <img src="{{ asset($Insumos->imagen) }}"
-                                                                        alt="Imagen del producto" width="40em">
-                                                                    <span>{{ $Insumos->id }} : {{ $Insumos->nombre }} $:
-                                                                        {{ $Insumos->precio_unitario }}</span>
-                                                                    <button type="button"
-                                                                        class="btn btn-success agregar-insumo"
-                                                                        style="max-width: 1em; max-height: 1.5em;">
-                                                                        <i class="fas fa-plus fa-xs"
-                                                                            style="position: relative; bottom: 8.5px;right: 5px"></i>
-                                                                        <!-- Icono de Font Awesome para el botón -->
-                                                                    </button>
-                                                                    <br>
-                                                                </div>
-                                                            @endforeach
+
+                                                            <table class="table">
+                                                                <tbody>
+                                                                    @foreach ($Insumo as $Insumos)
+                                                                        <tr class="insumo" data-id="{{ $Insumos->id }}">
+                                                                            <td><img src="{{ asset($Insumos->imagen) }}"
+                                                                                    alt="Imagen del producto"
+                                                                                    width="40em"></td>
+                                                                            <td>{{ $Insumos->id }}</td>
+                                                                            <td>{{ $Insumos->nombre }}</td>
+                                                                            <td>${{ $Insumos->precio_unitario }}</td>
+                                                                            <td>
+                                                                                <button type="button"
+                                                                                    class="btn btn-success agregar-insumo"
+                                                                                    style="max-width: 1em; max-height: 1.5em;">
+                                                                                    <i class="fas fa-plus fa-xs"
+                                                                                        style="position: relative; bottom: 8.5px;right: 5px"></i>
+                                                                                </button>
+                                                                                {{-- <button type="button"
+                                                                                    class="btn btn-primary agregar-insumox2"
+                                                                                    style="max-width: 2.2em; max-height: 1.5em;">
+                                                                                    <i class="fas fa-times"
+                                                                                        style="position: relative; bottom: 8.5px;right: 5px">
+                                                                                        2</i>
+                                                                                </button> --}}
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+
                                                         </div>
-
-
                                                         <div class="insumos_selecionados"
-                                                            style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 200px;">
+                                                            style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 20em;">
                                                             <h3>Insumo seleccionados</h3>
                                                             <div id="totalInsumosSeleccionados">
                                                                 Total: $0.00
                                                             </div>
                                                             <ul class="lista-insumos-seleccionados"></ul>
-                                                            <!-- Usaremos una lista para mostrar los insumos seleccionados -->
+                                                            <!-- Agrega esta tabla en el modal donde deseas mostrar los insumos seleccionados -->
+                                                            <div class="insumos_selecionados"
+                                                                style="flex: 1; margin-top: 10px; overflow-y: scroll; max-height: 20em;">
+                                                                <table class="table tabla-insumos-seleccionados">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>ID</th>
+                                                                            <th>Nombre</th>
+                                                                            <th>Cantida</th>
+                                                                            <th>Precio</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <!-- Los insumos seleccionados se agregarán aquí dinámicamente -->
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div
+                                                    style="display: flex;align-items: center ;justify-content: center;padding: 0em; position: relative;bottom: 1em;">
 
-                                                <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" id="crearPersonalizados"
-                                                        data-dismiss="modal"
-                                                        onclick="actualizarTotalCarrito(true); mostrarAlertaExitosa('Producto agregado al carrito exitosamente');">Crear</button>
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Cerrar</button>
+                                                    <div class="form-group"
+                                                        style="margin: 0em;padding: 0em;width: 75%;;position: relative;bottom: 1em">
+                                                        <label for="descripcionnn">Descripción:</label>
+                                                        <textarea class="form-control" maxlength="200"
+                                                            style="width: 100%; height: 3em !important; resize: none; position: relative; right: 1em !important;"
+                                                            id="descripcionnn"></textarea>
+                                                    </div>
+
+
+                                                    <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
+                                                    <div class="modal-footer" style="margin: 0em;padding: 0em;">
+                                                        <button type="button" class="btn btn-primary"
+                                                            id="crearPersonalizados" data-dismiss="modal"
+                                                            onclick=" mostrarAlertaExitosa('Producto agregado al carrito exitosamente');">
+                                                            Crear
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Cerrar</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -149,9 +186,10 @@
 
                                                 // Mostrar solo los insumos que coinciden con el término de búsqueda
                                                 insumosFila.forEach(function(filaInsumo) {
-                                                    const textoInsumo = filaInsumo.querySelector('span').textContent.toLowerCase();
+                                                    const textoInsumo = filaInsumo.querySelector('td:nth-child(3)').textContent
+                                                        .toLowerCase();
                                                     if (textoInsumo.includes(terminoBusqueda)) {
-                                                        filaInsumo.style.display = 'block';
+                                                        filaInsumo.style.display = 'table-row';
                                                     } else {
                                                         filaInsumo.style.display = 'none';
                                                     }
@@ -160,6 +198,9 @@
                                         });
                                     </script>
                                     <!-- Modal Personalizados-->
+
+
+
                                     @foreach ($productos as $producto)
                                         @if ($producto->activo)
                                             <li>
@@ -177,8 +218,8 @@
                                             <!-- Modal productModal-->
                                             <div class="modal fade my-modal" id="productModal_{{ $producto->id }}"
                                                 tabindex="-1" role="dialog"
-                                                aria-labelledby="productModalLabel_{{ $producto->id }}" aria-hidden="true"
-                                                style="position: absolute; z-index: 1050;">
+                                                aria-labelledby="productModalLabel_{{ $producto->id }}"
+                                                aria-hidden="true" style="position: absolute; z-index: 1050;">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -295,9 +336,10 @@
                                         </div>
                                         <div class="modal-body">
                                             <h6 class="modal-nombre">Nombre:</h6>
-                                            <ul id="modalPersonalizadoInsumos" class="list-group">
+                                            <ul id="modalPersonalizadoInsumos" class="">
                                                 <!-- Insumos se agregarán aquí -->
                                             </ul>
+                                            <p class="modal-descripcion">Descripción:</p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -322,9 +364,12 @@
                                         insumosList.empty();
 
                                         productoPersonalizado.insumos.forEach(function(insumo) {
-                                            var insumoItem = $('<li>').addClass('list-group-item').text(insumo);
+                                            var insumoItem = $('<li>').text(insumo);
                                             insumosList.append(insumoItem);
                                         });
+
+                                        // Agregar la descripción al modal
+                                        modal.find('.modal-descripcion').text('Descripción: ' + productoPersonalizado.Descripcion);
                                     });
                                 });
                             </script>
@@ -455,73 +500,225 @@
 
                             <script>
                                 $(document).ready(function() {
-                                    var maxSeleccionados = 3; // Cantidad máxima de productos seleccionados
+                                    $('#Personalizados').on('hidden.bs.modal', function() {
+                                        $('#descripcion').val('');
+                                    });
+
+                                    var maxSeleccionados = 3;
                                     var insumosSeleccionadosSet = new Set();
-
-                                    $('.agregar-insumo').click(function() {
-                                        if ($('.insumos_selecionados li').length < maxSeleccionados) {
-                                            var insumoId = $(this).closest('.insumo').data('id');
-
-                                            var insumoNombre = $(this).siblings('span').text();
-                                            if (!insumosSeleccionadosSet.has(insumoId)) {
-                                                // Agrega el insumo al conjunto de IDs de insumos seleccionados
-                                                insumosSeleccionadosSet.add(insumoId);
-
-                                                // Crea un elemento de lista con el nombre del insumo seleccionado
-                                                var listItem = $('<li>').text(insumoNombre);
-
-                                                // Agrega un botón para eliminar el insumo seleccionado
-                                                // var removeButton = $('<button>').text('Quitar').addClass(
-                                                //     'btn btn-danger quitar-insumo');
-                                                var removeButton = $('<button>').html('<i class="fas fa-trash"></i>').addClass(
-                                                    'btn btn-danger quitar-insumo').css({
-                                                    margin: '8px',
+                                    var numeroPersonalizado = 1;
+                                    var insumosCantidad = {}; // Objeto para almacenar la cantidad de insumos iguales
 
 
 
-                                                });
-                                                // Agrega el insumo seleccionado a la lista de insumos seleccionados
-                                                $('.lista-insumos-seleccionados').append(listItem.append(removeButton));
-                                            } else {
-                                                nosepuedeAgregar('El insumo ya ha sido seleccionado anteriormente.');
-                                            }
-                                            recalcularTotalInsumosSeleccionados();
+                                    var productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados'));
+                                    if (productosPersonalizadosGuardados && productosPersonalizadosGuardados.length > 0) {
+                                        var ultimoNumeroPersonalizado = productosPersonalizadosGuardados[productosPersonalizadosGuardados
+                                            .length - 1].NumeroPersonalizado;
+                                        numeroPersonalizado = ultimoNumeroPersonalizado + 1;
+                                    }
+                                    // nosepuedeAgregar
+                                    $(document).on('click', '.agregar-insumo', function() {
+                                        let insumoNombre = $(this).closest('tr').find('td:nth-child(3)').text();
+                                        let insumoId = $(this).closest('tr').data('id');
+                                        let insumoPrecio = parseFloat($(this).closest('tr').find('td:nth-child(4)').text().match(
+                                            /\d+/)[0]);
 
+                                        let cantidadTotal = Object.values(insumosCantidad).reduce((total, cantidad) => total +
+                                            cantidad, 0);
+
+                                        if ($('.tabla-insumos-seleccionados tbody tr').length >= maxSeleccionados ||
+                                            cantidadTotal >= maxSeleccionados) {
+                                            nosepuedeAgregar('No puedes agregar más insumos o la cantidad total ya es 3.');
+                                            return;
+                                        }
+
+                                        if (insumosSeleccionadosSet.has(insumoId)) {
+                                            insumosCantidad[insumoId]++;
+                                            let insumoFila = $(`.tabla-insumos-seleccionados tbody tr[data-id="${insumoId}"]`);
+                                            insumoFila.find('td:nth-child(3)').text(insumosCantidad[insumoId]);
                                         } else {
-                                            nosepuedeAgregar('Ya has seleccionado la cantidad máxima de productos.');
+                                            insumosSeleccionadosSet.add(insumoId);
+                                            insumosCantidad[insumoId] = 1;
+
+                                            var newRow = $('<tr>').attr('data-id', insumoId);
+                                            newRow.append($('<td>').text(insumoId));
+                                            newRow.append($('<td>').text(insumoNombre));
+                                            newRow.append($('<td>').text(insumosCantidad[insumoId]));
+                                            newRow.append($('<td>').text(`$${insumoPrecio}`));
+
+                                            var removeButton = $('<button>').addClass('btn btn-danger quitar-insumo');
+                                            var removeIcon = $('<i>').addClass('fas fa-trash');
+                                            removeButton.append(removeIcon);
+                                            newRow.append($('<td>').append(removeButton));
+
+
+                                            $('.tabla-insumos-seleccionados tbody').append(newRow);
+                                        }
+
+                                        recalcularTotalInsumosSeleccionados();
+                                    });
+                                    $(document).on('click', '.agregar-insumox2', function() {
+                                        let insumoNombre = $(this).closest('tr').find('td:nth-child(3)').text();
+                                        let insumoId = $(this).closest('tr').data('id');
+                                        let insumoPrecio = parseFloat($(this).closest('tr').find('td:nth-child(4)').text().match(
+                                            /\d+/)[0]);
+
+                                        let cantidadTotal = Object.values(insumosCantidad).reduce((total, cantidad) => total +
+                                            cantidad, 0);
+
+                                        let cantidadInsumo = insumosCantidad[insumoId] || 0;
+
+                                        let existeInsumoConCantidadDosOMas = Object.values(insumosCantidad).some(cantidad =>
+                                            cantidad >= 2);
+
+                                        if (cantidadTotal >= maxSeleccionados || cantidadInsumo >= 2 ||
+                                            existeInsumoConCantidadDosOMas) {
+                                            nosepuedeAgregar(
+                                                'No puedes agregar más insumos o ya has agregado un insumo con cantidad x2.');
+                                            return;
+                                        }
+
+                                        if (insumosSeleccionadosSet.has(insumoId)) {
+                                            insumosCantidad[insumoId]++;
+                                            let insumoFila = $(`.tabla-insumos-seleccionados tbody tr[data-id="${insumoId}"]`);
+                                            insumoFila.find('td:nth-child(3)').text(insumosCantidad[insumoId]);
+                                        } else {
+                                            insumosSeleccionadosSet.add(insumoId);
+                                            insumosCantidad[insumoId] = 1;
+
+                                            var newRow = $('<tr>').attr('data-id', insumoId);
+                                            newRow.append($('<td>').text(insumoId));
+                                            newRow.append($('<td>').text(insumoNombre));
+                                            newRow.append($('<td>').text(insumosCantidad[insumoId] * 2));
+                                            newRow.append($('<td>').text(`$${insumoPrecio}`));
+
+                                            var removeButton = $('<button>').addClass('btn btn-danger quitar-insumo');
+                                            var removeIcon = $('<i>').addClass('fas fa-trash');
+                                            removeButton.append(removeIcon);
+                                            newRow.append($('<td>').append(removeButton));
+
+
+                                            $('.tabla-insumos-seleccionados tbody').append(newRow);
+                                        }
+
+                                        recalcularTotalInsumosSeleccionados();
+                                    });
+                                    $(document).on('click', '.quitar-insumo', function() {
+                                        var insumoId = $(this).closest('tr').data('id');
+
+                                        if (insumosSeleccionadosSet.has(insumoId)) {
+                                            var insumoFila = $(`.tabla-insumos-seleccionados tbody tr[data-id="${insumoId}"]`);
+                                            var cantidadActual = parseInt(insumoFila.find('td:nth-child(3)').text());
+
+                                            if (cantidadActual > 1) {
+                                                insumosCantidad[insumoId]--;
+                                                insumoFila.find('td:nth-child(3)').text(cantidadActual - 1);
+                                            } else {
+                                                insumosSeleccionadosSet.delete(insumoId);
+                                                delete insumosCantidad[insumoId];
+                                                insumoFila.remove();
+                                            }
+
+                                            recalcularTotalInsumosSeleccionados();
                                         }
                                     });
+                                    $('#crearPersonalizados').click(function() {
+                                        var insumosSeleccionados = $('.tabla-insumos-seleccionados tbody tr');
 
-                                    // Función para quitar un insumo seleccionado
-                                    $(document).on('click', '.quitar-insumo', function() {
-                                        var insumoId = $(this).closest('.insumo').data('id');
-                                        // Elimina el insumo del conjunto de IDs de insumos seleccionados
-                                        insumosSeleccionadosSet.clear(insumoId);
-                                        $(this).closest('li').remove();
-                                        // $('.lista-insumos-seleccionados').empty();
-                                        // insumosSeleccionadosSet.clear();
-                                        recalcularTotalInsumosSeleccionados();
+                                        var cantidadTotalInsumos = Object.values(insumosCantidad).reduce((total, cantidad) =>
+                                            total + cantidad, 0);
+
+                                        if (insumosSeleccionados.length < 3 && cantidadTotalInsumos < 3) {
+                                            nosepuedeAgregar(
+                                                'Debes seleccionar al menos un insumo para crear un producto personalizado.');
+                                            return; // Salir de la función si no hay insumos seleccionados
+                                        }
+
+                                        actualizarTotalCarrito(true);
+                                        // Obtener la descripción del campo de entrada de texto
+                                        var descripcion = $('#descripcion').val();
+                                        var personalizado = {
+                                            NumeroPersonalizado: numeroPersonalizado,
+                                            Nombre: `Personalizado ${numeroPersonalizado}`,
+                                            Subtotal: 0,
+                                            Cantidad: 1,
+                                            Descripcion: descripcion || 'Sin descripción',
+
+                                            insumos: []
+                                        };
+
+                                        insumosSeleccionados.each(function() {
+                                            var insumoId = $(this).data('id');
+                                            var insumoNombre = $(this).find('td:nth-child(2)').text();
+                                            var insumoPrecio = parseFloat($(this).find('td:nth-child(4)').text().match(
+                                                /\$(\d+(\.\d{1,2})?)/)[1]);
+
+                                            var insumoDetalles =
+                                                `${insumoId} : ${insumoNombre} $: ${insumoPrecio} (cantidad: ${insumosCantidad[insumoId]})`;
+                                            personalizado.insumos.push(insumoDetalles);
+                                            personalizado.Subtotal += insumoPrecio * insumosCantidad[insumoId];
+                                        });
+
+                                        numeroPersonalizado++;
+
+                                        var productosPersonalizados = JSON.parse(localStorage.getItem('productosPersonalizados')) ||
+                                            [];
+                                        productosPersonalizados.push(personalizado);
+                                        localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizados));
+
 
                                     });
+
+                                    // Función para recalcular el total de insumos seleccionados
+                                    function recalcularTotalInsumosSeleccionados() {
+                                        var total = 0;
+                                        $('.tabla-insumos-seleccionados tbody tr').each(function() {
+                                            var insumoPrecioSeleccionado = parseFloat($(this).find('td:nth-child(4)').text().match(
+                                                /\d+(\.\d{1,2})?/)[0]);
+                                            var cantidad = insumosCantidad[$(this).data('id')];
+
+                                            // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
+                                            // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
+                                            total += insumoPrecioSeleccionado * cantidad;
+                                        });
+
+                                        let formattedTotal = total.toLocaleString(undefined, {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        $('#totalInsumosSeleccionados').text(`Total: ${formattedTotal}`);
+                                    }
+
+                                    function recalcularTotalInsumosSeleccionados1() {
+                                        var total = 0;
+                                        $('.tabla-insumos-seleccionados tbody tr').each(function() {
+                                            var insumoPrecioSeleccionado = parseFloat($(this).find('td:nth-child(4)').text().match(
+                                                /\d+(\.\d{1,2})?/)[0]);
+                                            var cantidad = insumosCantidad[$(this).data('id')];
+
+                                            // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
+                                            // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
+                                            total += insumoPrecioSeleccionado * cantidad * 2;
+                                        });
+
+                                        let formattedTotal = total.toLocaleString(undefined, {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        $('#totalInsumosSeleccionados').text(`Total: ${formattedTotal}`);
+                                    }
 
                                     $('#Personalizados').on('hidden.bs.modal', function() {
-                                        // Elimina todos los insumos seleccionados y vacía el conjunto de IDs
-                                        $('.lista-insumos-seleccionados').empty();
-                                        insumosSeleccionadosSet.clear();
+                                        // Clear all the input fields, selected items, and any other content within the modal
+                                        $('#descripcionnn').val(''); // Clear description field
+                                        $('.tabla-insumos-seleccionados tbody').empty(); // Clear selected insumos
+                                        insumosSeleccionadosSet.clear(); // Clear selected insumos set
+                                        insumosCantidad = {}; // Clear insumosCantidad object
+                                        recalcularTotalInsumosSeleccionados(); // Recalculate total
                                     });
                                 });
-                                // Función para recalcular el total de insumos seleccionados
-                                function recalcularTotalInsumosSeleccionados() {
-                                    var total = 0;
-                                    $('.insumos_selecionados li').each(function() {
-                                        var insumoPrecioSeleccionado = parseFloat($(this).text().match(
-                                            /\$:\s*(\d+)/)[1]);
-                                        total += insumoPrecioSeleccionado;
-                                    });
 
-                                    // Actualizar el contenido del elemento HTML del total
-                                    $('#totalInsumosSeleccionados').text(`Total: $${total.toFixed(2)}`);
-                                }
 
                                 function nosepuedeAgregar(mensaje) {
                                     Swal.fire({
@@ -547,89 +744,93 @@
                                 var personalizadosArray = [];
 
                                 document.getElementById('crearPersonalizados').addEventListener('click', function() {
-                                    var insumosSeleccionados = Array.from(document.querySelectorAll('.insumos_selecionados li')).map(
-                                        function(li) {
-                                            return li.textContent.trim();
-                                        });
-
-
-
-                                    // Importa SweetAlert si estás usando npm o yarn
-                                    // import Swal from 'sweetalert2';
-
-                                    // Utiliza SweetAlert para mostrar una ventana emergente de entrada
+                                    var insumosSeleccionados = Array.from(document.querySelectorAll(
+                                        '.tabla-insumos-seleccionados tbody tr')).map(function(row) {
+                                        var id = row.querySelector('td:nth-child(1)').textContent.trim();
+                                        var nombre = row.querySelector('td:nth-child(2)').textContent.trim();
+                                        var cantidad = row.querySelector('td:nth-child(3)').textContent.trim();
+                                        // var precio = row.querySelector('td:nth-child(4)').textContent.trim();
+                                        var precioTexto = row.querySelector('td:nth-child(4)').textContent
+                                            .trim(); // Supongamos que obtienes "$1,000"
+                                        var precioNumerico = precioTexto.replace(/[$,]/g, '');
+                                        return `${id} : ${nombre}  : ${precioNumerico} (cantidad: ${cantidad})`;
+                                    });
+                                    // alert(JSON.stringify(insumosSeleccionados));
                                     Swal.fire({
                                         title: 'Ingrese la cantidad para el producto personalizado:',
                                         input: 'number',
-                                        inputValue: 1, // Valor por defecto
+                                        inputValue: 1,
                                         showCancelButton: true,
                                         confirmButtonText: 'Aceptar',
-                                        cancelButtonText: 'Cancelar',
+                                        cancelButtonText: 'Cancelar'
                                     }).then((result) => {
                                         if (result.isConfirmed) {
                                             var cantidad = result.value;
-                                            console.log('Cantidad ingresada:', cantidad);
 
-                                            // Ahora puedes usar la variable "cantidad" en tu lógica de código
+                                            if (!isNaN(cantidad) && cantidad > 0) {
+                                                cantidad = parseInt(cantidad);
 
+                                                var tableBody = document.getElementById('selected-products-list');
+                                                var subtotal = 0;
 
-                                            if (cantidad === null || cantidad === '') {
-                                                return; // Si el usuario cancela o no ingresa un valor, no se agrega el producto
+                                                insumosSeleccionados.forEach(function(insumo) {
+                                                    var data = insumo.split(':');
+                                                    var precio = parseFloat(data[2].trim());
+                                                    var CantidaInsumo = parseFloat(data[3].trim());
+
+                                                    subtotal += (precio * CantidaInsumo) * cantidad;
+                                                });
+                                                var descripcionnn = document.getElementById('descripcionnn')
+                                                    .value; // Obtener el valor de la descripción
+                                                // alert();
+                                                // alert(JSON.stringify(descripcionnn));
+
+                                                var personalizado = {
+                                                    'Nombre': 'Personalizado ' + (personalizadosArray.length + 1),
+                                                    'insumos': insumosSeleccionados,
+                                                    'Subtotal': subtotal,
+                                                    'Cantidad': cantidad,
+                                                    'Descripcion': descripcionnn // Agregar la descripción al objeto personalizado
+
+                                                };
+                                                personalizadosArray.push(personalizado);
+
+                                                var row = document.createElement('tr');
+                                                var uniqueId = personalizadosArray.length - 1;
+                                                row.innerHTML = `
+                                                <td>${personalizado.Nombre}</td>
+                                                <td>${cantidad}</td>
+                                                <td>${subtotal.toLocaleString('en-US')}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-info btn-sm detalles-btn" data-index="${uniqueId}" data-toggle="modal" data-target="#personalizadoDetallesModal">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </td>
+                                            `;
+                                                row.setAttribute('data-id', uniqueId);
+                                                tableBody.appendChild(row);
+
+                                                total += subtotal;
+                                                totalElement.textContent = total.toFixed(2);
+                                                totalSection.style.display = 'block';
+
+                                                var totalInput = document.getElementById('total-input');
+                                                totalInput.value = total.toFixed(2);
+
+                                                var personalizadosArrayInput = document.getElementById('personalizadosArray');
+                                                personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
+                                                // alert(JSON.stringify(personalizadosArray));
+                                            } else {
+                                                console.log('Cantidad no válida');
                                             }
-
-                                            cantidad = parseInt(cantidad);
-
-                                            var tableBody = document.getElementById('selected-products-list');
-                                            var subtotal = 0;
-
-                                            insumosSeleccionados.forEach(function(insumo) {
-                                                var data = insumo.split(':');
-                                                var precio = parseFloat(data[2].trim());
-                                                subtotal += parseFloat(precio) * cantidad;
-                                            });
-
-                                            var
-                                                personalizado = {}; // Crear un objeto para almacenar los datos del personalizado
-
-                                            var num = personalizadosArray.length + 1;
-                                            personalizado['Nombre'] = 'Personalizado ' + num;
-                                            personalizado['insumos'] = insumosSeleccionados;
-                                            personalizado['Subtotal'] = subtotal;
-                                            personalizado['Cantidad'] = cantidad; // Agregar la cantidad al objeto personalizado
-
-                                            personalizadosArray.push(personalizado);
-
-                                            var row = document.createElement('tr');
-                                            var uniqueId = personalizadosArray.length -
-                                                1; // Obtener el índice único del personalizado
-                                            row.innerHTML = `
-                                                                        <td>${personalizado.Nombre}</td>
-                                                                        <td>${cantidad}</td>
-                                                                        <td>${subtotal.toLocaleString('en-US')}</td>
-                                                                        <td>
-                                                                            <button type="button" class="btn btn-danger btn-sm quitar-btn" onclick="quitarProductoPersonalizados(${uniqueId})"> <i class="fas fa-trash"></i>  </button>
-                                                                            <button type="button" class="btn btn-info btn-sm detalles-btn" data-index="${uniqueId}" data-toggle="modal" data-target="#personalizadoDetallesModal">  <i class="fas fa-eye"></i> </button>
-                                                                        </td>
-                                                                    `;
-                                            row.setAttribute('data-id',
-                                                uniqueId); // Asignar el índice único como el atributo data-id
-                                            tableBody.appendChild(row);
-
-                                            total += subtotal; // Sumar el subtotal al total existente
-
-                                            totalElement.textContent = total.toFixed(2);
-                                            totalSection.style.display = 'block';
-
-                                            var totalInput = document.getElementById('total-input');
-                                            totalInput.value = total.toFixed(2);
-
-                                            var personalizadosArrayInput = document.getElementById('personalizadosArray');
-                                            personalizadosArrayInput.value = JSON.stringify(personalizadosArray);
-
                                         }
-                                    });
-                                });
 
+                                    });
+
+                                });
 
                                 function quitarProductoPersonalizados(index) {
                                     var productoPersonalizado = personalizadosArray[index];

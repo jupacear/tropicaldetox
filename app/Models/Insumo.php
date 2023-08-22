@@ -26,7 +26,7 @@ class Insumo extends Model
     'nombre' => 'required|unique:insumos,nombre',
     'activo' => 'boolean',
     'cantidad_disponible' => 'required|numeric',
-    'unidad_medida' => 'required',
+    // 'unidad_medida' => 'required',
     'precio_unitario' => 'required|numeric',
   ];
   static $rulesUpdate = [
@@ -34,7 +34,7 @@ class Insumo extends Model
     'nombre' => '',
     'activo' => '',
     'cantidad_disponible' => 'numeric',
-    'unidad_medida' => '',
+    // 'unidad_medida' => '',
     'precio_unitario' => 'numeric',
   ];
   protected $table = 'insumos';
