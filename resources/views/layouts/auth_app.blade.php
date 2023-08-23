@@ -1,7 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
+
 <head>
+<style>
+    html, body {
+  height: 82%;
+  
+}
+
+/* Contenedor del contenido principal */
+.content-wrapper {
+  min-height: 100%; /* Ocupará al menos toda la altura de la ventana */
+  margin-bottom: -60px; /* Altura del footer (ajusta según tu diseño) */
+}
+
+/* Footer */
+.footer {
+  
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* Altura del footer */
+}
+</style>
+    
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>@yield('title') | {{ config('app.name') }}</title>
@@ -38,12 +62,21 @@
 <body>
 @include('cliente.nav')
 
+<div class="content-wrapper">
+    @yield('content')
+</div>
 
-                        @yield('content')
+                       
                     
+<footer class="footer">
+    @include('cliente.footer')
+  </footer>
 
 
-@include('cliente.footer')
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>

@@ -138,7 +138,7 @@
                                     </script>
                                     <div class="col-md-12 mt-4">
                                         <div class="form-group">
-                                            <button type="submit" id="miBoton" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                                            <button type="submit" id="miBoton" class="btn btn-primary btn-lg btn-block" tabindex="4" style="background-color: rgb(173, 187, 50)">
                                                 Registrar
                                             </button>
                                         </div>

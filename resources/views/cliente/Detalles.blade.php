@@ -33,7 +33,7 @@
         <div class="row" style="margin-top:1.5em ">
             <div class="col-lg-12">
                 <div class="title-all text-center">
-                    <h1>pedido</h1>
+                    <h1>Pedido</h1>
                 </div>
             </div>
         </div>

@@ -4,7 +4,9 @@
 @endsection
 @section('content')
 
-
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
 
 
 @if ($errors->any())
@@ -27,7 +29,7 @@
         });
     </script>
 @endif
-<div class="container mb-5" style="padding-top: 60px;">
+<div class="container mb-5" style="padding-top: 80px;">
     <!--- Mensajes -->
     
     <h2 class="text-center">Cambiar contraseña <hr></h2>
@@ -107,8 +109,9 @@
     
                 <div class="row text-center mb-4 mt-5">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success btn-sm" id="formSubmit">Guardar Cambios</button>
-                        <a href="/home" class="btn btn-secondary btn-sm">Cancelar</a>
+                        <button type="submit" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn" id="formSubmit">Guardar Cambios</button>
+
+                        <a href="/home" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </div>
             </form>
@@ -156,5 +159,7 @@
         });
     </script>
 @endif
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 
 @endsection

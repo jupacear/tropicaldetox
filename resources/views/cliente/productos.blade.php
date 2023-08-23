@@ -138,7 +138,7 @@
 
                                     <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
                                     <div class="modal-footer" style="margin: 0em;padding: 0em;">
-                                        <button type="button" class="btn btn-primary" id="crearPersonalizados"
+                                        <button type="button" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn" id="crearPersonalizados"
                                             data-dismiss="modal"
                                             onclick=" mostrarAlertaExitosa('Producto agregado al carrito exitosamente');actualizarTotalCarrito()">
                                             Crear
