@@ -36,7 +36,7 @@
                                     <p><i class="fas fa-phone-square"></i>Phone: <a href="tel:+1-888705770">+57 3015892266</a></p>
                                 </li>
                                 <li>
-                                    <p><i class="fas fa-envelope"></i>Email: <a href="mailto:contactinfo@gmail.com">tropicaldetox@gmail.com</a></p>
+                                    <p><i class="fas fa-envelope"></i>Email: <a href="mailto:contactinfo@gmail.com">TropicalDetoxShop@hotmail.com</a></p>
                                 </li>
                             </ul>
                         </div>

@@ -80,14 +80,15 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success btn-lg btn-block" tabindex="4" style="background-color: rgb(95, 180, 78);">Enviar</button>
+                    <button type="submit" class="btn btn-success btn-lg btn-block" tabindex="4" style="background-color: rgb(173, 187, 50)">Enviar</button>
                 </div>
             </form>
+            <div class="mt-5 text-muted text-center">
+                ¿Recordaste tus datos de inicio de sesión? <a href="{{ route('login') }}">Iniciar sesión</a>
+            </div>
         </div>
     </div>
-    <div class="mt-5 text-muted text-center">
-        ¿Recordaste tus datos de inicio de sesión? <a href="{{ route('login') }}">Iniciar sesión</a>
-    </div>
+    
 </div>
     <script>
         window.addEventListener('load', function() {

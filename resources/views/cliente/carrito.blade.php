@@ -22,7 +22,7 @@
                     <p>{{ $message }}</p>
                 </div>
             @endif
-            <div class="row">
+            <div class="row" style="padding-top: 60px;">
                 <div class="col-lg-12">
                     <div class="title-all text-center">
                         <h1>Carrito de Compras</h1>
@@ -66,7 +66,7 @@
             </div>
 
             @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
-                <button type="submit" class="btn third" onclick="mostrarAlerta()">Guardar Pedido</button>
+                <button type="submit" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn "  onclick="mostrarAlerta()">Guardar Pedido</button>
             @else
                 <form id="formulario-guadar-pedido" action="{{ route('guardarPedido') }}" method="POST">
                     @csrf
@@ -89,7 +89,7 @@
                     </Script>
                     <input type="hidden" name="carrito" id="carrito" value="">
                     <input type="hidden" name="productosPersonalizados" id="productosPersonalizados" value="">
-                    <button type="submit" class="btn third">Guardar Pedido</button>
+                    <button type="submit" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn ">Guardar Pedido</button>
                 </form>
             @endif
         </div>
