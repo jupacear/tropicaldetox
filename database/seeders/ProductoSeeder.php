@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Producto;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Insumo;
 
 class ProductoSeeder extends Seeder
 {
@@ -26,7 +27,7 @@ class ProductoSeeder extends Seeder
             ],
             [
                 'imagen' => 'img/IMGWelcome/JugoManzana.png',
-                'nombre' => 'jugo de Manzana',
+                'nombre' => 'Jugo de Manzana',
                 'precio' => 5000,
                 'descripcion' => 'Frutas',
                 'activo' => true,
@@ -39,8 +40,7 @@ class ProductoSeeder extends Seeder
                 'descripcion' => 'Personalizado',
                 'activo' => true,
                 'categorias_id' => 3,
-            ], 
-            // aaa
+            ],
             [
                 'imagen' => 'img/IMGWelcome/JugoMaracuya.png',
                 'nombre' => 'Jugo de Maracuya',
@@ -67,8 +67,30 @@ class ProductoSeeder extends Seeder
             ],
         ];
 
-        foreach ($productos as $producto) {
-            Producto::create($producto);
+        // Arreglo de nombres de insumos por producto
+        $insumosPorProducto = [
+            'Jugo de Durazno' => ['Maracuya', 'Mango'],
+            'Jugo de Manzana' => ['Fresa', 'Mango'],
+            'Guayaba con mango' => ['Maracuya', 'Fresa'],
+            'Jugo de Maracuya' => ['Maracuya', 'Fresa'],
+            'Jugo de papaya' => ['Maracuya', 'Fresa'],
+            'Jugo de Pera' => ['Mango', 'Maracuya'],
+        ];
+        
+        foreach ($productos as $productoData) {
+            $insumoNombres = $insumosPorProducto[$productoData['nombre']];
+            $productoDataWithoutInsumos = $productoData; // Hacemos una copia para eliminar el campo 'insumos'
+            unset($productoDataWithoutInsumos['insumos']);
+
+            $producto = Producto::create($productoDataWithoutInsumos);
+
+            // Buscar los insumos por nombre y adjuntarlos al producto
+            foreach ($insumoNombres as $nombre) {
+                $insumo = Insumo::where('nombre', $nombre)->first();
+                if ($insumo) {
+                    $producto->insumos()->attach($insumo);
+                }
+            }
         }
     }
 }

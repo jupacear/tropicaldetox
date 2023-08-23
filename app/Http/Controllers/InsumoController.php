@@ -164,9 +164,7 @@ class InsumoController extends Controller
 
         // Actualizar los demás campos del insumo
         $insumo->nombre = $request->input('nombre');
-        $insumo->activo = $activo;
-        $insumo->cantidad_disponible = $request->input('cantidad_disponible');
-        $insumo->unidad_medida = $request->input('unidad_medida');
+        $insumo->cantidad_disponible = $request->input('cantidad_disponible') * 3;
         $insumo->precio_unitario = $request->input('precio_unitario');
 
         // Guardar los cambios en la base de datos

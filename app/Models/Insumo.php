@@ -32,7 +32,6 @@ class Insumo extends Model
   static $rulesUpdate = [
     'imagen' => 'image|mimes:jpg,png|max:2048',
     'nombre' => '',
-    'activo' => '',
     'cantidad_disponible' => 'numeric',
     // 'unidad_medida' => '',
     'precio_unitario' => 'numeric',
