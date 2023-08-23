@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Producto;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Insumo;
 
 class ProductoSeeder extends Seeder
 {
@@ -17,33 +18,79 @@ class ProductoSeeder extends Seeder
     {
         $productos = [
             [
-                'imagen' => 'img/logo.png',
-                'nombre' => 'Piloncillo y Vainilla',
-                'precio' => 2999,
+                'imagen' => 'img/IMGWelcome/JugoKiwi.png',
+                'nombre' => 'Jugo de Durazno',
+                'precio' => 2000,
                 'descripcion' => 'Verdes',
                 'activo' => true,
                 'categorias_id' => 1,
             ],
             [
-                'imagen' => 'img/logo.png',
-                'nombre' => 'jugo de Manzana',
+                'imagen' => 'img/IMGWelcome/JugoManzana.png',
+                'nombre' => 'Jugo de Manzana',
                 'precio' => 5000,
                 'descripcion' => 'Frutas',
                 'activo' => true,
                 'categorias_id' => 2,
             ],
             [
-                'imagen' => 'img/logo.png',
+                'imagen' => 'img/IMGWelcome/CategoriaFrutas.png',
                 'nombre' => 'Guayaba con mango',
                 'precio' => 9000,
                 'descripcion' => 'Personalizado',
                 'activo' => true,
                 'categorias_id' => 3,
             ],
+            [
+                'imagen' => 'img/IMGWelcome/JugoMaracuya.png',
+                'nombre' => 'Jugo de Maracuya',
+                'precio' => 2000,
+                'descripcion' => 'Frutas',
+                'activo' => true,
+                'categorias_id' => 1,
+            ],
+            [
+                'imagen' => 'img/IMGWelcome/JugoPapaya.png',
+                'nombre' => 'Jugo de papaya',
+                'precio' => 5000,
+                'descripcion' => 'Frutas',
+                'activo' => true,
+                'categorias_id' => 2,
+            ],
+            [
+                'imagen' => 'img/IMGWelcome/JugoPera.png',
+                'nombre' => 'Jugo de Pera',
+                'precio' => 9000,
+                'descripcion' => 'Verdes',
+                'activo' => true,
+                'categorias_id' => 2,
+            ],
         ];
 
-        foreach ($productos as $producto) {
-            Producto::create($producto);
+        // Arreglo de nombres de insumos por producto
+        $insumosPorProducto = [
+            'Jugo de Durazno' => ['Maracuya', 'Mango'],
+            'Jugo de Manzana' => ['Fresa', 'Mango'],
+            'Guayaba con mango' => ['Maracuya', 'Fresa'],
+            'Jugo de Maracuya' => ['Maracuya', 'Fresa'],
+            'Jugo de papaya' => ['Maracuya', 'Fresa'],
+            'Jugo de Pera' => ['Mango', 'Maracuya'],
+        ];
+        
+        foreach ($productos as $productoData) {
+            $insumoNombres = $insumosPorProducto[$productoData['nombre']];
+            $productoDataWithoutInsumos = $productoData; // Hacemos una copia para eliminar el campo 'insumos'
+            unset($productoDataWithoutInsumos['insumos']);
+
+            $producto = Producto::create($productoDataWithoutInsumos);
+
+            // Buscar los insumos por nombre y adjuntarlos al producto
+            foreach ($insumoNombres as $nombre) {
+                $insumo = Insumo::where('nombre', $nombre)->first();
+                if ($insumo) {
+                    $producto->insumos()->attach($insumo);
+                }
+            }
         }
     }
 }

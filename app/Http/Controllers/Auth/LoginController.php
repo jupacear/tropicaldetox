@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categorium;
+use App\Models\Insumo;
 use App\Models\Producto;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -44,10 +45,10 @@ class LoginController extends Controller
             'login_error' => 'Correo o contraseña incorrectos. Por favor, inténtalo de nuevo.',
         ]);
     }
-    
+
     protected function authenticated(Request $request, $user)
     {
-        
+
         $data = $this->indexData();
         // Verificar si el usuario está inactivo
         if (!$user->estado) {
@@ -75,7 +76,7 @@ class LoginController extends Controller
     {
         $categorias = Categorium::where('activo', true)->get();
         $productos = Producto::all();
-
-        return compact('categorias', 'productos');
+        $Insumo = Insumo::all();
+        return compact('categorias', 'productos','Insumo');
     }
 }

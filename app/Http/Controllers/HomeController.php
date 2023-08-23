@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorium;
+use App\Models\Insumo;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,7 @@ class HomeController extends Controller
     {
         $categorias = Categorium::where('activo', true)->get();
         $productos = Producto::all();
-
-        return compact('categorias', 'productos');
+        $Insumo = Insumo::all();
+        return compact('categorias', 'productos','Insumo');
     }
 }

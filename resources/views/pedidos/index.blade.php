@@ -29,18 +29,18 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a class="btn btn-warning" href="{{ url('pedidos/create') }}">Nuevo</a>
+                        <a class="btn btn-warning" style="margin-bottom: 20px"
+                            href="{{ url('pedidos/create') }}">Nuevo</a>
                         <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead style="background-color:#6777ef">
                                 <th style="color:#fff;">No</th>
-
                                 <th style="color:#fff;">Nombre</th>
                                 <th style="color:#fff;">Telefono</th>
                                 <th style="color:#fff;">Direcion</th>
                                 <th style="color:#fff;">Estado</th>
                                 <th style="color:#fff;">Fecha</th>
                                 <th style="color:#fff;">Total</th>
-                                <th style="color:#fff;">Opciones</th>
+                                <th style="color:#fff;">Acciones</th>
                             </thead>
                             @php $Numero = 1 @endphp
 
@@ -122,7 +122,6 @@
                                             </td>
                                         </tr>
                                         @php $Numero++ @endphp
-
                                     @endif
                                 @endforeach
 
@@ -151,9 +150,7 @@
                                                     @csrf
                                                     @method('PUT')
                                                     <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-{{ $pedido->Estado == 'En_proceso' ? 'primary' : 'success' }}"
-                                                        onclick="cambiarEstado({{ $pedido->id }}) ">
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick=" ">
                                                         {{ $pedido->Estado }}
                                                     </button>
                                                 </form>
@@ -161,21 +158,21 @@
                                             <td>{{ $pedido->Fecha }}</td>
                                             <td> {{ number_format($pedido->Total, 0, ',', '.') }}</td>
                                             <td style="display: flex">
-                                                <div class="text-center" style="display: flex">
+                                                <div class="text-center ">
                                                     <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
                                                         <a href="{{ route('pedidos.show', $pedido->id) }}"
-                                                            class="btn btn-sm btn-primary"><i
+                                                            class="btn btn-sm btn-primary "><i
                                                                 class="fa fa-fw fa-eye"></i></a></a>
-                                                        <a class="btn btn-sm btn-success"
+                                                        {{-- <a class="btn btn-sm btn-success"
                                                             href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
                                                             <i class="fa fa-fw fa-edit"></i>
-                                                        </a>
+                                                        </a> --}}
                                                         {{-- <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
                                                             <i class="fa fa-fw fa-trash"></i>
                                                         </button> --}}
 
                                                     </form>
-                                                    <form action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
+                                                    {{-- <form action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
                                                         method="POST" id="form-estadoo-{{ $pedido->id }}">
                                                         @csrf
                                                         @method('PUT')
@@ -189,7 +186,7 @@
                                                             onclick="cambiarEstadoq({{ $pedido->id }})">
                                                             <i class="fa fa-fw fa-toggle-off"></i>
                                                         </button>
-                                                    </form>
+                                                    </form> --}}
 
 
                                                     {{-- <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
@@ -200,7 +197,6 @@
                                             </td>
                                         </tr>
                                         @php $Numero++ @endphp
-
                                     @endif
                                 @endforeach
                             </tbody>
@@ -241,8 +237,6 @@
         // Cambiar el estado
         if (estado === 'En_proceso') {
             estado = 'Finalizado';
-        } else {
-            estado = 'En_proceso';
         }
         estadoInput.value = estado;
 
@@ -252,7 +246,7 @@
             button.classList.remove('btn-success');
             button.classList.add('btn-primary');
             button.innerText = 'En proceso';
-        } else {
+        } else if (estado === 'En_proceso') {
             button.classList.remove('btn-primary');
             button.classList.add('btn-success');
             button.innerText = 'Finalizado';
@@ -263,32 +257,41 @@
     }
 
     function cambiarEstadoq(pedidoId) {
-        var form = document.getElementById('form-estado-' + pedidoId);
-        var estadoInput = form.querySelector('input[name="Estado"]');
-        var estado = estadoInput.value;
+        Swal.fire({
+            title: 'Confirmar cambio de estado',
+            text: '¿Estás seguro de que deseas cambiar el estado?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, cambiar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var form = document.getElementById('form-estado-' + pedidoId);
+                var estadoInput = form.querySelector('input[name="Estado"]');
+                var estado = estadoInput.value;
 
-        // Cambiar el estado
-        if (estado === 'En_proceso') {
-            estado = 'Cancelado';
-        } else {
-            estado = 'En_proceso';
-        }
-        estadoInput.value = estado;
+                // Cambiar el estado
+                if (estado === 'En_proceso') {
+                    estado = 'Cancelado';
+                }
+                estadoInput.value = estado;
 
-        // Cambiar el color del botón y mostrar el mensaje
-        var button = form.querySelector('button');
-        if (estado === 'En_proceso') {
-            button.classList.remove('btn-success');
-            button.classList.add('btn-primary');
-            button.innerText = 'En proceso';
-        } else {
-            button.classList.remove('btn-primary');
-            button.classList.add('btn-success');
-            button.innerText = 'Finalizado';
-        }
+                // Cambiar el color del botón y mostrar el mensaje
+                var button = form.querySelector('button');
+                if (estado === 'En_proceso') {
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-primary');
+                    button.innerText = 'En proceso';
+                } else {
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-success');
+                    button.innerText = 'Finalizado';
+                }
 
-        // Enviar el formulario
-        form.submit();
+                // Enviar el formulario
+                form.submit();
+            }
+        });
     }
 </script>
 

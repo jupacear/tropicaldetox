@@ -48,7 +48,7 @@
                                 <th style="color:#fff;">Estado</th>
                                 <th style="color:#fff;">Fecha</th>
                                 <th style="color:#fff;">Total</th>
-                                <th style="color:#fff;">Opciones</th>
+                                <th style="color:#fff;">Acciones</th>
                             </thead>
                             @php $Numero = 1 @endphp
 
