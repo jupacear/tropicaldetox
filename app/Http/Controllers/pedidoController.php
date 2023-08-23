@@ -143,7 +143,7 @@ class pedidoController extends Controller
                     if ($insumo) {
                         // return response()->json($soloNumeros);
 
-                        $insumo->cantidad_disponible -= 1 + $soloNumeros;
+                        $insumo->cantidad_disponible -= 1 + $soloNumeros +  $Cantidad;
                         if ($insumo->cantidad_disponible < 3) {
                             $pedidos = Pedido::all();
                             return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
@@ -171,7 +171,7 @@ class pedidoController extends Controller
                         $insumo = Insumo::find($insumo_producto->insumo_id);
                         if ($insumo) {
 
-                            $insumo->cantidad_disponible -= 3;
+                            $insumo->cantidad_disponible -= 3 +  $cantidades[$index];
                             if ($insumo->cantidad_disponible < 3) {
                                 $pedidos = Pedido::all();
                                 return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
@@ -358,7 +358,7 @@ class pedidoController extends Controller
                     if ($insumo) {
                         // return response()->json($soloNumeros);
 
-                        $insumo->cantidad_disponible -= 1 + $soloNumeros;
+                        $insumo->cantidad_disponible -= 1 + $soloNumeros +  $Cantidad;
                         if ($insumo->cantidad_disponible < 3) {
                             $pedidos = Pedido::all();
                             return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
@@ -421,7 +421,7 @@ class pedidoController extends Controller
                     if ($insumo_producto) {
                         $insumo = Insumo::find($insumo_producto->insumo_id);
                         if ($insumo) {
-                            $insumo->cantidad_disponible -= 3;
+                            $insumo->cantidad_disponible -= 3 +  $cantidades[$index];
                             $insumo->save();
                         }
                     }

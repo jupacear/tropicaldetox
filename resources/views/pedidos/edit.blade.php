@@ -7,13 +7,13 @@
     <section class="" style="">
         <div
             style="
-        padding: 40px;
+         padding: 40px;
         background-color: #ffffff;
         border: 1px solid #ffffff;
         margin-bottom: 20px;
         height: 5em;
         position: relative;
-        width: 180%;
+        width: 106%;
         right: 2.3em;
         bottom: 1em;
         ">
@@ -31,22 +31,16 @@
 
 
         <div class="section-body">
+            @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <strong>¡Revise los campos!</strong>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            @if ($errors->any())
-                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endif
+
 
                             <div class="container">
                                 <ul class="product-list">
@@ -596,7 +590,7 @@
                                     totalElement.textContent = totalFormateado;
                                     totalInput.value = total.toFixed(2);
                                 }
-                                 // var selectedProductsList = document.getElementById('selected-products-list');
+                                // var selectedProductsList = document.getElementById('selected-products-list');
                                 // if (selectedProductsList) {
                                 //     var observer = new MutationObserver(function(mutationsList, observer) {
                                 //         calcularTotalInicial(); // Ejecutar la función de cálculo en respuesta a cambios en la tabla
@@ -1103,7 +1097,7 @@
                                                     .value; // Obtener el valor de la descripción
                                                 // alert();
                                                 // alert(JSON.stringify(descripcionnn));
-                                                var cd =personalizadosArray2.length+personalizadosArray.length ;
+                                                var cd = personalizadosArray2.length + personalizadosArray.length;
                                                 var newPersonalizadoName = 'Personalizado ' + (cd + 1);
 
                                                 // Check if a personalized product with the desired name already exists
