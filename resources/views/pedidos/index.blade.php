@@ -71,7 +71,7 @@
                                                     <button type="button"
                                                         class="btn btn-sm btn-{{ $pedido->Estado == 'En_proceso' ? 'primary' : 'success' }}"
                                                         onclick="cambiarEstado({{ $pedido->id }}) ">
-                                                        {{ $pedido->Estado }}
+                                                        En proceso
                                                     </button>
                                                 </form>
                                             </td>
@@ -109,7 +109,7 @@
                                                         <button style="margin-left: 0.2em" type="button"
                                                             class="btn btn-sm btn-info"
                                                             onclick="cambiarEstadoq({{ $pedido->id }})">
-                                                            <i class="fa fa-fw fa-toggle-on"></i>
+                                                            <i class="fa fa-fw  fa-times"></i>
                                                         </button>
                                                     </form>
                                                     {{-- <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
@@ -124,7 +124,84 @@
                                         @php $Numero++ @endphp
                                     @endif
                                 @endforeach
+                                @foreach ($pedidos as $pedido)
+                                    @if ($pedido->Estado == 'Terminados')
+                                        <tr>
+                                            <td>{{ $Numero }}</td>
 
+                                            <td>{{ $pedido->users ? $pedido->users->name : 'Null' }}</td>
+                                            <td>{{ $pedido->users ? $pedido->users->telefono : 'Null' }}</td>
+                                            <td>
+                                                @if ($pedido->Direcion)
+                                                    {{ $pedido->Direcion }}
+                                                @else
+                                                    {{ $pedido->users->direccion }}
+                                                @endif
+                                            </td>
+
+
+
+                                            <td>
+                                                <form action="{{ route('pedidos.updateEstado', $pedido->id) }}"
+                                                    method="POST" id="form-estado-{{ $pedido->id }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
+                                                    <button type="button" class="btn btn-sm btn-success"
+                                                        onclick="cambiarEstado({{ $pedido->id }}) ">
+                                                        {{ $pedido->Estado }}
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            {{-- <td>{{ $pedido->Fecha }}</td> --}}
+                                            <td>{{ substr($pedido->created_at, 11, 5) }}</td>
+
+
+                                            <td> {{ number_format($pedido->Total, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                <div class="text-center" style="display: flex">
+
+                                                    <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
+                                                        <a href="{{ route('pedidos.show', $pedido->id) }}"
+                                                            class="btn btn-sm btn-primary"><i
+                                                                class="fa fa-fw fa-eye"></i></a></a>
+                                                        <a class="btn btn-sm btn-success"
+                                                            href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
+                                                            <i class="fa fa-fw fa-edit"></i>
+                                                        </a>
+                                                        {{-- <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
+                                                    <i class="fa fa-fw fa-trash"></i>
+                                                </button> --}}
+
+
+                                                    </form>
+                                                    <form action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
+                                                        method="POST" id="form-estadoo-{{ $pedido->id }}">
+                                                        @csrf
+                                                        @method('PUT')
+
+                                                        <!-- Add the input element for 'Estado' -->
+                                                        <input type="hidden" name="Estadoo"
+                                                            value="{{ $pedido->estado }}">
+
+                                                        <button style="margin-left: 0.2em" type="button"
+                                                            class="btn btn-sm btn-info"
+                                                            onclick="cambiarEstadoq({{ $pedido->id }})">
+                                                            <i class="fa fa-fw  fa-times"></i>
+                                                        </button>
+                                                    </form>
+                                                    {{-- <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
+                                                @method('DELETE')
+                                                @csrf
+                                            </form> --}}
+
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @php $Numero++ @endphp
+                                    @endif
+                                @endforeach
 
 
                                 @foreach ($pedidos as $pedido)
@@ -150,9 +227,12 @@
                                                     @csrf
                                                     @method('PUT')
                                                     <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
-                                                    <button type="button" class="btn btn-sm btn-danger" onclick=" ">
-                                                        {{ $pedido->Estado }}
-                                                    </button>
+                                                   <div style="background: #f8473e;color: #fff;border-radius: 5px;text-align: center;width: 95%;height: 2.2em;display: flex;align-items: center;
+                                                        justify-content: center">
+
+                                                       {{ $pedido->Estado }}
+                                                    </div>
+                                                    
                                                 </form>
                                             </td>
                                             <td>{{ $pedido->Fecha }}</td>
@@ -163,36 +243,9 @@
                                                         <a href="{{ route('pedidos.show', $pedido->id) }}"
                                                             class="btn btn-sm btn-primary "><i
                                                                 class="fa fa-fw fa-eye"></i></a></a>
-                                                        {{-- <a class="btn btn-sm btn-success"
-                                                            href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
-                                                            <i class="fa fa-fw fa-edit"></i>
-                                                        </a> --}}
-                                                        {{-- <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
-                                                            <i class="fa fa-fw fa-trash"></i>
-                                                        </button> --}}
-
                                                     </form>
-                                                    {{-- <form action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
-                                                        method="POST" id="form-estadoo-{{ $pedido->id }}">
-                                                        @csrf
-                                                        @method('PUT')
+                                                 
 
-                                                        <!-- Add the input element for 'Estado' -->
-                                                        <input type="hidden" name="Estadoo"
-                                                            value="{{ $pedido->estado }}">
-
-                                                        <button style="margin-left: 0.2em" type="button"
-                                                            class="btn btn-sm btn-info"
-                                                            onclick="cambiarEstadoq({{ $pedido->id }})">
-                                                            <i class="fa fa-fw fa-toggle-off"></i>
-                                                        </button>
-                                                    </form> --}}
-
-
-                                                    {{-- <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                    </form> --}}
                                                 </div>
                                             </td>
                                         </tr>
@@ -236,6 +289,8 @@
 
         // Cambiar el estado
         if (estado === 'En_proceso') {
+            estado = 'Terminados';
+        } else if (estado === 'Terminados') {
             estado = 'Finalizado';
         }
         estadoInput.value = estado;
@@ -273,7 +328,20 @@
                 // Cambiar el estado
                 if (estado === 'En_proceso') {
                     estado = 'Cancelado';
+                } else if (estado === 'Terminados') {
+                    estado = 'Finalizado';
                 }
+
+
+
+
+
+
+
+
+
+
+
                 estadoInput.value = estado;
 
                 // Cambiar el color del botón y mostrar el mensaje

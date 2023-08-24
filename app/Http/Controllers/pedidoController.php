@@ -94,7 +94,7 @@ class pedidoController extends Controller
 
 
         $pedido->Estado = "En_proceso";
-        $pedido->Fecha = now();
+        // $pedido->Fecha = now();
         $pedido->id_users = $request->input('Usuario');
         $pedido->Total = $request->input('Total');
         $pedido->save();
@@ -481,7 +481,7 @@ class pedidoController extends Controller
         $pedido->Descripcion = $request->input('Descripcion');
 
         $pedido->Estado = 'En_proceso';
-        $pedido->Fecha = now();
+        // $pedido->Fecha = now();
         $pedido->id_users = Auth::user()->id;
         $pedido->Total = 0;
         $pedido->save();
