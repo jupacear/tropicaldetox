@@ -29,21 +29,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('Productos') }}">Productos</a></li>
 
 
-                    {{-- nav-link --}}
-                    @if (empty(session('carrito.productos')))
-                        <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
-                                    class="fa fa-shopping-cart ">
-                                    <span class="badge" id="carritoBadge"  style="font-size: 20px;padding: 0em;margin: 0em">
-                                    </span>
-                                </i></a></li>
-                    @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}">carrito<i
-                                    class="fa fa-shopping-cart ">
-                                    <span class="badge"  style="font-size: 20px;padding: 0em;margin: 0em">
-                                            {{ count(session('carrito.productos', [])) }}
-                                    </span>
-                                </i></a></li>
-                    @endif
+                   
                     @if (!empty(\Illuminate\Support\Facades\Auth::user()->name))
                         <li class="nav-item"><a class="nav-link" href="{{ route('verpedido') }}">Pedidos</a></li>
                     @else
@@ -102,7 +88,22 @@
                         @endauth
                     @endif
 
-
+ {{-- nav-link --}}
+                    @if (empty(session('carrito.productos')))
+                        <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}"><i
+                                    class="fa fa-shopping-cart ">
+                                    <span class="badge" id="carritoBadge"  style="font-size: 20px;padding: 0em;margin: 0em">
+                                    </span>
+                                </i></a></li>
+                    @else
+                        <li class="nav-item"><a class="nav-link" href="{{ route('carrito') }}"><i
+                                    class="fa fa-shopping-cart ">
+                                    <span class="badge"  style="font-size: 20px;padding: 0em;margin: 0em">
+                                            {{ count(session('carrito.productos', [])) }}
+                                    </span>
+                                </i></a></li>
+                    @endif
+                    
 
                     <!-- End Carrito de compras -->
                     <!-- Código de autenticación -->

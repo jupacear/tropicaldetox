@@ -28,7 +28,9 @@ return new class extends Migration
             $table->string('Direcion','500')->nullable();
             $table->string('Telefono','15')->nullable();
             $table->string('Estado')->nullable();
-            $table->date('Fecha');
+            // $table->date('Fecha');
+            $table->dateTime('Fecha')->default(now());
+
             $table->integer('Total');
 
             $table->timestamps();
