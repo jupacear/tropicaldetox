@@ -7,6 +7,17 @@
     <body>
 
 
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
+        <div class="row" style="padding-top: 60px;">
+            <div class="col-lg-12">
+                <div class="title-all text-center">
+                    <h1 style="margin-top: 1em; text-align: center;">Mis Pedidos</h1>
+
+
         <div class="container">
             @if ($errors->any())
                 <div class="alert alert-danger">

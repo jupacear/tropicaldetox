@@ -89,27 +89,22 @@
                 
                                 <br>
                                 
-                                {{-- <div class="form-group">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
-                                               id="remember"{{ (Cookie::get('remember') !== null) ? 'checked' : '' }}>
-                                        <label class="custom-control-label" for="remember">Recuerdame</label>
-                                    </div>
-                                </div> --}}
+                             
                 
                                 <div class="form-group">
-                                    <button id="miBoton" type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                                    <button id="miBoton" type="submit" class="btn btn-primary btn-lg btn-block" style="background-color: rgb(173, 187, 50)" tabindex="4">
                                         Iniciar Sesión
                                     </button>
                                 </div>
                             </form>
+                            <div class="mt-5 text-muted text-center">
+                                ¿No estas registrado? <a
+                                        href="{{ route('register') }}">Registrate</a>
+                            </div>
                         </div>
                     </div>
                 
-                    <div class="mt-5 text-muted text-center">
-                        ¿No estas registrado? <a
-                                href="{{ route('register') }}">Registrate</a>
-                    </div>
+                   
                     
                     
                     
