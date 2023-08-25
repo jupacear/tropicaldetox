@@ -5,7 +5,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<section class="section">
+<section class="section" >
     <div class="section-header">
         <h3 class="page__heading">Pedidos</h3>
     </div>
@@ -107,7 +107,7 @@
                                                             value="{{ $pedido->estado }}">
 
                                                         <button style="margin-left: 0.2em" type="button"
-                                                            class="btn btn-sm btn-info"
+                                                            class="btn btn-sm btn-danger"
                                                             onclick="cambiarEstadoq({{ $pedido->id }})">
                                                             <i class="fa fa-fw  fa-times"></i>
                                                         </button>
@@ -185,7 +185,7 @@
                                                             value="{{ $pedido->estado }}">
 
                                                         <button style="margin-left: 0.2em" type="button"
-                                                            class="btn btn-sm btn-info"
+                                                            class="btn btn-sm btn-danger"
                                                             onclick="cambiarEstadoq({{ $pedido->id }})">
                                                             <i class="fa fa-fw  fa-times"></i>
                                                         </button>
@@ -232,7 +232,7 @@
 
                                                        {{ $pedido->Estado }}
                                                     </div>
-                                                    
+
                                                 </form>
                                             </td>
                                             <td>{{ $pedido->Fecha }}</td>
@@ -244,7 +244,7 @@
                                                             class="btn btn-sm btn-primary "><i
                                                                 class="fa fa-fw fa-eye"></i></a></a>
                                                     </form>
-                                                 
+
 
                                                 </div>
                                             </td>

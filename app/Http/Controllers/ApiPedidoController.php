@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\detalle_pedidos;
+use App\Models\Insumo;
 use App\Models\pedido;
+use App\Models\producPerz;
 use Illuminate\Http\Request;
 
 class ApiPedidoController extends Controller
@@ -39,7 +42,23 @@ class ApiPedidoController extends Controller
      */
     public function show($id)
     {
-        //
+        // Recuperar el pedido y sus detalles de la base de datos
+        $pedido = Pedido::with('users')->find($id);
+        $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
+        $personaliza = producPerz::where('id_pedidos', $id)->get();
+        $Insumo = Insumo::all();
+       
+          // Crear un array asociativo con los datos que deseas devolver
+    $data = [
+        'pedido' => $pedido,
+        'detalles_pedidos' => $detalles_pedidos,
+        'personalizados' => $personaliza,
+        'Insumo' => $Insumo,
+    ];
+
+    // Devolver los datos en una respuesta JSON
+    return response()->json($data);
+
     }
 
     /**
