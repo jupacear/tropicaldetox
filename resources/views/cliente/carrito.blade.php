@@ -66,7 +66,7 @@
             </div>
 
             @if (empty(\Illuminate\Support\Facades\Auth::user()->name))
-                <button type="submit" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn "  onclick="mostrarAlerta()">Guardar Pedido</button>
+                <button type="submit" class="btn third" onclick="mostrarAlerta()">Guardar Pedido</button>
             @else
                 <form id="formulario-guadar-pedido" action="{{ route('guardarPedido') }}" method="POST">
                     @csrf
@@ -89,7 +89,7 @@
                     </Script>
                     <input type="hidden" name="carrito" id="carrito" value="">
                     <input type="hidden" name="productosPersonalizados" id="productosPersonalizados" value="">
-                    <button type="submit" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn ">Guardar Pedido</button>
+                    <button type="submit" class="btn third">Guardar Pedido</button>
                 </form>
             @endif
         </div>
@@ -225,7 +225,7 @@
                 actualizarSubtotalesEnCarrito();
             });
 
-            // alert(calcularTotalPedido()); 
+            // alert(calcularTotalPedido());
 
             // Función para actualizar el total en el DOM
             function actualizarTotalEnDOM() {
@@ -392,8 +392,8 @@
                         let columnaAcciones = $('<td>');
                         let botonEliminar = $('<button>').html('<i class="fas fa-trash"></i>').addClass('btn thirdd');
 
-                            
-                            // actualizarTotalCarrito()
+
+                        // actualizarTotalCarrito()
                         botonEliminar.on('click', function() {
                             eliminarProductoPersonalizado(index);
                             actualizarTotalCarrito();
@@ -508,14 +508,36 @@
 
 
             function eliminarProductoPersonalizado(index) {
-                let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem('productosPersonalizados')) || [];
-                productosPersonalizadosGuardados.splice(index, 1);
-                localStorage.setItem('productosPersonalizados', JSON.stringify(productosPersonalizadosGuardados));
-                // Volver a cargar los productos personalizados en la tabla
-                mostrarProductosPersonalizados();
-                // Actualizar el total en el DOM
-                actualizarTotalEnDOM();
+                // Mostrar la alerta de confirmación usando Swal.fire
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: '¿Deseas eliminar este producto personalizado?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let productosPersonalizadosGuardados = JSON.parse(localStorage.getItem(
+                            'productosPersonalizados')) || [];
+                        productosPersonalizadosGuardados.splice(index, 1);
+                        localStorage.setItem('productosPersonalizados', JSON.stringify(
+                            productosPersonalizadosGuardados));
+                        // Volver a cargar los productos personalizados en la tabla
+                        mostrarProductosPersonalizados();
+                        // Actualizar el total en el DOM
+                        actualizarTotalEnDOM();
+
+                        // Mostrar una alerta de éxito con Swal.fire si se elimina el producto
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El producto personalizado ha sido eliminado.',
+                            'success'
+                        );
+                    }
+                });
             }
+
 
             function actualizarCantidadCarrito(indice, cantidad) {
                 let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
@@ -563,21 +585,41 @@
                 }
 
                 function eliminarProductoCarrito(indice) {
-                    carrito.splice(indice, 1);
-                    localStorage.setItem('carrito', JSON.stringify(carrito));
+    // Mostrar la alerta de confirmación usando Swal.fire
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Deseas eliminar este producto del carrito?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            carrito.splice(indice, 1);
+            localStorage.setItem('carrito', JSON.stringify(carrito));
 
-                    // Eliminar la fila correspondiente al producto eliminado
-                    tablaCarrito.removeChild(tablaCarrito.children[indice]);
+            // Eliminar la fila correspondiente al producto eliminado
+            tablaCarrito.removeChild(tablaCarrito.children[indice]);
 
-                    // Actualizar los índices de los botones de eliminar restantes en la tabla
-                    let botonesEliminar = tablaCarrito.querySelectorAll('.btn.thirdd');
-                    botonesEliminar.forEach(function(boton, nuevoIndice) {
-                        boton.setAttribute('data-indice', nuevoIndice);
-                    });
+            // Actualizar los índices de los botones de eliminar restantes en la tabla
+            let botonesEliminar = tablaCarrito.querySelectorAll('.btn.thirdd');
+            botonesEliminar.forEach(function(boton, nuevoIndice) {
+                boton.setAttribute('data-indice', nuevoIndice);
+            });
 
-                    // Actualizar el total del pedido después de eliminar el producto
-                    actualizarTotalEnDOM();
-                }
+            // Actualizar el total del pedido después de eliminar el producto
+            actualizarTotalEnDOM();
+
+            // Mostrar una alerta de éxito con Swal.fire si se elimina el producto
+            Swal.fire(
+                '¡Eliminado!',
+                'El producto ha sido eliminado del carrito.',
+                'success'
+            );
+        }
+    });
+}
+
                 carrito.forEach(function(producto) {
                     let fila = document.createElement('tr');
 

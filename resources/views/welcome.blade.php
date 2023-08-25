@@ -67,12 +67,23 @@
             .lightbox-gallery div>img {
                 max-width: 100%;
                 display: block;
+                border-radius:.8em;
+
             }
 
             .lightbox-gallery div {
                 margin: 10px;
                 flex-basis: 180px;
             }
+
+            .lightbox-gallery img:hover {
+                transform: scale(1.1);
+                /* Aumenta el tamaño en un 5% */
+                transition: transform 0.3s ease;
+                /* Agrega una transición suave */
+                border-radius:.5em;
+            }
+
 
             @media only screen and (max-width: 480px) {
                 .lightbox-gallery {
@@ -379,8 +390,9 @@
 
                                     <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
                                     <div class="modal-footer" style="margin: 0em;padding: 0em;">
-                                        <button type="button" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn" id="crearPersonalizados"
-                                            data-dismiss="modal"
+                                        <button type="button"
+                                            style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);"
+                                            class="btn" id="crearPersonalizados" data-dismiss="modal"
                                             onclick=" mostrarAlertaExitosa('Producto agregado al carrito exitosamente');actualizarTotalCarrito()">
                                             Crear
                                         </button>
@@ -490,8 +502,13 @@
 
 
         </div>
-        
+
         <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
+
+
+        <div style="margin-top: 10%">
+
+        </div>
         {{-- Scrip de la galeria --}}
         <script>
             // Create a lightbox
@@ -501,12 +518,11 @@
                 var $caption = $("<p class='caption'></p>");
 
                 // Add image and caption to lightbox
-
                 $lightbox
                     .append($img)
                     .append($caption);
 
-                // Add lighbox to document
+                // Add lightbox to document
                 $('body').append($lightbox);
 
                 $('.lightbox-gallery img').click(function(e) {
@@ -516,7 +532,7 @@
                     var src = $(this).attr("data-image-hd");
                     var cap = $(this).attr("alt");
 
-                    // Add data to lighbox
+                    // Add data to lightbox
 
                     $img.attr('src', src);
                     $caption.text(cap);
@@ -530,7 +546,7 @@
                     });
                 });
 
-            }());
+            })();
         </script>
         <script>
             function agregarAlCarrito(event) {
@@ -790,7 +806,7 @@
 
                         // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
                         // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
-                            total += insumoPrecioSeleccionado * cantidad;
+                        total += insumoPrecioSeleccionado * cantidad;
                     });
 
                     let formattedTotal = total.toLocaleString(undefined, {
@@ -799,6 +815,7 @@
                     });
                     $('#totalInsumosSeleccionados').text(`Total: ${formattedTotal}`);
                 }
+
                 function recalcularTotalInsumosSeleccionados1() {
                     var total = 0;
                     $('.tabla-insumos-seleccionados tbody tr').each(function() {
@@ -808,7 +825,7 @@
 
                         // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
                         // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
-                            total += insumoPrecioSeleccionado * cantidad * 2;
+                        total += insumoPrecioSeleccionado * cantidad * 2;
                     });
 
                     let formattedTotal = total.toLocaleString(undefined, {
