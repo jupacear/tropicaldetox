@@ -11,7 +11,7 @@
         <a href="{{ route('pedidos.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Volver
         </a>
-        <h3 class="page__heading ml-3 mb-0">Pedido</h3>
+        <h3 class="page__heading ml-3 mb-0">Detalle del pedido</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -21,8 +21,6 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h1>Detalles del pedido</h1>
-
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
 
 
