@@ -11,7 +11,7 @@
         <a href="{{ route('ventas.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Volver
         </a>
-        <h3 style="margin-left: .5em" class="page__heading"> Ventas</h3>
+        <h3 style="margin-left: .5em" class="page__heading">Detalle de la venta</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -21,11 +21,6 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h1>Detalles del Ventas</h1>
-
-
-
-
                                     <a href="{{ route('pdf', ['id' => $pedido->id]) }}"
                                         class="btn btn-primary">Descargar PDF</a>
 

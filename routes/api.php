@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiPedidoController;
 use App\Http\Controllers\InsumoApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // Insumos
 Route::apiResource('insumos', InsumoApiController::class);
+Route::apiResource('pedidos', ApiPedidoController::class);
+Route::get('pedidos/{id}', [TuControlador::class, 'show']);

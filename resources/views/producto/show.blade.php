@@ -33,7 +33,7 @@ Mostrar Producto
                             {{ $producto->precio }}
                         </div>
                         <div class="form-group">
-                            <strong>Descripcion:</strong>
+                            <strong>Descripción:</strong>
                             {{ $producto->descripcion }}
                         </div>
                         <div class="form-group">
@@ -45,8 +45,8 @@ Mostrar Producto
                             @endif
                         </div>
                         <div class="form-group">
-                            <strong>Categorias Id:</strong>
-                            {{ $producto->categorias_id }}
+                            <strong>Categoría:</strong>
+                            {{ $producto->categorium->nombre }}
                         </div>
 
                         <div class="form-group">
