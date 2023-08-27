@@ -8,7 +8,7 @@
 
 
     <div class="section-header">
-        <h3 class="page__heading">Venta</h3>
+        <h3 class="page__heading">Ventas</h3>
     </div>
     <div class="section-body">
         @if ($errors->any())

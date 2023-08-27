@@ -21,7 +21,7 @@
                             <h4>Información</h4>
                             <ul>
                                 <li><a href="{{ route('Productos') }}">Nuestros productos</a></li>
-                                <li><a href="#">Politica y privacidad</a></li>
+                                <!-- <li><a href="#">Politica y privacidad</a></li> -->
                             </ul>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                             <h4>Contactanos</h4>
                             <ul>
                                 <li>
-                                    <p><i class="fas fa-map-marker-alt"></i>calle: 56 $ 67 <br>Centro de medellin,<br></p>
+                                    <p><i class="fas fa-map-marker-alt"></i>Carrera 46 #50-13 <br>Centro de medellín,La candelaria<br></p>
                                 </li>
                                 <li>
                                     <p><i class="fas fa-phone-square"></i>Phone: <a href="tel:+1-888705770">+57 3015892266</a></p>
