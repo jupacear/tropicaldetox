@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApiPedidoController;
 use App\Http\Controllers\InsumoApiController;
 use Illuminate\Http\Request;
@@ -19,6 +20,23 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+
+Route::post('nose2', [AuthController::class, 'Register']);
+Route::post('nose', [AuthController::class, 'login']);
 // Insumos
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::post('/logout', [AuthController::class, 'logout']);
+    
+   
+});
+
+
+
 Route::apiResource('insumos', InsumoApiController::class);
 Route::apiResource('pedidos', ApiPedidoController::class);
+
