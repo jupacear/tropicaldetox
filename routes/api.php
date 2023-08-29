@@ -22,4 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Insumos
 Route::apiResource('insumos', InsumoApiController::class);
 Route::apiResource('pedidos', ApiPedidoController::class);
+Route::put('pedidos/{id}/estado', [ApiPedidoController::class, 'updateEstadoo']);
+
 Route::get('pedidos/{id}', [TuControlador::class, 'show']);
