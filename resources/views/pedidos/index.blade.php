@@ -149,7 +149,7 @@
                                                     <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
                                                     <button type="button" class="btn btn-sm btn-success"
                                                         onclick="cambiarEstado({{ $pedido->id }}) ">
-                                                        {{ $pedido->Estado }}
+                                                        Terminado
                                                     </button>
                                                 </form>
                                             </td>

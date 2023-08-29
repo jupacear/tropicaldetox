@@ -42,9 +42,9 @@
                                         <th style="color:#fff;">Imagen</th>
                                         <th style="color:#fff;">Nombre</th>
                                         <th style="color:#fff;">Precio</th>
-                                        <th style="color:#fff;">Descripcion</th>
+                                        <th style="color:#fff;">Descripción</th>
                                         <th style="color:#fff;">Estado</th>
-                                        <th style="color:#fff;">Nombre de categoria</th>
+                                        <th style="color:#fff;">Nombre de categoría</th>
                                         <th style="color:#fff;">Insumo</th>
                                         <th style="color:#fff;">Opciones</th>
                                     </tr>
