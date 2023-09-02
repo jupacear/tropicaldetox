@@ -47,17 +47,17 @@ class ApiPedidoController extends Controller
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
         $personaliza = producPerz::where('id_pedidos', $id)->get();
         $Insumo = Insumo::all();
-       
-          // Crear un array asociativo con los datos que deseas devolver
-    $data = [
-        'pedido' => $pedido,
-        'detalles_pedidos' => $detalles_pedidos,
-        'personalizados' => $personaliza,
-        'Insumo' => $Insumo,
-    ];
 
-    // Devolver los datos en una respuesta JSON
-    return response()->json($data);
+        // Crear un array asociativo con los datos que deseas devolver
+        $data = [
+            'pedido' => $pedido,
+            'detalles_pedidos' => $detalles_pedidos,
+            'personalizados' => $personaliza,
+            'Insumo' => $Insumo,
+        ];
+
+        // Devolver los datos en una respuesta JSON
+        return response()->json($data);
 
     }
 
@@ -71,6 +71,22 @@ class ApiPedidoController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+    public function updateEstadoo(Request $request, $id)
+    {
+        $request->validate([
+            'Estadoo' => 'required|max:200',
+        ]);
+
+        $pedido = Pedido::find($id);
+        if (!$pedido) {
+            return response()->json(['error' => 'Pedido no encontrado'], 404);
+        }
+
+        $pedido->Estado = $request->input('Estadoo');
+        $pedido->save();
+
+        return response()->json(['message' => 'Estado actualizado correctamente']);
     }
 
     /**

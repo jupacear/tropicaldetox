@@ -31,7 +31,11 @@
         <div class="section-body">
             @if ($errors->any())
                 <div class="alert alert-danger" role="alert">
-                    <strong>¡Revise los campos!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
             <div class="row">
@@ -383,7 +387,7 @@
                                 var totalSection = document.getElementById('total-section');
                                 var total = 0; // Inicializar el total en 0
 
-                               
+
 
                                 function agregarProducto(id, nombre, precio) {
                                     Swal.fire({

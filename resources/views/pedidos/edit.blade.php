@@ -33,7 +33,11 @@
         <div class="section-body">
             @if ($errors->any())
                 <div class="alert alert-danger" role="alert">
-                    <strong>¡Revise los campos!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
             <div class="row">
