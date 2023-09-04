@@ -3,8 +3,13 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApiPedidoController;
 use App\Http\Controllers\InsumoApiController;
+use App\Http\Controllers\PasswordResetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ResetPasswordController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +49,16 @@ Route::put('pedidos/{id}/estado', [ApiPedidoController::class, 'updateEstadoo'])
 
 
 Route::get('pedidos/{id}', [TuControlador::class, 'show']);
+
+
+
+Route::post('/recuperar-contrasena', [ResetPasswordController::class, 'recuperarContrasena']);
+Route::post('/verificar-codigo', [ResetPasswordController::class, 'verificarCodigo']);
+Route::post('/cambiarContrasena', [ResetPasswordController::class, 'cambiarContrasena']);
+
+
+
+
 
 
 
