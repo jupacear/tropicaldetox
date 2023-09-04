@@ -57,7 +57,7 @@
 
 <div class="container" style="padding-top: 60px;">
     <div class="card card-primary mx-auto" style="max-width: 400px;">
-        <div class="card-header"><h4>Restablecer Contraseña</h4></div>
+        <div class="card-header"><h4>Recuperar Contraseña</h4></div>
 
         <div class="card-body">
             @if (session('status'))
