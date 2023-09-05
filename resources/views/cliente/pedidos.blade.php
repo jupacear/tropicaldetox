@@ -30,7 +30,7 @@
                                 <p>{{ $message }}</p>
                             </div>
                         @endif
-                        
+
                         <div class="row">
                             <div class="col-lg-12">
                                 {{-- <h1>Lista de Pedidos</h1> --}}
@@ -149,6 +149,46 @@
                                                                     style="background: rgba(175, 0, 0, 0.753);border-radius:1em ; display:flex;
                                         align-content: center;justify-content: center;font-size: 1.1em;width: 6em;">
                                                                     {{ $pedido->Estado }}
+                                                                </div>
+                                                            @endif
+
+                                                        </td>
+                                                        <td> {{ number_format($pedido->Total, 0, ',', '.') }}
+
+                                                        </td>
+                                                        <td>
+                                                            <!-- Enlace para ver el detalle del pedido -->
+                                                            <a href="{{ route('Detalle', $pedido->id) }}"
+                                                                class="btn btn-info">Ver
+                                                                Detalle</a>
+                                                        </td>
+
+
+
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                            @foreach ($pedidos as $pedido)
+                                                @if ($pedido->Estado == 'Finalizado')
+                                                    <tr>
+
+                                                        <td>{{ $pedido->Fecha }}</td>
+                                                        <td> {{ substr($pedido->created_at, 11, 5) }}</td>
+
+
+                                                        <td>
+                                                            @if ($pedido->Direcion)
+                                                                {{ $pedido->Direcion }}
+                                                            @else
+                                                                {{ $pedido->users->direccion }}
+                                                            @endif
+                                                        </td>
+                                                        <td style="color:#000;">
+                                                            @if ($pedido->Estado == 'Finalizado')
+                                                                <div
+                                                                    style="background: rgba(59, 226, 255, 0.904);border-radius:1em ; display:flex;
+                                    align-content: center;justify-content: center;font-size: 1.1em;width: 6em;">
+                                                                   Finalizado
                                                                 </div>
                                                             @endif
 
