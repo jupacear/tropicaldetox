@@ -16,23 +16,23 @@
     <div class="box-body">
         <div class="form-row d-flex flex-colum">
             <div class="form-group col-md-6 p-3 ">
-                {{ Form::label('categorias_id', 'Categoria') }}
+                {{ Form::label('categorias_id', 'Categoría') }}
                 {{ Form::select('categorias_id', $categorias, $producto->categorias_id, ['class' => 'form-control' . ($errors->has('categorias_id') ? ' is-invalid' : ''), 'placeholder' => 'Selecciona una categoría']) }}
                 {!! $errors->first('categorias_id', '<div class="invalid-feedback">:message</div>') !!}
                 @if (!Route::is('productos.create'))
-                <div class="pt-5">
-                    {{ Form::label('estado', 'Estado:') }}
-                    {{ Form::select('activo', ['1' => 'Activo', '0' => 'Inactivo'], $producto->activo ?? '1', ['class' => 'form-control' . ($errors->has('estado') ? ' is-invalid' : '')]) }}
-                    {!! $errors->first('estado', '<div class="invalid-feedback">:message</div>') !!}
-                </div>
+                    <div class="pt-5">
+                        {{ Form::label('estado', 'Estado:') }}
+                        {{ Form::select('activo', ['1' => 'Activo', '0' => 'Inactivo'], $producto->activo ?? '1', ['class' => 'form-control' . ($errors->has('estado') ? ' is-invalid' : '')]) }}
+                        {!! $errors->first('estado', '<div class="invalid-feedback">:message</div>') !!}
+                    </div>
                 @endif
             </div>
             <div class="form-group col-md-6 p-3 ">
                 {{ Form::label('imagen', 'Imagen') }}
                 @if ($producto->imagen)
-                <div>
-                    <img src="{{ asset($producto->imagen) }}" alt="Imagen actual" width="200">
-                </div>
+                    <div>
+                        <img src="{{ asset($producto->imagen) }}" alt="Imagen actual" width="200">
+                    </div>
                 @endif
                 {{ Form::file('imagen', ['class' => 'form-control' . ($errors->has('imagen') ? ' is-invalid' : ''), 'placeholder' => 'Imagen']) }}
                 {!! $errors->first('imagen', '<div class="invalid-feedback">:message</div>') !!}
@@ -52,8 +52,8 @@
         </div>
         <div class="form-row">
             <div class="form-group col-md-6 p-3 ">
-                {{ Form::label('descripcion') }}
-                {{ Form::text('descripcion', $producto->descripcion, ['class' => 'form-control' . ($errors->has('descripcion') ? ' is-invalid' : ''), 'placeholder' => 'Descripcion']) }}
+                {{ Form::label('descripción') }}
+                {{ Form::text('descripcion', $producto->descripcion, ['class' => 'form-control' . ($errors->has('descripcion') ? ' is-invalid' : ''), 'placeholder' => 'Descripción', 'oninput' => 'validateDescripcion(this)']) }}
                 {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
                 <div id="additional-insumos"></div>
             </div>
@@ -72,22 +72,27 @@
 </div>
 
 <script>
+    // Evento click para agregar un nuevo selector de insumo
     $(document).ready(function() {
-        // Evento click para agregar un nuevo selector de insumo
+        var maxClicks = 5;
+        var clickCount = 0;
+
         $("#add-insumo").click(function() {
-            var insumosSelect = $("#insumos-select").clone(); // Clonar el selector existente
-            insumosSelect.val(''); // Limpiar el valor seleccionado
+            if (clickCount < maxClicks) {
+                var insumosSelect = $("#insumos-select").clone();
+                insumosSelect.val('');
 
-            // Crear un nuevo div para el selector de insumo y agregarlo al contenedor
-            var newInsumoDiv = $("<div></div>").addClass("form-group mt-3").append(insumosSelect);
-            $("#additional-insumos").append(newInsumoDiv);
+                var newInsumoDiv = $("<div></div>").addClass("form-group mt-3").append(insumosSelect);
+                $("#additional-insumos").append(newInsumoDiv);
 
-            // Agregar el campo "cantidad a utilizar" al nuevo div
-            // var cantidadUtilizadaInput = $("<div class='form-group col-md-2'>" +
-            //     "<label for='cantidad_utilizada'>Cantidad a utilizar</label>" +
-            //     "<input type='number' name='cantidad_utilizada[]' class='form-control'>" +
-            //     "</div>");
-            // newInsumoDiv.append(cantidadUtilizadaInput);
+                clickCount++;
+
+                if (clickCount === maxClicks) {
+                    // Mostrar una alerta de SweetAlert cuando se alcance el límite de insumos
+                    swal.fire('Límite alcanzado', "Se ha alcanzado el límite de insumos.", "warning");
+                    $("#add-insumo").prop("disabled", true);
+                }
+            }
         });
     });
     // Función para eliminar espacios en blanco de izquierda y derecha

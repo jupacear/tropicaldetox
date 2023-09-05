@@ -164,7 +164,7 @@ Inicio
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="title-all text-center">
-                            <h1>Categorias</h1>
+                            <h1>Categorías</h1>
                             <p>Descubre una amplia variedad de jugos frescos y deliciosos en nuestras categorías.
                                 Desde jugos cítricos y refrescantes, hasta mezclas exóticas y nutritivas,
                                 encontrarás opciones para satisfacer todos los gustos y necesidades.</p>
@@ -196,7 +196,7 @@ Inicio
             <div class="row">
                 <div class="col-lg-12">
                     <div class="title-all text-center">
-                        <h1>Productos & Categorias</h1>
+                        <h1>Productos & Categorías</h1>
                         <p>Descubre nuestra amplia selección de jugos frescos y deliciosos,
                             junto con una variedad de categorías que se adaptan a tus preferencias.
                             Disfruta de sabores únicos y opciones personalizadas para satisfacer tu sed de jugos

@@ -14,8 +14,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    {{ Form::label('descripcion') }}
-                    {{ Form::text('descripcion', $categorium->descripcion, ['class' => 'form-control' . ($errors->has('descripcion') ? ' is-invalid' : ''), 'placeholder' => 'Descripcion', 'onkeyup' => 'validateDescripcion(this)']) }}
+                    {{ Form::label('descripción') }}
+                    {{ Form::text('descripcion', $categorium->descripcion, ['class' => 'form-control' . ($errors->has('descripcion') ? ' is-invalid' : ''), 'placeholder' => 'Descripción', 'onkeyup' => 'validateDescripcion(this)']) }}
                     {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
             </div>

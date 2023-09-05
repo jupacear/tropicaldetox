@@ -29,7 +29,7 @@ Detalle
                             {{ $categorium->nombre }}
                         </div>
                         <div class="form-group">
-                            <strong>Descripcion:</strong>
+                            <strong>Descripción:</strong>
                             {{ $categorium->descripcion }}
                         </div>
                         <div class="form-group">
