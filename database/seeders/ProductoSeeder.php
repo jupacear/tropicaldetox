@@ -33,14 +33,14 @@ class ProductoSeeder extends Seeder
                 'activo' => true,
                 'categorias_id' => 2,
             ],
-            [
-                'imagen' => 'img/IMGWelcome/CategoriaFrutas.png',
-                'nombre' => 'Guayaba con mango',
-                'precio' => 9000,
-                'descripcion' => 'Personalizado',
-                'activo' => true,
-                'categorias_id' => 3,
-            ],
+            // [
+            //     'imagen' => 'img/IMGWelcome/CategoriaFrutas.png',
+            //     'nombre' => 'Guayaba con mango',
+            //     'precio' => 9000,
+            //     'descripcion' => 'Personalizado',
+            //     'activo' => true,
+            //     'categorias_id' => 3,
+            // ],
             [
                 'imagen' => 'img/IMGWelcome/JugoMaracuya.png',
                 'nombre' => 'Jugo de Maracuya',
@@ -71,7 +71,7 @@ class ProductoSeeder extends Seeder
         $insumosPorProducto = [
             'Jugo de Durazno' => ['Maracuya', 'Mango'],
             'Jugo de Manzana' => ['Fresa', 'Mango'],
-            'Guayaba con mango' => ['Maracuya', 'Fresa'],
+            // 'Guayaba con mango' => ['Maracuya', 'Fresa'],
             'Jugo de Maracuya' => ['Maracuya', 'Fresa'],
             'Jugo de papaya' => ['Maracuya', 'Fresa'],
             'Jugo de Pera' => ['Mango', 'Maracuya'],

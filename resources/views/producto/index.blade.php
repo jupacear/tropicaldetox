@@ -45,6 +45,7 @@
                                         <th style="color:#fff;">Descripción</th>
                                         <th style="color:#fff;">Estado</th>
                                         <th style="color:#fff;">Nombre de categoría</th>
+                                        <th style="color:#fff;">Personalizado</th>
                                         <th style="color:#fff;">Insumo</th>
                                         <th style="color:#fff;">Opciones</th>
                                     </tr>
@@ -68,6 +69,11 @@
                                                 <td>{{ $producto->descripcion }}</td>
                                                 <td> <span class="badge badge-success">Activo</span>
                                                 <td>{{ $producto->categorium->nombre }}</td>
+                                                <td>
+                                                    @if ($producto->personalizado )
+                                                        Personalizado
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @foreach ($producto->insumos as $insumo)
                                                         {{ $insumo->nombre }}
@@ -117,6 +123,11 @@
                                                 <td>{{ $producto->descripcion }}</td>
                                                 <td> <span class="badge badge-danger">Inactivo</span> </td>
                                                 <td>{{ $producto->categorium->nombre }}</td>
+                                                <td>
+                                                    @if ($producto->personalizado )
+                                                        Personalizado
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @foreach ($producto->insumos as $insumo)
                                                         {{ $insumo->nombre }}

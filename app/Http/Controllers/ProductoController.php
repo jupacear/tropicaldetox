@@ -27,8 +27,14 @@ class ProductoController extends Controller
     public function index()
     {
         $productos = Producto::with('insumos')->paginate(10);
+        // Recorrer la colección de productos y calcular la cantidad de insumos
+        foreach ($productos as $productoPer) {
+            $cantidadInsumos = count($productoPer->insumos);
 
-        return view('producto.index', compact('productos'))
+            // Agregar un campo 'personalizado' al producto si tiene 3 o más insumos
+            $productoPer->personalizado = $cantidadInsumos >= 3;
+        }
+        return view('producto.index', compact('productos', 'productoPer'))
             ->with('i', (request()->input('page', 1) - 1) * $productos->perPage());
     }
 
@@ -188,7 +194,7 @@ class ProductoController extends Controller
         $producto->nombre = $request->input('nombre');
         $producto->precio = $request->input('precio');
         $producto->descripcion = $request->input('descripcion');
-        $producto->activo = $request->has('activo'); // Guarda el estado como true o false según si se seleccionó o no el checkbox
+        $activo = $request->input('activo') == 1 ? true : false; // Guarda el estado como true o false según si se seleccionó o no el checkbox
         $producto->categorias_id = $request->input('categorias_id');
 
         // Guardar los cambios en la base de datos
@@ -216,11 +222,12 @@ class ProductoController extends Controller
                 return redirect()->route('productos.index')
                     ->with('error', 'El producto no existe');
             }
-
-            $producto->delete();
-
+            // Cambiar el estado del producto a "Inactivo"
+            $producto->activo = 0;
+            $producto->save();
             return redirect()->route('productos.index')
                 ->with('success', 'Producto eliminado correctamente');
+                
         } catch (QueryException $e) {
             return redirect()->route('productos.index')
                 ->withErrors(['error' => 'No se puede eliminar el producto porque tiene un pedido asociado']);

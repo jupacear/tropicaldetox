@@ -26,11 +26,11 @@ class CategoriaSeeder extends Seeder
                 'nombre' => 'Verdes',
                 'descripcion' => 'Refrescantes bebidas naturales cargadas de nutrientes y beneficios saludables',
             ],
-            [
-                'imagen' => 'img/logo.png',
-                'nombre' => 'Personalizados',
-                'descripcion' => 'Deliciosas bebidas adaptadas a tus gustos y necesidades individuales.',
-            ]
+            // [
+            //     'imagen' => 'img/logo.png',
+            //     'nombre' => 'Personalizados',
+            //     'descripcion' => 'Deliciosas bebidas adaptadas a tus gustos y necesidades individuales.',
+            // ]
         ]);
     }
 }
