@@ -137,7 +137,7 @@ Inicio
     <div id="slides-shop" class="cover-slides">
         <ul class="slides-container">
             @foreach ($productos as $producto)
-            @if ($producto->activo)
+            @if ($producto->activo == 1)
             <li class="text-center">
                 <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}">
                 <div class="container">
@@ -222,7 +222,7 @@ Inicio
             </div>
             <div class="row justify-content-center special-list">
                 @foreach ($productos as $producto)
-                @if ($producto->activo && $producto->categorias_id !== 3)
+                @if ($producto->activo == 1 && $producto->categorias_id )
                 <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
                     <!-- Cartas -->
                     <div class="products-single fix ">
@@ -304,6 +304,7 @@ Inicio
                                             <tbody>
                                                 @foreach ($Insumo as $Insumos)
                                                 <tr class="insumo" data-id="{{ $Insumos->id }}">
+                                                    @if ($Insumos->activo ==  1)
                                                     <td><img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto" width="40em"></td>
                                                     <td>{{ $Insumos->id }}</td>
                                                     <td>{{ $Insumos->nombre }}</td>
@@ -321,6 +322,7 @@ Inicio
                                                                 </button> --}}
                                                     </td>
                                                 </tr>
+                                                @endif
                                                 @endforeach
                                             </tbody>
                                         </table>

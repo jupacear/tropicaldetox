@@ -213,7 +213,7 @@ class ProductoController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
             $producto = Producto::find($id);
@@ -222,15 +222,21 @@ class ProductoController extends Controller
                 return redirect()->route('productos.index')
                     ->with('error', 'El producto no existe');
             }
-            // Cambiar el estado del producto a "Inactivo"
-            $producto->activo = 0;
+            // Obtener el nuevo estado del insumo
+            $nuevoEstado = !$producto->activo;
+
+            // Actualizar el estado del insumo
+            $producto->activo = $nuevoEstado;
+            // Cambia el estado del producto según el valor recibido del formulario
+            // $producto->activo = $request->estado;
+
             $producto->save();
+
             return redirect()->route('productos.index')
-                ->with('success', 'Producto eliminado correctamente');
-                
+                ->with('success', 'Estado del producto actualizado correctamente');
         } catch (QueryException $e) {
             return redirect()->route('productos.index')
-                ->withErrors(['error' => 'No se puede eliminar el producto porque tiene un pedido asociado']);
+                ->withErrors(['error' => 'No se puede actualizar el estado del producto debido a un error', $e]);
         }
     }
 }
