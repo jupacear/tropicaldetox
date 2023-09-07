@@ -81,6 +81,7 @@
                                                             <a href="{{ route('Detalle', $pedido->id) }}"
                                                                 class="btn btn-info">Ver
                                                                 Detalle</a>
+
                                                         </td>
 
 
@@ -147,7 +148,7 @@
                                                             @if ($pedido->Estado == 'Cancelado')
                                                                 <div
                                                                     style="background: rgba(175, 0, 0, 0.753);border-radius:1em ; display:flex;
-                                        align-content: center;justify-content: center;font-size: 1.1em;width: 6em;">
+                                                                            align-content: center;justify-content: center;font-size: 1.1em;width: 6em;">
                                                                     {{ $pedido->Estado }}
                                                                 </div>
                                                             @endif
@@ -156,13 +157,47 @@
                                                         <td> {{ number_format($pedido->Total, 0, ',', '.') }}
 
                                                         </td>
-                                                        <td>
+                                                        <td style="">
                                                             <!-- Enlace para ver el detalle del pedido -->
                                                             <a href="{{ route('Detalle', $pedido->id) }}"
                                                                 class="btn btn-info">Ver
                                                                 Detalle</a>
+                                                            <button type="button" class="btn btn-sm btn-danger"
+                                                                style="padding: 0.2em;" data-toggle="modal"
+                                                                data-target="#motivoCancelacionModal{{ $pedido->id }}">
+                                                                <i class="fa fa-fw fa-info-circle"></i>
+                                                            </button>
                                                         </td>
+                                                        <!-- Modal para mostrar el motivo de cancelación -->
+                                                        <div class="modal fade"
+                                                            id="motivoCancelacionModal{{ $pedido->id }}" tabindex="-1"
+                                                            role="dialog"
+                                                            aria-labelledby="motivoCancelacionModalLabel{{ $pedido->id }}"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="motivoCancelacionModalLabel{{ $pedido->id }}">
+                                                                            Motivo de Cancelación</h5>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Cerrar">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body" style="display: flex;justify-content: left;">
+                                                                        <!-- Aquí muestra el motivo de cancelación del pedido -->
+                                                                        Motivo de cancelación:
+                                                                        {{ $pedido->motivoCancelacion }}
+                                                                    </div>
 
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary"
+                                                                            data-dismiss="modal">Cerrar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
 
                                                     </tr>
@@ -188,7 +223,7 @@
                                                                 <div
                                                                     style="background: rgba(59, 226, 255, 0.904);border-radius:1em ; display:flex;
                                     align-content: center;justify-content: center;font-size: 1.1em;width: 6em;">
-                                                                   Finalizado
+                                                                    Finalizado
                                                                 </div>
                                                             @endif
 

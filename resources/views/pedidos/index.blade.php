@@ -5,7 +5,28 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<section class="section" >
+<section class="">
+    <div
+        style="
+            padding: 40px;
+            background-color: #ffffff;
+            border: 1px solid #ffffff;
+            margin-bottom: 20px;
+            height: 5em;
+            position: relative;
+            width: 106%;
+            right: 2.3em;
+            bottom: 1em;
+            ">
+        <div class="section-header">
+            <div style="display: flex;position: relative;bottom: 1em">
+
+
+                <h3 class="page__heading ml-3 mb-0">Pedido</h3>
+            </div>
+        </div>
+
+    </div>
     <div class="section-header">
         <h3 class="page__heading">Pedidos</h3>
     </div>
@@ -106,12 +127,72 @@
                                                         <input type="hidden" name="Estadoo"
                                                             value="{{ $pedido->estado }}">
 
-                                                        <button style="margin-left: 0.2em" type="button"
-                                                            class="btn btn-sm btn-danger"
-                                                            onclick="cambiarEstadoq({{ $pedido->id }})">
-                                                            <i class="fa fa-fw  fa-times"></i>
+                                                        <!-- Botón para abrir el modal -->
+
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                            data-toggle="modal" data-target="#motivoModal">
+                                                            <i class="fa fa-fw fa-times"></i>
                                                         </button>
                                                     </form>
+                                                    <!-- Botón para abrir el modal -->
+
+                                                    <!-- Modal para el motivo de cancelación -->
+                                                    <div class="modal fade" id="motivoModal" tabindex="-1"
+                                                        role="dialog" aria-labelledby="exampleModalLabel"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                                        Motivo de cancelación</h5>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal" aria-label="Cerrar">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <!-- Formulario dentro del modal -->
+                                                                    <form id="modalForm"
+                                                                        action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('PUT')
+
+                                                                        <!-- Campo de entrada para el motivo de cancelación -->
+                                                                        <div class="form-group">
+                                                                            <label for="motivoCancelacion">Motivo de
+                                                                                cancelación</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="motivoCancelacion"
+                                                                                name="motivo_cancelacion"
+                                                                                placeholder="Ingrese el motivo de cancelación"
+                                                                                required>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <!-- Botón para enviar el motivo al controlador -->
+                                                                    <button type="button" class="btn btn-primary"
+                                                                        onclick="enviarMotivo()">Enviar</button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cancelar</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        function enviarMotivo() {
+                                                            // Envía el formulario dentro del modal
+                                                            $('#modalForm').submit();
+
+                                                            // Restablece el valor del campo de motivo de cancelación a una cadena vacía
+                                                            $('#motivoCancelacion').val('');
+
+                                                            // Cierra el modal
+                                                            $('#motivoModal').modal('hide');
+                                                        }
+                                                    </script>
+
                                                     {{-- <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
                                                     @method('DELETE')
                                                     @csrf
@@ -146,7 +227,8 @@
                                                     method="POST" id="form-estado-{{ $pedido->id }}">
                                                     @csrf
                                                     @method('PUT')
-                                                    <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
+                                                    <input type="hidden" name="Estado"
+                                                        value="{{ $pedido->Estado }}">
                                                     <button type="button" class="btn btn-sm btn-success"
                                                         onclick="cambiarEstado({{ $pedido->id }}) ">
                                                         Terminado
@@ -161,7 +243,8 @@
                                             <td class="text-center">
                                                 <div class="text-center" style="display: flex">
 
-                                                    <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
+                                                    <form action="{{ url('pedidos/' . $pedido->id) }}"
+                                                        method="post">
                                                         <a href="{{ route('pedidos.show', $pedido->id) }}"
                                                             class="btn btn-sm btn-primary"><i
                                                                 class="fa fa-fw fa-eye"></i></a></a>
@@ -169,11 +252,6 @@
                                                             href="{{ url('pedidos/' . $pedido->id . '/edit') }}">
                                                             <i class="fa fa-fw fa-edit"></i>
                                                         </a>
-                                                        {{-- <button type="button" class="btn btn-danger btn-sm" onclick="confirmarEliminacion({{ $pedido->id }})">
-                                                    <i class="fa fa-fw fa-trash"></i>
-                                                </button> --}}
-
-
                                                     </form>
                                                     <form action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
                                                         method="POST" id="form-estadoo-{{ $pedido->id }}">
@@ -183,19 +261,69 @@
                                                         <!-- Add the input element for 'Estado' -->
                                                         <input type="hidden" name="Estadoo"
                                                             value="{{ $pedido->estado }}">
-
-                                                        <button style="margin-left: 0.2em" type="button"
-                                                            class="btn btn-sm btn-danger"
-                                                            onclick="cambiarEstadoq({{ $pedido->id }})">
-                                                            <i class="fa fa-fw  fa-times"></i>
+                                                        <!-- Botón para abrir el modal -->
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                            data-toggle="modal" data-target="#motivoModal">
+                                                            <i class="fa fa-fw fa-times"></i>
                                                         </button>
+
                                                     </form>
-                                                    {{-- <form id="form-eliminar-{{ $pedido->id }}" action="{{ url('pedidos/' . $pedido->id) }}" method="post" style="display: none;">
-                                                @method('DELETE')
-                                                @csrf
-                                            </form> --}}
+                                                      <!-- Modal para el motivo de cancelación -->
+                                                      <div class="modal fade" id="motivoModal" tabindex="-1"
+                                                      role="dialog" aria-labelledby="exampleModalLabel"
+                                                      aria-hidden="true">
+                                                      <div class="modal-dialog" role="document">
+                                                          <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                  <h5 class="modal-title" id="exampleModalLabel">
+                                                                      Motivo de cancelación</h5>
+                                                                  <button type="button" class="close"
+                                                                      data-dismiss="modal" aria-label="Cerrar">
+                                                                      <span aria-hidden="true">&times;</span>
+                                                                  </button>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                  <!-- Formulario dentro del modal -->
+                                                                  <form id="modalForm"
+                                                                      action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
+                                                                      method="POST">
+                                                                      @csrf
+                                                                      @method('PUT')
 
+                                                                      <!-- Campo de entrada para el motivo de cancelación -->
+                                                                      <div class="form-group">
+                                                                          <label for="motivoCancelacion">Motivo de
+                                                                              cancelación</label>
+                                                                          <input type="text" class="form-control"
+                                                                              id="motivoCancelacion"
+                                                                              name="motivo_cancelacion"
+                                                                              placeholder="Ingrese el motivo de cancelación"
+                                                                              required>
+                                                                      </div>
+                                                                  </form>
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                  <!-- Botón para enviar el motivo al controlador -->
+                                                                  <button type="button" class="btn btn-primary"
+                                                                      onclick="enviarMotivo()">Enviar</button>
+                                                                  <button type="button" class="btn btn-secondary"
+                                                                      data-dismiss="modal">Cancelar</button>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                  <script>
+                                                      function enviarMotivo() {
+                                                          // Envía el formulario dentro del modal
+                                                          $('#modalForm').submit();
 
+                                                          // Restablece el valor del campo de motivo de cancelación a una cadena vacía
+                                                          $('#motivoCancelacion').val('');
+
+                                                          // Cierra el modal
+                                                          $('#motivoModal').modal('hide');
+                                                      }
+                                                  </script> 
                                                 </div>
                                             </td>
                                         </tr>
@@ -226,11 +354,13 @@
                                                     method="POST" id="form-estado-{{ $pedido->id }}">
                                                     @csrf
                                                     @method('PUT')
-                                                    <input type="hidden" name="Estado" value="{{ $pedido->Estado }}">
-                                                   <div style="background: #f8473e;color: #fff;border-radius: 5px;text-align: center;width: 95%;height: 2.2em;display: flex;align-items: center;
+                                                    <input type="hidden" name="Estado"
+                                                        value="{{ $pedido->Estado }}">
+                                                    <div
+                                                        style="background: #f8473e;color: #fff;border-radius: 5px;text-align: center;width: 95%;height: 2.2em;display: flex;align-items: center;
                                                         justify-content: center">
 
-                                                       {{ $pedido->Estado }}
+                                                        {{ $pedido->Estado }}
                                                     </div>
 
                                                 </form>
@@ -238,16 +368,49 @@
                                             <td>{{ $pedido->Fecha }}</td>
                                             <td> {{ number_format($pedido->Total, 0, ',', '.') }}</td>
                                             <td style="display: flex">
-                                                <div class="text-center ">
-                                                    <form action="{{ url('pedidos/' . $pedido->id) }}" method="post">
+                                                <div class="">
+                                                    <form action="{{ url('pedidos/' . $pedido->id) }}"
+                                                        method="post">
                                                         <a href="{{ route('pedidos.show', $pedido->id) }}"
-                                                            class="btn btn-sm btn-primary "><i
-                                                                class="fa fa-fw fa-eye"></i></a></a>
+                                                            class="btn btn-sm btn-primary"><i
+                                                                class="fa fa-fw fa-eye"></i></a>
+                                                        <!-- Botón para mostrar el motivo de cancelación en un modal -->
+                                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#motivoCancelacionModal{{ $pedido->id }}">
+                                                            <i class="fa fa-fw fa-info-circle"></i> 
+                                                        </button>
+                                                        
                                                     </form>
-
-
                                                 </div>
                                             </td>
+                                            <!-- Modal para mostrar el motivo de cancelación -->
+                                            <div class="modal fade" id="motivoCancelacionModal{{ $pedido->id }}"
+                                                tabindex="-1" role="dialog"
+                                                aria-labelledby="motivoCancelacionModalLabel{{ $pedido->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="motivoCancelacionModalLabel{{ $pedido->id }}">
+                                                                Motivo de Cancelación</h5>
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal" aria-label="Cerrar">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!-- Aquí muestra el motivo de cancelación del pedido -->
+                                                            Motivo de cancelación: {{ $pedido->motivoCancelacion }}
+                                                        </div>
+                                                        
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </tr>
                                         @php $Numero++ @endphp
                                     @endif
@@ -259,7 +422,20 @@
             </div>
         </div>
     </div>
+
 </section>
+
+
+</form>
+{{-- <script>
+    // Cuando se haga clic en el botón "Enviar" del modal
+    $('#enviarMotivo').on('click', function() {
+        $('#modalForm').submit(); // Envía el formulario dentro del modal
+
+        // Restablece el valor del campo de motivo de cancelación a una cadena vacía
+        $('#motivoCancelacion').val('');
+    });
+</script> --}}
 <script>
     function confirmarEliminacion(pedidoId) {
         Swal.fire({

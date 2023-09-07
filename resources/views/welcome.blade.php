@@ -714,7 +714,7 @@ Inicio
 
                 if (insumosSeleccionados.length < 3 && cantidadTotalInsumos < 3) {
                     nosepuedeAgregar(
-                        'Debes seleccionar al menos un insumo para crear un producto personalizado.');
+                        'Debes seleccionar 3  insumo para crear un producto personalizado.');
                     return; // Salir de la función si no hay insumos seleccionados
                 }
 
