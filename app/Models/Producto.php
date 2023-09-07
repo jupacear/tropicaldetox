@@ -72,4 +72,8 @@ class Producto extends Model
   {
     return $this->belongsTo(Productos::class, 'Prductos', 'id');
   }
+  public function iinsumos()
+  {
+      return $this->belongsToMany(Insumo::class);
+  }
 }

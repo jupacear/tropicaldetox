@@ -218,26 +218,45 @@
                                                     data-target="#productModal_{{ $producto->id }}">Detalles</button>
                                             </li>
 
-                                            <!-- Modal -->
                                             <div class="modal fade my-modal" id="productModal_{{ $producto->id }}"
                                                 tabindex="-1" role="dialog"
                                                 aria-labelledby="productModalLabel_{{ $producto->id }}"
-                                                aria-hidden="true" style="position: absolute; z-index: 1050;">
-                                                <div class="modal-dialog" role="document">
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-lg" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title"
-                                                                id="productModalLabel_{{ $producto->id }}">
-                                                                Detalles del producto</h5>
+                                                                id="productModalLabel_{{ $producto->id }}">Detalles del
+                                                                producto</h5>
                                                             <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p>ID: {{ $producto->id }}</p>
-                                                            <p>Nombre: {{ $producto->nombre }}</p>
-                                                            <p>Precio: ${{ $producto->precio }}</p>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <img src="{{ asset($producto->imagen) }}"
+                                                                        alt="{{ $producto->nombre }}" class="img-fluid">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <p><strong>Nombre:</strong> {{ $producto->nombre }}</p>
+                                                                    @foreach ($Categorium as $Categoriu)
+                                                                        <p><strong>Categoria:</strong>
+                                                                            {{ $Categoriu->nombre }}</p>
+                                                                    @endforeach
+                                                                    <p><strong>Insumos:</strong></p>
+                                                                    <ul>
+                                                                        @foreach ($producto->insumos as $insumo)
+                                                                            <li>{{ $insumo->nombre }}</li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                    <p><strong>Descripción:</strong>
+                                                                        {{ $producto->descripcion }}</p>
+                                                                    <p><strong>Precio:</strong> ${{ $producto->precio }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                             <!-- Agrega aquí más detalles del producto si es necesario -->
                                                         </div>
                                                         <div class="modal-footer">
@@ -594,19 +613,7 @@
                                     totalElement.textContent = totalFormateado;
                                     totalInput.value = total.toFixed(2);
                                 }
-                                // var selectedProductsList = document.getElementById('selected-products-list');
-                                // if (selectedProductsList) {
-                                //     var observer = new MutationObserver(function(mutationsList, observer) {
-                                //         calcularTotalInicial(); // Ejecutar la función de cálculo en respuesta a cambios en la tabla
-                                //     });
 
-                                //     observer.observe(selectedProductsList, {
-                                //         childList: true,
-                                //         subtree: true
-                                //     });
-                                // }
-                                // Llamamos a la función al cargar la página
-                                // Llamamos a la función al cargar la página
                                 window.addEventListener('load', calcularTotalInicial);
                             </script>
 
@@ -693,40 +700,39 @@
                                 function quitarProducto(id) {
                                     var producto = document.querySelector(`tr[data-producto-id="${id}"]`);
                                     var cantidad = parseInt(producto.getAttribute('data-cantidad'));
-                                    var subtotal = parseFloat(producto.getAttribute('data-subtotal'));
+                                    var subtotal = parseInt(producto.getAttribute('data-subtotal'));
 
                                     producto.remove();
 
-                                    var totalElement = document.getElementById('total');
+                                    total -= subtotal;
+
+                                    totalElement.textContent = total.toFixed(2);
+
                                     var totalInput = document.getElementById('total-input');
-                                    let total = parseFloat(totalElement.textContent.replace(/\./g, '').replace(',', '.'));
-
-                                    total -= subtotal; // Restamos el subtotal del producto eliminado al total
-
-                                    // Actualizar el elemento de visualización del total
-                                    var totalFormateado = total.toLocaleString(undefined, {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2
-                                    });
-                                    totalElement.textContent = totalFormateado;
-
-                                    // Actualizar el campo oculto con los datos actualizados
-                                    // alert(totalInput.value = total.toFixed(2));
                                     totalInput.value = total.toFixed(2);
 
                                     var inputProductosSeleccionados = document.getElementById('productos-seleccionados-input');
                                     var productosSeleccionados = Array.from(document.querySelectorAll('#selected-products-list tr')).map(function(
                                         tr) {
-                                        return {
-                                            id: tr.getAttribute('data-producto-id'),
-                                            cantidad: parseInt(tr.getAttribute('data-cantidad')),
-                                            subtotal: parseFloat(tr.getAttribute('data-subtotal'))
-                                        };
+                                        return tr.textContent.split('\t');
                                     });
 
                                     inputProductosSeleccionados.value = JSON.stringify(productosSeleccionados);
-                                }
 
+                                    var inputCantidad = document.createElement('input');
+                                    inputCantidad.type = 'hidden';
+                                    inputCantidad.name = 'Cantidad[]';
+                                    inputCantidad.value = cantidad;
+                                    productosSeleccionados.appendChild(inputCantidad);
+
+                                    var inputProductoID = document.createElement('input');
+                                    inputProductoID.type = 'hidden';
+                                    inputProductoID.name = 'ProductoID[]';
+                                    inputProductoID.value = id;
+                                    productosSeleccionados.appendChild(inputProductoID);
+                                    personalizadosArray.splice(id, 1);
+
+                                }
                                 const busquedaInput = document.getElementById('busqueda');
                                 const productItems = document.querySelectorAll('.product-list li');
 
@@ -899,7 +905,7 @@
 
                                         if (insumosSeleccionados.length < 3 && cantidadTotalInsumos < 3) {
                                             nosepuedeAgregar(
-                                                'Debes seleccionar al menos un insumo para crear un producto personalizado.');
+                                                'Debes seleccionar 3 insumo para crear un producto personalizado.');
                                             return; // Salir de la función si no hay insumos seleccionados
                                         }
 
@@ -1073,7 +1079,7 @@
                                     });
 
                                     Swal.fire({
-                                        title: 'Ingrese la cantidad para el producto personalizado:',
+                                        title: 'Ingrese la cantidad para el producto:',
                                         input: 'number',
                                         inputValue: 1,
                                         showCancelButton: true,

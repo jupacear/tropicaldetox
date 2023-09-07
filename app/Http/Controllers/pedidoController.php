@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categorium;
 use App\Models\Insumo;
 use App\Models\detalle_pedidos;
 use App\Models\InsumoProducto;
@@ -46,7 +47,7 @@ class pedidoController extends Controller
     public function create()
     {
         // Retornamos la vista "create" y le pasamos las variables "productos" y "users"
-        return view('pedidos.create', ['productos' => Producto::all(), 'users' => User::all(), 'Insumo' => Insumo::all()]);
+        return view('pedidos.create', ['productos' => Producto::all(), 'users' => User::all(), 'Insumo' => Insumo::all(), 'Categorium' => Categorium::all()]);
     }
 
     /**
@@ -58,6 +59,7 @@ class pedidoController extends Controller
     public function store(Request $request)
     {
         $productos = $request->input('ProductoID');
+        $nombre = $request->input('Nombre');
         $cantidades = $request->input('Cantidad');
         $personalizadosArray = json_decode($request->input('personalizadosArray'), true);
         if ($productos) {
@@ -84,7 +86,7 @@ class pedidoController extends Controller
                 'Total' => 'required|numeric',
             ]);
         }
-
+        
         $pedido = new Pedido();
         if (!empty($nombre)) {
             $pedido->Descripcion = $nombre;
@@ -111,7 +113,6 @@ class pedidoController extends Controller
             }
         }
         // Si todos los insumos son suficientes, continúa con la creación de los pedidos para productos estándar
-        // return response()->json($personalizadosArray);
         if (!empty($personalizadosArray)) {
 
         foreach ($personalizadosArray as $personalizado) {
@@ -148,21 +149,6 @@ class pedidoController extends Controller
             }
         }}
         
-
-
-        // Si todos los insumos son suficientes, continúa con la creación de los pedidos personalizados
-// ...
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -307,7 +293,7 @@ class pedidoController extends Controller
         $personaliza = producPerz::where('id_pedidos', $id)->get();
         $users = User::all(); // define la variable $users con todos los usuarios
         $detalles_pedidos = detalle_pedidos::where('id_pedidos', $id)->get();
-        return view('pedidos.edit', ['pedidos' => $pedidos, 'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users, 'Insumo' => Insumo::all(), 'personaliza' => $personaliza])->with('success', 'exito');
+        return view('pedidos.edit', ['pedidos' => $pedidos, 'pedido' => $pedido, 'detalles_pedidos' => $detalles_pedidos, 'productos' => Producto::all(), 'users' => $users, 'Insumo' => Insumo::all(), 'personaliza' => $personaliza, 'Categorium' => Categorium::all()])->with('success', 'exito');
     }
 
 
@@ -331,15 +317,35 @@ class pedidoController extends Controller
         ;
     }
 
+    // public function updateEstadoo(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'Estadoo' => 'required|max:200',
+    //     ]);
+    //     $pedido = Pedido::find($id);
+    //     $pedido->Estado = $request->input('Estado');
+    //     // return response()->json($pedido->Estado = $request->input('Estado'));
+
+    //     $pedido->save();
+    //     return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');
+    //     ;
+    // }
     public function updateEstadoo(Request $request, $id)
     {
         $request->validate([
-            'Estadoo' => 'required|max:200',
+            // 'Estado' => 'required|max:200',
+            'motivo_cancelacion' => 'required|max:200', // Validar el motivo de cancelación
+
         ]);
         $pedido = Pedido::find($id);
-        $pedido->Estado = $request->input('Estado');
-        // return response()->json($pedido->Estado = $request->input('Estado'));
-
+ 
+        $motivoCancelacion = $request->input('motivo_cancelacion');
+        // return response()->json($motivoCancelacion);
+        $pedido->motivoCancelacion = $motivoCancelacion;
+        // $status=$request->input('Estado');
+        // if ($status) {
+            $pedido->Estado = 'Cancelado';
+        // }
         $pedido->save();
         return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');
         ;
@@ -352,6 +358,8 @@ class pedidoController extends Controller
     {
         $productos = $request->input('ProductoID');
         $cantidades = $request->input('Cantidad');
+        $nombre = $request->input('Nombre');
+
         $personalizadosArray2 = json_decode($request->input('personalizadosArray2'), true);
         $personalizadosArray = json_decode($request->input('personalizadosArray'), true);
         // return response()->json($personalizadosArray2);
