@@ -148,7 +148,16 @@
         // Validar si el valor ingresado contiene caracteres diferentes a números y el punto
         for (let i = 0; i < inputValue.length; i++) {
             const charCode = inputValue.charCodeAt(i);
-
+            // Validar longitud total del valor ingresado (incluyendo dígitos y puntos)
+            if (inputValue.length > 5) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'El precio no puede tener más de 5 caracteres',
+                });
+                input.value = inputValue.substring(0, 5); // Truncar el valor a 8 caracteres
+                return;
+            }
             // Aceptar solo números (48-57) y el punto (46)
             if ((charCode < 48 || charCode > 57) && charCode !== 46) {
                 Swal.fire({

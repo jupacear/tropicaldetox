@@ -5,14 +5,7 @@
 @endsection
 @section('content')
 
-<style>
-    /* Estilo específico para el footer en la página de inicio de sesión */
-    .footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-    }
-</style>
+
 
 
 

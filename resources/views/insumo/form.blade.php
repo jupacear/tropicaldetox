@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="cantidad_disponible">Cantidad de bolsas disponibles</label>
-                    <input type="text" name="cantidad_disponible" value="{{ $insumo->cantidad_disponible/3 }}"
+                    <input type="text" name="cantidad_disponible" value="{{ round($insumo->cantidad_disponible/3) }}"
                         class="form-control{{ $errors->has('cantidad_disponible') ? ' is-invalid' : '' }}"
                         placeholder="Cantidad Disponible" onkeyup="validatePrecio(this)" onchange="removeSpaces(this)">
                     {!! $errors->first('cantidad_disponible', '<div class="invalid-feedback">:message</div>') !!}
@@ -113,13 +113,13 @@
     function validatePrecio(input) {
         const inputValue = input.value.trim(); // Eliminar espacios al inicio y al final
         // Validar longitud total del valor ingresado (incluyendo dígitos y puntos)
-        if (inputValue.length > 6) {
+        if (inputValue.length > 5) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'El precio no puede tener más de 6 caracteres',
+                text: 'El precio no puede tener más de 5 caracteres',
             });
-            input.value = inputValue.substring(0, 6); // Truncar el valor a 8 caracteres
+            input.value = inputValue.substring(0, 5); // Truncar el valor a 8 caracteres
             return;
         }
         // Validar si el valor ingresado contiene caracteres diferentes a números y el punto
