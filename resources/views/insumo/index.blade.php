@@ -39,6 +39,7 @@ Insumo
                                         <th style="color:#fff;">Nombre</th>
                                         <th style="color:#fff;">Estado</th>
                                         <th style="color:#fff;">Cantidad Disponible</th>
+                                        <th style="color:#fff;">bolsas disponibles</th>
                                         <th style="color:#fff;">Unidad Medida</th>
                                         <th style="color:#fff;">Precio Unitario</th>
                                         <th style="color:#fff;">Opciones</th>
@@ -63,6 +64,8 @@ Insumo
                                             <span class="badge badge-success">Activo</span>
                                         </td>
                                         <td>{{ $insumo->cantidad_disponible }}</td>
+                                        <td>{{ round($insumo->cantidad_disponible/3) }}</td>
+
                                         <td>{{ $insumo->unidad_medida }}</td>
                                         <td>{{ number_format($insumo->precio_unitario, 0, '.','.') }}</td>
 

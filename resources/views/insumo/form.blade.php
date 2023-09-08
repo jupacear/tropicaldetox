@@ -22,8 +22,8 @@
                     {!! $errors->first('nombre', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
                 <div class="col-md-4">
-                    <label for="cantidad_disponible">Cantidad Disponible</label>
-                    <input type="text" name="cantidad_disponible" value="{{ $insumo->cantidad_disponible }}"
+                    <label for="cantidad_disponible">Cantidad de bolsas disponibles</label>
+                    <input type="text" name="cantidad_disponible" value="{{ $insumo->cantidad_disponible/3 }}"
                         class="form-control{{ $errors->has('cantidad_disponible') ? ' is-invalid' : '' }}"
                         placeholder="Cantidad Disponible" onkeyup="validatePrecio(this)" onchange="removeSpaces(this)">
                     {!! $errors->first('cantidad_disponible', '<div class="invalid-feedback">:message</div>') !!}
