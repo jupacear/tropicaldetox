@@ -22,14 +22,12 @@
             <div style="display: flex;position: relative;bottom: 1em">
 
 
-                <h3 class="page__heading ml-3 mb-0">Pedido</h3>
+                <h3 class="page__heading ml-3 mb-0">Pedidos</h3>
             </div>
         </div>
 
     </div>
-    <div class="section-header">
-        <h3 class="page__heading">Pedidos</h3>
-    </div>
+   
     <div class="section-body">
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -268,62 +266,62 @@
                                                         </button>
 
                                                     </form>
-                                                      <!-- Modal para el motivo de cancelación -->
-                                                      <div class="modal fade" id="motivoModal" tabindex="-1"
-                                                      role="dialog" aria-labelledby="exampleModalLabel"
-                                                      aria-hidden="true">
-                                                      <div class="modal-dialog" role="document">
-                                                          <div class="modal-content">
-                                                              <div class="modal-header">
-                                                                  <h5 class="modal-title" id="exampleModalLabel">
-                                                                      Motivo de cancelación</h5>
-                                                                  <button type="button" class="close"
-                                                                      data-dismiss="modal" aria-label="Cerrar">
-                                                                      <span aria-hidden="true">&times;</span>
-                                                                  </button>
-                                                              </div>
-                                                              <div class="modal-body">
-                                                                  <!-- Formulario dentro del modal -->
-                                                                  <form id="modalForm"
-                                                                      action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
-                                                                      method="POST">
-                                                                      @csrf
-                                                                      @method('PUT')
+                                                    <!-- Modal para el motivo de cancelación -->
+                                                    <div class="modal fade" id="motivoModal" tabindex="-1"
+                                                        role="dialog" aria-labelledby="exampleModalLabel"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                                        Motivo de cancelación</h5>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="modal" aria-label="Cerrar">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <!-- Formulario dentro del modal -->
+                                                                    <form id="modalForm"
+                                                                        action="{{ route('pedidos.updateEstadoo', $pedido->id) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('PUT')
 
-                                                                      <!-- Campo de entrada para el motivo de cancelación -->
-                                                                      <div class="form-group">
-                                                                          <label for="motivoCancelacion">Motivo de
-                                                                              cancelación</label>
-                                                                          <input type="text" class="form-control"
-                                                                              id="motivoCancelacion"
-                                                                              name="motivo_cancelacion"
-                                                                              placeholder="Ingrese el motivo de cancelación"
-                                                                              required>
-                                                                      </div>
-                                                                  </form>
-                                                              </div>
-                                                              <div class="modal-footer">
-                                                                  <!-- Botón para enviar el motivo al controlador -->
-                                                                  <button type="button" class="btn btn-primary"
-                                                                      onclick="enviarMotivo()">Enviar</button>
-                                                                  <button type="button" class="btn btn-secondary"
-                                                                      data-dismiss="modal">Cancelar</button>
-                                                              </div>
-                                                          </div>
-                                                      </div>
-                                                  </div>
-                                                  <script>
-                                                      function enviarMotivo() {
-                                                          // Envía el formulario dentro del modal
-                                                          $('#modalForm').submit();
+                                                                        <!-- Campo de entrada para el motivo de cancelación -->
+                                                                        <div class="form-group">
+                                                                            <label for="motivoCancelacion">Motivo de
+                                                                                cancelación</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="motivoCancelacion"
+                                                                                name="motivo_cancelacion"
+                                                                                placeholder="Ingrese el motivo de cancelación"
+                                                                                required>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <!-- Botón para enviar el motivo al controlador -->
+                                                                    <button type="button" class="btn btn-primary"
+                                                                        onclick="enviarMotivo()">Enviar</button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cancelar</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        function enviarMotivo() {
+                                                            // Envía el formulario dentro del modal
+                                                            $('#modalForm').submit();
 
-                                                          // Restablece el valor del campo de motivo de cancelación a una cadena vacía
-                                                          $('#motivoCancelacion').val('');
+                                                            // Restablece el valor del campo de motivo de cancelación a una cadena vacía
+                                                            $('#motivoCancelacion').val('');
 
-                                                          // Cierra el modal
-                                                          $('#motivoModal').modal('hide');
-                                                      }
-                                                  </script> 
+                                                            // Cierra el modal
+                                                            $('#motivoModal').modal('hide');
+                                                        }
+                                                    </script>
                                                 </div>
                                             </td>
                                         </tr>
@@ -375,10 +373,12 @@
                                                             class="btn btn-sm btn-primary"><i
                                                                 class="fa fa-fw fa-eye"></i></a>
                                                         <!-- Botón para mostrar el motivo de cancelación en un modal -->
-                                                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#motivoCancelacionModal{{ $pedido->id }}">
-                                                            <i class="fa fa-fw fa-info-circle"></i> 
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#motivoCancelacionModal{{ $pedido->id }}">
+                                                            <i class="fa fa-fw fa-info-circle"></i>
                                                         </button>
-                                                        
+
                                                     </form>
                                                 </div>
                                             </td>
@@ -402,7 +402,7 @@
                                                             <!-- Aquí muestra el motivo de cancelación del pedido -->
                                                             Motivo de cancelación: {{ $pedido->motivoCancelacion }}
                                                         </div>
-                                                        
+
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-dismiss="modal">Cerrar</button>

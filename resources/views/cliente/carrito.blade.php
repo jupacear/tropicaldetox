@@ -25,7 +25,9 @@
             <div class="row" style="padding-top: 60px;">
                 <div class="col-lg-12">
                     <div class="title-all text-center">
-                        <h1>Carrito de Productos</h1>
+
+                        <h1>Carrito de Pedidos</h1>
+
                     </div>
                 </div>
             </div>
@@ -71,7 +73,7 @@
                 <form id="formulario-guadar-pedido" action="{{ route('guardarPedido') }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="Direcion">si vas a utilizar otras dirección ponlo aqui:</label>
+                        <label for="Direcion">Si vas a colocar otra dirección ponlo aquí:</label>
                         <input type="text" name="Direcion" id="Direcion" class="form-control"
                             value="{{ \Illuminate\Support\Facades\Auth::user()->direccion }}">
                     </div>

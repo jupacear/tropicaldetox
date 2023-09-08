@@ -48,7 +48,9 @@
                                 <tbody>
                                     @php $contador = 1 @endphp
                                     @foreach ($usuarios as $usuario)
-                                        @if ($usuario->estado)
+                                        @if ($usuario->name ==\Illuminate\Support\Facades\Auth::user()->name)
+
+                                        @else ($usuario->estado)
                                             <tr>
                                                 <td>{{ $contador }}</td>
                                                 <td>{{ $usuario->name }}</td>
@@ -85,6 +87,7 @@
                                                 </td>
                                             </tr>
                                             @php $contador++ @endphp
+
                                         @endif
                                     @endforeach
 
