@@ -39,28 +39,29 @@ class InsumoApiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'imagen' => 'required|image|mimes:jpg,png|max:2048',
+            'imagen' => 'nullable|image|mimes:jpg,png|max:2048', // Cambiar 'required' a 'nullable'
             'nombre' => 'required',
             'cantidad_disponible' => 'required|numeric',
             'unidad_medida' => 'required',
             'precio_unitario' => 'required|numeric',
             'activo' => 'boolean'
         ]);
-
+    
         // Obtener la imagen del cuerpo de la solicitud
         $image = $request->file('imagen');
-
+    
         // Verificar si se proporcionó una imagen
-        if (!$image) {
-            return response()->json(['error' => 'Debe proporcionar una imagen'], 400);
+        if ($image) {
+            // Generar un nombre único para la imagen usando la marca de tiempo actual
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+    
+            // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
+            $image->move(public_path('img/InsumoIMG'), $imageName);
+        } else {
+            // Si no se proporciona una imagen, asignar null al campo 'imagen'
+            $imageName = null;
         }
-
-        // Generar un nombre único para la imagen usando la marca de tiempo actual
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-
-        // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
-        $image->move(public_path('img/InsumoIMG'), $imageName);
-
+    
         // Crear una instancia del modelo Insumo con los demás datos del formulario
         $insumo = new Insumo([
             'nombre' => $request->input('nombre'),
@@ -68,16 +69,17 @@ class InsumoApiController extends Controller
             'unidad_medida' => $request->input('unidad_medida'),
             'precio_unitario' => $request->input('precio_unitario'),
             'activo' => $request->input('activo'),
-            'imagen' => 'img/InsumoIMG/' . $imageName,
+            'imagen' => $imageName, // Asignar el nombre de la imagen o null
         ]);
-
+    
         // Guardar el nuevo insumo en la base de datos
         $insumo->save();
-
+    
         // Devolver una respuesta de éxito
         return response()->json(['message' => 'Insumo creado exitosamente'], 201);
     }
-
+    
+    
 
 
     /**
@@ -100,45 +102,48 @@ class InsumoApiController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $insumo = Insumo::findOrFail($id);
+{
+    $request->validate([
+        'imagen' => 'nullable|image|mimes:jpg,png|max:2048',
+        'nombre' => 'required',
+        'cantidad_disponible' => 'required|numeric',
+        'unidad_medida' => 'required',
+        'precio_unitario' => 'required|numeric',
+        'activo' => 'boolean'
+    ]);
 
-        $request->validate(Insumo::$rulesUpdate);
+    // Obtener el insumo existente por su ID
+    $insumo = Insumo::findOrFail($id);
 
-        // Verificar si se ha cargado una nueva imagen
-        if ($request->hasFile('imagen')) {
-            // Eliminar la imagen anterior si existe
-            if ($insumo->imagen) {
-                Storage::delete($insumo->imagen);
-            }
-
-            // Obtener el archivo de imagen
-            $image = $request->file('imagen');
-
-            // Generar un nombre único para la imagen usando la marca de tiempo actual
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-
-            // Mover la imagen a la carpeta "public/img/InsumoIMG" dentro del directorio público
-            $image->move(public_path('img/InsumoIMG'), $imageName);
-
-            // Actualizar la propiedad "imagen" del modelo Insumo
-            $insumo->imagen = 'img/InsumoIMG' . $imageName;
-        } else {
-            // Actualizar los demás campos del modelo con los datos del formulario
-            $insumo->nombre = $request->input('nombre');
-            $insumo->cantidad_disponible = $request->input('cantidad_disponible');
-            $insumo->unidad_medida = $request->input('unidad_medida');
-            $insumo->precio_unitario = $request->input('precio_unitario');
-            $insumo->activo = $request->input('activo');
+    // Procesar la imagen si se proporciona una nueva
+    if ($request->hasFile('imagen')) {
+        $image = $request->file('imagen');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('img/InsumoIMG'), $imageName);
+        // Eliminar la imagen anterior si existe
+        if ($insumo->imagen) {
+            unlink(public_path('img/InsumoIMG/' . $insumo->imagen));
         }
-
-        // Guardar los cambios en la base de datos
-        $insumo->save();
-
-        // Devolver un mensaje de éxito personalizado
-        $message = 'Insumo actualizado exitosamente: ' . $insumo->toJson();
-        return response()->json(['message' => $message], 200);
+        $insumo->imagen = $imageName;
     }
+
+    // Actualizar los demás campos del insumo
+    $insumo->nombre = $request->input('nombre');
+    $insumo->cantidad_disponible = $request->input('cantidad_disponible');
+    $insumo->unidad_medida = $request->input('unidad_medida');
+    $insumo->precio_unitario = $request->input('precio_unitario');
+    $insumo->activo = $request->input('activo');
+
+    // Guardar los cambios
+    $insumo->save();
+
+    return response()->json(['message' => 'Insumo actualizado exitosamente'], 200);
+}
+
+
+
+
+
 
 
     /**

@@ -25,7 +25,7 @@
             <div class="row" style="padding-top: 60px;">
                 <div class="col-lg-12">
                     <div class="title-all text-center">
-                        <h1>Carrito de Compras</h1>
+                        <h1>Carrito de Productos</h1>
                     </div>
                 </div>
             </div>

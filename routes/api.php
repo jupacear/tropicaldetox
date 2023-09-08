@@ -43,6 +43,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 Route::apiResource('insumos', InsumoApiController::class);
+
+Route::post('/crear', [InsumoApiController::class, 'store']);
+Route::put('/api/insumos/{id}', 'InsumoController@update');
+
+
+
 Route::apiResource('pedidos', ApiPedidoController::class);
 
 Route::put('pedidos/{id}/estado', [ApiPedidoController::class, 'updateEstadoo']);
