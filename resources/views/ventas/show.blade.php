@@ -21,8 +21,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <a href="{{ route('pdf', ['id' => $pedido->id]) }}"
-                                        class="btn btn-primary">Descargar PDF</a>
+
 
                                     <p><strong>Usuario:</strong> {{ $pedido->users->name }}</p>
                                     @if (!empty($pedido->Telefono))
@@ -35,7 +34,11 @@
                                     <p><strong>Total:</strong> {{ number_format($pedido->Total, 0, ',', '.') }}</p>
 
                                     <h2>Detalles del Ventas</h2>
+                                    <div style="display: flex;justify-content: right;margin: 2em">
 
+                                        <a href="{{ route('pdf', ['id' => $pedido->id]) }}"
+                                            class="btn btn-primary">Descargar PDF</a>
+                                    </div>
                                     <table class="table">
                                         @if (!empty($pedido->Descripcion))
                                             <p style="font-size: 1.5em"><strong>descripción:</strong>
@@ -163,7 +166,7 @@
 @endforeach
 
 
-    <!-- Bloque de JavaScript para cargar los ingredientes en el modal -->
+<!-- Bloque de JavaScript para cargar los ingredientes en el modal -->
 <script>
     $(document).ready(function() {
         $('.modal').on('show.bs.modal', function(event) {
