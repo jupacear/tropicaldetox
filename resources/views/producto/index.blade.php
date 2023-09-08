@@ -45,6 +45,7 @@
                                         <th style="color:#fff;">Descripción</th>
                                         <th style="color:#fff;">Estado</th>
                                         <th style="color:#fff;">Nombre de categoría</th>
+                                        <th style="color:#fff;">Personalizado</th>
                                         <th style="color:#fff;">Insumo</th>
                                         <th style="color:#fff;">Opciones</th>
                                     </tr>
@@ -69,16 +70,21 @@
                                                 <td> <span class="badge badge-success">Activo</span>
                                                 <td>{{ $producto->categorium->nombre }}</td>
                                                 <td>
+                                                    @if ($producto->personalizado)
+                                                        <span class="badge badge-primary">Personalizado</span>
+                                                    @else
+                                                        <span class="badge badge-success">Normal</span>
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     @foreach ($producto->insumos as $insumo)
                                                         {{ $insumo->nombre }}
                                                         <br>
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    <!-- Formulario de eliminación -->
-                                                    <form id="deleteProductForm-{{ $producto->id }}"
-                                                        action="{{ route('productos.destroy', $producto->id) }}"
-                                                        method="POST" style="display: inline;">
+                                                    <form action="{{ route('productos.destroy', $producto->id) }}"
+                                                        method="POST">
                                                         <a class="btn btn-sm btn-primary"
                                                             href="{{ route('productos.show', $producto->id) }}"><i
                                                                 class="fa fa-fw fa-eye"></i> </a>
@@ -87,12 +93,10 @@
                                                                 class="fa fa-fw fa-edit"></i> </a>
                                                         @csrf
                                                         @method('DELETE')
-
-                                                        <button type="button" class="btn btn-danger btn-sm"
-                                                            data-toggle="modal" data-target="#confirmDeleteModal"
-                                                            data-form-id="deleteProductForm-{{ $producto->id }}"><i
-                                                                class="fa fa-fw fa-trash"></i> </button>
-
+                                                        <button type="button" class="btn btn-sm btn-info"
+                                                            onclick="confirmChangeStatus(event)">
+                                                            <i class="fa fa-fw fa-toggle-off"></i>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -118,16 +122,21 @@
                                                 <td> <span class="badge badge-danger">Inactivo</span> </td>
                                                 <td>{{ $producto->categorium->nombre }}</td>
                                                 <td>
+                                                    @if ($producto->personalizado)
+                                                        <span class="badge badge-primary">Personalizado</span>
+                                                    @else
+                                                        <span class="badge badge-success">Normal</span>
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     @foreach ($producto->insumos as $insumo)
                                                         {{ $insumo->nombre }}
                                                         <br>
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    <!-- Formulario de eliminación -->
-                                                    <form id="deleteProductForm-{{ $producto->id }}"
-                                                        action="{{ route('productos.destroy', $producto->id) }}"
-                                                        method="POST" style="display: inline;">
+                                                    <form action="{{ route('productos.destroy', $producto->id) }}"
+                                                        method="POST">
                                                         <a class="btn btn-sm btn-primary"
                                                             href="{{ route('productos.show', $producto->id) }}"><i
                                                                 class="fa fa-fw fa-eye"></i> </a>
@@ -136,12 +145,10 @@
                                                                 class="fa fa-fw fa-edit"></i> </a>
                                                         @csrf
                                                         @method('DELETE')
-
-                                                        <button type="button" class="btn btn-danger btn-sm"
-                                                            data-toggle="modal" data-target="#confirmDeleteModal"
-                                                            data-form-id="deleteProductForm-{{ $producto->id }}"><i
-                                                                class="fa fa-fw fa-trash"></i> </button>
-
+                                                        <button type="button" class="btn btn-sm btn-info"
+                                                            onclick="confirmChangeStatus(event)">
+                                                            <i class="fa fa-fw fa-toggle-on"></i>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -165,28 +172,25 @@
     </section>
     // Sweet alert
     <script>
-        $(document).ready(function() {
-            var deleteFormId;
+        function confirmChangeStatus(event) {
+            event.preventDefault(); // Evita la acción por defecto del botón
 
-            // Captura el evento click del botón de eliminar y muestra la alerta de confirmación
-            $(document).on('click', '[data-toggle="modal"][data-target="#confirmDeleteModal"]', function() {
-                deleteFormId = $(this).data('form-id');
-                Swal.fire({
-                    title: 'Confirmar Eliminación',
-                    text: '¿Estás seguro de que quieres eliminar este producto?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Eliminar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#' + deleteFormId).submit(); // Envía la solicitud de eliminación
-                    }
-                });
+            Swal.fire({
+                title: 'Confirmar Cambio de Estado',
+                text: '¿Estás seguro de que quieres cambiar el estado de este producto?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Cambiar Estado',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si el usuario confirma, envía el formulario
+                    event.target.closest('form').submit();
+                }
             });
-        });
+        }
     </script>
     <script>
         $(document).ready(function() {

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-{{ __('Update') }} Categoria
+{{ __('Update') }} Categoría
 @endsection
 
 @section('content')

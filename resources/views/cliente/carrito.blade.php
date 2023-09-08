@@ -122,6 +122,8 @@
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     
+
         <script>
             $(document).on('click', '.btn-ver-detalles', function() {
                 var index = $(this).closest('tr').find('input[type="number"]').data('index');
@@ -585,40 +587,40 @@
                 }
 
                 function eliminarProductoCarrito(indice) {
-    // Mostrar la alerta de confirmación usando Swal.fire
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: '¿Deseas eliminar este producto del carrito?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            carrito.splice(indice, 1);
-            localStorage.setItem('carrito', JSON.stringify(carrito));
+                    // Mostrar la alerta de confirmación usando Swal.fire
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: '¿Deseas eliminar este producto del carrito?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            carrito.splice(indice, 1);
+                            localStorage.setItem('carrito', JSON.stringify(carrito));
 
-            // Eliminar la fila correspondiente al producto eliminado
-            tablaCarrito.removeChild(tablaCarrito.children[indice]);
+                            // Eliminar la fila correspondiente al producto eliminado
+                            tablaCarrito.removeChild(tablaCarrito.children[indice]);
 
-            // Actualizar los índices de los botones de eliminar restantes en la tabla
-            let botonesEliminar = tablaCarrito.querySelectorAll('.btn.thirdd');
-            botonesEliminar.forEach(function(boton, nuevoIndice) {
-                boton.setAttribute('data-indice', nuevoIndice);
-            });
+                            // Actualizar los índices de los botones de eliminar restantes en la tabla
+                            let botonesEliminar = tablaCarrito.querySelectorAll('.btn.thirdd');
+                            botonesEliminar.forEach(function(boton, nuevoIndice) {
+                                boton.setAttribute('data-indice', nuevoIndice);
+                            });
 
-            // Actualizar el total del pedido después de eliminar el producto
-            actualizarTotalEnDOM();
+                            // Actualizar el total del pedido después de eliminar el producto
+                            actualizarTotalEnDOM();
 
-            // Mostrar una alerta de éxito con Swal.fire si se elimina el producto
-            Swal.fire(
-                '¡Eliminado!',
-                'El producto ha sido eliminado del carrito.',
-                'success'
-            );
-        }
-    });
-}
+                            // Mostrar una alerta de éxito con Swal.fire si se elimina el producto
+                            Swal.fire(
+                                '¡Eliminado!',
+                                'El producto ha sido eliminado del carrito.',
+                                'success'
+                            );
+                        }
+                    });
+                }
 
                 carrito.forEach(function(producto) {
                     let fila = document.createElement('tr');

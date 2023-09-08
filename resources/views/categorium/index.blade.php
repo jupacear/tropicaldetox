@@ -1,13 +1,16 @@
 @extends('layouts.app')
 
 @section('title')
-Categoria
+Categorías
 @endsection
 
 @section('content')
 <section class="section">
     <div class="section-header">
+
         <h3 class="page__heading">Categorias</h3>
+
+
     </div>
     <div class="section-body">
         @if ($errors->any())
@@ -34,7 +37,7 @@ Categoria
                                         <th style="color:#fff;">No</th>
                                         <th style="color:#fff;">Imagen</th>
                                         <th style="color:#fff;">Nombre</th>
-                                        <th style="color:#fff;">Descripcion</th>
+                                        <th style="color:#fff;">Descripción</th>
                                         <th style="color:#fff;">Estado</th>
                                         <th style="color:#fff;">Opciones</th>
 

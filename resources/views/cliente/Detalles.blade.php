@@ -56,6 +56,10 @@
                                                     @endif
                                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
+                                                    @if (!empty($pedido->motivoCancelacion))
+                                                        <p><strong>motivo Cancelacion:</strong>
+                                                            {{ $pedido->motivoCancelacion }}</p>
+                                                    @endif
                                                     <p><strong>Hora:</strong> {{ substr($pedido->created_at, 11, 5) }}
 
                                                     </p>

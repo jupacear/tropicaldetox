@@ -137,7 +137,7 @@ Inicio
     <div id="slides-shop" class="cover-slides">
         <ul class="slides-container">
             @foreach ($productos as $producto)
-            @if ($producto->activo)
+            @if ($producto->activo == 1)
             <li class="text-center">
                 <img src="{{ asset($producto->imagen) }}" alt="{{ $producto->nombre }}">
                 <div class="container">
@@ -164,7 +164,7 @@ Inicio
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="title-all text-center">
-                            <h1>Categorias</h1>
+                            <h1>Categorías</h1>
                             <p>Descubre una amplia variedad de jugos frescos y deliciosos en nuestras categorías.
                                 Desde jugos cítricos y refrescantes, hasta mezclas exóticas y nutritivas,
                                 encontrarás opciones para satisfacer todos los gustos y necesidades.</p>
@@ -196,7 +196,7 @@ Inicio
             <div class="row">
                 <div class="col-lg-12">
                     <div class="title-all text-center">
-                        <h1>Productos & Categorias</h1>
+                        <h1>Productos & Categorías</h1>
                         <p>Descubre nuestra amplia selección de jugos frescos y deliciosos,
                             junto con una variedad de categorías que se adaptan a tus preferencias.
                             Disfruta de sabores únicos y opciones personalizadas para satisfacer tu sed de jugos
@@ -222,7 +222,7 @@ Inicio
             </div>
             <div class="row justify-content-center special-list">
                 @foreach ($productos as $producto)
-                @if ($producto->activo && $producto->categorias_id !== 3)
+                @if ($producto->activo == 1 && $producto->categorias_id )
                 <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
                     <!-- Cartas -->
                     <div class="products-single fix ">
@@ -304,6 +304,7 @@ Inicio
                                             <tbody>
                                                 @foreach ($Insumo as $Insumos)
                                                 <tr class="insumo" data-id="{{ $Insumos->id }}">
+                                                    @if ($Insumos->activo ==  1)
                                                     <td><img src="{{ asset($Insumos->imagen) }}" alt="Imagen del producto" width="40em"></td>
                                                     <td>{{ $Insumos->id }}</td>
                                                     <td>{{ $Insumos->nombre }}</td>
@@ -321,6 +322,7 @@ Inicio
                                                                 </button> --}}
                                                     </td>
                                                 </tr>
+                                                @endif
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -712,7 +714,7 @@ Inicio
 
                 if (insumosSeleccionados.length < 3 && cantidadTotalInsumos < 3) {
                     nosepuedeAgregar(
-                        'Debes seleccionar al menos un insumo para crear un producto personalizado.');
+                        'Debes seleccionar 3  insumo para crear un producto personalizado.');
                     return; // Salir de la función si no hay insumos seleccionados
                 }
 
