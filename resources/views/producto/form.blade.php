@@ -34,36 +34,84 @@
                         <img src="{{ asset($producto->imagen) }}" alt="Imagen actual" width="200">
                     </div>
                 @endif
-                {{ Form::file('imagen', ['class' => 'form-control' . ($errors->has('imagen') ? ' is-invalid' : ''), 'placeholder' => 'Imagen']) }}
+                {{ Form::file('imagen', ['class' => 'form-control' . ($errors->has('imagen') ? ' is-invalid' : ''), 'placeholder' => '']) }}
                 {!! $errors->first('imagen', '<div class="invalid-feedback">:message</div>') !!}
             </div>
         </div>
         <div class="form-row d-flex flex-colum">
             <div class="form-group col-md-6 p-3 ">
                 {{ Form::label('nombre') }}
-                {{ Form::text('nombre', $producto->nombre, ['class' => 'form-control' . ($errors->has('nombre') ? ' is-invalid' : ''), 'placeholder' => 'Nombre', 'onkeyup' => 'validateNombre(this)', 'onblur' => 'removeSpaces(this)']) }}
+                {{ Form::text('nombre', $producto->nombre, ['class' => 'form-control' . ($errors->has('nombre') ? ' is-invalid' : ''), 'placeholder' => '', 'onkeyup' => 'validateNombre(this)', 'onblur' => 'removeSpaces(this)']) }}
                 {!! $errors->first('nombre', '<div class="invalid-feedback">:message</div>') !!}
             </div>
             <div class="form-group col-md-6 p-3">
                 {{ Form::label('precio') }}
-                {{ Form::text('precio', $producto->precio, ['class' => 'form-control' . ($errors->has('precio') ? ' is-invalid' : ''), 'placeholder' => 'Precio', 'oninput' => 'validatePrecio(this)']) }}
+                {{ Form::text('precio', $producto->precio, ['class' => 'form-control' . ($errors->has('precio') ? ' is-invalid' : ''), 'placeholder' => '', 'oninput' => 'validatePrecio(this)']) }}
                 {!! $errors->first('precio', '<div class="invalid-feedback">:message</div>') !!}
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-6 p-3 ">
                 {{ Form::label('descripción') }}
-                {{ Form::text('descripcion', $producto->descripcion, ['class' => 'form-control' . ($errors->has('descripcion') ? ' is-invalid' : ''), 'placeholder' => 'Descripción', 'oninput' => 'validateDescripcion(this)']) }}
+                {{ Form::text('descripcion', $producto->descripcion, ['class' => 'form-control' . ($errors->has('descripcion') ? ' is-invalid' : ''), 'placeholder' => '', 'oninput' => 'validateDescripcion(this)']) }}
                 {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
                 <div id="additional-insumos"></div>
             </div>
-            <div class="form-group col-md-6 ">
-                <div class="d-flex align-items-center p-3 ">
-                    {{ Form::label('insumos', 'Insumos', ['class' => 'mr-2']) }}
-                    {{ Form::select('insumos[]', $insumos, $producto->insumos->pluck('id')->toArray(), ['class' => 'form-control' . ($errors->has('insumos') ? ' is-invalid' : ''), 'id' => 'insumos-select']) }}
-                    <button type="button" class="btn btn-primary btn-sm ml-2" id="add-insumo">Agregar insumo</button>
-                </div>
+            <div class="form-group col-md-6 p-3">
+    <div class="mt-n2"> <!-- Aplicamos un margen superior negativo mt-n2 -->
+        {{ Form::label('insumos', 'Insumos') }}
+    </div>
+    <div class="d-flex flex-column"> <!-- Cambiamos a una columna flex para colocar los elementos uno debajo del otro -->
+        <div class="input-group"> <!-- Agregamos un div con la clase input-group -->
+            {{ Form::select('insumos[]', $insumos, $producto->insumos->pluck('id')->toArray(), ['class' => 'form-control' . ($errors->has('insumos') ? ' is-invalid' : ''), 'id' => 'insumos-select']) }}
+            <div class="input-group-append">
+                <button type="button" class="btn btn-primary btn-sm ml-2" id="add-insumo">Agregar insumo</button>
             </div>
+        </div>
+        <div id="insumos-agregados-container" class="mt-3"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var maxClicks = 5;
+        var clickCount = 0;
+
+        $("#add-insumo").click(function() {
+            if (clickCount < maxClicks) {
+                var insumosSelect = $("#insumos-select").clone();
+                insumosSelect.val('');
+                var deleteButton = $("<button></button>").addClass("btn btn-link text-danger").html('<i class="fas fa-trash"></i>');
+                deleteButton.click(function() {
+                    $(this).parent().remove(); // Eliminar el conjunto de elementos al hacer clic en el botón Eliminar
+                    clickCount--;
+                    $("#add-insumo").prop("disabled", false); // Habilitar el botón Agregar cuando se elimina un elemento
+                    if ($("#insumos-agregados-container").children().length === 0) {
+                        $("#insumos-agregados-container").empty(); // Si no hay elementos, borra el contenedor
+                    }
+                });
+
+                var newInputGroup = $("<div class='input-group mt-3'></div>").append(insumosSelect, deleteButton);
+                $("#insumos-agregados-container").append(newInputGroup);
+
+                clickCount++;
+
+                if (clickCount === maxClicks) {
+                    // Mostrar una alerta de SweetAlert cuando se alcance el límite de insumos
+                    swal.fire('Límite alcanzado', "Se ha alcanzado el límite de insumos.", "warning");
+                    $("#add-insumo").prop("disabled", true);
+                }
+
+                // Agregar el título "Insumos Agregados" si no existe
+                if ($("#insumos-agregados-container").children().length === 1) {
+                    var title = $("<h3>Insumos Adicionales Agregados:</h3>").addClass("mt-3");
+                    $("#insumos-agregados-container").prepend(title);
+                }
+            }
+        });
+    });
+</script>
+
         </div>
     </div>
     <div class="box-footer mt-3">
@@ -73,28 +121,9 @@
 
 <script>
     // Evento click para agregar un nuevo selector de insumo
-    $(document).ready(function() {
-        var maxClicks = 5;
-        var clickCount = 0;
+   
 
-        $("#add-insumo").click(function() {
-            if (clickCount < maxClicks) {
-                var insumosSelect = $("#insumos-select").clone();
-                insumosSelect.val('');
 
-                var newInsumoDiv = $("<div></div>").addClass("form-group mt-3").append(insumosSelect);
-                $("#additional-insumos").append(newInsumoDiv);
-
-                clickCount++;
-
-                if (clickCount === maxClicks) {
-                    // Mostrar una alerta de SweetAlert cuando se alcance el límite de insumos
-                    swal.fire('Límite alcanzado', "Se ha alcanzado el límite de insumos.", "warning");
-                    $("#add-insumo").prop("disabled", true);
-                }
-            }
-        });
-    });
     // Función para eliminar espacios en blanco de izquierda y derecha
     function removeSpaces(input) {
         input.value = input.value.trim();

@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
     {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"> --}}
 
+    <link rel="icon" href="public/images/logo.png" type="image/png">
 
     <!-- jQuery (obligatorio para DataTables) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
