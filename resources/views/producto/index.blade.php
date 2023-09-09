@@ -95,7 +95,7 @@
                                                         @method('DELETE')
                                                         <button type="button" class="btn btn-sm btn-info"
                                                             onclick="confirmChangeStatus(event)">
-                                                            <i class="fa fa-fw fa-toggle-off"></i>
+                                                            <i class="fa fa-fw fa-toggle-on"></i>
                                                         </button>
                                                     </form>
                                                 </td>
@@ -147,7 +147,7 @@
                                                         @method('DELETE')
                                                         <button type="button" class="btn btn-sm btn-info"
                                                             onclick="confirmChangeStatus(event)">
-                                                            <i class="fa fa-fw fa-toggle-on"></i>
+                                                            <i class="fa fa-fw fa-toggle-off"></i>
                                                         </button>
                                                     </form>
                                                 </td>

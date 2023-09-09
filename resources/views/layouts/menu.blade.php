@@ -21,6 +21,11 @@
         <i class="fas fa-user-tie"></i><span>Clientes</span>
     </a>
     @endcan
+    @can('insumos')
+    <a class="nav-link" href="{{route('insumo.index')}}">
+        <i class="fas fa-box"></i><span>Insumos</span>
+    </a>
+    @endcan
     @can('categoria de productos')
     <a class="nav-link" href="{{route('categoria.index')}}">
         <i class="fas fa-tags"></i><span>Categoria de productos</span>
@@ -32,11 +37,7 @@
         <i class="fas fa-cubes"></i><span>Productos</span>
     </a>
     @endcan
-    @can('insumos')
-    <a class="nav-link" href="{{route('insumo.index')}}">
-        <i class="fas fa-box"></i><span>Insumos</span>
-    </a>
-    @endcan
+    
     @can('pedidos')
     <a class="nav-link" href="{{route('pedidos.index')}}">
         <i class="fas fa-boxes"></i><span>Pedidos</span>

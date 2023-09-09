@@ -6,7 +6,18 @@
 @section('content')
 
 
+<style>
+    .main-content {
+    margin-bottom: 50px; /* Ajusta este valor según sea necesario */
 
+}
+
+.footer {
+    position: absolute;
+     
+}
+
+</style>
 
 
 <div id="app">

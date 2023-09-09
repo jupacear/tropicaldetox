@@ -17,7 +17,7 @@
                 <div class="col-md-4">
                     <label for="nombre">Nombre</label>
                     <input type="text" name="nombre" value="{{ $insumo->nombre }}"
-                        class="form-control{{ $errors->has('nombre') ? ' is-invalid' : '' }}" placeholder="Nombre"
+                        class="form-control{{ $errors->has('nombre') ? ' is-invalid' : '' }}" placeholder=""
                         onkeyup="validateNombre(this)" onchange="removeSpaces(this)">
                     {!! $errors->first('nombre', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
@@ -25,14 +25,14 @@
                     <label for="cantidad_disponible">Cantidad de bolsas disponibles</label>
                     <input type="text" name="cantidad_disponible" value="{{ round($insumo->cantidad_disponible/3) }}"
                         class="form-control{{ $errors->has('cantidad_disponible') ? ' is-invalid' : '' }}"
-                        placeholder="Cantidad Disponible" onkeyup="validatePrecio(this)" onchange="removeSpaces(this)">
+                        placeholder="" onkeyup="validatePrecio(this)" onchange="removeSpaces(this)">
                     {!! $errors->first('cantidad_disponible', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
                 <div class="col-md-4">
                     <label for="precio_unitario">Precio Unitario</label>
                     <input type="text" name="precio_unitario" value="{{ $insumo->precio_unitario }}"
                         class="form-control{{ $errors->has('precio_unitario') ? ' is-invalid' : '' }}"
-                        placeholder="Precio Unitario" onkeyup="validatePrecio(this)" onchange="removeSpaces(this)">
+                        placeholder="" onkeyup="validatePrecio(this)" onchange="removeSpaces(this)">
                     {!! $errors->first('precio_unitario', '<div class="invalid-feedback">:message</div>') !!}
                 </div>
             </div>
