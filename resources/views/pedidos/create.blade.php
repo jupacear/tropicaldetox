@@ -288,7 +288,7 @@
                                                     data-live-search="true" required>
                                                     <option value="">Seleccionar Usuario</option>
                                                     @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                        <option value="{{ $user->id }}">{{ $user->name }} {{ $user->documento }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -765,7 +765,7 @@
 
                                     $('#Personalizados').on('hidden.bs.modal', function() {
                                         // Clear all the input fields, selected items, and any other content within the modal
-                                        $('#descripcionnn').val(''); // Clear description field
+                                        // $('#descripcionnn').val(''); // Clear description field
                                         $('.tabla-insumos-seleccionados tbody').empty(); // Clear selected insumos
                                         insumosSeleccionadosSet.clear(); // Clear selected insumos set
                                         insumosCantidad = {}; // Clear insumosCantidad object

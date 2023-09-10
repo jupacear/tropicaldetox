@@ -86,7 +86,7 @@ class pedidoController extends Controller
                 'Total' => 'required|numeric',
             ]);
         }
-        
+
         $pedido = new Pedido();
         if (!empty($nombre)) {
             $pedido->Descripcion = $nombre;
@@ -103,9 +103,9 @@ class pedidoController extends Controller
 
                 if ($insumo_producto) {
                     $insumo = Insumo::find($insumo_producto->insumo_id);
-                    
+
                     if ($insumo->cantidad_disponible < 3 + $cantidades[$index]) {
-                     
+
                         // Insumo insuficiente, muestra un mensaje de error y no continúes
                         return redirect()->back()->withErrors(['error' => '1Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
                     }
@@ -115,40 +115,41 @@ class pedidoController extends Controller
         // Si todos los insumos son suficientes, continúa con la creación de los pedidos para productos estándar
         if (!empty($personalizadosArray)) {
 
-        foreach ($personalizadosArray as $personalizado) {
-            // Verificar si $personalizado contiene la información de $insumos
-            if (isset($personalizado['insumos'])) {
-                $insumos = $personalizado['insumos'];
-        
-                // Ahora puedes iterar sobre $insumos
-                foreach ($insumos as $insumo) {
-                    $insumoData = explode(':', $insumo);
-                    $id = trim($insumoData[0]);
+            foreach ($personalizadosArray as $personalizado) {
+                // Verificar si $personalizado contiene la información de $insumos
+                if (isset($personalizado['insumos'])) {
+                    $insumos = $personalizado['insumos'];
 
-                    $insumo = Insumo::find($id);
-        
-                    if ($insumo) {
-                        // Realizar la validación de insumos aquí
-                        $Cantidad = $personalizado['Cantidad']; // Asegúrate de obtener la cantidad correctamente
-                        $soloNumeros = preg_replace('/[^0-9]/', '', $insumoData);
+                    // Ahora puedes iterar sobre $insumos
+                    foreach ($insumos as $insumo) {
+                        $insumoData = explode(':', $insumo);
+                        $id = trim($insumoData[0]);
 
-                        $ultimaParte = end($insumoData);
-                        $ultfvimaParte =( end($soloNumeros));
-                        $ultimaParteEntero = (int)$ultimaParte;
-                        // return response()->json($ultimaParteEntero);
-                        
-                        if ($insumo->cantidad_disponible < 1 + $ultfvimaParte + $Cantidad) {
-                            // Insumo insuficiente, muestra un mensaje de error y no continúes
-                            return redirect()->back()->withErrors(['error' => '1Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
+                        $insumo = Insumo::find($id);
+
+                        if ($insumo) {
+                            // Realizar la validación de insumos aquí
+                            $Cantidad = $personalizado['Cantidad']; // Asegúrate de obtener la cantidad correctamente
+                            $soloNumeros = preg_replace('/[^0-9]/', '', $insumoData);
+
+                            $ultimaParte = end($insumoData);
+                            $ultfvimaParte = (end($soloNumeros));
+                            $ultimaParteEntero = (int) $ultimaParte;
+                            // return response()->json($ultimaParteEntero);
+
+                            if ($insumo->cantidad_disponible < 1 + $ultfvimaParte + $Cantidad) {
+                                // Insumo insuficiente, muestra un mensaje de error y no continúes
+                                return redirect()->back()->withErrors(['error' => '1Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
+                            }
+                            // Resto del código de validación de insumos
                         }
-                        // Resto del código de validación de insumos
                     }
+                } else {
+                    // Manejo de error o acción por defecto si 'insumos' no existe en $personalizado
                 }
-            } else {
-                // Manejo de error o acción por defecto si 'insumos' no existe en $personalizado
             }
-        }}
-        
+        }
+
 
 
 
@@ -226,21 +227,21 @@ class pedidoController extends Controller
                 $subtotal = $detalles_pedidos->cantidad * $detalles_pedidos->precio_unitario;
                 $total += $subtotal;
                 $insumo_producto = InsumoProducto::where('producto_id', $producto_id)->first();
-                    if ($insumo_producto) {
-                        $insumo = Insumo::find($insumo_producto->insumo_id);
-                        if ($insumo) {
+                if ($insumo_producto) {
+                    $insumo = Insumo::find($insumo_producto->insumo_id);
+                    if ($insumo) {
 
-                            $insumo->cantidad_disponible -=( 3 * $cantidades[$index]);
-                            // return response()->json($insumo->cantidad_disponible);
-                            if ($insumo->cantidad_disponible < 3) {
-                                $pedidos = Pedido::all();
+                        $insumo->cantidad_disponible -= (3 * $cantidades[$index]);
+                        // return response()->json($insumo->cantidad_disponible);
+                        if ($insumo->cantidad_disponible < 3) {
+                            $pedidos = Pedido::all();
 
-                                return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
-                                // return view('pedidos.index', compact('pedidos'))->with('error', 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre);
-                            }
-                            $insumo->save();
+                            return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
+                            // return view('pedidos.index', compact('pedidos'))->with('error', 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre);
                         }
+                        $insumo->save();
                     }
+                }
                 $detalles_pedidos->save();
             }
         }
@@ -338,13 +339,13 @@ class pedidoController extends Controller
 
         ]);
         $pedido = Pedido::find($id);
- 
+
         $motivoCancelacion = $request->input('motivo_cancelacion');
         // return response()->json($motivoCancelacion);
         $pedido->motivoCancelacion = $motivoCancelacion;
         // $status=$request->input('Estado');
         // if ($status) {
-            $pedido->Estado = 'Cancelado';
+        $pedido->Estado = 'Cancelado';
         // }
         $pedido->save();
         return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');
@@ -352,7 +353,7 @@ class pedidoController extends Controller
     }
 
 
-    
+
     // fataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
     public function update(Request $request, $id)
     {
@@ -362,7 +363,7 @@ class pedidoController extends Controller
 
         $personalizadosArray2 = json_decode($request->input('personalizadosArray2'), true);
         $personalizadosArray = json_decode($request->input('personalizadosArray'), true);
-        // return response()->json($personalizadosArray2);
+        // return response()->json($personalizadosArray);
 
         if ($productos) {
             $request->validate([
@@ -399,61 +400,62 @@ class pedidoController extends Controller
 
 
 
-   // Validación global antes de crear el pedido para productos estándar
-   if (!is_null($productos) && (is_array($productos) || is_object($productos))) {
+        // Validación global antes de crear el pedido para productos estándar
+        if (!is_null($productos) && (is_array($productos) || is_object($productos))) {
 
-    foreach ($productos as $index => $producto_id) {
-        $producto = Producto::find($producto_id);
-        $insumo_producto = InsumoProducto::where('producto_id', $producto_id)->first();
+            foreach ($productos as $index => $producto_id) {
+                $producto = Producto::find($producto_id);
+                $insumo_producto = InsumoProducto::where('producto_id', $producto_id)->first();
 
-        if ($insumo_producto) {
-            $insumo = Insumo::find($insumo_producto->insumo_id);
-            
-            if ($insumo->cantidad_disponible < 3 + $cantidades[$index]) {
-             
-                // Insumo insuficiente, muestra un mensaje de error y no continúes
-                return redirect()->back()->withErrors(['error' => '1Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
-            }
-        }
-    }
-}
-// Si todos los insumos son suficientes, continúa con la creación de los pedidos para productos estándar
-// return response()->json($personalizadosArray);
-if (!empty($personalizadosArray)) {
+                if ($insumo_producto) {
+                    $insumo = Insumo::find($insumo_producto->insumo_id);
 
-foreach ($personalizadosArray as $personalizado) {
-    // Verificar si $personalizado contiene la información de $insumos
-    if (isset($personalizado['insumos'])) {
-        $insumos = $personalizado['insumos'];
+                    if ($insumo->cantidad_disponible < 3 + $cantidades[$index]) {
 
-        // Ahora puedes iterar sobre $insumos
-        foreach ($insumos as $insumo) {
-            $insumoData = explode(':', $insumo);
-            $id = trim($insumoData[0]);
-
-            $insumo = Insumo::find($id);
-
-            if ($insumo) {
-                // Realizar la validación de insumos aquí
-                $Cantidad = $personalizado['Cantidad']; // Asegúrate de obtener la cantidad correctamente
-                $soloNumeros = preg_replace('/[^0-9]/', '', $insumoData);
-
-                $ultimaParte = end($insumoData);
-                $ultfvimaParte =( end($soloNumeros));
-                $ultimaParteEntero = (int)$ultimaParte;
-                // return response()->json($ultimaParteEntero);
-                
-                if ($insumo->cantidad_disponible < 1 + $ultfvimaParte + $Cantidad) {
-                    // Insumo insuficiente, muestra un mensaje de error y no continúes
-                    return redirect()->back()->withErrors(['error' => '1Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
+                        // Insumo insuficiente, muestra un mensaje de error y no continúes
+                        return redirect()->back()->withErrors(['error' => '1Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
+                    }
                 }
-                // Resto del código de validación de insumos
             }
         }
-    } else {
-        // Manejo de error o acción por defecto si 'insumos' no existe en $personalizado
-    }
-}}
+        // Si todos los insumos son suficientes, continúa con la creación de los pedidos para productos estándar
+// return response()->json($personalizadosArray);
+        if (!empty($personalizadosArray)) {
+
+            foreach ($personalizadosArray as $personalizado) {
+                // Verificar si $personalizado contiene la información de $insumos
+                if (isset($personalizado['insumos'])) {
+                    $insumos = $personalizado['insumos'];
+
+                    // Ahora puedes iterar sobre $insumos
+                    foreach ($insumos as $insumo) {
+                        $insumoData = explode(':', $insumo);
+                        $id = trim($insumoData[0]);
+
+                        $insumo = Insumo::find($id);
+
+                        if ($insumo) {
+                            // Realizar la validación de insumos aquí
+                            $Cantidad = $personalizado['Cantidad']; // Asegúrate de obtener la cantidad correctamente
+                            $soloNumeros = preg_replace('/[^0-9]/', '', $insumoData);
+
+                            $ultimaParte = end($insumoData);
+                            $ultfvimaParte = (end($soloNumeros));
+                            $ultimaParteEntero = (int) $ultimaParte;
+                            // return response()->json($ultimaParteEntero);
+
+                            if ($insumo->cantidad_disponible < 1 + $ultfvimaParte + $Cantidad) {
+                                // Insumo insuficiente, muestra un mensaje de error y no continúes
+                                return redirect()->back()->withErrors(['error' => '1Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
+                            }
+                            // Resto del código de validación de insumos
+                        }
+                    }
+                } else {
+                    // Manejo de error o acción por defecto si 'insumos' no existe en $personalizado
+                }
+            }
+        }
 
 
 
@@ -466,7 +468,9 @@ foreach ($personalizadosArray as $personalizado) {
 
         $pedido->Estado = $request->input('Estado');
         $pedido->id_users = $request->input('Usuario');
-        $pedido->Total = $request->input('Total');
+        // $pedido->Total = $request->input('Total');
+        // return response()->json($pedido->Total = $request->input('Total'));
+
         $pedido->save();
         $pedido->detalle_pedidos()->delete();
         $total = 0;
@@ -493,8 +497,10 @@ foreach ($personalizadosArray as $personalizado) {
                     $personalizadoModel->insumos = $id;
                     $personalizadoModel->Subtotal = $subtotal;
                     $personalizadoModel->Descripción = $Descripcion;
-                    $personalizadoModel->datos = $insumo;
+                    // return response()->json( $personalizadoModel->Descripción = $Descripcion);
 
+                    $personalizadoModel->datos = $insumo;
+                    $total += $subtotal;
                     $personalizadoModel->save();
 
                     $coleccionPersonalizados[] = $personalizadoModel;
@@ -507,7 +513,7 @@ foreach ($personalizadosArray as $personalizado) {
                     if ($insumo) {
                         // return response()->json($soloNumeros);
 
-                        $insumo->cantidad_disponible -= 1 +( $soloNumeros * $Cantidad);
+                        $insumo->cantidad_disponible -= 1 + ($soloNumeros * $Cantidad);
                         if ($insumo->cantidad_disponible < 3) {
                             $pedidos = Pedido::all();
                             return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
@@ -531,8 +537,12 @@ foreach ($personalizadosArray as $personalizado) {
                 }
                 $Nombre = $personalizado['Nombre'];
                 $subtotal = (int) $personalizado['Subtotal'];
+        // return response()->json($personalizadosArray2);
 
-                $total = $subtotal;
+                $Descripcion = $personalizado['Descripcion'];
+
+
+                $total += $subtotal;
                 $datos = $personalizado['datos'];
 
                 foreach ($insumos as $insumo) {
@@ -546,6 +556,8 @@ foreach ($personalizadosArray as $personalizado) {
                     $personalizadoModel->Subtotal = $subtotal;
                     $formattedData = "id: " . $id . $Nombre . " (cantidad:" . $Cantidad . ")";
                     $personalizadoModel->datos = $datos;
+                    $personalizadoModel->Descripción = $Descripcion;
+
 
 
                     $personalizadoModel->save();
@@ -565,18 +577,20 @@ foreach ($personalizadosArray as $personalizado) {
                 $subtotal = $detalles_pedidos->cantidad * $detalles_pedidos->precio_unitario;
                 $total += $subtotal;
                 $insumo_producto = InsumoProducto::where('producto_id', $producto_id)->first();
-                    # code...
-                    if ($insumo_producto) {
-                        $insumo = Insumo::find($insumo_producto->insumo_id);
-                        if ($insumo) {
-                            $insumo->cantidad_disponible -= 3 * $cantidades[$index];
-                            $insumo->save();
-                        }
+                # code...
+                if ($insumo_producto) {
+                    $insumo = Insumo::find($insumo_producto->insumo_id);
+                    if ($insumo) {
+                        $insumo->cantidad_disponible -= 3 * $cantidades[$index];
+                        $insumo->save();
                     }
+                }
                 $detalles_pedidos->save();
             }
         }
         // $pedido->Total = $total;
+        $pedido->Total = $total;
+
         $pedido->save();
         $pedidos = Pedido::all();
         return view('pedidos.index', compact('pedidos'));
@@ -608,12 +622,12 @@ foreach ($personalizadosArray as $personalizado) {
     {
         $carrito = json_decode($request->input('carrito', '[]'), true);
         $productosPersonalizados = json_decode($request->input('productosPersonalizados', '[]'), true);
-    
+
         // Verificar si el carrito está vacío
         if (empty($carrito) && empty($productosPersonalizados)) {
             return redirect()->back()->with('success', 'El carrito está vacío. Agrega productos antes de guardar el pedido.');
         }
-    
+
         // Validar disponibilidad de insumos para productos estándar
         foreach ($carrito as $producto) {
             $insumo_productos = InsumoProducto::where('producto_id', $producto['id'])->get();
@@ -624,29 +638,31 @@ foreach ($personalizadosArray as $personalizado) {
                 }
             }
         }
-    
+
         $pedido = new Pedido();
         $pedido->Direcion = $request->input('Direcion');
         $pedido->Descripcion = $request->input('Descripcion');
-    
+
         $pedido->Estado = 'En_proceso';
         $pedido->id_users = Auth::user()->id;
         $pedido->Total = 0;
         $pedido->save();
         $total = 0;
-    
+
         // Guardar los productos del carrito en la tabla "detalle_pedidos" y realizar descuentos de insumos
         foreach ($carrito as $producto) {
             $detalle_pedido = new detalle_pedidos();
             $detalle_pedido->id_pedidos = $pedido->id;
             $detalle_pedido->cantidad = $producto['cantidad'];
+
             $detalle_pedido->precio_unitario = $producto['precio'];
+
             $detalle_pedido->id_productos = $producto['id'];
             $detalle_pedido->Nombre = $producto['nombre'];
             $subtotal = $producto['cantidad'] * $producto['precio'];
             $total += $subtotal;
             $detalle_pedido->save();
-    
+
             // Realizar el descuento de 3 unidades de insumo por cada insumo asociado al producto
             $insumo_productos = InsumoProducto::where('producto_id', $producto['id'])->get();
             foreach ($insumo_productos as $insumo_producto) {
@@ -657,60 +673,79 @@ foreach ($personalizadosArray as $personalizado) {
                 }
             }
         }
-    
+
         // Guardar los productos personalizados en la tabla "producPerz" y realizar descuentos de insumos
         if (!empty($productosPersonalizados)) {
-            $totalL = 0;
+
             foreach ($productosPersonalizados as $personalizado) {
                 // Guardar los datos del personalizado en la base de datos
                 $insumos = $personalizado['insumos'];
                 $Nombre = $personalizado['Nombre'];
+                $subtotal = $personalizado['Subtotal'];
+
+                $Cantidad = $personalizado['Cantidad'];
                 $Descripcion = $personalizado['Descripcion'];
-                $cantidad = isset($personalizado['cantidad']) && !empty($personalizado['cantidad']) ? $personalizado['cantidad'] : 1;
-                $subtotal = 0;
-    
+
+                $id = '';
+                $Nombres = '';
+                $total += $subtotal;
                 foreach ($insumos as $insumo) {
                     $insumoData = explode(':', $insumo);
                     $NombreData = explode(':', $Nombre);
-                    $CantidadDedinsumos = intval(trim($insumoData[count($insumoData) - 1]));
+                    $subtotalData = explode(':', $subtotal);
+
                     $id = trim($insumoData[0]);
                     $Nombres = trim($NombreData[0]);
-    
+                    $subtotal = trim($subtotalData[0]);
+                    // return response()->json($subtotal);
+                    // return response()->json($soloNumeros);
+
                     $personalizadoModel = new producPerz();
                     $personalizadoModel->nombre = $Nombres;
-                    $personalizadoModel->cantidad = $cantidad;
+                    $personalizadoModel->cantidad = $Cantidad;
                     $personalizadoModel->Subtotal = $subtotal;
                     $personalizadoModel->id_pedidos = $pedido->id;
                     $personalizadoModel->insumos = $id;
                     $personalizadoModel->Descripción = $Descripcion;
                     $personalizadoModel->datos = $insumo;
+
                     $personalizadoModel->save();
-    
-                    // Realizar el descuento del insumo asociado al producto personalizado
+
+
+
+                    $coleccionPersonalizados[] = $personalizadoModel;
+                    $ultimoModelo = end($coleccionPersonalizados);
+                    $ultimoDato = $ultimoModelo->datos;
+                    $ultimoDatoss = explode(':', $ultimoDato);
+                    $ultimaParte = end($ultimoDatoss);
+                    $soloNumeros = preg_replace('/[^0-9]/', '', $ultimaParte);
                     $insumo = Insumo::find($id);
                     if ($insumo) {
-                        $insumo->cantidad_disponible -=  $CantidadDedinsumos * $cantidad;
-                        if ($insumo->cantidad_disponible < 3 ) {
+                        // return response()->json($soloNumeros);
+
+                        $insumo->cantidad_disponible -= 1 + $soloNumeros + $Cantidad;
+                        if ($insumo->cantidad_disponible < 3) {
                             $pedidos = Pedido::all();
                             return redirect()->back()->withErrors(['error' => 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre]);
+                            // return view('pedidos.index', compact('pedidos'))->with('error', 'Insumo insuficiente para hacer el pedido: ' . $insumo->nombre);
                         }
                         $insumo->save();
                     }
                 }
             }
         }
-    
+
         // Actualizar el campo "Total" del pedido con el valor total calculado
         $pedido->Total = $total;
         $pedido->save();
-    
+
         // Borrar el carrito del Local Storage después de guardar el pedido
         echo '<script>localStorage.removeItem("carrito");</script>';
-    
+
         // Redirigir al usuario a la página deseada después de guardar el pedido
         return redirect()->route('verpedido')->with('success', 'Pedido guardado correctamente.')->with('pedidoGuardado', true);
     }
-    
+
     // fataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
 
 

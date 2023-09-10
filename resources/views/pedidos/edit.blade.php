@@ -288,14 +288,20 @@
                                                         <select name="Usuario" id="Usuario"
                                                             class="form-control select2" data-live-search="true" required>
                                                             @foreach ($users as $user)
+
+                                                        {{-- @if ($user->estado != 1) --}}
+
                                                                 @if ($pedido->id_users == $user->id)
-                                                                    <option value="{{ $user->id }}" selected>
-                                                                        {{ $user->name }}</option>
+                                                                <option value="{{ $user->id }}">{{ $user->name }}
+                                                                    {{ $user->documento }}</option>
                                                                 @else
-                                                                    <option value="{{ $user->id }}">
-                                                                        {{ $user->name }}</option>
+                                                                <option value="{{ $user->id }}">{{ $user->name }}
+                                                                    {{ $user->documento }}</option>
                                                                 @endif
+                                                        {{-- @endif --}}
+
                                                             @endforeach
+                                                            
                                                         </select>
                                                     </div>
                                                 </div>
@@ -612,6 +618,7 @@
                                     });
                                     totalElement.textContent = totalFormateado;
                                     totalInput.value = total.toFixed(2);
+                                    
                                 }
 
                                 window.addEventListener('load', calcularTotalInicial);
@@ -624,7 +631,7 @@
 
                                 function agregarProducto(id, nombre, precio) {
                                     Swal.fire({
-                                        title: 'Ingrese la cantidad para el producto personalizado:',
+                                        title: 'Ingrese la cantidad para el producto :',
                                         input: 'number',
                                         inputValue: 1, // Valor por defecto
                                         showCancelButton: true,
@@ -987,7 +994,7 @@
                                     }
                                     $('#Personalizados').on('hidden.bs.modal', function() {
                                         // Clear all the input fields, selected items, and any other content within the modal
-                                        $('#descripcionnn').val(''); // Clear description field
+                                        // $('#descripcionnn').val(''); // Clear description field
                                         $('.tabla-insumos-seleccionados tbody').empty(); // Clear selected insumos
                                         insumosSeleccionadosSet.clear(); // Clear selected insumos set
                                         insumosCantidad = {}; // Clear insumosCantidad object
@@ -1079,7 +1086,7 @@
                                     });
 
                                     Swal.fire({
-                                        title: 'Ingrese la cantidad para el producto:',
+                                        title: 'Ingrese la cantidad para el personalizado:',
                                         input: 'number',
                                         inputValue: 1,
                                         showCancelButton: true,
@@ -1155,6 +1162,7 @@
 
                                                 total += subtotal;
                                                 totalElement.textContent = total.toFixed(2);
+
                                                 // totalSection.style.display = 'block';
                                                 // alert("  ");
 
@@ -1222,6 +1230,7 @@
                                 @foreach ($personaliza as $personalizas)
                                     var personalizado = {};
                                     personalizado['Nombre'] = '{{ $personalizas->nombre }}';
+                                    personalizado['Descripcion'] = '{{ $personalizas->Descripción }}';
                                     personalizado['Insumos'] = [];
 
                                     @foreach (\App\Models\ProducPerz::where('id', $personalizas->id)->get() as $producPerz)
