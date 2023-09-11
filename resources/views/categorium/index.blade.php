@@ -8,7 +8,7 @@ Categorías
 <section class="section">
     <div class="section-header">
 
-        <h3 class="page__heading">Categorias</h3>
+        <h3 class="page__heading">Categorías</h3>
 
 
     </div>
@@ -52,7 +52,7 @@ Categorías
                                         <td>{{ $contador }}</td>
                                         <td>
                                             @if ($categorium->imagen)
-                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del categoria" width="25">
+                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del Categoría" width="25">
                                             @else
                                             Sin imagen
                                             @endif
@@ -89,7 +89,7 @@ Categorías
                                         <td>{{ $contador }}</td>
                                         <td>
                                             @if ($categorium->imagen)
-                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del categoria" width="25">
+                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del Categoría" width="25">
                                             @else
                                             Sin imagen
                                             @endif

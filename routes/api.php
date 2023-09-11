@@ -7,9 +7,7 @@ use App\Http\Controllers\PasswordResetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResetPasswordController;
-
-
-
+use Spatie\Permission\Contracts\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +50,7 @@ Route::put('/api/insumos/{id}', 'InsumoController@update');
 Route::apiResource('pedidos', ApiPedidoController::class);
 
 Route::put('pedidos/{id}/estado', [ApiPedidoController::class, 'updateEstadoo']);
+Route::put('pedidos/{id}/estadoo',  [ApiPedidoController::class, 'updateEstado']);
 
 
 Route::get('pedidos/{id}', [TuControlador::class, 'show']);

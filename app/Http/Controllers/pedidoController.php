@@ -314,23 +314,9 @@ class pedidoController extends Controller
         $pedido = Pedido::find($id);
         $pedido->Estado = $request->input('Estado');
         $pedido->save();
-        return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');
-        ;
+        return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');;
     }
 
-    // public function updateEstadoo(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'Estadoo' => 'required|max:200',
-    //     ]);
-    //     $pedido = Pedido::find($id);
-    //     $pedido->Estado = $request->input('Estado');
-    //     // return response()->json($pedido->Estado = $request->input('Estado'));
-
-    //     $pedido->save();
-    //     return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');
-    //     ;
-    // }
     public function updateEstadoo(Request $request, $id)
     {
         $request->validate([
@@ -348,8 +334,7 @@ class pedidoController extends Controller
         $pedido->Estado = 'Cancelado';
         // }
         $pedido->save();
-        return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');
-        ;
+        return redirect()->route('pedidos.index')->with('success', 'exito')->with('success', 'Estado actualizado correctamente');;
     }
 
 
@@ -419,7 +404,7 @@ class pedidoController extends Controller
             }
         }
         // Si todos los insumos son suficientes, continúa con la creación de los pedidos para productos estándar
-// return response()->json($personalizadosArray);
+        // return response()->json($personalizadosArray);
         if (!empty($personalizadosArray)) {
 
             foreach ($personalizadosArray as $personalizado) {
@@ -537,7 +522,7 @@ class pedidoController extends Controller
                 }
                 $Nombre = $personalizado['Nombre'];
                 $subtotal = (int) $personalizado['Subtotal'];
-        // return response()->json($personalizadosArray2);
+                // return response()->json($personalizadosArray2);
 
                 $Descripcion = $personalizado['Descripcion'];
 
@@ -561,7 +546,6 @@ class pedidoController extends Controller
 
 
                     $personalizadoModel->save();
-
                 }
             }
         }
@@ -759,6 +743,4 @@ class pedidoController extends Controller
         $pedidos = Pedido::where('id_users', $user->id)->get();
         return view('cliente.pedidos', compact('pedidos', 'userDirecion'));
     }
-
-
 }

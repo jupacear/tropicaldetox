@@ -88,7 +88,25 @@ class ApiPedidoController extends Controller
 
         return response()->json(['message' => 'Estado actualizado correctamente']);
     }
+    public function updateEstado(Request $request, $id)
+    {
+        $request->validate([
+            'motivo_cancelacion' => 'required|max:200',
+        ]);
 
+        $pedido = Pedido::find($id);
+
+        if (!$pedido) {
+            return response()->json(['message' => 'Pedido no encontrado'], 404);
+        }
+
+        $motivoCancelacion = $request->input('motivo_cancelacion');
+        $pedido->motivoCancelacion = $motivoCancelacion;
+        $pedido->Estado = 'Cancelado';
+        $pedido->save();
+
+        return response()->json(['message' => 'Estado actualizado correctamente']);
+    }
     /**
      * Remove the specified resource from storage.
      *
