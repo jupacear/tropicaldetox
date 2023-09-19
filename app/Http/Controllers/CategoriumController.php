@@ -159,7 +159,7 @@ class CategoriumController extends Controller
         $categoria->descripcion = $request->input('descripcion');
 
         // Actualizar el estado 'activo' según el valor recibido del formulario
-        $categoria->activo = $request->has('activo');
+        $activo = $request->input('activo') == 1 ? true : false;
 
         // Guardar los cambios en la base de datos
         $categoria->save();

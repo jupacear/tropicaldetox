@@ -27,8 +27,14 @@ class ProductoController extends Controller
     public function index()
     {
         $productos = Producto::with('insumos')->paginate(10);
+        // Recorrer la colección de productos y calcular la cantidad de insumos
+        foreach ($productos as $productoPer) {
+            $cantidadInsumos = count($productoPer->insumos);
 
-        return view('producto.index', compact('productos'))
+            // Agregar un campo 'personalizado' al producto si tiene 3 o más insumos
+            $productoPer->personalizado = $cantidadInsumos >= 3;
+        }
+        return view('producto.index', compact('productos', 'productoPer'))
             ->with('i', (request()->input('page', 1) - 1) * $productos->perPage());
     }
 
@@ -188,7 +194,7 @@ class ProductoController extends Controller
         $producto->nombre = $request->input('nombre');
         $producto->precio = $request->input('precio');
         $producto->descripcion = $request->input('descripcion');
-        $producto->activo = $request->has('activo'); // Guarda el estado como true o false según si se seleccionó o no el checkbox
+        $activo = $request->input('activo') == 1 ? true : false; // Guarda el estado como true o false según si se seleccionó o no el checkbox
         $producto->categorias_id = $request->input('categorias_id');
 
         // Guardar los cambios en la base de datos
@@ -207,7 +213,7 @@ class ProductoController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
             $producto = Producto::find($id);
@@ -216,14 +222,21 @@ class ProductoController extends Controller
                 return redirect()->route('productos.index')
                     ->with('error', 'El producto no existe');
             }
+            // Obtener el nuevo estado del insumo
+            $nuevoEstado = !$producto->activo;
 
-            $producto->delete();
+            // Actualizar el estado del insumo
+            $producto->activo = $nuevoEstado;
+            // Cambia el estado del producto según el valor recibido del formulario
+            // $producto->activo = $request->estado;
+
+            $producto->save();
 
             return redirect()->route('productos.index')
-                ->with('success', 'Producto eliminado correctamente');
+                ->with('success', 'Estado del producto actualizado correctamente');
         } catch (QueryException $e) {
             return redirect()->route('productos.index')
-                ->withErrors(['error' => 'No se puede eliminar el producto porque tiene un pedido asociado']);
+                ->withErrors(['error' => 'No se puede actualizar el estado del producto debido a un error', $e]);
         }
     }
 }

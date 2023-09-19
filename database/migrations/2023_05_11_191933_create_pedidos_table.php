@@ -23,11 +23,15 @@ return new class extends Migration
             $table->unsignedBigInteger('id_users');
             $table->foreign('id_users')->references('id')->on('users');
 
-            $table->string('Nombre','200')->nullable();
-            $table->string('Telefono','15')->nullable();
+            $table->string('Descripcion','200')->nullable();
+            $table->string('motivoCancelacion','200')->nullable();
+
+            
             $table->string('Direcion','500')->nullable();
+            $table->string('Telefono','15')->nullable();
             $table->string('Estado')->nullable();
-            $table->date('Fecha');
+            // $table->date('Fecha');
+            $table->dateTime('Fecha')->default(now());
             $table->integer('Total');
 
             $table->timestamps();

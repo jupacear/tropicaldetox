@@ -1,13 +1,16 @@
 @extends('layouts.app')
 
 @section('title')
-Categoria
+Categorías
 @endsection
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Categoria</h3>
+
+        <h3 class="page__heading">Categorías</h3>
+
+
     </div>
     <div class="section-body">
         @if ($errors->any())
@@ -34,7 +37,7 @@ Categoria
                                         <th style="color:#fff;">No</th>
                                         <th style="color:#fff;">Imagen</th>
                                         <th style="color:#fff;">Nombre</th>
-                                        <th style="color:#fff;">Descripcion</th>
+                                        <th style="color:#fff;">Descripción</th>
                                         <th style="color:#fff;">Estado</th>
                                         <th style="color:#fff;">Opciones</th>
 
@@ -49,7 +52,7 @@ Categoria
                                         <td>{{ $contador }}</td>
                                         <td>
                                             @if ($categorium->imagen)
-                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del categoria" width="25">
+                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del Categoría" width="25">
                                             @else
                                             Sin imagen
                                             @endif
@@ -57,7 +60,9 @@ Categoria
 
                                         <td class="">{{ $categorium->nombre }}</td>
                                         <td>{{ $categorium->descripcion }}</td>
-                                        <td>{{ $categorium->activo ? 'Activo' : 'Inactivo' }}</td>
+                                        <td> <span class="badge badge-success">Activo</span>
+                                        </td>
+
                                         <td>
                                             <form action="{{ route('categoria.destroy', $categorium->id) }}" method="POST">
                                                 <a class="btn btn-sm btn-primary " href="{{ route('categoria.show', $categorium->id) }}"><i class="fa fa-fw fa-eye"></i></a>
@@ -84,7 +89,7 @@ Categoria
                                         <td>{{ $contador }}</td>
                                         <td>
                                             @if ($categorium->imagen)
-                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del categoria" width="25">
+                                            <img src="{{ asset($categorium->imagen) }}" alt="Imagen del Categoría" width="25">
                                             @else
                                             Sin imagen
                                             @endif
@@ -92,7 +97,7 @@ Categoria
 
                                         <td class="">{{ $categorium->nombre }}</td>
                                         <td>{{ $categorium->descripcion }}</td>
-                                        <td>{{ $categorium->activo ? 'Activo' : 'Inactivo' }}</td>
+                                        <td> <span class="badge badge-danger">Inactivo</span> </td>
                                         <td>
                                             <form action="{{ route('categoria.destroy', $categorium->id) }}" method="POST">
                                                 <a class="btn btn-sm btn-primary " href="{{ route('categoria.show', $categorium->id) }}"><i class="fa fa-fw fa-eye"></i></a>

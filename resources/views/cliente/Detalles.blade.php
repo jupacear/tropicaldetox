@@ -33,7 +33,7 @@
         <div class="row" style="margin-top:1.5em ">
             <div class="col-lg-12">
                 <div class="title-all text-center">
-                    <h1>pedido</h1>
+                    <h1>Pedido</h1>
                 </div>
             </div>
         </div>
@@ -56,7 +56,13 @@
                                                     @endif
                                                     <p><strong>Estado:</strong> {{ $pedido->Estado }}</p>
                                                     <p><strong>Fecha:</strong> {{ $pedido->Fecha }}</p>
-                                                    <p><strong>Hora:</strong> {{ substr($pedido->created_at, 11, 5) }}</p>
+                                                    @if (!empty($pedido->motivoCancelacion))
+                                                        <p><strong>motivo Cancelacion:</strong>
+                                                            {{ $pedido->motivoCancelacion }}</p>
+                                                    @endif
+                                                    <p><strong>Hora:</strong> {{ substr($pedido->created_at, 11, 5) }}
+
+                                                    </p>
 
                                                     <p><strong>Total:</strong>
                                                         {{ number_format($pedido->Total, 0, ',', '.') }}</p>
@@ -67,10 +73,11 @@
                                                         <p><strong>direccion:</strong>
                                                             {{ $pedido->users->direccion }}</p>
                                                     @endif
-                                                    <h2>Productos</h2>
-                                                    @if (!empty($pedido->Nombre))
-                                                        <p><strong>Descripción:</strong> {{ $pedido->Nombre }}</p>
+                                                    @if (!empty($pedido->Descripcion))
+                                                        <p><strong>Descripción:</strong> {{ $pedido->Descripcion }}</p>
                                                     @endif
+
+                                                    <h2 style="margin-top: 1em; margin-bottom: 1em">Productos</h2>
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
@@ -113,15 +120,19 @@
                                                                                 class="btn btn-info btn-sm float-right"
                                                                                 data-toggle="modal"
                                                                                 data-target="#productModal_{{ $personalizas->insumos }}"
-                                                                                data-details="{{ json_encode($personalizas) }}">Detalles
+                                                                                data-details="{{ json_encode($personalizas) }}"
+                                                                                data-descripcion="{{ $personalizas->Descripción }}"
+                                                                                data-datos="{{ $personalizas->datos }}">Detalles
                                                                             </button>
                                                                         </td>
+
                                                                         <!-- ... -->
                                                                     </tr>
                                                                 @endif
                                                             @endforeach
 
-                                                         
+
+                                                            <!-- Aquí se encuentran los modales -->
                                                             @foreach ($personaliza as $personalizas)
                                                                 <div class="modal fade my-modal"
                                                                     id="productModal_{{ $personalizas->insumos }}"
@@ -142,12 +153,17 @@
                                                                                 </button>
                                                                             </div>
                                                                             <div class="modal-body">
-                                                                                <h6 class="Nombre">Nombre:
+                                                                                <h6 class="Nombre">
+                                                                                    <strong>Nombre:</strong>
+                                                                                    {{ $personalizas->nombre }}
                                                                                 </h6>
                                                                                 <div
                                                                                     id="productModalIngredients_{{ $personalizas->insumos }}">
-                                                                                    <!-- Ingredientes se agregarán aquí -->
+                                                                                    <!-- Ingredientes se agregarán aquí utilizando jQuery -->
                                                                                 </div>
+                                                                                <p><strong>Descripción:</strong> <span
+                                                                                        class="modal-descripcion"></span>
+                                                                                </p>
                                                                             </div>
                                                                             <div class="modal-footer">
                                                                                 <button type="button"
@@ -157,33 +173,37 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
-                                                                <!-- JS para cargar los ingredientes en el modal -->
-                                                                <script>
-                                                                    $(document).ready(function() {
-                                                                        $('#productModal_{{ $personalizas->insumos }}').on('show.bs.modal', function(event) {
-                                                                            var button = $(event.relatedTarget);
-                                                                            var details = button.data('details');
-                                                                            var modal = $(this);
-
-                                                                            modal.find('.modal-title').text('Detalles del producto: ' + details.nombre);
-                                                                            modal.find('.Nombre').text('Nombre: ' + details.nombre);
-
-                                                                            var ingredientList = '<ul>';
-                                                                            @foreach ($personaliza as $q)
-                                                                                if ("{{ $q->nombre }}" == details.nombre) {
-                                                                                    ingredientList +=
-                                                                                        '<li>Insumo: {{ $q->insumos }} - {{ optional(App\Models\Insumo::find($q->insumos))->nombre ?? 'Nombre no encontrado' }}</li>';
-                                                                                }
-                                                                            @endforeach
-                                                                            ingredientList += '</ul>';
-                                                                            modal.find('#productModalIngredients_{{ $personalizas->insumos }}').html(ingredientList);
-                                                                        });
-                                                                    });
-                                                                </script>
                                                             @endforeach
 
 
+                                                            <!-- Bloque de JavaScript para cargar los ingredientes en el modal -->
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    $('.modal').on('show.bs.modal', function(event) {
+                                                                        var button = $(event.relatedTarget);
+                                                                        var datos = button.data('datos');
+                                                                        var details = button.data('details');
+                                                                        var descripcion = button.data('descripcion'); // Obtiene la descripción
+                                                                        var modal = $(this);
+
+                                                                        modal.find('.modal-title').text('Detalles del producto: ' + details.nombre);
+                                                                        modal.find('.modal-body .modal-descripcion').text('Descripción: ' + descripcion);
+
+                                                                        var ingredientList = '<ul>';
+                                                                        @foreach ($personaliza as $q)
+                                                                            if ("{{ $q->nombre }}" == details.nombre) {
+                                                                                var datosArray = "{{ $q->datos }}".split(',');
+                                                                                $.each(datosArray, function(index, value) {
+                                                                                    ingredientList += '<li><span class="highlight">' + value +
+                                                                                        '</span></li>';
+                                                                                });
+                                                                            }
+                                                                        @endforeach
+                                                                        ingredientList += '</ul>';
+                                                                        modal.find('.modal-body #productModalIngredients_' + details.insumos).html(ingredientList);
+                                                                    });
+                                                                });
+                                                            </script>
 
 
 
@@ -211,6 +231,9 @@
 
     <!-- JS -->
 
+    <div style="padding-top: 15%">
+
+    </div>
     @include('cliente.footer')
 
 

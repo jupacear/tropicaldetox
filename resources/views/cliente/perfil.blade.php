@@ -1,8 +1,13 @@
-@include('cliente.nav')
+@extends('layouts.auth_app')
+@section('title')
+    Perfil
+@endsection
+@section('content')
+
 <head>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 @if (Session::has('sweet-alert'))
     <script>
         Swal.fire({
@@ -14,7 +19,7 @@
         });
     </script>
 @endif
-<div class="container mb-5" style="padding-top: 60px;">
+<div class="container mb-5" style="padding-top: 80px;">
     <!-- Mensajes -->
     <h2 class="text-center">Actualizar mis datos</h2>
     <hr>
@@ -86,7 +91,7 @@
     
                 <div class="row text-center mb-4 mt-5">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success" id="formSubmit">Guardar Cambios</button>
+                        <button type="submit" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn" id="formSubmit">Guardar Cambios</button>
 
                         <a href="/home" class="btn btn-secondary">Cancelar</a>
                     </div>
@@ -96,15 +101,10 @@
     </div>
 </div>
 
-@include('cliente.footer')
-
-{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 
 
-<style>
-    .content-container {
-    margin-top: 50px; /* Espacio superior */
-    margin-bottom: 50px; /* Espacio inferior */
-}
-</style>
+
+
+
+@endsection

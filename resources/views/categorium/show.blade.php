@@ -10,7 +10,7 @@ Detalle
         <a href="{{ route('categoria.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Volver
         </a>
-        <h3 class="page__heading ml-3 mb-0" >Detalle de Categoria</h3>
+        <h3 class="page__heading ml-3 mb-0">Detalle de Categoria</h3>
     </div>
 
     <div class="section-body">
@@ -29,12 +29,16 @@ Detalle
                             {{ $categorium->nombre }}
                         </div>
                         <div class="form-group">
-                            <strong>Descripcion:</strong>
+                            <strong>Descripción:</strong>
                             {{ $categorium->descripcion }}
                         </div>
                         <div class="form-group">
                             <strong>Estado:</strong>
-                            {{ $categorium->activo }}
+                            @if ($categorium['activo'] == 1)
+                            Activo
+                            @else
+                            Desactivado
+                            @endif
                         </div>
                         <!-- <div class="float-center">
                             <a class="btn btn-primary" href="{{ route('categoria.index') }}"> Volver</a>

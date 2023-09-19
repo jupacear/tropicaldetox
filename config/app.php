@@ -69,7 +69,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+
+    'timezone' => 'America/Bogota',
 
     /*
     |--------------------------------------------------------------------------
@@ -164,6 +165,9 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        
+        
+        
 
 
         /*

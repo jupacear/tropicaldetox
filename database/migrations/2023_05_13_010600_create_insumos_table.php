@@ -12,18 +12,18 @@ return new class extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('insumos', function (Blueprint $table) {
-            $table->id();
-            $table->string('imagen');
-            $table->string('nombre');
-            $table->boolean('activo')->default(true);
-            $table->float('cantidad_disponible');
-            $table->string('unidad_medida');
-            $table->float('precio_unitario');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('insumos', function (Blueprint $table) {
+        $table->id();
+        $table->string('imagen')->nullable(); // Añadir ->nullable() al campo 'imagen'
+        $table->string('nombre');
+        $table->boolean('activo')->default(true);
+        $table->float('cantidad_disponible');
+        $table->string('unidad_medida');
+        $table->float('precio_unitario');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
