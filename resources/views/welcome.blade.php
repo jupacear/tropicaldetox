@@ -145,7 +145,7 @@ Inicio
                         <div class="col-md-12">
                             <h1 class="m-b-20"><strong>Bienvenido a <br> Tropical Detox</strong></h1>
                             <p class="m-b-40">¡Disfrute de una pagina de jugos <br> de todo tipo de sabores
-                                y tus personalizados!</p>
+                                junto con personalizados!</p>
                             <p><a class="btn hvr-hover" href="{{ route('Productos') }}">Productos</a></p>
                         </div>
                     </div>

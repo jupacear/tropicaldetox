@@ -33,9 +33,8 @@ use App\Models\Producto;
 Route::get('/', function () {
     $categorias = Categorium::where('activo', true)->get(); // Obtén todas las categorías activas
     $productos = Producto::all(); // Obtén todos los productos
-    $Insumo = Insumo::all();
 
-    return view('welcome', compact('categorias', 'productos','Insumo'));
+    return view('welcome', compact('categorias', 'productos'));
 })->name('Bienvenido');
 
 // Vista cliente

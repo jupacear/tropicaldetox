@@ -23,7 +23,7 @@ class Insumo extends Model
 
   static $rules = [
     'imagen' => '|image|mimes:jpg,png|max:2048',
-    'nombre' => 'required|unique:insumos,nombre',
+    'nombre' => 'required',
     'activo' => 'boolean',
     'cantidad_disponible' => 'required|numeric',
     // 'unidad_medida' => 'required',
