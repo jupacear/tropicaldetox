@@ -1,6 +1,6 @@
 @extends('layouts.auth_app')
 @section('title')
-    Perfil
+    Productos
 @endsection
 @section('content')
 
@@ -138,8 +138,9 @@
 
                                     <!-- Agrega aquí más detalles del producto Personalizados si es necesario -->
                                     <div class="modal-footer" style="margin: 0em;padding: 0em;">
-                                        <button type="button" style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);" class="btn" id="crearPersonalizados"
-                                            data-dismiss="modal"
+                                        <button type="button"
+                                            style="background-color: rgb(173, 187, 50); color: rgb(255, 255, 255);"
+                                            class="btn" id="crearPersonalizados" data-dismiss="modal"
                                             onclick=" mostrarAlertaExitosa('Producto agregado al carrito exitosamente');actualizarTotalCarrito()">
                                             Crear
                                         </button>
@@ -180,13 +181,15 @@
                 </div>
                 <div class="row justify-content-center special-list">
                     @foreach ($productos as $producto)
-                        @if ($producto->activo && $producto->categorias_id !== 3)
+                        @if ($producto->activo == 1 && $producto->categorias_id)
                             <div class="col-lg-3 col-md-6 col-sm-6 special-grid {{ $producto->categorias_id }}">
                                 <!-- Cartas -->
                                 <div class="products-single fix">
                                     <div class="box-img-hover">
                                         <!-- Imagen del producto -->
-                                        <img src="{{ asset($producto->imagen) }}" style="width:25em !important;height:15em !important" class="img-fluid" alt="Image">
+                                        <img src="{{ asset($producto->imagen) }}"
+                                            style="width:25em !important;height:15em !important" class="img-fluid"
+                                            alt="Image">
                                         <div class="mask-icon">
                                             <a class="cart" href="#" data-producto-id="{{ $producto->id }}"
                                                 data-producto-nombre="{{ $producto->nombre }}"
@@ -477,7 +480,7 @@
 
                         // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
                         // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
-                            total += insumoPrecioSeleccionado * cantidad;
+                        total += insumoPrecioSeleccionado * cantidad;
                     });
 
                     let formattedTotal = total.toLocaleString(undefined, {
@@ -486,6 +489,7 @@
                     });
                     $('#totalInsumosSeleccionados').text(`Total: ${formattedTotal}`);
                 }
+
                 function recalcularTotalInsumosSeleccionados1() {
                     var total = 0;
                     $('.tabla-insumos-seleccionados tbody tr').each(function() {
@@ -495,7 +499,7 @@
 
                         // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
                         // Multiplicar el precio por 2 si es un insumo agregado con el botón "agregar-insumox2"
-                            total += insumoPrecioSeleccionado * cantidad * 2;
+                        total += insumoPrecioSeleccionado * cantidad * 2;
                     });
 
                     let formattedTotal = total.toLocaleString(undefined, {

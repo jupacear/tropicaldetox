@@ -26,7 +26,7 @@
                 <div class="col-lg-12">
                     <div class="title-all text-center">
 
-                        <h1>Carrito de Pedidos</h1>
+                        <h1>Carrito de Productos</h1>
 
                     </div>
                 </div>

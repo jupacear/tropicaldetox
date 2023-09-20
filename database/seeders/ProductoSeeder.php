@@ -20,7 +20,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/IMGWelcome/JugoKiwi.png',
                 'nombre' => 'Jugo de Durazno',
-                'precio' => 2000,
+                'precio' => 7000,
                 'descripcion' => 'Verdes',
                 'activo' => true,
                 'categorias_id' => 1,
@@ -28,7 +28,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/IMGWelcome/JugoManzana.png',
                 'nombre' => 'Jugo de Manzana',
-                'precio' => 5000,
+                'precio' => 8000,
                 'descripcion' => 'Frutas',
                 'activo' => true,
                 'categorias_id' => 2,
@@ -44,7 +44,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/IMGWelcome/JugoMaracuya.png',
                 'nombre' => 'Jugo de Maracuya',
-                'precio' => 2000,
+                'precio' => 8000,
                 'descripcion' => 'Frutas',
                 'activo' => true,
                 'categorias_id' => 1,
@@ -52,7 +52,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/IMGWelcome/JugoPapaya.png',
                 'nombre' => 'Jugo de papaya',
-                'precio' => 5000,
+                'precio' => 9000,
                 'descripcion' => 'Frutas',
                 'activo' => true,
                 'categorias_id' => 2,
@@ -60,7 +60,7 @@ class ProductoSeeder extends Seeder
             [
                 'imagen' => 'img/IMGWelcome/JugoPera.png',
                 'nombre' => 'Jugo de Pera',
-                'precio' => 9000,
+                'precio' => 8000,
                 'descripcion' => 'Verdes',
                 'activo' => true,
                 'categorias_id' => 2,
@@ -69,12 +69,12 @@ class ProductoSeeder extends Seeder
 
         // Arreglo de nombres de insumos por producto
         $insumosPorProducto = [
-            'Jugo de Durazno' => ['Maracuya', 'Mango'],
-            'Jugo de Manzana' => ['Fresa', 'Mango'],
+            'Jugo de Durazno' => ['Durazno'],
+            'Jugo de Manzana' => ['Manzana'],
             // 'Guayaba con mango' => ['Maracuya', 'Fresa'],
-            'Jugo de Maracuya' => ['Maracuya', 'Fresa'],
-            'Jugo de papaya' => ['Maracuya', 'Fresa'],
-            'Jugo de Pera' => ['Mango', 'Maracuya'],
+            'Jugo de Maracuya' => ['Maracuya'],
+            'Jugo de papaya' => ['Papaya'],
+            'Jugo de Pera' => ['Pera'],
         ];
         
         foreach ($productos as $productoData) {
