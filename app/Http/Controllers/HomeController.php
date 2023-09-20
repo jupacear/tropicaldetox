@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance,m.
      *
      * @return void
      */
@@ -48,3 +48,4 @@ class HomeController extends Controller
         return compact('categorias', 'productos','Insumo');
     }
 }
+
